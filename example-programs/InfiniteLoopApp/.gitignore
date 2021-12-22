@@ -1,0 +1,13 @@
+*.vcxproj.user
+Debug/*
+!Debug/*.exe
+!Debug/*.pdb
+Release/*
+!Release/*.exe
+!Release/*.pdb
+x64/Debug/*
+x64/Release/*
+!x64/Debug/*.exe
+!x64/Debug/*.pdb
+!x64/Release/*.exe
+!x64/Release/*.pdb
