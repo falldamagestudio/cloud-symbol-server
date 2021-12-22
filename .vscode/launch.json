@@ -1,0 +1,34 @@
+{
+    "configurations": [
+        {
+            "name": "Cloud Run: Run/Debug Locally",
+            "type": "cloudcode.cloudrun",
+            "request": "launch",
+            "build": {
+                "docker": {
+                    "path": "download-api/Dockerfile"
+                }
+            },
+            "image": "cloud-symbol-store-download-api",
+            "service": {
+                "name": "cloud-symbol-store-download-api",
+                "containerPort": 8080,
+                "env": [
+                    {
+                        "name": "PORT=8081",
+                        "value": ""
+                    }
+                ],
+                "resources": {
+                    "limits": {
+                        "memory": "256Mi"
+                    }
+                }
+            },
+            "target": {
+                "minikube": {}
+            },
+            "watch": true
+        }
+    ]
+}
