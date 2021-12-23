@@ -14,10 +14,6 @@
                 "name": "cloud-symbol-store-download-api",
                 "containerPort": 8080,
                 "env": [
-                    {
-                        "name": "PORT=8081",
-                        "value": ""
-                    }
                 ],
                 "resources": {
                     "limits": {
