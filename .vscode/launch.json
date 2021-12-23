@@ -13,8 +13,7 @@
             "service": {
                 "name": "cloud-symbol-store-download-api",
                 "containerPort": 8080,
-                "env": [
-                ],
+                "env": [],
                 "resources": {
                     "limits": {
                         "memory": "256Mi"
@@ -24,7 +23,12 @@
             "target": {
                 "minikube": {}
             },
-            "watch": true
+            "watch": true,
+            "debug": {
+                "sourceFileMap": {
+                    "${workspaceFolder}": "/workdir"
+                }
+            }
         }
     ]
 }
