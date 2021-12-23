@@ -46,7 +46,7 @@ func TestService(t *testing.T) {
 		t.Fatalf("ioutil.ReadAll: %v", err)
 	}
 
-	want := "Congratulations, you successfully deployed a container image to Cloud Run"
+	want := "hello run "
 	if !strings.Contains(string(out), want) {
 		t.Errorf("HTTP Response: body does not include %q", want)
 	}
