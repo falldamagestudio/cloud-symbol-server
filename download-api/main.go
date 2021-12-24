@@ -7,7 +7,26 @@ import (
 	"os"
 )
 
+type storageRequestHandler struct {
+	StorageBucketHost string
+}
+
+func getStorageBucketURL(host string, path string) string {
+	return fmt.Sprintf("%s%s", host, path)
+}
+
+func (handler *storageRequestHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
+	storageBucketURL := getStorageBucketURL(handler.StorageBucketHost, r.URL.Path)
+
+	log.Printf("Path %v redirected to %v", r.URL.Path, storageBucketURL)
+	http.Redirect(w, r, storageBucketURL, http.StatusTemporaryRedirect)
+}
+
+var storageBucketHost string = "http://localhost:9000"
+
 func main() {
+
 	// Initialize template parameters.
 	service := os.Getenv("K_SERVICE")
 	if service == "" {
@@ -20,7 +39,7 @@ func main() {
 	}
 
 	// Define HTTP server.
-	http.HandleFunc("/", helloRunHandler)
+	http.Handle("/", &storageRequestHandler{StorageBucketHost: storageBucketHost})
 
 	// PORT environment variable is provided by Cloud Run.
 	port := os.Getenv("PORT")
@@ -34,10 +53,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-// helloRunHandler responds to requests by rendering an HTML page.
-func helloRunHandler(w http.ResponseWriter, r *http.Request) {
-	log.Printf("hello run %d", 12)
-	fmt.Fprintf(w, "hello run %d", 12)
 }
