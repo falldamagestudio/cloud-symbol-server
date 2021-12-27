@@ -11,6 +11,7 @@ import (
 
 type storageRequestHandler struct {
 	StorageBucketHost string
+	BucketName        string
 }
 
 func getStorageBucketURL(host string, path string) string {
@@ -19,7 +20,10 @@ func getStorageBucketURL(host string, path string) string {
 
 func DownloadFile(w http.ResponseWriter, r *http.Request) {
 
-	handler := &storageRequestHandler{"http://localhost:9000"}
+	handler := &storageRequestHandler{
+		StorageBucketHost: "http://localhost:9000",
+		BucketName:        "example-bucket",
+	}
 
 	// Create client as usual.
 	storageClient, err := storage.NewClient(r.Context())
@@ -32,7 +36,7 @@ func DownloadFile(w http.ResponseWriter, r *http.Request) {
 	log.Print("Querying for objects")
 
 	query := &storage.Query{Prefix: ""}
-	it := storageClient.Bucket("example-bucket").Objects(r.Context(), query)
+	it := storageClient.Bucket(handler.BucketName).Objects(r.Context(), query)
 	for {
 		_, err := it.Next()
 		if err == iterator.Done {
