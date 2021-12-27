@@ -11,8 +11,12 @@ import (
 )
 
 func main() {
+
+	// Point Cloud Storage SDK to local emulator
+	_ = os.Setenv("STORAGE_EMULATOR_HOST", "localhost:9000")
+
 	ctx := context.Background()
-	if err := funcframework.RegisterHTTPFunctionContext(ctx, "/", download_api.HelloWorld); err != nil {
+	if err := funcframework.RegisterHTTPFunctionContext(ctx, "/", download_api.DownloadFile); err != nil {
 		log.Fatalf("funcframework.RegisterHTTPFunctionContext: %v\n", err)
 	}
 	// Use PORT environment variable, or default to 8080.

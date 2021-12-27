@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"cloud.google.com/go/storage"
 	"google.golang.org/api/iterator"
@@ -23,8 +22,6 @@ func DownloadFile(w http.ResponseWriter, r *http.Request) {
 	handler := &storageRequestHandler{"localhost:9000"}
 
 	log.Print("Creating storage client")
-
-	_ = os.Setenv("STORAGE_EMULATOR_HOST", "localhost:9000")
 
 	// Create client as usual.
 	storageClient, err := storage.NewClient(r.Context())
