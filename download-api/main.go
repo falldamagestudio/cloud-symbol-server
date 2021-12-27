@@ -18,7 +18,7 @@ func getStorageBucketURL(host string, path string) string {
 	return fmt.Sprintf("%s%s", host, path)
 }
 
-func HelloWorld(w http.ResponseWriter, r *http.Request) {
+func DownloadFile(w http.ResponseWriter, r *http.Request) {
 
 	handler := &storageRequestHandler{"localhost:9000"}
 
