@@ -12,7 +12,7 @@ import (
 	retry "github.com/hashicorp/go-retryablehttp"
 )
 
-func request(path string) (*http.Response, error) {
+func apiRequest(path string) (*http.Response, error) {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -33,7 +33,7 @@ func request(path string) (*http.Response, error) {
 	retryClient := retry.NewClient()
 	retryClient.HTTPClient = httpClient
 
-	req, err := retry.NewRequest(http.MethodGet, serviceUrl+path, nil)
+	req, err := retry.NewRequest(http.MethodGet, serviceUrl+"/"+path, nil)
 	if err != nil {
 		//t.Fatalf("retry.NewRequest: %v", err)
 		return nil, err
@@ -53,11 +53,38 @@ func request(path string) (*http.Response, error) {
 	return resp, nil
 }
 
+func fileRequest(url string) (*http.Response, error) {
+
+	httpClient := &http.Client{
+		Transport: cleanhttp.DefaultPooledTransport(),
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
+
+	retryClient := retry.NewClient()
+	retryClient.HTTPClient = httpClient
+
+	req, err := retry.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		//t.Fatalf("retry.NewRequest: %v", err)
+		return nil, err
+	}
+
+	resp, err := retryClient.Do(req)
+	if err != nil {
+		//t.Fatalf("retryClient.Do: %v", err)
+		return nil, err
+	}
+
+	return resp, nil
+}
+
 func TestAccessFileThatExists(t *testing.T) {
 
-	path := "/pingme.txt"
+	path := "pingme.txt"
 
-	resp, err := request(path)
+	resp, err := apiRequest(path)
 
 	if err != nil {
 		t.Errorf("Error in request: %v", err)
@@ -73,7 +100,8 @@ func TestAccessFileThatExists(t *testing.T) {
 
 	desiredRedirectedURL, _ := url.Parse("http://localhost:9000/pingme.txt")
 
-	if location, err := resp.Location(); err != http.ErrNoLocation && !reflect.DeepEqual(location, desiredRedirectedURL) {
+	location, err := resp.Location()
+	if err != http.ErrNoLocation && !reflect.DeepEqual(location, desiredRedirectedURL) {
 		t.Errorf("HTTP Response Location: got %v, want %v", location, desiredRedirectedURL)
 	}
 
@@ -81,13 +109,23 @@ func TestAccessFileThatExists(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ioutil.ReadAll: %v", err)
 	}
+
+	resp, err = fileRequest(location.String())
+	if err != nil {
+		t.Errorf("Error in request: %v", err)
+	}
+
+	// TODO test downloading of file as well
+	// if statusCode := resp.StatusCode; statusCode != http.StatusOK {
+	// 	t.Errorf("HTTP Response status: got %d, want %d", statusCode, http.StatusOK)
+	// }
 }
 
 func TestAccessFileThatDoesNotExist(t *testing.T) {
 
-	path := "/pingme2.txt"
+	path := "pingme2.txt"
 
-	resp, err := request(path)
+	resp, err := apiRequest(path)
 
 	if err != nil {
 		t.Errorf("Error in request: %v", err)
