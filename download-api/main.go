@@ -21,12 +21,10 @@ func DownloadFile(w http.ResponseWriter, r *http.Request) {
 
 	handler := &storageRequestHandler{"localhost:9000"}
 
-	log.Print("Creating storage client")
-
 	// Create client as usual.
 	storageClient, err := storage.NewClient(r.Context())
 	if err != nil {
-		log.Print("Unable to create storageClient")
+		log.Printf("Unable to create storageClient: %v", err)
 		http.Error(w, "Unable to create storageClient", http.StatusInternalServerError)
 		return
 	}
@@ -35,19 +33,14 @@ func DownloadFile(w http.ResponseWriter, r *http.Request) {
 
 	query := &storage.Query{Prefix: ""}
 	it := storageClient.Bucket("example-bucket").Objects(r.Context(), query)
-	log.Print("Query completed, iteration time")
 	for {
-		log.Printf("before next")
-		attrs, err := it.Next()
-		log.Printf("after next")
+		_, err := it.Next()
 		if err == iterator.Done {
 			break
 		}
 		if err != nil {
 			log.Fatal(err)
 		}
-		log.Printf("Encountered item %v", attrs.Name)
-		fmt.Fprintf(w, "Object in bucket: %v\n", attrs.Name)
 	}
 	log.Print("iteration done")
 
