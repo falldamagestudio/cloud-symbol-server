@@ -12,7 +12,7 @@ import (
 	retry "github.com/hashicorp/go-retryablehttp"
 )
 
-func TestService(t *testing.T) {
+func request(path string) (*http.Response, error) {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -33,11 +33,10 @@ func TestService(t *testing.T) {
 	retryClient := retry.NewClient()
 	retryClient.HTTPClient = httpClient
 
-	path := "/folder/file"
-
 	req, err := retry.NewRequest(http.MethodGet, serviceUrl+path, nil)
 	if err != nil {
-		t.Fatalf("retry.NewRequest: %v", err)
+		//t.Fatalf("retry.NewRequest: %v", err)
+		return nil, err
 	}
 
 	token := os.Getenv("TOKEN")
@@ -47,7 +46,21 @@ func TestService(t *testing.T) {
 
 	resp, err := retryClient.Do(req)
 	if err != nil {
-		t.Fatalf("retryClient.Do: %v", err)
+		//t.Fatalf("retryClient.Do: %v", err)
+		return nil, err
+	}
+
+	return resp, nil
+}
+
+func TestAccessFileThatExists(t *testing.T) {
+
+	path := "/pingme.txt"
+
+	resp, err := request(path)
+
+	if err != nil {
+		t.Errorf("Error in request: %v", err)
 	}
 
 	if statusCode := resp.StatusCode; statusCode != http.StatusTemporaryRedirect {
@@ -58,12 +71,31 @@ func TestService(t *testing.T) {
 		t.Error("HTTP Response should include a Location header")
 	}
 
-	desiredRedirectedURL, _ := url.Parse("http://localhost:9000/folder/file")
+	desiredRedirectedURL, _ := url.Parse("http://localhost:9000/pingme.txt")
 
 	if location, err := resp.Location(); err != http.ErrNoLocation && !reflect.DeepEqual(location, desiredRedirectedURL) {
 		t.Errorf("HTTP Response Location: got %v, want %v", location, desiredRedirectedURL)
 	}
 
+	_, err = ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Fatalf("ioutil.ReadAll: %v", err)
+	}
+}
+
+func TestAccessFileThatDoesNotExist(t *testing.T) {
+
+	path := "/pingme2.txt"
+
+	resp, err := request(path)
+
+	if err != nil {
+		t.Errorf("Error in request: %v", err)
+	}
+
+	if statusCode := resp.StatusCode; statusCode != http.StatusNotFound {
+		t.Errorf("HTTP Response status: got %d, want %d", statusCode, http.StatusNotFound)
+	}
 	_, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatalf("ioutil.ReadAll: %v", err)

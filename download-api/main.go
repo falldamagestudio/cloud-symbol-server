@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"cloud.google.com/go/storage"
-	"google.golang.org/api/iterator"
 )
 
 type storageRequestHandler struct {
@@ -25,7 +24,6 @@ func DownloadFile(w http.ResponseWriter, r *http.Request) {
 		BucketName:        "example-bucket",
 	}
 
-	// Create client as usual.
 	storageClient, err := storage.NewClient(r.Context())
 	if err != nil {
 		log.Printf("Unable to create storageClient: %v", err)
@@ -33,20 +31,17 @@ func DownloadFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Print("Querying for objects")
+	// Validate whether object exists in bucket
+	// This will talk to the Cloud Storage APIs
 
-	query := &storage.Query{Prefix: ""}
-	it := storageClient.Bucket(handler.BucketName).Objects(r.Context(), query)
-	for {
-		_, err := it.Next()
-		if err == iterator.Done {
-			break
-		}
-		if err != nil {
-			log.Fatal(err)
-		}
+	log.Printf("Validating whether object %v does exists in bucket %v", r.URL.Path, handler.BucketName)
+
+	_, err = storageClient.Bucket(handler.BucketName).Object(r.URL.Path).Attrs(r.Context())
+	if err != nil {
+		log.Printf("Object %v does not exist in bucket %v", r.URL.Path, handler.BucketName)
+		http.Error(w, fmt.Sprintf("Object %v does not exist in bucket", r.URL.Path), http.StatusNotFound)
+		return
 	}
-	log.Print("iteration done")
 
 	storageBucketURL := getStorageBucketURL(handler.StorageBucketHost, r.URL.Path)
 
