@@ -19,7 +19,7 @@ func getStorageBucketURL(host string, path string) string {
 
 func DownloadFile(w http.ResponseWriter, r *http.Request) {
 
-	handler := &storageRequestHandler{"localhost:9000"}
+	handler := &storageRequestHandler{"http://localhost:9000"}
 
 	// Create client as usual.
 	storageClient, err := storage.NewClient(r.Context())
