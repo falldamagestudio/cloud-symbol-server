@@ -43,6 +43,8 @@ func DownloadFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Object exists in bucket; respond with a redirect URL
+
 	log.Printf("Object %v exists in bucket %v, preparing a redirect", r.URL.Path, handler.BucketName)
 
 	storageBucketURL := getStorageBucketURL(handler.StorageBucketHost, r.URL.Path)
