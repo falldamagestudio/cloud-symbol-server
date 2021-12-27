@@ -1,34 +1,11 @@
 {
     "configurations": [
         {
-            "name": "Cloud Run: Run/Debug Locally",
-            "type": "cloudcode.cloudrun",
+            "name": "download-api: Debug",
+            "type": "go",
             "request": "launch",
-            "build": {
-                "docker": {
-                    "path": "download-api/Dockerfile"
-                }
-            },
-            "image": "cloud-symbol-store-download-api",
-            "service": {
-                "name": "cloud-symbol-store-download-api",
-                "containerPort": 8080,
-                "env": [],
-                "resources": {
-                    "limits": {
-                        "memory": "256Mi"
-                    }
-                }
-            },
-            "target": {
-                "minikube": {}
-            },
-            "watch": true,
-            "debug": {
-                "sourceFileMap": {
-                    "${workspaceFolder}": "/workdir"
-                }
-            }
+            "mode": "debug",
+            "program": "${workspaceFolder}/download-api/cmd/main.go"
         }
     ]
 }
