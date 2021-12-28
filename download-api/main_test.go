@@ -98,7 +98,7 @@ func TestAccessFileThatExists(t *testing.T) {
 		t.Error("HTTP Response should include a Location header")
 	}
 
-	desiredRedirectedURL, _ := url.Parse("http://localhost:9000/pingme.txt")
+	desiredRedirectedURL, _ := url.Parse("http://localhost:9000/example-bucket/pingme.txt")
 
 	location, err := resp.Location()
 	if err != http.ErrNoLocation && !reflect.DeepEqual(location, desiredRedirectedURL) {
