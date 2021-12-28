@@ -10,7 +10,7 @@ ENV:=test
 endif
 
 test-download-api:
-	cd download-api && go test -timeout 30s download-api
+	cd download-api && go test -timeout 30s github.com/falldamagestudio/cloud-symbol-store/download-api
 
 test: default-env-to-test test-download-api
 

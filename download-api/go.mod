@@ -1,4 +1,4 @@
-module download-api
+module github.com/falldamagestudio/cloud-symbol-store/download-api
 
 go 1.13
 
