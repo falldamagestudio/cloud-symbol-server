@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"cloud.google.com/go/storage"
@@ -20,16 +21,23 @@ func getStorageBucketURL(host string, path string) string {
 
 func DownloadFile(w http.ResponseWriter, r *http.Request) {
 
+	symbolStoreBucketName := os.Getenv("SYMBOL_STORE_BUCKET_NAME")
+	if symbolStoreBucketName == "" {
+		log.Print("No storage bucket configured")
+		http.Error(w, "No storage bucket configured", http.StatusInternalServerError)
+		return
+	}
+
 	// Settings for live testing against GCS (test env)
 	// handler := &storageRequestHandler{
 	// 	StorageBucketHost: "https://storage.googleapis.com/test-cloud-symbol-store-symbols",
-	// 	BucketName:        "test-cloud-symbol-store-symbols",
+	// 	BucketName:        symbolStoreBucketName,
 	// }
 
 	// Settings for local testing
 	handler := &storageRequestHandler{
 		StorageBucketHost: "http://localhost:9000/",
-		BucketName:        "example-bucket",
+		BucketName:        symbolStoreBucketName,
 	}
 
 	storageClient, err := storage.NewClient(r.Context())

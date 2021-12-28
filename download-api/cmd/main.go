@@ -14,6 +14,7 @@ func main() {
 
 	// Point Cloud Storage SDK to local emulator
 	_ = os.Setenv("STORAGE_EMULATOR_HOST", "localhost:9000")
+	_ = os.Setenv("SYMBOL_STORE_BUCKET_NAME", "example-bucket")
 
 	ctx := context.Background()
 	if err := funcframework.RegisterHTTPFunctionContext(ctx, "/", download_api.DownloadFile); err != nil {
