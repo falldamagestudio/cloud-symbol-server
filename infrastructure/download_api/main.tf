@@ -47,8 +47,8 @@ resource "google_cloudfunctions_function" "function" {
 
 # Create a service account. The cloud function will run in the context of this service account
 resource "google_service_account" "function_service_account" {
-  account_id   = "transfer"
-  display_name = "Service Account used to run the transfer Cloud Function"
+  account_id   = "download-api"
+  display_name = "Service Account used to run the Download API Cloud Function"
 }
 
 # Grant the cloud function's service account admin permissions to symbol store bucket
@@ -61,8 +61,8 @@ resource "google_storage_bucket_iam_member" "function_symbol_store_access" {
 
 # Create a service account. This account can be used to invoke the function via HTTP.
 resource "google_service_account" "invoke_function_service_account" {
-  account_id   = "invoke-transfer"
-  display_name = "Service account used to invoke the transfer Cloud Function via HTTP"
+  account_id   = "invoke-download-api"
+  display_name = "Service account used to invoke the Download API Cloud Function via HTTP"
 }
 
 # Grant the cloud function's invocation service account permissions to launch the function via HTTP
