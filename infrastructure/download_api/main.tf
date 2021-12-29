@@ -40,7 +40,6 @@ resource "google_cloudfunctions_function" "function" {
   entry_point           = "DownloadFile"
   environment_variables = {
     GCP_PROJECT_ID           = var.project_id
-    SYMBOL_STORE_BUCKET_HOST = "https://storage.googleapis.com/"
     SYMBOL_STORE_BUCKET_NAME = var.symbol_store_bucket_name
   }
 }
