@@ -59,34 +59,8 @@ resource "google_storage_bucket_iam_member" "function_symbol_store_access" {
   member     = "serviceAccount:${google_service_account.function_service_account.email}"
 }
 
-# Create a service account. This account can be used to invoke the function via HTTP.
-resource "google_service_account" "invoke_function_service_account" {
-  account_id   = "invoke-download-api"
-  display_name = "Service account used to invoke the Download API Cloud Function via HTTP"
-}
-
-# Grant the cloud function's invocation service account permissions to launch the function via HTTP
-resource "google_cloudfunctions_function_iam_member" "function_invoker" {
-  depends_on = [google_service_account.invoke_function_service_account]
-
-  project        = google_cloudfunctions_function.function.project
-  region         = google_cloudfunctions_function.function.region
-  cloud_function = google_cloudfunctions_function.function.name
-
-  role   = "roles/cloudfunctions.invoker"
-  member = "serviceAccount:${google_service_account.invoke_function_service_account.email}"
-}
-
 # Create an IAM entry for invoking the function
 # This IAM entry allows anyone to invoke the function via HTTP, without being authenticated
-#
-# It would be ideal to have the function always require authentication, but that will be for later
-# The problematic bit is: how do we embed a suitable authentication into the Unreal client?
-# If we solve that, we can remove this IAM entry.
-#
-# The main risk posed by allowing this to be called unauthenticated is that an external party
-#   could flood our internal database, driving up cost and making it hard for us to understand
-#   our own data
 resource "google_cloudfunctions_function_iam_member" "allow_unauthenticated_invocation" {
   project        = google_cloudfunctions_function.function.project
   region         = google_cloudfunctions_function.function.region
