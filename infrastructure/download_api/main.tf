@@ -59,6 +59,17 @@ resource "google_storage_bucket_iam_member" "function_symbol_store_access" {
   member     = "serviceAccount:${google_service_account.function_service_account.email}"
 }
 
+# Grant the cloud function's service account permission to create tokens
+# This includes the permission to sign blobs (iam.serviceAccounts.signBlob)
+#  and that is required in order to create signed URLs
+# Reference: https://stackoverflow.com/a/57565326
+resource "google_project_iam_member" "function_token_creation_permission" {
+  depends_on = [google_service_account.function_service_account]
+  project    = var.project_id
+  role       = "roles/iam.serviceAccountTokenCreator"
+  member     = "serviceAccount:${google_service_account.function_service_account.email}"
+}
+
 # Create an IAM entry for invoking the function
 # This IAM entry allows anyone to invoke the function via HTTP, without being authenticated
 resource "google_cloudfunctions_function_iam_member" "allow_unauthenticated_invocation" {
