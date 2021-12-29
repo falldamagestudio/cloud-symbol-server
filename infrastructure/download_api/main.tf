@@ -69,6 +69,15 @@ resource "google_project_iam_member" "function_token_creation_permission" {
   member     = "serviceAccount:${google_service_account.function_service_account.email}"
 }
 
+# Grant the cloud function's service account access to Firestore
+# TODO: make permissions narrower - perhaps only roles/datastore.viewer?
+resource "google_project_iam_member" "function_firestore_access" {
+  depends_on = [google_service_account.function_service_account]
+  project    = var.project_id
+  role       = "roles/datastore.owner"
+  member     = "serviceAccount:${google_service_account.function_service_account.email}"
+}
+
 # Create an IAM entry for invoking the function
 # This IAM entry allows anyone to invoke the function via HTTP, without being authenticated
 resource "google_cloudfunctions_function_iam_member" "allow_unauthenticated_invocation" {
