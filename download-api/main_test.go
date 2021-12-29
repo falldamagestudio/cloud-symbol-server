@@ -84,11 +84,15 @@ func TestAccessFileThatExists(t *testing.T) {
 
 	path := "pingme.txt"
 
+	// Request contents of a file that exists
+
 	resp, err := apiRequest(path)
 
 	if err != nil {
 		t.Errorf("Error in request: %v", err)
 	}
+
+	// API response should be a HTTP 307 redirect URL, to a download location for the actual file
 
 	if statusCode := resp.StatusCode; statusCode != http.StatusTemporaryRedirect {
 		t.Errorf("HTTP Response status: got %d, want %d", statusCode, http.StatusTemporaryRedirect)
@@ -98,7 +102,7 @@ func TestAccessFileThatExists(t *testing.T) {
 		t.Error("HTTP Response should include a Location header")
 	}
 
-	desiredRedirectedURL, _ := url.Parse("http://localhost:9000/example-bucket/pingme.txt")
+	desiredRedirectedURL, _ := url.Parse("http://localhost:9000/storage/v1/b/example-bucket/o/pingme.txt?alt=media")
 
 	location, err := resp.Location()
 	if err != http.ErrNoLocation && !reflect.DeepEqual(location, desiredRedirectedURL) {
@@ -110,20 +114,25 @@ func TestAccessFileThatExists(t *testing.T) {
 		t.Fatalf("ioutil.ReadAll: %v", err)
 	}
 
+	// Download actual file
+
 	resp, err = fileRequest(location.String())
 	if err != nil {
 		t.Errorf("Error in request: %v", err)
 	}
 
-	// TODO test downloading of file as well
-	// if statusCode := resp.StatusCode; statusCode != http.StatusOK {
-	// 	t.Errorf("HTTP Response status: got %d, want %d", statusCode, http.StatusOK)
-	// }
+	// Downloding actual file should result in a HTTP 200 response
+
+	if statusCode := resp.StatusCode; statusCode != http.StatusOK {
+		t.Errorf("HTTP Response status: got %d, want %d", statusCode, http.StatusOK)
+	}
 }
 
 func TestAccessFileThatDoesNotExist(t *testing.T) {
 
 	path := "pingme2.txt"
+
+	// Request contents of a file that exists
 
 	resp, err := apiRequest(path)
 
@@ -131,9 +140,12 @@ func TestAccessFileThatDoesNotExist(t *testing.T) {
 		t.Errorf("Error in request: %v", err)
 	}
 
+	// API response should be a HTTP 404
+
 	if statusCode := resp.StatusCode; statusCode != http.StatusNotFound {
 		t.Errorf("HTTP Response status: got %d, want %d", statusCode, http.StatusNotFound)
 	}
+
 	_, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatalf("ioutil.ReadAll: %v", err)
