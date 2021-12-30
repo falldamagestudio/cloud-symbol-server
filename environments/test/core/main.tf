@@ -6,4 +6,6 @@ module "core" {
 
     symbol_store_bucket_name = var.symbol_store_bucket_name
     symbol_store_bucket_location = var.symbol_store_bucket_location
+
+    firestore_location = var.firestore_location
 }

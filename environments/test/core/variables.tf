@@ -9,3 +9,7 @@ variable "symbol_store_bucket_name" {
 variable "symbol_store_bucket_location" {
   type = string
 }
+
+variable "firestore_location" {
+  type = string
+}

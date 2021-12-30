@@ -1,0 +1,4 @@
+{
+    "downloadAPIProtocol" : "https",
+    "downloadAPIHost" : "europe-west1-test-cloud-symbol-store.cloudfunctions.net/DownloadFile"
+}

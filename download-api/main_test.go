@@ -1,26 +1,34 @@
 package hello
 
 import (
+	"fmt"
 	"io/ioutil"
 	"net/http"
-	"net/url"
 	"os"
-	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/hashicorp/go-cleanhttp"
 	retry "github.com/hashicorp/go-retryablehttp"
 )
 
-func apiRequest(path string) (*http.Response, error) {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
+func apiRequest(email string, pat string, path string) (*http.Response, error) {
+
+	downloadAPIProtocol := os.Getenv("DOWNLOAD_API_PROTOCOL")
+	if downloadAPIProtocol == "" {
+		downloadAPIProtocol = "http"
 	}
 
-	serviceUrl := os.Getenv("SERVICE_URL")
-	if serviceUrl == "" {
-		serviceUrl = "http://localhost:" + port
+	downloadAPIHost := os.Getenv("DOWNLOAD_API_HOST")
+	if downloadAPIHost == "" {
+		downloadAPIHost = "localhost:8080"
+	}
+
+	serviceUrl := ""
+	if email != "" || pat != "" {
+		serviceUrl = fmt.Sprintf("%s://%s:%s@%s", downloadAPIProtocol, email, pat, downloadAPIHost)
+	} else {
+		serviceUrl = fmt.Sprintf("%s://%s", downloadAPIProtocol, downloadAPIHost)
 	}
 
 	httpClient := &http.Client{
@@ -82,11 +90,13 @@ func fileRequest(url string) (*http.Response, error) {
 
 func TestAccessFileThatExists(t *testing.T) {
 
+	email := "testuser"
+	pat := "testpat"
 	path := "pingme.txt"
 
 	// Request contents of a file that exists
 
-	resp, err := apiRequest(path)
+	resp, err := apiRequest(email, pat, path)
 
 	if err != nil {
 		t.Errorf("Error in request: %v", err)
@@ -98,15 +108,20 @@ func TestAccessFileThatExists(t *testing.T) {
 		t.Errorf("HTTP Response status: got %d, want %d", statusCode, http.StatusTemporaryRedirect)
 	}
 
-	if _, err := resp.Location(); err == http.ErrNoLocation {
-		t.Error("HTTP Response should include a Location header")
-	}
+	// Unsigned URLs are on the format,
+	// http://<host>:<port>/[storage/v1/]b/<bucketname>/o/<objectname>?alt=media
+	desiredUnsignedURLSuffix := "/o/pingme.txt?alt=media"
 
-	desiredRedirectedURL, _ := url.Parse("http://localhost:9000/storage/v1/b/example-bucket/o/pingme.txt?alt=media")
+	// Signed URLs are on the format,
+	// https://<host>/<bucketname>/<objectname>?<bunch of key-value pairs, including an 'Expires' header that is typically first>
+	desiredSignedURLComponent := "?Expires="
 
 	location, err := resp.Location()
-	if err != http.ErrNoLocation && !reflect.DeepEqual(location, desiredRedirectedURL) {
-		t.Errorf("HTTP Response Location: got %v, want %v", location, desiredRedirectedURL)
+
+	if err == http.ErrNoLocation {
+		t.Error("HTTP Response should include a Location header")
+	} else if !strings.HasSuffix(location.String(), desiredUnsignedURLSuffix) && !strings.Contains(location.String(), desiredSignedURLComponent) {
+		t.Errorf("HTTP Response Location: got %v, want string to either have unsigned suffix %v or signed substring %v", location, desiredUnsignedURLSuffix, desiredSignedURLComponent)
 	}
 
 	_, err = ioutil.ReadAll(resp.Body)
@@ -130,11 +145,13 @@ func TestAccessFileThatExists(t *testing.T) {
 
 func TestAccessFileThatDoesNotExist(t *testing.T) {
 
+	email := "testuser"
+	pat := "testpat"
 	path := "pingme2.txt"
 
 	// Request contents of a file that exists
 
-	resp, err := apiRequest(path)
+	resp, err := apiRequest(email, pat, path)
 
 	if err != nil {
 		t.Errorf("Error in request: %v", err)
@@ -144,6 +161,56 @@ func TestAccessFileThatDoesNotExist(t *testing.T) {
 
 	if statusCode := resp.StatusCode; statusCode != http.StatusNotFound {
 		t.Errorf("HTTP Response status: got %d, want %d", statusCode, http.StatusNotFound)
+	}
+
+	_, err = ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Fatalf("ioutil.ReadAll: %v", err)
+	}
+}
+
+func TestAccessWithoutBasicAuthFails(t *testing.T) {
+
+	path := "pingme.txt"
+
+	// Request contents of a file that exists
+
+	resp, err := apiRequest("", "", path)
+
+	if err != nil {
+		t.Errorf("Error in request: %v", err)
+	}
+
+	// API response should be a HTTP 401 Forbidden
+
+	if statusCode := resp.StatusCode; statusCode != http.StatusUnauthorized {
+		t.Errorf("HTTP Response status: got %d, want %d", statusCode, http.StatusUnauthorized)
+	}
+
+	_, err = ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Fatalf("ioutil.ReadAll: %v", err)
+	}
+}
+
+func TestAccessWithInvalidPATFails(t *testing.T) {
+
+	email := "testuser"
+	pat := "invalidpat"
+	path := "pingme.txt"
+
+	// Request contents of a file that exists
+
+	resp, err := apiRequest(email, pat, path)
+
+	if err != nil {
+		t.Errorf("Error in request: %v", err)
+	}
+
+	// API response should be a HTTP 401 Forbidden
+
+	if statusCode := resp.StatusCode; statusCode != http.StatusUnauthorized {
+		t.Errorf("HTTP Response status: got %d, want %d", statusCode, http.StatusUnauthorized)
 	}
 
 	_, err = ioutil.ReadAll(resp.Body)
