@@ -1,0 +1,19 @@
+{
+  "name": "InfiniteLoopApp.exe/61C0D4547000/refs.ptr",
+  "bucket": "default-bucket",
+  "contentType": "application/octet-stream",
+  "metageneration": 1,
+  "generation": 1640867217032,
+  "storageClass": "STANDARD",
+  "etag": "someETag",
+  "contentDisposition": "inline",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "ca392bc0-10b2-4d77-840d-6fe76fccd2ad"
+  ],
+  "timeCreated": "2021-12-30T12:26:57.031Z",
+  "updated": "2021-12-30T12:26:57.031Z",
+  "size": 83,
+  "md5Hash": "u1cr6TQG1DR2W5VkcrOxbw==",
+  "crc32c": "3578008260"
+}

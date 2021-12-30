@@ -1,0 +1,19 @@
+{
+  "name": "000Admin/lastid.txt",
+  "bucket": "default-bucket",
+  "contentType": "text/plain",
+  "metageneration": 1,
+  "generation": 1640867172253,
+  "storageClass": "STANDARD",
+  "etag": "someETag",
+  "contentDisposition": "inline",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "56bd8abe-96f0-4f1b-91f8-4a2c931e60d8"
+  ],
+  "timeCreated": "2021-12-30T12:26:12.252Z",
+  "updated": "2021-12-30T12:26:12.252Z",
+  "size": 10,
+  "md5Hash": "D/id6Z1Kj0sEyxYry1dAzw==",
+  "crc32c": "999707847"
+}

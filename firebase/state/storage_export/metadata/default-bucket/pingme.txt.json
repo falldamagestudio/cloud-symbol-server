@@ -1,0 +1,19 @@
+{
+  "name": "pingme.txt",
+  "bucket": "default-bucket",
+  "contentType": "text/plain",
+  "metageneration": 1,
+  "generation": 1640865863565,
+  "storageClass": "STANDARD",
+  "etag": "someETag",
+  "contentDisposition": "inline",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "bcf2f2c4-eb44-4c94-81a5-d6317437f2c0"
+  ],
+  "timeCreated": "2021-12-30T12:04:23.564Z",
+  "updated": "2021-12-30T12:04:23.564Z",
+  "size": 0,
+  "md5Hash": "1B2M2Y8AsgTpgAmY7PhCfg==",
+  "crc32c": "0"
+}

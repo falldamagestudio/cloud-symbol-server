@@ -1,0 +1,19 @@
+{
+  "name": "vc142.pdb/7EFB0B955F1A473EAEE9DCD53B3C8396/vc142.pdb",
+  "bucket": "default-bucket",
+  "contentType": "application/octet-stream",
+  "metageneration": 1,
+  "generation": 1640867278034,
+  "storageClass": "STANDARD",
+  "etag": "someETag",
+  "contentDisposition": "inline",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "4f6c0081-479a-4fec-9938-6c3d5e35ab22"
+  ],
+  "timeCreated": "2021-12-30T12:27:58.033Z",
+  "updated": "2021-12-30T12:27:58.034Z",
+  "size": 61440,
+  "md5Hash": "hHR5GDMB2tPfMXRUwGI7KQ==",
+  "crc32c": "1289005130"
+}
