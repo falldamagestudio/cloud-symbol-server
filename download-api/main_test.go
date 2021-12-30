@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"net/url"
 	"os"
-	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/hashicorp/go-cleanhttp"
@@ -15,16 +14,21 @@ import (
 
 func apiRequest(email string, pat string, path string) (*http.Response, error) {
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
+	downloadAPIProtocol := os.Getenv("DOWNLOAD_API_PROTOCOL")
+	if downloadAPIProtocol == "" {
+		downloadAPIProtocol = "http"
+	}
+
+	downloadAPIHost := os.Getenv("DOWNLOAD_API_HOST")
+	if downloadAPIHost == "" {
+		downloadAPIHost = "localhost:8080"
 	}
 
 	serviceUrl := ""
 	if email != "" || pat != "" {
-		serviceUrl = fmt.Sprintf("http://%s:%s@localhost:%s", email, pat, port)
+		serviceUrl = fmt.Sprintf("%s://%s:%s@%s", downloadAPIProtocol, email, pat, downloadAPIHost)
 	} else {
-		serviceUrl = fmt.Sprintf("http://localhost:%s", port)
+		serviceUrl = fmt.Sprintf("%s://%s", downloadAPIProtocol, downloadAPIHost)
 	}
 
 	httpClient := &http.Client{
@@ -104,15 +108,20 @@ func TestAccessFileThatExists(t *testing.T) {
 		t.Errorf("HTTP Response status: got %d, want %d", statusCode, http.StatusTemporaryRedirect)
 	}
 
-	if _, err := resp.Location(); err == http.ErrNoLocation {
-		t.Error("HTTP Response should include a Location header")
-	}
+	// Unsigned URLs are on the format,
+	// http://<host>:<port>/[storage/v1/]b/<bucketname>/o/<objectname>?alt=media
+	desiredUnsignedURLSuffix := "/o/pingme.txt?alt=media"
 
-	desiredRedirectedURL, _ := url.Parse("http://localhost:9199/b/default-bucket/o/pingme.txt?alt=media")
+	// Signed URLs are on the format,
+	// https://<host>/<bucketname>/<objectname>?<bunch of key-value pairs, including an 'Expires' header that is typically first>
+	desiredSignedURLComponent := "?Expires="
 
 	location, err := resp.Location()
-	if err != http.ErrNoLocation && !reflect.DeepEqual(location, desiredRedirectedURL) {
-		t.Errorf("HTTP Response Location: got %v, want %v", location, desiredRedirectedURL)
+
+	if err == http.ErrNoLocation {
+		t.Error("HTTP Response should include a Location header")
+	} else if !strings.HasSuffix(location.String(), desiredUnsignedURLSuffix) && !strings.Contains(location.String(), desiredSignedURLComponent) {
+		t.Errorf("HTTP Response Location: got %v, want string to either have unsigned suffix %v or signed substring %v", location, desiredUnsignedURLSuffix, desiredSignedURLComponent)
 	}
 
 	_, err = ioutil.ReadAll(resp.Body)

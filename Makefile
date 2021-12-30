@@ -1,7 +1,8 @@
 .PHONY: default-env-to-test
 .PHONY: deploy deploy-core deploy_download_api
 .PHONY: destroy
-.PHONY: start-local-cloud-storage stop-local-cloud-storage
+.PHONY: test test-download-api
+
 .PHONY: run-local-firebase-emulators
 .PHONY: run-local-download-api
 .PHONY: test-local test-local-download-api
@@ -26,6 +27,14 @@ deploy: default-env-to-test deploy-core deploy-download-api
 destroy: default-env-to-test
 	cd environments/$(ENV)/core && terraform destroy
 
+test-download-api: default-env-to-test
+	cd download-api \
+	&&	DOWNLOAD_API_PROTOCOL="$(shell jq -r ".downloadAPIProtocol" < environments/$(ENV)/config.json)" \
+		DOWNLOAD_API_HOST="$(shell jq -r ".downloadAPIHost" < environments/$(ENV)/config.json)" \
+		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-store/download-api
+
+test: default-env-to-test test-download-api
+
 #########################################################
 # Local (emulator) commands
 #########################################################
@@ -44,7 +53,8 @@ run-local-download-api:
 
 test-local-download-api:
 	cd download-api \
-	&&	PORT=8083 \
+	&&	DOWNLOAD_API_PROTOCOL=http \
+		DOWNLOAD_API_HOST=localhost:8083 \
 		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-store/download-api
 
 test-local: test-local-download-api
