@@ -51,6 +51,12 @@ run-local-download-api:
 		PORT=8083 \
 		go run main.go
 
+run-local-frontend:
+	cd frontend \
+	&&	VUE_APP_FIREBASE_CONFIG='$(shell cat environments/$(ENV)/frontend/firebase-config.json)' \
+		VUE_APP_FIRESTORE_EMULATOR_PORT=8082 \
+		npm run serve
+
 test-local-download-api:
 	cd download-api \
 	&&	DOWNLOAD_API_PROTOCOL=http \
