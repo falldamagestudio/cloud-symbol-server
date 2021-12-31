@@ -4,7 +4,7 @@ import 'firebase/firestore'
 
 import store from './store/index'
 
-import { firebaseConfig, firestoreEmulator } from './firebaseConfig'
+import { firebaseConfig, authEmulatorUrl, firestoreEmulator } from './firebaseConfig'
 
 firebase.initializeApp(firebaseConfig)
 
@@ -30,4 +30,10 @@ export const db = firebase.firestore()
 
 if (firestoreEmulator) {
     db.useEmulator(firestoreEmulator.host, firestoreEmulator.port)
+}
+
+export const auth = firebase.auth()
+
+if (authEmulatorUrl) {
+    auth.useEmulator(authEmulatorUrl)
 }
