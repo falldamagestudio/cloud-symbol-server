@@ -31,7 +31,10 @@
       <template v-for="pat in pats">
         <v-col v-bind:key="pat.id" cols="12">
 
-          <PAT :email="email" :pat="pat"/>
+          <PAT
+            :email="email"
+            :pat="pat"
+          />
 
         </v-col>
       </template>
@@ -99,6 +102,7 @@ export default Vue.extend({
 
       db.collection('users').doc(this.email).collection('pats').doc(id).set({}).then((result) => {
         console.log("New doc added")
+        this.fetch()
       })
     },
   },
