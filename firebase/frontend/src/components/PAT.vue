@@ -45,7 +45,7 @@ export default Vue.extend({
 
   methods: {
     revoke() {
-      db.collection('users').doc(this.email).collection('pats').doc(this.pat.id).delete().then((result) => {
+      db.collection('users').doc(this.email).collection('pats').doc(this.pat.id).delete().then(() => {
         this.$emit('refresh')
       })
     }

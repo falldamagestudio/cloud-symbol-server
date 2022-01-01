@@ -15,7 +15,7 @@
       >
 
         <v-btn
-          v-on:click="generate"
+          v-on:click="generate()"
         >
           <v-icon>mdi-plus</v-icon>
           Generate new token
@@ -96,11 +96,11 @@ export default Vue.extend({
       })
     },
 
-    generate(event: any) {
+    generate() {
 
       const id = generateId(32)
 
-      db.collection('users').doc(this.email).collection('pats').doc(id).set({}).then((result) => {
+      db.collection('users').doc(this.email).collection('pats').doc(id).set({}).then(() => {
         this.fetch()
       })
     },
