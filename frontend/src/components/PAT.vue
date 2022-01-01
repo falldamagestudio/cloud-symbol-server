@@ -18,6 +18,7 @@
           >
             <v-btn
               color="error--text"
+              v-on:click="revoke"
             >
               Revoke
             </v-btn>
@@ -33,12 +34,22 @@
 <script lang="ts">
 
 import Vue from 'vue'
+import { db } from '../firebase'
 
 export default Vue.extend({
 
   props: {
+    email: String,
     pat: Object,
   },
+
+  methods: {
+    revoke(event: any) {
+      db.collection('users').doc(this.email).collection('pats').doc(this.pat.id).delete().then((result) => {
+        console.log("Deleted")
+      })
+    }
+  }
 
 })
 
