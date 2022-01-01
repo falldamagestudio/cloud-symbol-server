@@ -25,6 +25,8 @@ deploy-download-api: default-env-to-test
 deploy-firebase-and-frontend: default-env-to-test
 	cd firebase/frontend \
 		&&	VUE_APP_FIREBASE_CONFIG='$(shell cat environments/$(ENV)/firebase/frontend/firebase-config.json)' \
+			VUE_APP_DOWNLOAD_API_PROTOCOL="$(shell jq -r ".downloadAPIProtocol" < environments/$(ENV)/config.json)" \
+			VUE_APP_DOWNLOAD_API_HOST="$(shell jq -r ".downloadAPIHost" < environments/$(ENV)/config.json)" \
 			npm run build
 	cd firebase && firebase deploy --project="$(shell jq -r ".gcpProjectId" < environments/$(ENV)/firebase/config.json)"
 
@@ -62,6 +64,8 @@ run-local-frontend:
 	&&	VUE_APP_FIREBASE_CONFIG='$(shell cat environments/$(ENV)/firebase/frontend/firebase-config.json)' \
 		VUE_APP_FIRESTORE_EMULATOR_PORT=8082 \
 		VUE_APP_AUTH_EMULATOR_URL=http://localhost:9099 \
+		VUE_APP_DOWNLOAD_API_PROTOCOL="$(shell jq -r ".downloadAPIProtocol" < environments/$(ENV)/config.json)" \
+		VUE_APP_DOWNLOAD_API_HOST="$(shell jq -r ".downloadAPIHost" < environments/$(ENV)/config.json)" \
 		npm run serve
 
 test-local-download-api:

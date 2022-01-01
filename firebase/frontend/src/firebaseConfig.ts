@@ -9,4 +9,7 @@ const firestoreEmulator = (process.env.VUE_APP_FIRESTORE_EMULATOR_PORT ?
   }
   : null)
 
-export { firebaseConfig, authEmulatorUrl, firestoreEmulator }
+  const downloadAPIProtocol = process.env.VUE_APP_DOWNLOAD_API_PROTOCOL
+  const downloadAPIHost = process.env.VUE_APP_DOWNLOAD_API_HOST
+
+export { firebaseConfig, authEmulatorUrl, firestoreEmulator, downloadAPIProtocol, downloadAPIHost }
