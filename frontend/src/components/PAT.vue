@@ -16,7 +16,9 @@
           <v-col
             class="text-right"
           >
-            <v-btn>
+            <v-btn
+              color="error--text"
+            >
               Revoke
             </v-btn>
           </v-col>

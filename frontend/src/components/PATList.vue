@@ -7,7 +7,7 @@
 
       <v-col
       >
-        Personal Access Tokens
+        Your tokens
       </v-col>
 
       <v-col
@@ -16,10 +16,12 @@
 
         <v-btn
         >
+          <v-icon>mdi-plus</v-icon>
           Generate new token
         </v-btn>
 
         <v-btn
+          color="error--text"
         >
           Revoke all tokens
         </v-btn>
