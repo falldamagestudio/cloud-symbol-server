@@ -18,7 +18,7 @@
           >
             <v-btn
               color="error--text"
-              v-on:click="revoke"
+              v-on:click="revoke()"
             >
               Revoke
             </v-btn>
@@ -44,9 +44,9 @@ export default Vue.extend({
   },
 
   methods: {
-    revoke(event: any) {
+    revoke() {
       db.collection('users').doc(this.email).collection('pats').doc(this.pat.id).delete().then((result) => {
-        console.log("Deleted")
+        this.$emit('refresh')
       })
     }
   }

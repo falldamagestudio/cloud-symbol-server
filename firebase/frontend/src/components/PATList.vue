@@ -34,6 +34,7 @@
           <PAT
             :email="email"
             :pat="pat"
+            @refresh="refresh()"
           />
 
         </v-col>
@@ -98,12 +99,14 @@ export default Vue.extend({
     generate(event: any) {
 
       const id = generateId(32)
-      console.log("new doc ID: " + id)
 
       db.collection('users').doc(this.email).collection('pats').doc(id).set({}).then((result) => {
-        console.log("New doc added")
         this.fetch()
       })
+    },
+
+    refresh() {
+      this.fetch()
     },
   },
 
