@@ -21,12 +21,6 @@
           Generate new token
         </v-btn>
 
-        <v-btn
-          color="error--text"
-        >
-          Revoke all tokens
-        </v-btn>
-
       </v-col>
 
     </v-row>
