@@ -1,24 +1,18 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
-import SessionsView from '../views/SessionsView.vue'
-import SessionView from '../views/SessionView.vue'
+import PATsView from '../views/PATsView.vue'
 
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
   {
     path: '/',
-    redirect: '/sessions'
+    redirect: '/pats'
   },
   {
-    path: '/sessions',
-    name: 'sessions',
-    component: SessionsView
-  },
-  {
-    path: '/sessions/:id',
-    name: 'session',
-    component: SessionView
+    path: '/pats',
+    name: 'pats',
+    component: PATsView
   },
 ]
 
