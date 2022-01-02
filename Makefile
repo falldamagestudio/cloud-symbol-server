@@ -1,5 +1,5 @@
 .PHONY: default-env-to-test
-.PHONY: deploy deploy-core deploy_download_api
+.PHONY: deploy deploy-core deploy-download-api deploy-firebase-and-frontend
 .PHONY: destroy
 .PHONY: test test-download-api
 
@@ -22,7 +22,15 @@ deploy-core: default-env-to-test
 deploy-download-api: default-env-to-test
 	cd environments/$(ENV)/download_api && terraform init && terraform apply -auto-approve
 
-deploy: default-env-to-test deploy-core deploy-download-api
+deploy-firebase-and-frontend: default-env-to-test
+	cd firebase/frontend \
+		&&	VUE_APP_FIREBASE_CONFIG='$(shell cat environments/$(ENV)/firebase/frontend/firebase-config.json)' \
+			VUE_APP_DOWNLOAD_API_PROTOCOL="$(shell jq -r ".downloadAPIProtocol" < environments/$(ENV)/config.json)" \
+			VUE_APP_DOWNLOAD_API_HOST="$(shell jq -r ".downloadAPIHost" < environments/$(ENV)/config.json)" \
+			npm run build
+	cd firebase && firebase deploy --project="$(shell jq -r ".gcpProjectId" < environments/$(ENV)/firebase/config.json)"
+
+deploy: default-env-to-test deploy-core deploy-download-api deploy-firebase-and-frontend
 
 destroy: default-env-to-test
 	cd environments/$(ENV)/core && terraform destroy
@@ -50,6 +58,15 @@ run-local-download-api:
 		SYMBOL_STORE_BUCKET_NAME=default-bucket \
 		PORT=8083 \
 		go run main.go
+
+run-local-frontend:
+	cd firebase/frontend \
+	&&	VUE_APP_FIREBASE_CONFIG='$(shell cat environments/$(ENV)/firebase/frontend/firebase-config.json)' \
+		VUE_APP_FIRESTORE_EMULATOR_PORT=8082 \
+		VUE_APP_AUTH_EMULATOR_URL=http://localhost:9099 \
+		VUE_APP_DOWNLOAD_API_PROTOCOL="$(shell jq -r ".downloadAPIProtocol" < environments/$(ENV)/config.json)" \
+		VUE_APP_DOWNLOAD_API_HOST="$(shell jq -r ".downloadAPIHost" < environments/$(ENV)/config.json)" \
+		npm run serve
 
 test-local-download-api:
 	cd download-api \

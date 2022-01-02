@@ -1,7 +1,13 @@
 {
     "emulators": {
+        "auth": {
+            "port": 9099
+        },
         "firestore": {
             "port": 8082
+        },
+        "hosting": {
+            "port": 5000
         },
         "storage": {
             "port": 9199
@@ -9,6 +15,19 @@
         "ui": {
             "port": 4000
         }
+    },
+    "hosting": {
+        "public": "frontend/dist",
+        "ignore": [
+            "**/.*",
+            "**/node_modules/**"
+        ],
+        "rewrites": [
+            {
+                "source": "**",
+                "destination": "/index.html"
+            }
+        ]
     },
     "firestore": {
         "rules": "firestore.rules",

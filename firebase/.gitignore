@@ -1,4 +1,8 @@
 
+# Ignore firebase temp files
+
+/.firebase
+
 # Ignore all log files
 
 /*-debug.log
