@@ -44,6 +44,22 @@
 
                 <ol>
                   <li>
+                    Decide on a location to cache symbol files on your machine, for example
+                    <code>{{symbolCacheLocation}}&nbsp;
+                      <v-btn
+                        icon
+                        @click="copyTextToClipboard(symbolCacheLocation)"
+                      >
+                        <v-icon
+                          small
+                        >
+                          mdi-content-copy
+                        </v-icon>
+                      </v-btn>
+                    </code>
+                    . Create the folder if it does not exist.
+                  </li>
+                  <li>
                     Run the following command to open the Environment Variables editor:
                     <code>{{openEnvironmentVariablesCommand}}&nbsp;
                       <v-btn
@@ -59,7 +75,7 @@
                     </code>
                   </li>
                   <li>
-                    <p>Create a new Environment Variable for the current user with the following name:
+                    Create or edit an environment variable for the current user with the following name:
                     <code>{{ntSymbolPathName}}&nbsp;
                       <v-btn
                         icon
@@ -72,12 +88,9 @@
                         </v-icon>
                       </v-btn>
                     </code>
-                    </p>
-                    <p>If this variable already exists, be careful to merge the changes below with the previous settings.
-                    </p>
                   </li>
                   <li>
-                    Set the value of the variable to the following:
+                    <p>Set the value of the variable to the following:
                     <code>{{ntSymbolPathValue}}&nbsp;
                       <v-btn
                         icon
@@ -90,11 +103,15 @@
                         </v-icon>
                       </v-btn>
                     </code>
-                  </li>
-                  <li>
-                    If the local symbols folder mentioned in the previous doesn't exist on your machine, create it.
+                    </p>
+                    <p>If this variable already exists, be careful to merge the changes above with its previous settings.
+                    </p>
+                    <p>Adjust the symbol cache folder location if necessary.
+                    </p>
                   </li>
                 </ol>
+                <p>For more information on _NT_SYMBOL_PATH, see <a href="https://docs.microsoft.com/en-us/windows/win32/debug/using-symsrv#setting-the-symbol-path">the MSDN documentation</a>.
+                </p>
               </v-card-text>
 
               <v-divider></v-divider>
@@ -135,6 +152,7 @@ import { downloadAPIProtocol, downloadAPIHost } from '../firebaseConfig'
 
 interface Data {
   useDialogVisible: boolean,
+  symbolCacheLocation: string,
   openEnvironmentVariablesCommand: string,
   ntSymbolPathName: string,
   ntSymbolPathValue: string,
@@ -150,6 +168,7 @@ export default Vue.extend({
   data(): Data {
     return {
       useDialogVisible: false,
+      symbolCacheLocation: 'C:\\Symbols',
       openEnvironmentVariablesCommand: 'rundll32 sysdm.cpl,EditEnvironmentVariables',
       ntSymbolPathName: '_NT_SYMBOL_PATH',
       ntSymbolPathValue: 'SRV*C:\\Symbols*' + downloadAPIProtocol + '://' + encodeURIComponent(this.email) + ':' + this.pat.id + '@' + downloadAPIHost,
