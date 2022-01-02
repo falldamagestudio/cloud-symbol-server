@@ -1,4 +1,5 @@
-.PHONY: default-env-to-test
+.PHONY: default-env-to-test set-env-to-local
+
 .PHONY: deploy deploy-core deploy-download-api deploy-firebase-and-frontend
 .PHONY: destroy
 .PHONY: test test-download-api
@@ -11,6 +12,9 @@ default-env-to-test:
 ifndef ENV
 ENV:=test
 endif
+
+set-env-to-local:
+ENV:=local
 
 #########################################################
 # Remote (connected to GCP) commands
@@ -47,10 +51,10 @@ test: default-env-to-test test-download-api
 # Local (emulator) commands
 #########################################################
 
-run-local-firebase-emulators:
+run-local-firebase-emulators: set-env-to-local
 	cd firebase && firebase emulators:start --project=demo-cloud-symbol-store --import state --export-on-exit
 
-run-local-download-api:
+run-local-download-api: set-env-to-local
 	cd download-api/cmd \
 	&&	GCP_PROJECT_ID=demo-cloud-symbol-store \
 		FIRESTORE_EMULATOR_HOST=localhost:8082 \
@@ -59,7 +63,7 @@ run-local-download-api:
 		PORT=8083 \
 		go run main.go
 
-run-local-frontend:
+run-local-frontend: set-env-to-local
 	cd firebase/frontend \
 	&&	VUE_APP_FIREBASE_CONFIG='$(shell cat environments/$(ENV)/firebase/frontend/firebase-config.json)' \
 		VUE_APP_FIRESTORE_EMULATOR_PORT=8082 \
@@ -68,10 +72,10 @@ run-local-frontend:
 		VUE_APP_DOWNLOAD_API_HOST="$(shell jq -r ".downloadAPIHost" < environments/$(ENV)/config.json)" \
 		npm run serve
 
-test-local-download-api:
+test-local-download-api: set-env-to-local
 	cd download-api \
 	&&	DOWNLOAD_API_PROTOCOL=http \
 		DOWNLOAD_API_HOST=localhost:8083 \
 		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-store/download-api
 
-test-local: test-local-download-api
+test-local: set-env-to-local test-local-download-api
