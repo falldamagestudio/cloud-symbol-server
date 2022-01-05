@@ -4,12 +4,14 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"path/filepath"
 
 	"github.com/falldamagestudio/cloud-symbol-store/cli"
 )
 
 type UploadTransactionRequest struct {
 	Description string              `json:"description"`
+	BuildId     string              `json:"buildid"`
 	Files       []UploadFileRequest `json:"files"`
 }
 
@@ -18,7 +20,7 @@ type UploadFileRequest struct {
 	Hash     string `json:"hash"`
 }
 
-func createUploadTransaction(description string, fileNames []string) (*UploadTransactionRequest, error) {
+func createUploadTransaction(description string, buildId string, fileNames []string) (*UploadTransactionRequest, error) {
 
 	files := []UploadFileRequest{}
 
@@ -41,6 +43,7 @@ func createUploadTransaction(description string, fileNames []string) (*UploadTra
 
 	uploadTransaction := &UploadTransactionRequest{
 		Description: description,
+		BuildId:     buildId,
 		Files:       files,
 	}
 
@@ -54,8 +57,31 @@ func uploadTransaction(uploadTransactionRequest UploadTransactionRequest) error 
 	return nil
 }
 
-func upload(description string, fileNames []string) error {
-	transaction, err := createUploadTransaction(description, fileNames)
+func matchFiles(patterns []string) ([]string, error) {
+
+	files := []string{}
+
+	for _, pattern := range patterns {
+
+		matches, err := filepath.Glob(pattern)
+		if err != nil {
+			return nil, err
+		}
+
+		files = append(files, matches...)
+	}
+
+	return files, nil
+}
+
+func upload(description string, buildId string, patterns []string) error {
+
+	fileNames, err := matchFiles(patterns)
+	if err != nil {
+		return err
+	}
+
+	transaction, err := createUploadTransaction(description, buildId, fileNames)
 	if err != nil {
 		return err
 	}
@@ -66,7 +92,12 @@ func upload(description string, fileNames []string) error {
 func main() {
 
 	var verbose bool
+	var description string
+	var buildId string
 	flag.BoolVar(&verbose, "verbose", false, "verbose output")
+	flag.StringVar(&description, "description", "", "Textual description")
+	flag.StringVar(&buildId, "buildId", "", "Build ID")
+
 	flag.Parse()
 	if verbose {
 		fmt.Println("verbose is on")
@@ -75,6 +106,10 @@ func main() {
 	operation := flag.Arg(0)
 
 	if operation == "upload" {
-		_ = upload(flag.Arg(1), []string{flag.Arg(2)})
+		patterns := []string{}
+		for i := 1; i < flag.NArg(); i++ {
+			patterns = append(patterns, flag.Arg(i))
+		}
+		_ = upload(description, buildId, patterns)
 	}
 }
