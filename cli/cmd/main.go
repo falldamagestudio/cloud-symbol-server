@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 	"path/filepath"
 
 	"github.com/falldamagestudio/cloud-symbol-store/cli"
@@ -81,6 +82,11 @@ func upload(description string, buildId string, patterns []string) error {
 		return err
 	}
 
+	if len(fileNames) == 0 {
+		log.Printf("No files matched by patterns; skipping upload")
+		return nil
+	}
+
 	transaction, err := createUploadTransaction(description, buildId, fileNames)
 	if err != nil {
 		return err
@@ -89,7 +95,7 @@ func upload(description string, buildId string, patterns []string) error {
 	return uploadTransaction(*transaction)
 }
 
-func main() {
+func mainInt() int {
 
 	var verbose bool
 	var description string
@@ -110,6 +116,24 @@ func main() {
 		for i := 1; i < flag.NArg(); i++ {
 			patterns = append(patterns, flag.Arg(i))
 		}
-		_ = upload(description, buildId, patterns)
+
+		if len(patterns) == 0 {
+			log.Printf("You must provide at least one pattern for upload")
+			return 1
+		} else {
+			err := upload(description, buildId, patterns)
+			if err != nil {
+				return 1
+			} else {
+				return 0
+			}
+		}
 	}
+
+	return 0
+}
+
+func main() {
+	result := mainInt()
+	os.Exit(result)
 }
