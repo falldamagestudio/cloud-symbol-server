@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/falldamagestudio/cloud-symbol-store/cli"
+	cli "github.com/falldamagestudio/cloud-symbol-store/cli"
 )
 
 type UploadTransactionRequest struct {
@@ -19,43 +19,6 @@ type UploadTransactionRequest struct {
 type UploadFileRequest struct {
 	FileName string `json:"filename"`
 	Hash     string `json:"hash"`
-}
-
-func createUploadTransaction(description string, buildId string, fileNames []string) (*UploadTransactionRequest, error) {
-
-	files := []UploadFileRequest{}
-
-	for _, fileName := range fileNames {
-
-		hash, err := cli.GetPdbHash(fileName)
-
-		if err != nil {
-			log.Printf("Error while parsing PDB: %v\n", err)
-			return nil, err
-		}
-
-		uploadFileRequest := UploadFileRequest{
-			FileName: fileName,
-			Hash:     *hash,
-		}
-
-		files = append(files, uploadFileRequest)
-	}
-
-	uploadTransaction := &UploadTransactionRequest{
-		Description: description,
-		BuildId:     buildId,
-		Files:       files,
-	}
-
-	return uploadTransaction, nil
-}
-
-func uploadTransaction(uploadTransactionRequest UploadTransactionRequest) error {
-
-	log.Printf("fake transaction: %v", uploadTransactionRequest)
-
-	return nil
 }
 
 func matchFiles(patterns []string) ([]string, error) {
@@ -75,7 +38,7 @@ func matchFiles(patterns []string) ([]string, error) {
 	return files, nil
 }
 
-func upload(description string, buildId string, patterns []string) error {
+func upload(uploadAPIProtocol string, uploadAPIHost string, email string, pat string, description string, buildId string, patterns []string) error {
 
 	fileNames, err := matchFiles(patterns)
 	if err != nil {
@@ -87,12 +50,27 @@ func upload(description string, buildId string, patterns []string) error {
 		return nil
 	}
 
-	transaction, err := createUploadTransaction(description, buildId, fileNames)
+	filesWithHashes, err := cli.GetFilesWithHashes(fileNames)
 	if err != nil {
 		return err
 	}
 
-	return uploadTransaction(*transaction)
+	uploadTransactionRequest, err := cli.CreateUploadTransaction(description, buildId, filesWithHashes)
+	if err != nil {
+		return err
+	}
+
+	uploadTransactionResponse, err := cli.InitiateUploadTransaction(uploadAPIProtocol, uploadAPIHost, email, pat, *uploadTransactionRequest)
+	if err != nil {
+		return err
+	}
+
+	err = cli.UploadMissingFiles(*uploadTransactionResponse, filesWithHashes)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func mainInt() int {
@@ -100,13 +78,26 @@ func mainInt() int {
 	var verbose bool
 	var description string
 	var buildId string
+	var email string
+	var pat string
+	var uploadAPIProtocol string
+	var uploadAPIHost string
 	flag.BoolVar(&verbose, "verbose", false, "verbose output")
 	flag.StringVar(&description, "description", "", "Textual description")
 	flag.StringVar(&buildId, "buildId", "", "Build ID")
+	flag.StringVar(&email, "email", "", "Authentication email")
+	flag.StringVar(&pat, "pat", "", "Authentication Personal Access Token")
+	flag.StringVar(&uploadAPIProtocol, "uploadAPIProtocol", "", "Upload API protocol")
+	flag.StringVar(&uploadAPIHost, "uploadAPIHost", "", "Upload API host")
 
 	flag.Parse()
 	if verbose {
 		fmt.Println("verbose is on")
+	}
+
+	if email == "" || pat == "" {
+		log.Printf("You must supply email and pat")
+		return 1
 	}
 
 	operation := flag.Arg(0)
@@ -121,7 +112,7 @@ func mainInt() int {
 			log.Printf("You must provide at least one pattern for upload")
 			return 1
 		} else {
-			err := upload(description, buildId, patterns)
+			err := upload(uploadAPIProtocol, uploadAPIHost, email, pat, description, buildId, patterns)
 			if err != nil {
 				return 1
 			} else {

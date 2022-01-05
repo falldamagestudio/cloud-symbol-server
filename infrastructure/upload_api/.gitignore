@@ -1,0 +1,3 @@
+# The Terraform module creates .zip files as an intermediate step; ignore those
+
+*.zip

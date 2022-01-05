@@ -1,32 +1,31 @@
-.PHONY: default-env-to-test set-env-to-local
-
-.PHONY: deploy deploy-core deploy-download-api deploy-firebase-and-frontend
+.PHONY: deploy deploy-core deploy-download-api deploy-upload-api deploy-firebase-and-frontend
 .PHONY: destroy
-.PHONY: test test-download-api
+.PHONY: test test-download-api test-upload-api
 
 .PHONY: run-local-firebase-emulators
-.PHONY: run-local-download-api
-.PHONY: test-local test-local-download-api
+.PHONY: run-local-download-api run-local-upload-api
+.PHONY: test-local test-local-download-api test-local-upload-api
 
-default-env-to-test:
 ifndef ENV
 ENV:=test
 endif
-
-set-env-to-local:
-ENV:=local
 
 #########################################################
 # Remote (connected to GCP) commands
 #########################################################
 
-deploy-core: default-env-to-test
+deploy-core:
+	echo apa3
+	echo $(ENV)
 	cd environments/$(ENV)/core && terraform init && terraform apply -auto-approve
 
-deploy-download-api: default-env-to-test
+deploy-download-api:
 	cd environments/$(ENV)/download_api && terraform init && terraform apply -auto-approve
 
-deploy-firebase-and-frontend: default-env-to-test
+deploy-upload-api:
+	cd environments/$(ENV)/upload_api && terraform init && terraform apply -auto-approve
+
+deploy-firebase-and-frontend:
 	cd firebase/frontend \
 		&&	VUE_APP_FIREBASE_CONFIG='$(shell cat environments/$(ENV)/firebase/frontend/firebase-config.json)' \
 			VUE_APP_DOWNLOAD_API_PROTOCOL="$(shell jq -r ".downloadAPIProtocol" < environments/$(ENV)/config.json)" \
@@ -34,27 +33,33 @@ deploy-firebase-and-frontend: default-env-to-test
 			npm run build
 	cd firebase && firebase deploy --project="$(shell jq -r ".gcpProjectId" < environments/$(ENV)/firebase/config.json)"
 
-deploy: default-env-to-test deploy-core deploy-download-api deploy-firebase-and-frontend
+deploy: deploy-core deploy-download-api deploy-upload-api deploy-firebase-and-frontend
 
-destroy: default-env-to-test
+destroy:
 	cd environments/$(ENV)/core && terraform destroy
 
-test-download-api: default-env-to-test
+test-download-api:
 	cd download-api \
 	&&	DOWNLOAD_API_PROTOCOL="$(shell jq -r ".downloadAPIProtocol" < environments/$(ENV)/config.json)" \
 		DOWNLOAD_API_HOST="$(shell jq -r ".downloadAPIHost" < environments/$(ENV)/config.json)" \
 		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-store/download-api
 
-test: default-env-to-test test-download-api
+test-upload-api:
+	cd upload-api \
+	&&	UPLOAD_API_PROTOCOL="$(shell jq -r ".uploadAPIProtocol" < environments/$(ENV)/config.json)" \
+		UPLOAD_API_HOST="$(shell jq -r ".uploadAPIHost" < environments/$(ENV)/config.json)" \
+		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-store/upload-api
+
+test: test-download-api test-upload-api
 
 #########################################################
 # Local (emulator) commands
 #########################################################
 
-run-local-firebase-emulators: set-env-to-local
+run-local-firebase-emulators:
 	cd firebase && firebase emulators:start --project=demo-cloud-symbol-store --import state --export-on-exit
 
-run-local-download-api: set-env-to-local
+run-local-download-api:
 	cd download-api/cmd \
 	&&	GCP_PROJECT_ID=demo-cloud-symbol-store \
 		FIRESTORE_EMULATOR_HOST=localhost:8082 \
@@ -63,19 +68,39 @@ run-local-download-api: set-env-to-local
 		PORT=8083 \
 		go run main.go
 
-run-local-frontend: set-env-to-local
+run-local-upload-api:
+	cd upload-api/cmd \
+	&&	GCP_PROJECT_ID=demo-cloud-symbol-store \
+		FIRESTORE_EMULATOR_HOST=localhost:8082 \
+		STORAGE_EMULATOR_HOST=localhost:9199 \
+		SYMBOL_STORE_BUCKET_NAME=default-bucket \
+		PORT=8084 \
+		go run main.go
+
+run-local-frontend:
 	cd firebase/frontend \
-	&&	VUE_APP_FIREBASE_CONFIG='$(shell cat environments/$(ENV)/firebase/frontend/firebase-config.json)' \
+	&&	VUE_APP_FIREBASE_CONFIG='$(shell cat environments/local/firebase/frontend/firebase-config.json)' \
 		VUE_APP_FIRESTORE_EMULATOR_PORT=8082 \
 		VUE_APP_AUTH_EMULATOR_URL=http://localhost:9099 \
-		VUE_APP_DOWNLOAD_API_PROTOCOL="$(shell jq -r ".downloadAPIProtocol" < environments/$(ENV)/config.json)" \
-		VUE_APP_DOWNLOAD_API_HOST="$(shell jq -r ".downloadAPIHost" < environments/$(ENV)/config.json)" \
+		VUE_APP_DOWNLOAD_API_PROTOCOL="$(shell jq -r ".downloadAPIProtocol" < environments/local/config.json)" \
+		VUE_APP_DOWNLOAD_API_HOST="$(shell jq -r ".downloadAPIHost" < environments/local/config.json)" \
 		npm run serve
 
-test-local-download-api: set-env-to-local
+test-local-download-api:
 	cd download-api \
 	&&	DOWNLOAD_API_PROTOCOL=http \
 		DOWNLOAD_API_HOST=localhost:8083 \
 		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-store/download-api
 
-test-local: set-env-to-local test-local-download-api
+test-local-upload-api:
+	cd upload-api \
+	&&	UPLOAD_API_PROTOCOL=http \
+		UPLOAD_API_HOST=localhost:8084 \
+		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-store/upload-api -count=1
+
+test-local: test-local-download-api test-local-upload-api
+
+build-cli:
+	cd cli \
+	&& GOOS=windows GOARCH=amd64 go build -o cloud-symbol-store-cli.exe ./cmd \
+	&& GOOS=linux GOARCH=amd64 go build -o cloud-symbol-store-cli ./cmd
