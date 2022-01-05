@@ -169,6 +169,13 @@ func UploadAPI(w http.ResponseWriter, r *http.Request) {
 
 	}
 
+	// Log transaction to Firestore DB
+
+	err = logTransaction(r, w, uploadTransactionRequest, uploadTransactionResponse, firestoreClient)
+	if err != nil {
+		return
+	}
+
 	log.Printf("Response: %v", uploadTransactionResponse)
 
 	response, err := json.Marshal(uploadTransactionResponse)
@@ -214,6 +221,28 @@ func handlePATAuthentication(r *http.Request, w http.ResponseWriter, firestoreCl
 	}
 
 	log.Printf("Email/PAT pair %v, %v exist in database; authentication successful", email, pat)
+
+	return nil
+}
+
+func logTransaction(r *http.Request, w http.ResponseWriter, uploadTransactionRequest UploadTransactionRequest, uploadTransactionResponse UploadTransactionResponse, firestoreClient *firestore.Client) error {
+
+	transactionContent := map[string]interface{}{
+		"description": uploadTransactionRequest.Description,
+		"buildId":     uploadTransactionRequest.BuildId,
+		"files":       uploadTransactionRequest.Files,
+		"timestamp":   time.Now().Format(time.RFC3339),
+	}
+
+	log.Printf("Writing transaction to database: %v", transactionContent)
+
+	_, _, err := firestoreClient.Collection("transactions").Add(r.Context(), transactionContent)
+
+	if err != nil {
+		log.Printf("Error when logging transaction, err = %v", err)
+		http.Error(w, fmt.Sprintf("Error when logging trasaction, err = %v", err), http.StatusInternalServerError)
+		return err
+	}
 
 	return nil
 }
