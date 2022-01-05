@@ -8,7 +8,7 @@ import (
 	"github.com/falldamagestudio/cloud-symbol-store/cli"
 )
 
-type TransactionRequest struct {
+type UploadTransactionRequest struct {
 	Description string              `json:"description"`
 	Files       []UploadFileRequest `json:"files"`
 }
@@ -18,7 +18,7 @@ type UploadFileRequest struct {
 	Hash     string `json:"hash"`
 }
 
-func createTransaction(description string, fileNames []string) (*TransactionRequest, error) {
+func createUploadTransaction(description string, fileNames []string) (*UploadTransactionRequest, error) {
 
 	files := []UploadFileRequest{}
 
@@ -39,23 +39,23 @@ func createTransaction(description string, fileNames []string) (*TransactionRequ
 		files = append(files, uploadFileRequest)
 	}
 
-	transaction := &TransactionRequest{
+	uploadTransaction := &UploadTransactionRequest{
 		Description: description,
 		Files:       files,
 	}
 
-	return transaction, nil
+	return uploadTransaction, nil
 }
 
-func uploadTransaction(transactionRequest TransactionRequest) error {
+func uploadTransaction(uploadTransactionRequest UploadTransactionRequest) error {
 
-	log.Printf("fake transaction: %v", transactionRequest)
+	log.Printf("fake transaction: %v", uploadTransactionRequest)
 
 	return nil
 }
 
 func upload(description string, fileNames []string) error {
-	transaction, err := createTransaction(description, fileNames)
+	transaction, err := createUploadTransaction(description, fileNames)
 	if err != nil {
 		return err
 	}
