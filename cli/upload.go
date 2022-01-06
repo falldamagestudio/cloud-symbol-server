@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"encoding/json"
+	"context"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -69,31 +69,28 @@ func CreateUploadTransaction(description string, buildId string, filesWithHashes
 
 func InitiateUploadTransaction(uploadAPIProtocol string, uploadAPIHost string, email string, pat string, uploadTransactionRequest openapi.UploadTransactionRequest) (*openapi.UploadTransactionResponse, error) {
 
-	body, err := json.Marshal(uploadTransactionRequest)
-	if err != nil {
-		return nil, err
-	}
-
 	serviceUrl := fmt.Sprintf("%s://%s:%s@%s", uploadAPIProtocol, email, pat, uploadAPIHost)
-	path := "UploadAPI/transactions"
 
-	response, err := retryablehttp.Post(serviceUrl+"/"+path, "application/json", body)
-	defer response.Body.Close()
+	configuration := openapi.NewConfiguration()
+	configuration.Servers = []openapi.ServerConfiguration{
+		{
+			URL:         serviceUrl,
+			Description: "Custom URL",
+			Variables:   nil,
+		},
+	}
+	api_client := openapi.NewAPIClient(configuration)
+	uploadTransactionResponse, httpResponse, err := api_client.DefaultApi.CreateTransaction(context.Background()).UploadTransactionRequest(uploadTransactionRequest).Execute()
+
 	if err != nil {
 		return nil, err
 	}
 
-	if response.StatusCode != http.StatusOK {
-		return nil, errors.New(fmt.Sprintf("Backend API call failed, status code = %v", response.StatusCode))
+	if httpResponse.StatusCode != http.StatusOK {
+		return nil, errors.New(fmt.Sprintf("Backend API call failed, status code = %v", httpResponse.StatusCode))
 	}
 
-	uploadTransactionResponse := &openapi.UploadTransactionResponse{}
-
-	if err = json.NewDecoder(response.Body).Decode(uploadTransactionResponse); err != nil {
-		return nil, err
-	}
-
-	return uploadTransactionResponse, nil
+	return &uploadTransactionResponse, nil
 }
 
 func UploadMissingFiles(uploadTransactionResponse openapi.UploadTransactionResponse, filesWithHashes []FileWithHash) error {
