@@ -118,4 +118,4 @@ generate-apis:
 		--git-repo-id=cloud-symbol-store/upload-api \
 		-i /local/upload-api/upload-api.yaml \
 		-g go-server \
-		-o /local/upload-api/api
+		-o /local/upload-api/generated
