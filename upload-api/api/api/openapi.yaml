@@ -1,0 +1,95 @@
+openapi: 3.0.1
+info:
+  description: This is the API that is used to upload symbols to Cloud Symbol Store
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: Cloud Symbol Store Uplaod API
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /transactions:
+    post:
+      operationId: createTransaction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/uploadTransactionRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/uploadTransactionResponse'
+          description: Success
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/notAuthorizedResponse'
+          description: Not authorized
+      summary: Start a new upload transaction
+components:
+  schemas:
+    uploadTransactionRequest:
+      properties:
+        description:
+          example: Example application
+          type: string
+        buildId:
+          example: Build 432
+          type: string
+        files:
+          items:
+            $ref: '#/components/schemas/uploadFileRequest'
+          type: array
+      type: object
+    uploadFileRequest:
+      properties:
+        fileName:
+          example: Application.pdb
+          type: string
+        hash:
+          example: 7F416863ABF34C3E894BAD1739BAA5571
+          type: string
+      type: object
+    uploadTransactionResponse:
+      example:
+        files:
+        - fileName: Application.pdb
+          hash: 7F416863ABF34C3E894BAD1739BAA5571
+          url: https://storage.googleapis.com/storage/v1/b/example-bucket/o/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
+        - fileName: Application.pdb
+          hash: 7F416863ABF34C3E894BAD1739BAA5571
+          url: https://storage.googleapis.com/storage/v1/b/example-bucket/o/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
+      properties:
+        files:
+          items:
+            $ref: '#/components/schemas/uploadFileResponse'
+          type: array
+      type: object
+    uploadFileResponse:
+      example:
+        fileName: Application.pdb
+        hash: 7F416863ABF34C3E894BAD1739BAA5571
+        url: https://storage.googleapis.com/storage/v1/b/example-bucket/o/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
+      properties:
+        fileName:
+          example: Application.pdb
+          type: string
+        hash:
+          example: 7F416863ABF34C3E894BAD1739BAA5571
+          type: string
+        url:
+          example: https://storage.googleapis.com/storage/v1/b/example-bucket/o/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
+          type: string
+      type: object
+    notAuthorizedResponse:
+      properties:
+        message:
+          example: Invalid email and Personal Access Token combination
+          type: string
+      type: object

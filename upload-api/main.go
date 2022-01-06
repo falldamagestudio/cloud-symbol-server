@@ -13,9 +13,11 @@ import (
 	"cloud.google.com/go/firestore"
 	"cloud.google.com/go/storage"
 	"google.golang.org/api/option"
+
+	openapi "github.com/falldamagestudio/cloud-symbol-store/upload-api/api/go"
 )
 
-func uploadFileRequestToPath(uploadFileRequest UploadFileRequest) string {
+func uploadFileRequestToPath(uploadFileRequest openapi.UploadFileRequest) string {
 	return fmt.Sprintf("%s/%s/%s", uploadFileRequest.FileName, uploadFileRequest.Hash, uploadFileRequest.FileName)
 }
 
@@ -106,11 +108,11 @@ func UploadAPI(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	uploadTransactionRequest := UploadTransactionRequest{}
+	uploadTransactionRequest := openapi.UploadTransactionRequest{}
 	json.NewDecoder(r.Body).Decode(&uploadTransactionRequest)
 	log.Printf("Request: %v", uploadTransactionRequest)
 
-	uploadTransactionResponse := UploadTransactionResponse{}
+	uploadTransactionResponse := openapi.UploadTransactionResponse{}
 
 	for _, uploadFileRequest := range uploadTransactionRequest.Files {
 
@@ -157,7 +159,7 @@ func UploadAPI(w http.ResponseWriter, r *http.Request) {
 
 			}
 
-			uploadTransactionResponse.Files = append(uploadTransactionResponse.Files, UploadFileResponse{
+			uploadTransactionResponse.Files = append(uploadTransactionResponse.Files, openapi.UploadFileResponse{
 				FileName: uploadFileRequest.FileName,
 				Hash:     uploadFileRequest.Hash,
 				Url:      objectURL,
@@ -225,7 +227,7 @@ func handlePATAuthentication(r *http.Request, w http.ResponseWriter, firestoreCl
 	return nil
 }
 
-func logTransaction(r *http.Request, w http.ResponseWriter, uploadTransactionRequest UploadTransactionRequest, uploadTransactionResponse UploadTransactionResponse, firestoreClient *firestore.Client) error {
+func logTransaction(r *http.Request, w http.ResponseWriter, uploadTransactionRequest openapi.UploadTransactionRequest, uploadTransactionResponse openapi.UploadTransactionResponse, firestoreClient *firestore.Client) error {
 
 	transactionContent := map[string]interface{}{
 		"description": uploadTransactionRequest.Description,
