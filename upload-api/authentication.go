@@ -3,13 +3,9 @@ package upload_api
 import (
 	"log"
 	"net/http"
-
-	"cloud.google.com/go/firestore"
 )
 
-type patAuthenticationMiddleware struct {
-	firestoreClient *firestore.Client
-}
+type patAuthenticationMiddleware struct{}
 
 func (patAM *patAuthenticationMiddleware) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -34,7 +30,14 @@ func (patAM *patAuthenticationMiddleware) Middleware(next http.Handler) http.Han
 
 		// Validate that email + PAT exists in database
 
-		patDocRef := patAM.firestoreClient.Collection("users").Doc(email).Collection("pats").Doc(pat)
+		firestoreClient, err := firestoreClient(r.Context())
+		if err != nil {
+			log.Printf("Unable to talk to database: %v", err)
+			http.Error(w, "Unable to talk to database", http.StatusInternalServerError)
+			return
+		}
+
+		patDocRef := firestoreClient.Collection("users").Doc(email).Collection("pats").Doc(pat)
 
 		if _, err := patDocRef.Get(r.Context()); err != nil {
 

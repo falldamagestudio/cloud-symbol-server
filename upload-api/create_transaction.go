@@ -11,7 +11,6 @@ import (
 	"strings"
 	"time"
 
-	"cloud.google.com/go/firestore"
 	"cloud.google.com/go/storage"
 	openapi "github.com/falldamagestudio/cloud-symbol-store/upload-api/api/go"
 	"google.golang.org/api/option"
@@ -67,18 +66,6 @@ func (s *ApiService) CreateTransaction(ctx context.Context, uploadTransactionReq
 	if symbolStoreBucketName == "" {
 		log.Print("No storage bucket configured")
 		return openapi.Response(http.StatusInternalServerError, "No storage bucket configured"), errors.New("No storage bucket configured")
-	}
-
-	gcpProjectId := os.Getenv("GCP_PROJECT_ID")
-	if gcpProjectId == "" {
-		log.Print("No GCP Project ID configured")
-		return openapi.Response(http.StatusInternalServerError, "No GCP Project ID configured"), errors.New("No GCP Project ID configured")
-	}
-
-	firestoreClient, err := firestore.NewClient(ctx, gcpProjectId)
-	if err != nil {
-		log.Printf("Unable to create firestoreClient: %v", err)
-		return openapi.Response(http.StatusInternalServerError, "Unable to create firestoreClient"), errors.New("Unable to create firestoreClient")
 	}
 
 	// patResponse, err := handlePATAuthentication(ctx, r, w, firestoreClient)
@@ -159,7 +146,7 @@ func (s *ApiService) CreateTransaction(ctx context.Context, uploadTransactionReq
 
 	// Log transaction to Firestore DB
 
-	err = logTransaction(ctx, uploadTransactionRequest, uploadTransactionResponse, firestoreClient)
+	err = logTransaction(ctx, uploadTransactionRequest, uploadTransactionResponse)
 	if err != nil {
 		return openapi.Response(http.StatusInternalServerError, "Internal error while logging transaction to DB"), errors.New("Internal error while logging transaction to DB")
 	}
@@ -175,7 +162,7 @@ func (s *ApiService) CreateTransaction(ctx context.Context, uploadTransactionReq
 	return openapi.Response(http.StatusOK, response), nil
 }
 
-func logTransaction(ctx context.Context, uploadTransactionRequest openapi.UploadTransactionRequest, uploadTransactionResponse openapi.UploadTransactionResponse, firestoreClient *firestore.Client) error {
+func logTransaction(ctx context.Context, uploadTransactionRequest openapi.UploadTransactionRequest, uploadTransactionResponse openapi.UploadTransactionResponse) error {
 
 	transactionContent := map[string]interface{}{
 		"description": uploadTransactionRequest.Description,
@@ -186,7 +173,13 @@ func logTransaction(ctx context.Context, uploadTransactionRequest openapi.Upload
 
 	log.Printf("Writing transaction to database: %v", transactionContent)
 
-	_, _, err := firestoreClient.Collection("transactions").Add(ctx, transactionContent)
+	firestoreClient, err := firestoreClient(ctx)
+	if err != nil {
+		log.Printf("Unable to talk to database: %v", err)
+		return err
+	}
+
+	_, _, err = firestoreClient.Collection("transactions").Add(ctx, transactionContent)
 
 	if err != nil {
 		log.Printf("Error when logging transaction, err = %v", err)
