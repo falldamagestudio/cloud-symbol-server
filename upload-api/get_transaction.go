@@ -7,6 +7,9 @@ import (
 
 	"cloud.google.com/go/firestore"
 	openapi "github.com/falldamagestudio/cloud-symbol-store/upload-api/generated/go"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func (s *ApiService) GetTransaction(context context.Context, transactionId string) (openapi.ImplResponse, error) {
@@ -14,8 +17,13 @@ func (s *ApiService) GetTransaction(context context.Context, transactionId strin
 	log.Printf("Getting transaction doc")
 	transactionDoc, err := getTransactionDoc(context, transactionId)
 	if err != nil {
-		log.Printf("Getting transaction doc failed")
-		return openapi.Response(http.StatusOK, &openapi.MessageResponse{Message: "Error while fetching doc"}), err
+		if status.Code(err) == codes.NotFound {
+			log.Printf("Doc %v does not exist", transactionId)
+			return openapi.Response(http.StatusNotFound, &openapi.MessageResponse{Message: "Doc does not exist"}), err
+		} else {
+			log.Printf("Getting transaction doc failed")
+			return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Error while fetching doc"}), err
+		}
 	}
 
 	log.Printf("Extracting transaction doc data")
