@@ -29,11 +29,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/notAuthorizedResponse'
+                $ref: '#/components/schemas/messageResponse'
           description: Not authorized
       summary: Start a new upload transaction
 components:
   schemas:
+    messageResponse:
+      properties:
+        message:
+          example: Invalid API invocation
+          type: string
+      type: object
     uploadTransactionRequest:
       properties:
         description:
@@ -89,11 +95,5 @@ components:
           type: string
         url:
           example: https://storage.googleapis.com/storage/v1/b/example-bucket/o/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
-          type: string
-      type: object
-    notAuthorizedResponse:
-      properties:
-        message:
-          example: Invalid email and Personal Access Token combination
           type: string
       type: object

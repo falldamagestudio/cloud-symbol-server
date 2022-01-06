@@ -33,11 +33,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/notAuthorizedResponse'
+                $ref: '#/components/schemas/messageResponse'
 
 
 components:
   schemas:
+
+    messageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Invalid API invocation
 
     uploadTransactionRequest:
       type: object
@@ -86,10 +93,3 @@ components:
         url:
           type: string
           example: https://storage.googleapis.com/storage/v1/b/example-bucket/o/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
-
-    notAuthorizedResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          example: Invalid email and Personal Access Token combination

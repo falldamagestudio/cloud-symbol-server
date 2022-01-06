@@ -2,7 +2,6 @@ package upload_api
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -149,13 +148,7 @@ func (s *ApiService) CreateTransaction(context context.Context, uploadTransactio
 
 	log.Printf("Response: %v", uploadTransactionResponse)
 
-	response, err := json.Marshal(uploadTransactionResponse)
-	if err != nil {
-		log.Printf("Error when turning response to json: %v => %v", uploadTransactionResponse, err)
-		return openapi.Response(http.StatusInternalServerError, "Error when turning response to json"), errors.New("Error when turning response to json")
-	}
-
-	return openapi.Response(http.StatusOK, response), nil
+	return openapi.Response(http.StatusOK, uploadTransactionResponse), nil
 }
 
 func logTransaction(context context.Context, uploadTransactionRequest openapi.UploadTransactionRequest, uploadTransactionResponse openapi.UploadTransactionResponse) (string, error) {

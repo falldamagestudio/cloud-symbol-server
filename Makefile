@@ -108,6 +108,7 @@ build-cli:
 ###
 
 generate-apis:
+	rm -r upload-api/generated/go
 	docker run \
 		--rm \
 		-v "${PWD}:/local" \

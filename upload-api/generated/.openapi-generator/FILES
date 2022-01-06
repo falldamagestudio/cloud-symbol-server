@@ -6,7 +6,7 @@ go/error.go
 go/helpers.go
 go/impl.go
 go/logger.go
-go/model_not_authorized_response.go
+go/model_message_response.go
 go/model_upload_file_request.go
 go/model_upload_file_response.go
 go/model_upload_transaction_request.go
