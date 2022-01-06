@@ -12,7 +12,7 @@ import (
 
 	retryablehttp "github.com/hashicorp/go-retryablehttp"
 
-	upload_api "github.com/falldamagestudio/cloud-symbol-store/upload-api"
+	openapi "github.com/falldamagestudio/cloud-symbol-store/upload-api/generated/go"
 )
 
 type FileWithHash struct {
@@ -44,13 +44,13 @@ func GetFilesWithHashes(fileNames []string) ([]FileWithHash, error) {
 	return filesWithHashes, nil
 }
 
-func CreateUploadTransaction(description string, buildId string, filesWithHashes []FileWithHash) (*upload_api.UploadTransactionRequest, error) {
+func CreateUploadTransaction(description string, buildId string, filesWithHashes []FileWithHash) (*openapi.UploadTransactionRequest, error) {
 
-	files := []upload_api.UploadFileRequest{}
+	files := []openapi.UploadFileRequest{}
 
 	for _, file := range filesWithHashes {
 
-		uploadFileRequest := upload_api.UploadFileRequest{
+		uploadFileRequest := openapi.UploadFileRequest{
 			FileName: file.FileWithoutPath,
 			Hash:     file.Hash,
 		}
@@ -58,7 +58,7 @@ func CreateUploadTransaction(description string, buildId string, filesWithHashes
 		files = append(files, uploadFileRequest)
 	}
 
-	uploadTransaction := &upload_api.UploadTransactionRequest{
+	uploadTransaction := &openapi.UploadTransactionRequest{
 		Description: description,
 		BuildId:     buildId,
 		Files:       files,
@@ -67,7 +67,7 @@ func CreateUploadTransaction(description string, buildId string, filesWithHashes
 	return uploadTransaction, nil
 }
 
-func InitiateUploadTransaction(uploadAPIProtocol string, uploadAPIHost string, email string, pat string, uploadTransactionRequest upload_api.UploadTransactionRequest) (*upload_api.UploadTransactionResponse, error) {
+func InitiateUploadTransaction(uploadAPIProtocol string, uploadAPIHost string, email string, pat string, uploadTransactionRequest openapi.UploadTransactionRequest) (*openapi.UploadTransactionResponse, error) {
 
 	body, err := json.Marshal(uploadTransactionRequest)
 	if err != nil {
@@ -75,7 +75,7 @@ func InitiateUploadTransaction(uploadAPIProtocol string, uploadAPIHost string, e
 	}
 
 	serviceUrl := fmt.Sprintf("%s://%s:%s@%s", uploadAPIProtocol, email, pat, uploadAPIHost)
-	path := "UploadAPI"
+	path := "UploadAPI/transactions"
 
 	response, err := retryablehttp.Post(serviceUrl+"/"+path, "application/json", body)
 	defer response.Body.Close()
@@ -87,7 +87,7 @@ func InitiateUploadTransaction(uploadAPIProtocol string, uploadAPIHost string, e
 		return nil, errors.New(fmt.Sprintf("Backend API call failed, status code = %v", response.StatusCode))
 	}
 
-	uploadTransactionResponse := &upload_api.UploadTransactionResponse{}
+	uploadTransactionResponse := &openapi.UploadTransactionResponse{}
 
 	if err = json.NewDecoder(response.Body).Decode(uploadTransactionResponse); err != nil {
 		return nil, err
@@ -96,7 +96,7 @@ func InitiateUploadTransaction(uploadAPIProtocol string, uploadAPIHost string, e
 	return uploadTransactionResponse, nil
 }
 
-func UploadMissingFiles(uploadTransactionResponse upload_api.UploadTransactionResponse, filesWithHashes []FileWithHash) error {
+func UploadMissingFiles(uploadTransactionResponse openapi.UploadTransactionResponse, filesWithHashes []FileWithHash) error {
 
 	for _, uploadFileResponse := range uploadTransactionResponse.Files {
 
