@@ -11,6 +11,8 @@ package openapi
 
 type UploadTransactionResponse struct {
 
+	Id string `json:"id,omitempty"`
+
 	Files []UploadFileResponse `json:"files,omitempty"`
 }
 

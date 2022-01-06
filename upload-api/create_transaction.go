@@ -140,10 +140,12 @@ func (s *ApiService) CreateTransaction(context context.Context, uploadTransactio
 
 	// Log transaction to Firestore DB
 
-	err = logTransaction(context, uploadTransactionRequest, uploadTransactionResponse)
+	transactionId, err := logTransaction(context, uploadTransactionRequest, uploadTransactionResponse)
 	if err != nil {
 		return openapi.Response(http.StatusInternalServerError, "Internal error while logging transaction to DB"), errors.New("Internal error while logging transaction to DB")
 	}
+
+	uploadTransactionResponse.Id = transactionId
 
 	log.Printf("Response: %v", uploadTransactionResponse)
 
@@ -156,7 +158,7 @@ func (s *ApiService) CreateTransaction(context context.Context, uploadTransactio
 	return openapi.Response(http.StatusOK, response), nil
 }
 
-func logTransaction(context context.Context, uploadTransactionRequest openapi.UploadTransactionRequest, uploadTransactionResponse openapi.UploadTransactionResponse) error {
+func logTransaction(context context.Context, uploadTransactionRequest openapi.UploadTransactionRequest, uploadTransactionResponse openapi.UploadTransactionResponse) (string, error) {
 
 	transactionContent := map[string]interface{}{
 		"description": uploadTransactionRequest.Description,
@@ -170,15 +172,15 @@ func logTransaction(context context.Context, uploadTransactionRequest openapi.Up
 	firestoreClient, err := firestoreClient(context)
 	if err != nil {
 		log.Printf("Unable to talk to database: %v", err)
-		return err
+		return "", err
 	}
 
-	_, _, err = firestoreClient.Collection("transactions").Add(context, transactionContent)
+	transactionDocRef, _, err := firestoreClient.Collection("transactions").Add(context, transactionContent)
 
 	if err != nil {
 		log.Printf("Error when logging transaction, err = %v", err)
-		return err
+		return "", err
 	}
 
-	return nil
+	return transactionDocRef.ID, nil
 }

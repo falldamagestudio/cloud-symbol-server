@@ -65,7 +65,11 @@ components:
         - fileName: Application.pdb
           hash: 7F416863ABF34C3E894BAD1739BAA5571
           url: https://storage.googleapis.com/storage/v1/b/example-bucket/o/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
+        id: s4elWg054qyrpHCsHqLq
       properties:
+        id:
+          example: s4elWg054qyrpHCsHqLq
+          type: string
         files:
           items:
             $ref: '#/components/schemas/uploadFileResponse'

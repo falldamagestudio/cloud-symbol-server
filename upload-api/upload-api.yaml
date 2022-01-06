@@ -66,6 +66,9 @@ components:
     uploadTransactionResponse:
       type: object
       properties:
+        id:
+          type: string
+          example: s4elWg054qyrpHCsHqLq
         files:
           type: array
           items:
