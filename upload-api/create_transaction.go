@@ -76,7 +76,7 @@ func (s *ApiService) CreateTransaction(context context.Context, uploadTransactio
 	storageClient, err := storage.NewClient(context, storageClientOpts...)
 	if err != nil {
 		log.Printf("Unable to create storageClient: %v", err)
-		return openapi.Response(http.StatusInternalServerError, "Unable to create storageClient"), errors.New("Unable to create storageClient")
+		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Unable to create storageClient"}), errors.New("Unable to create storageClient")
 	}
 
 	uploadTransactionResponse := openapi.UploadTransactionResponse{}
@@ -105,7 +105,7 @@ func (s *ApiService) CreateTransaction(context context.Context, uploadTransactio
 
 				if err != nil {
 					log.Printf("Unable to create signed URL for %v: %v", path, err)
-					return openapi.Response(http.StatusInternalServerError, fmt.Sprintf("Unable to create signed URL for %v", path)), errors.New(fmt.Sprintf("Unable to create signed URL for %v", path))
+					return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: fmt.Sprintf("Unable to create signed URL for %v", path)}), errors.New(fmt.Sprintf("Unable to create signed URL for %v", path))
 				}
 
 				log.Printf("Object %v has a signed URL %v, valid for %d seconds", path, objectURL, signedURLExpirationSeconds)
@@ -141,7 +141,7 @@ func (s *ApiService) CreateTransaction(context context.Context, uploadTransactio
 
 	transactionId, err := logTransaction(context, uploadTransactionRequest, uploadTransactionResponse)
 	if err != nil {
-		return openapi.Response(http.StatusInternalServerError, "Internal error while logging transaction to DB"), errors.New("Internal error while logging transaction to DB")
+		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Internal error while logging transaction to DB"}), errors.New("Internal error while logging transaction to DB")
 	}
 
 	uploadTransactionResponse.Id = transactionId
