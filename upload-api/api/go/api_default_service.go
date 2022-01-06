@@ -27,12 +27,12 @@ func NewDefaultApiService() DefaultApiServicer {
 }
 
 // CreateTransaction - Start a new upload transaction
-func (s *DefaultApiService) CreateTransaction(ctx context.Context, transactionPostRequest TransactionPostRequest) (ImplResponse, error) {
+func (s *DefaultApiService) CreateTransaction(ctx context.Context, uploadTransactionRequest UploadTransactionRequest) (ImplResponse, error) {
 	// TODO - update CreateTransaction with the required logic for this service method.
 	// Add api_default_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
-	//TODO: Uncomment the next line to return response Response(200, TransactionPostResponse{}) or use other options such as http.Ok ...
-	//return Response(200, TransactionPostResponse{}), nil
+	//TODO: Uncomment the next line to return response Response(200, UploadTransactionResponse{}) or use other options such as http.Ok ...
+	//return Response(200, UploadTransactionResponse{}), nil
 
 	//TODO: Uncomment the next line to return response Response(401, NotAuthorizedResponse{}) or use other options such as http.Ok ...
 	//return Response(401, NotAuthorizedResponse{}), nil

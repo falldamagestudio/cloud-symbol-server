@@ -1,6 +1,7 @@
 package upload_api
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -15,13 +16,36 @@ import (
 	"google.golang.org/api/option"
 
 	openapi "github.com/falldamagestudio/cloud-symbol-store/upload-api/api/go"
+	"github.com/gorilla/mux"
 )
+
+type ApiService struct {
+}
+
+var router *mux.Router
+var apiService openapi.DefaultApiServicer
+
+func init() {
+	apiService = &ApiService{}
+	DefaultApiController := openapi.NewDefaultApiController(apiService)
+
+	router = openapi.NewRouter(DefaultApiController)
+
+	patAM := &patAuthenticationMiddleware{}
+	router.Use(patAM.Middleware)
+}
 
 func uploadFileRequestToPath(uploadFileRequest openapi.UploadFileRequest) string {
 	return fmt.Sprintf("%s/%s/%s", uploadFileRequest.FileName, uploadFileRequest.Hash, uploadFileRequest.FileName)
 }
 
 func UploadAPI(w http.ResponseWriter, r *http.Request) {
+
+	router.ServeHTTP(w, r)
+
+}
+
+func (s *ApiService) CreateTransaction(ctx context.Context, uploadTransactionRequest openapi.UploadTransactionRequest) (openapi.ImplResponse, error) {
 
 	signedURLExpirationSeconds := 15 * 60
 
@@ -66,28 +90,26 @@ func UploadAPI(w http.ResponseWriter, r *http.Request) {
 	symbolStoreBucketName := os.Getenv("SYMBOL_STORE_BUCKET_NAME")
 	if symbolStoreBucketName == "" {
 		log.Print("No storage bucket configured")
-		http.Error(w, "No storage bucket configured", http.StatusInternalServerError)
-		return
+		return openapi.Response(http.StatusInternalServerError, "No storage bucket configured"), errors.New("No storage bucket configured")
 	}
 
 	gcpProjectId := os.Getenv("GCP_PROJECT_ID")
 	if gcpProjectId == "" {
 		log.Print("No GCP Project ID configured")
-		http.Error(w, "No GCP Project ID configured", http.StatusInternalServerError)
-		return
+		return openapi.Response(http.StatusInternalServerError, "No GCP Project ID configured"), errors.New("No GCP Project ID configured")
 	}
 
-	firestoreClient, err := firestore.NewClient(r.Context(), gcpProjectId)
+	firestoreClient, err := firestore.NewClient(ctx, gcpProjectId)
 	if err != nil {
 		log.Printf("Unable to create firestoreClient: %v", err)
-		http.Error(w, "Unable to create firestoreClient", http.StatusInternalServerError)
+		return openapi.Response(http.StatusInternalServerError, "Unable to create firestoreClient"), errors.New("Unable to create firestoreClient")
 	}
 
-	err = handlePATAuthentication(r, w, firestoreClient)
+	// patResponse, err := handlePATAuthentication(ctx, r, w, firestoreClient)
 
-	if err != nil {
-		return
-	}
+	// if err != nil {
+	// 	return patResponse, err
+	// }
 
 	storageClientOpts := []option.ClientOption{}
 
@@ -95,22 +117,11 @@ func UploadAPI(w http.ResponseWriter, r *http.Request) {
 		storageClientOpts = append(storageClientOpts, option.WithEndpoint(storageEndpoint))
 	}
 
-	storageClient, err := storage.NewClient(r.Context(), storageClientOpts...)
+	storageClient, err := storage.NewClient(ctx, storageClientOpts...)
 	if err != nil {
 		log.Printf("Unable to create storageClient: %v", err)
-		http.Error(w, "Unable to create storageClient", http.StatusInternalServerError)
-		return
+		return openapi.Response(http.StatusInternalServerError, "Unable to create storageClient"), errors.New("Unable to create storageClient")
 	}
-
-	if r.Header.Get("Content-Type") != "application/json" {
-		log.Print("Request must have content-type = application/json")
-		http.Error(w, "Request must have content-type = application/json", http.StatusBadRequest)
-		return
-	}
-
-	uploadTransactionRequest := openapi.UploadTransactionRequest{}
-	json.NewDecoder(r.Body).Decode(&uploadTransactionRequest)
-	log.Printf("Request: %v", uploadTransactionRequest)
 
 	uploadTransactionResponse := openapi.UploadTransactionResponse{}
 
@@ -121,7 +132,7 @@ func UploadAPI(w http.ResponseWriter, r *http.Request) {
 
 		path := uploadFileRequestToPath(uploadFileRequest)
 		log.Printf("Validating whether object %v does exists in bucket %v", path, symbolStoreBucketName)
-		_, err = storageClient.Bucket(symbolStoreBucketName).Object(path).Attrs(r.Context())
+		_, err = storageClient.Bucket(symbolStoreBucketName).Object(path).Attrs(ctx)
 		if err != nil {
 			log.Printf("Object %v does not exist in bucket %v, preparing a redirect", path, symbolStoreBucketName)
 
@@ -138,8 +149,7 @@ func UploadAPI(w http.ResponseWriter, r *http.Request) {
 
 				if err != nil {
 					log.Printf("Unable to create signed URL for %v: %v", path, err)
-					http.Error(w, fmt.Sprintf("Unable to create signed URL for %v", path), http.StatusInternalServerError)
-					return
+					return openapi.Response(http.StatusInternalServerError, fmt.Sprintf("Unable to create signed URL for %v", path)), errors.New(fmt.Sprintf("Unable to create signed URL for %v", path))
 				}
 
 				log.Printf("Object %v has a signed URL %v, valid for %d seconds", path, objectURL, signedURLExpirationSeconds)
@@ -173,9 +183,9 @@ func UploadAPI(w http.ResponseWriter, r *http.Request) {
 
 	// Log transaction to Firestore DB
 
-	err = logTransaction(r, w, uploadTransactionRequest, uploadTransactionResponse, firestoreClient)
+	err = logTransaction(ctx, uploadTransactionRequest, uploadTransactionResponse, firestoreClient)
 	if err != nil {
-		return
+		return openapi.Response(http.StatusInternalServerError, "Internal error while logging transaction to DB"), errors.New("Internal error while logging transaction to DB")
 	}
 
 	log.Printf("Response: %v", uploadTransactionResponse)
@@ -183,51 +193,56 @@ func UploadAPI(w http.ResponseWriter, r *http.Request) {
 	response, err := json.Marshal(uploadTransactionResponse)
 	if err != nil {
 		log.Printf("Error when turning response to json: %v => %v", uploadTransactionResponse, err)
-		http.Error(w, "Error when turning response to json", http.StatusInternalServerError)
+		return openapi.Response(http.StatusInternalServerError, "Error when turning response to json"), errors.New("Error when turning response to json")
 	}
 
-	w.Write(response)
+	return openapi.Response(http.StatusOK, response), nil
 }
 
-func handlePATAuthentication(r *http.Request, w http.ResponseWriter, firestoreClient *firestore.Client) error {
-
-	// Fetch email + PAT from Basic Authentication header of WWW request
-	// The caller will have supplied this in its GET call
-	//  by performaing GET to https://<email>:<pat>@<site>/<file path>
-	// Also, the email/pat contents are expected to be URL encoded
-	//  (so hello%40example.com will translate to hello@example.com, etc)
-
-	email, pat, basicAuthPresent := r.BasicAuth()
-
-	if !basicAuthPresent {
-
-		w.Header().Set("WWW-Authenticate", `Basic realm="restricted", charset="UTF-8"`)
-		log.Print("Basic auth header (with email/token) not provided")
-		http.Error(w, "Unauthorized; please provide email + personal access token using Basic Authentication", http.StatusUnauthorized)
-		return errors.New("basic auth header (with email/token) not provided")
-
-	}
-
-	log.Printf("Basic Auth header present, email: %v, PAT: %v", email, pat)
-
-	// Validate that email + PAT exists in database
-
-	patDocRef := firestoreClient.Collection("users").Doc(email).Collection("pats").Doc(pat)
-
-	if _, err := patDocRef.Get(r.Context()); err != nil {
-
-		w.Header().Set("WWW-Authenticate", `Basic realm="restricted", charset="UTF-8"`)
-		log.Printf("Unable to find email %v, pat %v combination in database: %v", email, pat, err)
-		http.Error(w, "Unauthorized; unable to find email / pat combination in database", http.StatusUnauthorized)
-		return fmt.Errorf("unable to find email %v, pat %v combination in database: %v", email, pat, err)
-	}
-
-	log.Printf("Email/PAT pair %v, %v exist in database; authentication successful", email, pat)
-
-	return nil
+type patAuthenticationMiddleware struct {
+	firestoreClient *firestore.Client
 }
 
-func logTransaction(r *http.Request, w http.ResponseWriter, uploadTransactionRequest openapi.UploadTransactionRequest, uploadTransactionResponse openapi.UploadTransactionResponse, firestoreClient *firestore.Client) error {
+func (patAM *patAuthenticationMiddleware) Middleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		// Fetch email + PAT from Basic Authentication header of WWW request
+		// The caller will have supplied this in its GET call
+		//  by performaing GET to https://<email>:<pat>@<site>/<file path>
+		// Also, the email/pat contents are expected to be URL encoded
+		//  (so hello%40example.com will translate to hello@example.com, etc)
+
+		email, pat, basicAuthPresent := r.BasicAuth()
+
+		if !basicAuthPresent {
+
+			w.Header().Set("WWW-Authenticate", `Basic realm="restricted", charset="UTF-8"`)
+			log.Print("Basic auth header (with email/token) not provided")
+			http.Error(w, "Unauthorized; please provide email + personal access token using Basic Authentication", http.StatusUnauthorized)
+			return
+		}
+
+		log.Printf("Basic Auth header present, email: %v, PAT: %v", email, pat)
+
+		// Validate that email + PAT exists in database
+
+		patDocRef := patAM.firestoreClient.Collection("users").Doc(email).Collection("pats").Doc(pat)
+
+		if _, err := patDocRef.Get(r.Context()); err != nil {
+
+			w.Header().Set("WWW-Authenticate", `Basic realm="restricted", charset="UTF-8"`)
+			log.Printf("Unable to find email %v, pat %v combination in database: %v", email, pat, err)
+			http.Error(w, "Unauthorized; unable to find email / pat combination in database", http.StatusUnauthorized)
+			return
+		}
+
+		log.Printf("Email/PAT pair %v, %v exist in database; authentication successful", email, pat)
+
+		next.ServeHTTP(w, r)
+	})
+}
+
+func logTransaction(ctx context.Context, uploadTransactionRequest openapi.UploadTransactionRequest, uploadTransactionResponse openapi.UploadTransactionResponse, firestoreClient *firestore.Client) error {
 
 	transactionContent := map[string]interface{}{
 		"description": uploadTransactionRequest.Description,
@@ -238,11 +253,10 @@ func logTransaction(r *http.Request, w http.ResponseWriter, uploadTransactionReq
 
 	log.Printf("Writing transaction to database: %v", transactionContent)
 
-	_, _, err := firestoreClient.Collection("transactions").Add(r.Context(), transactionContent)
+	_, _, err := firestoreClient.Collection("transactions").Add(ctx, transactionContent)
 
 	if err != nil {
 		log.Printf("Error when logging transaction, err = %v", err)
-		http.Error(w, fmt.Sprintf("Error when logging trasaction, err = %v", err), http.StatusInternalServerError)
 		return err
 	}
 

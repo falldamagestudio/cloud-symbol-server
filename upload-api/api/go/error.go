@@ -10,7 +10,6 @@
 package openapi
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -60,16 +59,4 @@ func DefaultErrorHandler(w http.ResponseWriter, r *http.Request, err error, resu
 		// Handle all other errors
 		EncodeJSONResponse(err.Error(), &result.Code, w)
 	}
-}
-
-// EncodeJSONResponse uses the json encoder to write an interface to the http response with an optional status code
-func EncodeJSONResponse(i interface{}, status *int, w http.ResponseWriter) error {
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	if status != nil {
-		w.WriteHeader(*status)
-	} else {
-		w.WriteHeader(http.StatusOK)
-	}
-
-	return json.NewEncoder(w).Encode(i)
 }

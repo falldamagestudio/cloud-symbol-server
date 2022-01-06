@@ -13,10 +13,5 @@ go.mod
 # Do not generate Dockerfile
 Dockerfile
 
-# TEMP - skip a couple of files that aren't required just to test schema generation
-go/api_default.go
+# Do not generate DefaultApiService -- we will decare our own DefaultApiServicer implementation
 go/api_default_service.go
-go/routers.go
-
-# TEMP - skip error file since we have local changes in into
-go/error.go
