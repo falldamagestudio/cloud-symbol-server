@@ -20,7 +20,7 @@ func uploadFileRequestToPath(uploadFileRequest openapi.UploadFileRequest) string
 	return fmt.Sprintf("%s/%s/%s", uploadFileRequest.FileName, uploadFileRequest.Hash, uploadFileRequest.FileName)
 }
 
-func (s *ApiService) CreateTransaction(ctx context.Context, uploadTransactionRequest openapi.UploadTransactionRequest) (openapi.ImplResponse, error) {
+func (s *ApiService) CreateTransaction(context context.Context, uploadTransactionRequest openapi.UploadTransactionRequest) (openapi.ImplResponse, error) {
 
 	signedURLExpirationSeconds := 15 * 60
 
@@ -68,7 +68,7 @@ func (s *ApiService) CreateTransaction(ctx context.Context, uploadTransactionReq
 		return openapi.Response(http.StatusInternalServerError, "No storage bucket configured"), errors.New("No storage bucket configured")
 	}
 
-	// patResponse, err := handlePATAuthentication(ctx, r, w, firestoreClient)
+	// patResponse, err := handlePATAuthentication(context, r, w, firestoreClient)
 
 	// if err != nil {
 	// 	return patResponse, err
@@ -80,7 +80,7 @@ func (s *ApiService) CreateTransaction(ctx context.Context, uploadTransactionReq
 		storageClientOpts = append(storageClientOpts, option.WithEndpoint(storageEndpoint))
 	}
 
-	storageClient, err := storage.NewClient(ctx, storageClientOpts...)
+	storageClient, err := storage.NewClient(context, storageClientOpts...)
 	if err != nil {
 		log.Printf("Unable to create storageClient: %v", err)
 		return openapi.Response(http.StatusInternalServerError, "Unable to create storageClient"), errors.New("Unable to create storageClient")
@@ -95,7 +95,7 @@ func (s *ApiService) CreateTransaction(ctx context.Context, uploadTransactionReq
 
 		path := uploadFileRequestToPath(uploadFileRequest)
 		log.Printf("Validating whether object %v does exists in bucket %v", path, symbolStoreBucketName)
-		_, err = storageClient.Bucket(symbolStoreBucketName).Object(path).Attrs(ctx)
+		_, err = storageClient.Bucket(symbolStoreBucketName).Object(path).Attrs(context)
 		if err != nil {
 			log.Printf("Object %v does not exist in bucket %v, preparing a redirect", path, symbolStoreBucketName)
 
@@ -146,7 +146,7 @@ func (s *ApiService) CreateTransaction(ctx context.Context, uploadTransactionReq
 
 	// Log transaction to Firestore DB
 
-	err = logTransaction(ctx, uploadTransactionRequest, uploadTransactionResponse)
+	err = logTransaction(context, uploadTransactionRequest, uploadTransactionResponse)
 	if err != nil {
 		return openapi.Response(http.StatusInternalServerError, "Internal error while logging transaction to DB"), errors.New("Internal error while logging transaction to DB")
 	}
@@ -162,7 +162,7 @@ func (s *ApiService) CreateTransaction(ctx context.Context, uploadTransactionReq
 	return openapi.Response(http.StatusOK, response), nil
 }
 
-func logTransaction(ctx context.Context, uploadTransactionRequest openapi.UploadTransactionRequest, uploadTransactionResponse openapi.UploadTransactionResponse) error {
+func logTransaction(context context.Context, uploadTransactionRequest openapi.UploadTransactionRequest, uploadTransactionResponse openapi.UploadTransactionResponse) error {
 
 	transactionContent := map[string]interface{}{
 		"description": uploadTransactionRequest.Description,
@@ -173,13 +173,13 @@ func logTransaction(ctx context.Context, uploadTransactionRequest openapi.Upload
 
 	log.Printf("Writing transaction to database: %v", transactionContent)
 
-	firestoreClient, err := firestoreClient(ctx)
+	firestoreClient, err := firestoreClient(context)
 	if err != nil {
 		log.Printf("Unable to talk to database: %v", err)
 		return err
 	}
 
-	_, _, err = firestoreClient.Collection("transactions").Add(ctx, transactionContent)
+	_, _, err = firestoreClient.Collection("transactions").Add(context, transactionContent)
 
 	if err != nil {
 		log.Printf("Error when logging transaction, err = %v", err)
