@@ -11,10 +11,6 @@ func (patAM *patAuthenticationMiddleware) Middleware(next http.Handler) http.Han
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		// Fetch email + PAT from Basic Authentication header of WWW request
-		// The caller will have supplied this in its GET call
-		//  by performaing GET to https://<email>:<pat>@<site>/<file path>
-		// Also, the email/pat contents are expected to be URL encoded
-		//  (so hello%40example.com will translate to hello@example.com, etc)
 
 		email, pat, basicAuthPresent := r.BasicAuth()
 
