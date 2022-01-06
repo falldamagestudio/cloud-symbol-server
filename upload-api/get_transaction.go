@@ -1,0 +1,62 @@
+package upload_api
+
+import (
+	"context"
+	"log"
+	"net/http"
+
+	"cloud.google.com/go/firestore"
+	openapi "github.com/falldamagestudio/cloud-symbol-store/upload-api/generated/go"
+)
+
+func (s *ApiService) GetTransaction(context context.Context, transactionId string) (openapi.ImplResponse, error) {
+
+	log.Printf("Getting transaction doc")
+	transactionDoc, err := getTransactionDoc(context, transactionId)
+	if err != nil {
+		log.Printf("Getting transaction doc failed")
+		return openapi.Response(http.StatusOK, &openapi.MessageResponse{Message: "Error while fetching doc"}), err
+	}
+
+	log.Printf("Extracting transaction doc data")
+	transactionDBEntry := TransactionDBEntry{}
+	if err = transactionDoc.DataTo(&transactionDBEntry); err != nil {
+		log.Printf("Extracting transaction doc data failed")
+		return openapi.Response(http.StatusOK, &openapi.MessageResponse{Message: "Error while extracting contents of doc"}), err
+	}
+
+	getTransactionResponse := openapi.GetTransactionResponse{}
+	getTransactionResponse.Description = transactionDBEntry.Description
+	getTransactionResponse.BuildId = transactionDBEntry.BuildId
+	getTransactionResponse.Timestamp = transactionDBEntry.Timestamp
+
+	for _, file := range transactionDBEntry.Files {
+
+		getTransactionResponse.Files = append(getTransactionResponse.Files, openapi.GetFileResponse{
+			FileName: file.FileName,
+			Hash:     file.Hash,
+		})
+	}
+
+	log.Printf("Response: %v", getTransactionResponse)
+
+	return openapi.Response(http.StatusOK, getTransactionResponse), nil
+}
+
+func getTransactionDoc(context context.Context, transactionId string) (*firestore.DocumentSnapshot, error) {
+
+	firestoreClient, err := firestoreClient(context)
+	if err != nil {
+		log.Printf("Unable to talk to database: %v", err)
+		return nil, err
+	}
+
+	transactionDoc, err := firestoreClient.Collection("transactions").Doc(transactionId).Get(context)
+
+	if err != nil {
+		log.Printf("Unable to fetch transaction, err = %v", err)
+		return nil, err
+	}
+
+	return transactionDoc, nil
+}

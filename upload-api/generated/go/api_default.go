@@ -13,11 +13,13 @@ import (
 	"encoding/json"
 	"net/http"
 	"strings"
+
+	"github.com/gorilla/mux"
 )
 
 // DefaultApiController binds http requests to an api service and writes the service results to the http response
 type DefaultApiController struct {
-	service      DefaultApiServicer
+	service DefaultApiServicer
 	errorHandler ErrorHandler
 }
 
@@ -47,12 +49,18 @@ func NewDefaultApiController(s DefaultApiServicer, opts ...DefaultApiOption) Rou
 
 // Routes returns all of the api route for the DefaultApiController
 func (c *DefaultApiController) Routes() Routes {
-	return Routes{
+	return Routes{ 
 		{
 			"CreateTransaction",
 			strings.ToUpper("Post"),
 			"/transactions",
 			c.CreateTransaction,
+		},
+		{
+			"GetTransaction",
+			strings.ToUpper("Get"),
+			"/transactions/{transactionId}",
+			c.GetTransaction,
 		},
 	}
 }
@@ -71,6 +79,22 @@ func (c *DefaultApiController) CreateTransaction(w http.ResponseWriter, r *http.
 		return
 	}
 	result, err := c.service.CreateTransaction(r.Context(), uploadTransactionRequestParam)
+	// If an error occurred, encode the error with the status code
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
+	// If no error, encode the body and the result code
+	EncodeJSONResponse(result.Body, &result.Code, w)
+
+}
+
+// GetTransaction - Fetch a transaction
+func (c *DefaultApiController) GetTransaction(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	transactionIdParam := params["transactionId"]
+	
+	result, err := c.service.GetTransaction(r.Context(), transactionIdParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)

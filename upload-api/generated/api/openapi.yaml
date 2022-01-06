@@ -32,6 +32,38 @@ paths:
                 $ref: '#/components/schemas/messageResponse'
           description: Not authorized
       summary: Start a new upload transaction
+  /transactions/{transactionId}:
+    get:
+      operationId: getTransaction
+      parameters:
+      - description: ID of the transaction to fetch
+        explode: false
+        in: path
+        name: transactionId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getTransactionResponse'
+          description: Success
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Not authorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: No such transaction
+      summary: Fetch a transaction
 components:
   schemas:
     messageResponse:
@@ -95,5 +127,42 @@ components:
           type: string
         url:
           example: https://storage.googleapis.com/storage/v1/b/example-bucket/o/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
+          type: string
+      type: object
+    getTransactionResponse:
+      example:
+        description: Example application
+        files:
+        - fileName: Application.pdb
+          hash: 7F416863ABF34C3E894BAD1739BAA5571
+        - fileName: Application.pdb
+          hash: 7F416863ABF34C3E894BAD1739BAA5571
+        buildId: Build 432
+        timestamp: 2019-10-12T07:20:50.52Z
+      properties:
+        description:
+          example: Example application
+          type: string
+        buildId:
+          example: Build 432
+          type: string
+        timestamp:
+          example: 2019-10-12T07:20:50.52Z
+          type: string
+        files:
+          items:
+            $ref: '#/components/schemas/getFileResponse'
+          type: array
+      type: object
+    getFileResponse:
+      example:
+        fileName: Application.pdb
+        hash: 7F416863ABF34C3E894BAD1739BAA5571
+      properties:
+        fileName:
+          example: Application.pdb
+          type: string
+        hash:
+          example: 7F416863ABF34C3E894BAD1739BAA5571
           type: string
       type: object
