@@ -12,7 +12,7 @@ import (
 
 	retryablehttp "github.com/hashicorp/go-retryablehttp"
 
-	openapi "github.com/falldamagestudio/cloud-symbol-store/upload-api/generated/go"
+	openapi "github.com/falldamagestudio/cloud-symbol-store/cli/generated"
 )
 
 type FileWithHash struct {
@@ -51,17 +51,17 @@ func CreateUploadTransaction(description string, buildId string, filesWithHashes
 	for _, file := range filesWithHashes {
 
 		uploadFileRequest := openapi.UploadFileRequest{
-			FileName: file.FileWithoutPath,
-			Hash:     file.Hash,
+			FileName: &file.FileWithoutPath,
+			Hash:     &file.Hash,
 		}
 
 		files = append(files, uploadFileRequest)
 	}
 
 	uploadTransaction := &openapi.UploadTransactionRequest{
-		Description: description,
-		BuildId:     buildId,
-		Files:       files,
+		Description: &description,
+		BuildId:     &buildId,
+		Files:       &files,
 	}
 
 	return uploadTransaction, nil
@@ -98,13 +98,13 @@ func InitiateUploadTransaction(uploadAPIProtocol string, uploadAPIHost string, e
 
 func UploadMissingFiles(uploadTransactionResponse openapi.UploadTransactionResponse, filesWithHashes []FileWithHash) error {
 
-	for _, uploadFileResponse := range uploadTransactionResponse.Files {
+	for _, uploadFileResponse := range *uploadTransactionResponse.Files {
 
 		fileWithHash := (*FileWithHash)(nil)
 
 		for i := 0; i < len(filesWithHashes); i++ {
 			currentFileWithHash := filesWithHashes[i]
-			if currentFileWithHash.FileWithoutPath == uploadFileResponse.FileName && currentFileWithHash.Hash == uploadFileResponse.Hash {
+			if currentFileWithHash.FileWithoutPath == *uploadFileResponse.FileName && currentFileWithHash.Hash == *uploadFileResponse.Hash {
 				fileWithHash = &currentFileWithHash
 				break
 			}
@@ -118,7 +118,7 @@ func UploadMissingFiles(uploadTransactionResponse openapi.UploadTransactionRespo
 		log.Printf("Uploading file %s...", fileWithHash.FileWithPath)
 
 		retryClient := retryablehttp.NewClient()
-		req, err := retryablehttp.NewRequest(http.MethodPut, uploadFileResponse.Url, file)
+		req, err := retryablehttp.NewRequest(http.MethodPut, *uploadFileResponse.Url, file)
 		if err != nil {
 			log.Printf("Request creation failed with error %v", err)
 			return err

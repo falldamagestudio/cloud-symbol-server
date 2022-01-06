@@ -120,3 +120,17 @@ generate-apis:
 		-i /local/upload-api/upload-api.yaml \
 		-g go-server \
 		-o /local/upload-api/generated
+
+	rm cli/generated/*.go
+	rm -r cli/generated/docs
+	docker run \
+		--rm \
+		-v "${PWD}:/local" \
+		--user $(shell id -u):$(shell id -g) \
+		openapitools/openapi-generator-cli \
+		generate \
+		--git-user-id=falldamagestudio \
+		--git-repo-id=cloud-symbol-store/cli \
+		-i /local/upload-api/upload-api.yaml \
+		-g go \
+		-o /local/cli/generated
