@@ -68,12 +68,6 @@ func (s *ApiService) CreateTransaction(context context.Context, uploadTransactio
 		return openapi.Response(http.StatusInternalServerError, "No storage bucket configured"), errors.New("No storage bucket configured")
 	}
 
-	// patResponse, err := handlePATAuthentication(context, r, w, firestoreClient)
-
-	// if err != nil {
-	// 	return patResponse, err
-	// }
-
 	storageClientOpts := []option.ClientOption{}
 
 	if storageEndpoint != "" {
