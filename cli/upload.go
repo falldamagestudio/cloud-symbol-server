@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"encoding/json"
+	"context"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -12,7 +12,7 @@ import (
 
 	retryablehttp "github.com/hashicorp/go-retryablehttp"
 
-	upload_api "github.com/falldamagestudio/cloud-symbol-store/upload-api"
+	openapi "github.com/falldamagestudio/cloud-symbol-store/cli/generated"
 )
 
 type FileWithHash struct {
@@ -44,67 +44,64 @@ func GetFilesWithHashes(fileNames []string) ([]FileWithHash, error) {
 	return filesWithHashes, nil
 }
 
-func CreateUploadTransaction(description string, buildId string, filesWithHashes []FileWithHash) (*upload_api.UploadTransactionRequest, error) {
+func CreateUploadTransaction(description string, buildId string, filesWithHashes []FileWithHash) (*openapi.UploadTransactionRequest, error) {
 
-	files := []upload_api.UploadFileRequest{}
+	files := []openapi.UploadFileRequest{}
 
 	for _, file := range filesWithHashes {
 
-		uploadFileRequest := upload_api.UploadFileRequest{
-			FileName: file.FileWithoutPath,
-			Hash:     file.Hash,
+		uploadFileRequest := openapi.UploadFileRequest{
+			FileName: &file.FileWithoutPath,
+			Hash:     &file.Hash,
 		}
 
 		files = append(files, uploadFileRequest)
 	}
 
-	uploadTransaction := &upload_api.UploadTransactionRequest{
-		Description: description,
-		BuildId:     buildId,
-		Files:       files,
+	uploadTransaction := &openapi.UploadTransactionRequest{
+		Description: &description,
+		BuildId:     &buildId,
+		Files:       &files,
 	}
 
 	return uploadTransaction, nil
 }
 
-func InitiateUploadTransaction(uploadAPIProtocol string, uploadAPIHost string, email string, pat string, uploadTransactionRequest upload_api.UploadTransactionRequest) (*upload_api.UploadTransactionResponse, error) {
-
-	body, err := json.Marshal(uploadTransactionRequest)
-	if err != nil {
-		return nil, err
-	}
+func InitiateUploadTransaction(uploadAPIProtocol string, uploadAPIHost string, email string, pat string, uploadTransactionRequest openapi.UploadTransactionRequest) (*openapi.UploadTransactionResponse, error) {
 
 	serviceUrl := fmt.Sprintf("%s://%s:%s@%s", uploadAPIProtocol, email, pat, uploadAPIHost)
-	path := "UploadAPI"
 
-	response, err := retryablehttp.Post(serviceUrl+"/"+path, "application/json", body)
-	defer response.Body.Close()
+	configuration := openapi.NewConfiguration()
+	configuration.Servers = []openapi.ServerConfiguration{
+		{
+			URL:         serviceUrl,
+			Description: "Custom URL",
+			Variables:   nil,
+		},
+	}
+	api_client := openapi.NewAPIClient(configuration)
+	uploadTransactionResponse, httpResponse, err := api_client.DefaultApi.CreateTransaction(context.Background()).UploadTransactionRequest(uploadTransactionRequest).Execute()
+
 	if err != nil {
 		return nil, err
 	}
 
-	if response.StatusCode != http.StatusOK {
-		return nil, errors.New(fmt.Sprintf("Backend API call failed, status code = %v", response.StatusCode))
+	if httpResponse.StatusCode != http.StatusOK {
+		return nil, errors.New(fmt.Sprintf("Backend API call failed, status code = %v", httpResponse.StatusCode))
 	}
 
-	uploadTransactionResponse := &upload_api.UploadTransactionResponse{}
-
-	if err = json.NewDecoder(response.Body).Decode(uploadTransactionResponse); err != nil {
-		return nil, err
-	}
-
-	return uploadTransactionResponse, nil
+	return &uploadTransactionResponse, nil
 }
 
-func UploadMissingFiles(uploadTransactionResponse upload_api.UploadTransactionResponse, filesWithHashes []FileWithHash) error {
+func UploadMissingFiles(uploadTransactionResponse openapi.UploadTransactionResponse, filesWithHashes []FileWithHash) error {
 
-	for _, uploadFileResponse := range uploadTransactionResponse.Files {
+	for _, uploadFileResponse := range *uploadTransactionResponse.Files {
 
 		fileWithHash := (*FileWithHash)(nil)
 
 		for i := 0; i < len(filesWithHashes); i++ {
 			currentFileWithHash := filesWithHashes[i]
-			if currentFileWithHash.FileWithoutPath == uploadFileResponse.FileName && currentFileWithHash.Hash == uploadFileResponse.Hash {
+			if currentFileWithHash.FileWithoutPath == *uploadFileResponse.FileName && currentFileWithHash.Hash == *uploadFileResponse.Hash {
 				fileWithHash = &currentFileWithHash
 				break
 			}
@@ -118,7 +115,7 @@ func UploadMissingFiles(uploadTransactionResponse upload_api.UploadTransactionRe
 		log.Printf("Uploading file %s...", fileWithHash.FileWithPath)
 
 		retryClient := retryablehttp.NewClient()
-		req, err := retryablehttp.NewRequest(http.MethodPut, uploadFileResponse.Url, file)
+		req, err := retryablehttp.NewRequest(http.MethodPut, *uploadFileResponse.Url, file)
 		if err != nil {
 			log.Printf("Request creation failed with error %v", err)
 			return err

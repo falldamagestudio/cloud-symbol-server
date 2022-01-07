@@ -8,10 +8,11 @@ import (
 	"os"
 	"testing"
 
+	openapi "github.com/falldamagestudio/cloud-symbol-store/upload-api/generated/go"
 	retryablehttp "github.com/hashicorp/go-retryablehttp"
 )
 
-func getServiceUrl(email string, pat string, path string) string {
+func getServiceUrl(email string, pat string) string {
 
 	uploadAPIProtocol := os.Getenv("UPLOAD_API_PROTOCOL")
 	if uploadAPIProtocol == "" {
@@ -33,17 +34,62 @@ func getServiceUrl(email string, pat string, path string) string {
 	return serviceUrl
 }
 
-func TestUploadTransaction(t *testing.T) {
+func TestGetTransactionWithInvalidCredentialsFails(t *testing.T) {
+
+	email := "invalidemail"
+	pat := "invalidpat"
+
+	serviceUrl := getServiceUrl(email, pat)
+
+	path := "/transactions/nonexistentid"
+
+	response, err := retryablehttp.Get(serviceUrl + path)
+	defer response.Body.Close()
+
+	if err != nil {
+		t.Fatalf("Error in request: %v", err)
+	}
+
+	if response.StatusCode != http.StatusUnauthorized {
+		responseBody, _ := ioutil.ReadAll(response.Body)
+		t.Fatalf("HTTP GET request failed: StatusCode expected %v, was %v, Body = %v", http.StatusUnauthorized, response.StatusCode, string(responseBody))
+	}
+}
+
+func TestGetTransactionThatDoesNotExistFails(t *testing.T) {
 
 	email := "testuser"
 	pat := "testpat"
-	path := "pingme.txt"
 
-	serviceUrl := getServiceUrl(email, pat, path)
+	serviceUrl := getServiceUrl(email, pat)
+
+	path := "/transactions/nonexistentid"
+
+	response, err := retryablehttp.Get(serviceUrl + path)
+	defer response.Body.Close()
+
+	if err != nil {
+		t.Fatalf("Error in request: %v", err)
+	}
+
+	if response.StatusCode != http.StatusNotFound {
+		responseBody, _ := ioutil.ReadAll(response.Body)
+		t.Fatalf("HTTP GET request failed: StatusCode expected %v, was %v, Body = %v", http.StatusNotFound, response.StatusCode, string(responseBody))
+	}
+}
+
+func TestUploadTransactionSucceeds(t *testing.T) {
+
+	email := "testuser"
+	pat := "testpat"
+
+	path := "/transactions"
+
+	serviceUrl := getServiceUrl(email, pat)
 
 	description := "test upload"
 	buildId := "test build id"
-	files := []UploadFileRequest{
+	files := []openapi.UploadFileRequest{
 		{
 			FileName: "file1",
 			Hash:     "hash1",
@@ -54,7 +100,7 @@ func TestUploadTransaction(t *testing.T) {
 		},
 	}
 
-	uploadTransaction := &UploadTransactionRequest{
+	uploadTransaction := &openapi.UploadTransactionRequest{
 		Description: description,
 		BuildId:     buildId,
 		Files:       files,
@@ -65,7 +111,7 @@ func TestUploadTransaction(t *testing.T) {
 		t.Fatalf("Error when marshalling json to text: %v", err)
 	}
 
-	response, err := retryablehttp.Post(serviceUrl, "application/json", requestBody)
+	response, err := retryablehttp.Post(serviceUrl+path, "application/json", requestBody)
 	defer response.Body.Close()
 
 	if err != nil {
@@ -77,7 +123,7 @@ func TestUploadTransaction(t *testing.T) {
 		t.Fatalf("HTTP POST request failed: StatusCode = %v, Body = %v", response.StatusCode, string(responseBody))
 	}
 
-	uploadTransactionResponse := UploadTransactionResponse{}
+	uploadTransactionResponse := openapi.UploadTransactionResponse{}
 	json.NewDecoder(response.Body).Decode(uploadTransactionResponse)
 
 }

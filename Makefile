@@ -104,3 +104,33 @@ build-cli:
 	cd cli \
 	&& GOOS=windows GOARCH=amd64 go build -o cloud-symbol-store-cli.exe ./cmd \
 	&& GOOS=linux GOARCH=amd64 go build -o cloud-symbol-store-cli ./cmd
+
+###
+
+generate-apis:
+	rm -r upload-api/generated/go
+	docker run \
+		--rm \
+		-v "${PWD}:/local" \
+		--user $(shell id -u):$(shell id -g) \
+		openapitools/openapi-generator-cli \
+		generate \
+		--git-user-id=falldamagestudio \
+		--git-repo-id=cloud-symbol-store/upload-api \
+		-i /local/upload-api/upload-api.yaml \
+		-g go-server \
+		-o /local/upload-api/generated
+
+	rm cli/generated/*.go
+	rm -r cli/generated/docs
+	docker run \
+		--rm \
+		-v "${PWD}:/local" \
+		--user $(shell id -u):$(shell id -g) \
+		openapitools/openapi-generator-cli \
+		generate \
+		--git-user-id=falldamagestudio \
+		--git-repo-id=cloud-symbol-store/cli \
+		-i /local/upload-api/upload-api.yaml \
+		-g go \
+		-o /local/cli/generated

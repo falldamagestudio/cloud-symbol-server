@@ -1,0 +1,155 @@
+openapi: 3.0.1
+
+info:
+  title: Cloud Symbol Store Uplaod API
+  description: 'This is the API that is used to upload symbols to Cloud Symbol Store'
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 1.0.0
+
+paths:
+  /transactions:
+    post:
+      summary: Start a new upload transaction
+      operationId: createTransaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/uploadTransactionRequest'
+      
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/uploadTransactionResponse'
+
+        401:
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+
+  /transactions/{transactionId}:
+    get:
+      summary: Fetch a transaction
+      operationId: getTransaction
+      parameters:
+        - in: path
+          name: transactionId
+          schema:
+            type: string
+          required: true
+          description: ID of the transaction to fetch
+      
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getTransactionResponse'
+
+        401:
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+
+        404:
+          description: No such transaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+
+components:
+  schemas:
+
+    messageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Invalid API invocation
+
+    uploadTransactionRequest:
+      type: object
+      properties:
+        description:
+          type: string
+          example: Example application
+        buildId:
+          type: string
+          example: Build 432
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/uploadFileRequest'
+
+    uploadFileRequest:
+      type: object
+      properties:
+        fileName:
+          type: string
+          example: Application.pdb
+        hash:
+          type: string
+          example: 7F416863ABF34C3E894BAD1739BAA5571
+
+    uploadTransactionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: s4elWg054qyrpHCsHqLq
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/uploadFileResponse'
+
+    uploadFileResponse:
+      type: object
+      properties:
+        fileName:
+          type: string
+          example: Application.pdb
+        hash:
+          type: string
+          example: 7F416863ABF34C3E894BAD1739BAA5571
+        url:
+          type: string
+          example: https://storage.googleapis.com/storage/v1/b/example-bucket/o/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
+
+    getTransactionResponse:
+      type: object
+      properties:
+        description:
+          type: string
+          example: Example application
+        buildId:
+          type: string
+          example: Build 432
+        timestamp:
+          type: string
+          example: '2019-10-12T07:20:50.52Z'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/getFileResponse'
+
+    getFileResponse:
+      type: object
+      properties:
+        fileName:
+          type: string
+          example: Application.pdb
+        hash:
+          type: string
+          example: 7F416863ABF34C3E894BAD1739BAA5571

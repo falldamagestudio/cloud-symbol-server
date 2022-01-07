@@ -114,6 +114,7 @@ func mainInt() int {
 		} else {
 			err := upload(uploadAPIProtocol, uploadAPIHost, email, pat, description, buildId, patterns)
 			if err != nil {
+				log.Printf("Error: %v", err)
 				return 1
 			} else {
 				return 0
