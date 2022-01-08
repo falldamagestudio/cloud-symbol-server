@@ -6,6 +6,8 @@
 .PHONY: run-local-download-api run-local-upload-api
 .PHONY: test-local test-local-download-api test-local-upload-api
 
+.PHONY: build-csharp-cli
+
 ifndef ENV
 ENV:=test
 endif
@@ -134,3 +136,14 @@ generate-apis:
 		-i /local/upload-api/upload-api.yaml \
 		-g go \
 		-o /local/cli/generated
+
+build-csharp-cli:
+	cd csharp-cli \
+	&& dotnet publish \
+		--runtime linux-x64 \
+		--self-contained \
+		--configuration Release \
+	&& dotnet publish \
+		--runtime win-x64 \
+		--self-contained \
+		--configuration Release
