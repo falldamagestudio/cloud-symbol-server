@@ -6,7 +6,6 @@ Console.WriteLine("Hello, World!");
 Parser.Default.ParseArguments<CLI.CommandLineOptions>(args)
         .WithParsed<CLI.CommandLineOptions>(o =>
         {
-            ClassLib.Class1.Upload(o.ServiceURL, o.Email, o.PAT);
+            CLI.Upload.DoUpload(o.ServiceURL, o.Email, o.PAT, new string[] { "*.pdb" });
         });
-
 
