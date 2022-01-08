@@ -4,11 +4,11 @@ namespace ClassLib
 {
     public class Class1
     {
-        public static void Upload() {
+        public static void Upload(string ServiceURL, string Email, string PAT) {
             BackendAPI.Client.Configuration config = new BackendAPI.Client.Configuration();
-            config.BasePath = "http://localhost:8084";
-            config.Username = "testuser";
-            config.Password = "testpat";
+            config.BasePath = ServiceURL;
+            config.Username = Email;
+            config.Password = PAT;
             BackendAPI.Api.DefaultApi api = new BackendAPI.Api.DefaultApi(config);
 
             BackendAPI.Model.UploadTransactionRequest uploadTransactionRequest = new BackendAPI.Model.UploadTransactionRequest();
