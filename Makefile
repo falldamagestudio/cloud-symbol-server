@@ -137,6 +137,21 @@ generate-apis:
 		-g go \
 		-o /local/cli/generated
 
+generate-apis-2:
+#	rm csharp-cli/BackendAPI/*.go
+#	rm -r csharp-cli/GeneratedAPI/docs
+	docker run \
+		--rm \
+		-v "${PWD}:/local" \
+		--user $(shell id -u):$(shell id -g) \
+		openapitools/openapi-generator-cli \
+		generate \
+		-i /local/upload-api/upload-api.yaml \
+		-g csharp-netcore \
+		--additional-properties=netCoreProjectFile=true,library=httpclient \
+		-o /local/csharp-cli/GeneratedBackendAPI
+
+
 build-csharp-cli:
 	cd csharp-cli \
 	&& dotnet publish \
