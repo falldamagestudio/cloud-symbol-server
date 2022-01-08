@@ -6,6 +6,8 @@
 .PHONY: run-local-download-api run-local-upload-api
 .PHONY: test-local test-local-download-api test-local-upload-api
 
+.PHONY: generate-apis generate-go-server-api generate-go-client-api generate-csharp-client-api
+
 .PHONY: build-csharp-cli
 
 ifndef ENV
@@ -109,7 +111,10 @@ build-cli:
 
 ###
 
-generate-apis:
+generate-apis: generate-go-server-api generate-go-client-api generate-csharp-client-api
+
+generate-go-server-api:
+
 	rm -r upload-api/generated/go
 	docker run \
 		--rm \
@@ -122,6 +127,8 @@ generate-apis:
 		-i /local/upload-api/upload-api.yaml \
 		-g go-server \
 		-o /local/upload-api/generated
+
+generate-go-client-api:
 
 	rm cli/generated/*.go
 	rm -r cli/generated/docs
@@ -137,9 +144,10 @@ generate-apis:
 		-g go \
 		-o /local/cli/generated
 
-generate-apis-2:
-#	rm csharp-cli/BackendAPI/*.go
-#	rm -r csharp-cli/GeneratedAPI/docs
+generate-csharp-client-api:
+
+	rm -r csharp-cli/generated/BackendAPI/src
+	rm -r csharp-cli/generated/BackendAPI/docs
 	docker run \
 		--rm \
 		-v "${PWD}:/local" \
