@@ -148,8 +148,8 @@ generate-apis-2:
 		generate \
 		-i /local/upload-api/upload-api.yaml \
 		-g csharp-netcore \
-		--additional-properties=netCoreProjectFile=true,library=httpclient \
-		-o /local/csharp-cli/GeneratedBackendAPI
+		--additional-properties=netCoreProjectFile=true,library=httpclient,packageName=BackendAPI \
+		-o /local/csharp-cli/generated/BackendAPI
 
 
 build-csharp-cli:

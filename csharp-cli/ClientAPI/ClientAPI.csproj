@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\GeneratedBackendAPI\src\Org.OpenAPITools\Org.OpenAPITools.csproj" />
+    <ProjectReference Include="..\generated\BackendAPI\src\BackendAPI\BackendAPI.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
