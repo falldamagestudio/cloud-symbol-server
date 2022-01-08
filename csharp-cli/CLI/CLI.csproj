@@ -9,6 +9,39 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <!-- Publishing-related settings -->
+
+    <!--
+      Publish all application-dependent files in a single file
+      Reference: https://docs.microsoft.com/en-us/dotnet/core/deploying/single-file
+    -->
+    <PublishSingleFile>true</PublishSingleFile>
+
+    <!--
+      Include .NET runtime within single-file distribution
+      Reference: https://docs.microsoft.com/en-us/dotnet/core/deploying/
+    -->
+    <SelfContained>true</SelfContained>
+
+    <!--
+      Default to publishing for linux/x64
+      Reference: https://docs.microsoft.com/en-us/dotnet/core/rid-catalog#linux-rids
+    -->
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+
+    <!--
+      Perform Ahead-of-Time compilation of code
+      This improves startup time, but increases binary size
+      Reference: https://docs.microsoft.com/en-us/dotnet/core/deploying/ready-to-run
+    -->
+    <PublishReadyToRun>true</PublishReadyToRun>
+
+    <!--
+      Trim unused code from executable
+      Reference: https://docs.microsoft.com/en-us/dotnet/core/deploying/trimming/trim-self-contained
+    -->
+    <PublishTrimmed>true</PublishTrimmed>
   </PropertyGroup>
 
 </Project>
