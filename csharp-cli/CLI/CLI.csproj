@@ -39,6 +39,8 @@
 
     <!--
       Trim unused code from executable
+      This produces a number of trimming warnings, but the resulting executable
+        seems to work anyway
       Reference: https://docs.microsoft.com/en-us/dotnet/core/deploying/trimming/trim-self-contained
     -->
     <PublishTrimmed>true</PublishTrimmed>
