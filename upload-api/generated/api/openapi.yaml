@@ -8,6 +8,8 @@ info:
   version: 1.0.0
 servers:
 - url: /
+security:
+- emailAndPat: []
 paths:
   /transactions:
     post:
@@ -166,3 +168,7 @@ components:
           example: 7F416863ABF34C3E894BAD1739BAA5571
           type: string
       type: object
+  securitySchemes:
+    emailAndPat:
+      scheme: basic
+      type: http

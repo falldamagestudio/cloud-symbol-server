@@ -61,7 +61,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[emailAndPat](../README.md#emailAndPat)
 
 ### HTTP request headers
 
@@ -129,7 +129,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[emailAndPat](../README.md#emailAndPat)
 
 ### HTTP request headers
 

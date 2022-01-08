@@ -280,6 +280,12 @@ namespace BackendAPI.Api
 
             localVarRequestOptions.Data = uploadTransactionRequest;
 
+            // authentication (emailAndPat) required
+            // http basic authentication required
+            if (!string.IsNullOrEmpty(this.Configuration.Username) || !string.IsNullOrEmpty(this.Configuration.Password))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", "Basic " + BackendAPI.Client.ClientUtils.Base64Encode(this.Configuration.Username + ":" + this.Configuration.Password));
+            }
 
             // make the HTTP request
             var localVarResponse = this.Client.Post<UploadTransactionResponse>("/transactions", localVarRequestOptions, this.Configuration);
@@ -340,6 +346,12 @@ namespace BackendAPI.Api
 
             localVarRequestOptions.Data = uploadTransactionRequest;
 
+            // authentication (emailAndPat) required
+            // http basic authentication required
+            if (!string.IsNullOrEmpty(this.Configuration.Username) || !string.IsNullOrEmpty(this.Configuration.Password))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", "Basic " + BackendAPI.Client.ClientUtils.Base64Encode(this.Configuration.Username + ":" + this.Configuration.Password));
+            }
 
             // make the HTTP request
 
@@ -396,6 +408,12 @@ namespace BackendAPI.Api
 
             localVarRequestOptions.PathParameters.Add("transactionId", BackendAPI.Client.ClientUtils.ParameterToString(transactionId)); // path parameter
 
+            // authentication (emailAndPat) required
+            // http basic authentication required
+            if (!string.IsNullOrEmpty(this.Configuration.Username) || !string.IsNullOrEmpty(this.Configuration.Password))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", "Basic " + BackendAPI.Client.ClientUtils.Base64Encode(this.Configuration.Username + ":" + this.Configuration.Password));
+            }
 
             // make the HTTP request
             var localVarResponse = this.Client.Get<GetTransactionResponse>("/transactions/{transactionId}", localVarRequestOptions, this.Configuration);
@@ -455,6 +473,12 @@ namespace BackendAPI.Api
 
             localVarRequestOptions.PathParameters.Add("transactionId", BackendAPI.Client.ClientUtils.ParameterToString(transactionId)); // path parameter
 
+            // authentication (emailAndPat) required
+            // http basic authentication required
+            if (!string.IsNullOrEmpty(this.Configuration.Username) || !string.IsNullOrEmpty(this.Configuration.Password))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", "Basic " + BackendAPI.Client.ClientUtils.Base64Encode(this.Configuration.Username + ":" + this.Configuration.Password));
+            }
 
             // make the HTTP request
 

@@ -30,6 +30,10 @@ namespace Example
         {
             Configuration config = new Configuration();
             config.BasePath = "http://localhost";
+            // Configure HTTP basic authorization: emailAndPat
+            config.Username = "YOUR_USERNAME";
+            config.Password = "YOUR_PASSWORD";
+
             var apiInstance = new DefaultApi(config);
             var uploadTransactionRequest = new UploadTransactionRequest(); // UploadTransactionRequest | 
 
@@ -62,7 +66,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[emailAndPat](../README.md#emailAndPat)
 
 ### HTTP request headers
 
@@ -100,6 +104,10 @@ namespace Example
         {
             Configuration config = new Configuration();
             config.BasePath = "http://localhost";
+            // Configure HTTP basic authorization: emailAndPat
+            config.Username = "YOUR_USERNAME";
+            config.Password = "YOUR_PASSWORD";
+
             var apiInstance = new DefaultApi(config);
             var transactionId = transactionId_example;  // string | ID of the transaction to fetch
 
@@ -132,7 +140,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[emailAndPat](../README.md#emailAndPat)
 
 ### HTTP request headers
 

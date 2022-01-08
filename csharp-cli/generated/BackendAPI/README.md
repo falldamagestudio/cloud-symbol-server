@@ -73,6 +73,10 @@ namespace Example
 
             Configuration config = new Configuration();
             config.BasePath = "http://localhost";
+            // Configure HTTP basic authorization: emailAndPat
+            config.Username = "YOUR_USERNAME";
+            config.Password = "YOUR_PASSWORD";
+
             var apiInstance = new DefaultApi(config);
             var uploadTransactionRequest = new UploadTransactionRequest(); // UploadTransactionRequest | 
 
@@ -120,4 +124,8 @@ Class | Method | HTTP request | Description
 <a name="documentation-for-authorization"></a>
 ## Documentation for Authorization
 
-All endpoints do not require authorization.
+<a name="emailAndPat"></a>
+### emailAndPat
+
+- **Type**: HTTP basic authentication
+
