@@ -41,6 +41,11 @@ namespace ClientAPI
             return request;
         }
 
+        public class UploadException : Exception
+        {
+            public UploadException(string message) : base(message) { }
+        }
+
         private static void UploadMissingFiles(BackendAPI.Model.UploadTransactionResponse uploadTransactionResponse, IEnumerable<FileWithHash> filesWithHashes)
         {
             if (uploadTransactionResponse.Files != null) {
@@ -56,8 +61,7 @@ namespace ClientAPI
                     IRestResponse rrr = restClient.Execute(request);
 
                     if (!rrr.IsSuccessful) {
-                        Console.WriteLine($"Upload failed with status code {rrr.StatusCode}; content = {rrr.Content}");
-                        throw new ApplicationException($"Upload failed with status code {rrr.StatusCode}; content = {rrr.Content}");
+                        throw new UploadException($"Upload failed with status code {rrr.StatusCode}; content = {rrr.Content}");
                     }
                 }
             }
@@ -73,11 +77,11 @@ namespace ClientAPI
 
             IEnumerable<FileWithHash> filesWithHashes = GetFilesWithHashes(Files);
             BackendAPI.Model.UploadTransactionRequest uploadTransactionRequest = CreateUploadTransactionRequest(description, buildId, filesWithHashes);
-            BackendAPI.Model.UploadTransactionResponse uploadTransactionResponse = api.CreateTransaction(uploadTransactionRequest);
-            if (uploadTransactionResponse == null)
-                throw new ApplicationException("Upload transaction failed");
+            BackendAPI.Client.ApiResponse<BackendAPI.Model.UploadTransactionResponse> uploadTransactionResponse = api.CreateTransactionWithHttpInfo(uploadTransactionRequest);
+            if (uploadTransactionResponse.ErrorText != null)
+                throw new UploadException(uploadTransactionResponse.ErrorText);
 
-            UploadMissingFiles(uploadTransactionResponse, filesWithHashes);
+            UploadMissingFiles(uploadTransactionResponse.Data, filesWithHashes);
         }
     }
 }
