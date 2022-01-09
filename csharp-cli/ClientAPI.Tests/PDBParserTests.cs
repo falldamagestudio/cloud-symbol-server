@@ -126,5 +126,13 @@ namespace ClientAPI.Tests
                 "abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh"));
             Assert.False(PDBParser.MSF7Parser.IsValid(memoryStream));
         }
+
+       [Fact]
+        public void GetHashSucceedsForMSF7File()
+        {
+            string hash = PDBParser.GetHash("../../../../testdata/example.pdb");
+            string expectedHash = "7F416863ABF34C3E894BAD1739BAA5571";
+            Assert.Equal(expectedHash, hash);
+        }
     }
 }
