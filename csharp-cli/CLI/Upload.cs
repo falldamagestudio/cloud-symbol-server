@@ -16,10 +16,7 @@ namespace CLI
 
         public static int DoUpload(UploadOptions options)
         {
-
-            string[] Patterns = new string[] { "*.pdb" };
-
-            var Files = FindMatchingFiles(Patterns);
+            var Files = FindMatchingFiles(options.Patterns!);
 
             ClientAPI.Ops.Upload(options.ServiceURL, options.Email, options.PAT, Files);
 
