@@ -46,7 +46,14 @@ namespace ClientAPI
             public UploadException(string message) : base(message) { }
         }
 
-        private static void UploadMissingFiles(BackendAPI.Model.UploadTransactionResponse uploadTransactionResponse, IEnumerable<FileWithHash> filesWithHashes)
+        public struct UploadProgress {
+            public enum StateEnum { LocalValidation, CreatingTransaction, UploadingMissingFiles, UploadingMissingFile, Done };
+
+            public StateEnum State;
+            public string FileName;
+        }
+
+        private static void UploadMissingFiles(BackendAPI.Model.UploadTransactionResponse uploadTransactionResponse, IEnumerable<FileWithHash> filesWithHashes, IProgress<UploadProgress> progress)
         {
             if (uploadTransactionResponse.Files != null) {
                 foreach (BackendAPI.Model.UploadFileResponse uploadFileResponse in uploadTransactionResponse.Files) {
@@ -54,7 +61,8 @@ namespace ClientAPI
                     FileWithHash fileWithHash = filesWithHashes.First(fwh => 
                         fwh.FileWithoutPath == uploadFileResponse.FileName && fwh.Hash == uploadFileResponse.Hash);
 
-                    Console.WriteLine($"Uploading file {fileWithHash.FileWithPath}...");
+                    if (progress != null)
+                        progress.Report(new UploadProgress { State = UploadProgress.StateEnum.UploadingMissingFile, FileName = fileWithHash.FileWithPath });
 
                     RestClient restClient = new RestClient();
                     RestRequest request = new RestRequest(uploadFileResponse.Url, Method.PUT);
@@ -67,7 +75,10 @@ namespace ClientAPI
             }
         }
 
-        public static void Upload(string ServiceURL, string Email, string PAT, string description, string buildId, IEnumerable<string> Files) {
+        public static void Upload(string ServiceURL, string Email, string PAT, string description, string buildId, IEnumerable<string> Files, IProgress<UploadProgress> progress) {
+
+            if (progress != null)
+                progress.Report(new UploadProgress { State = UploadProgress.StateEnum.LocalValidation });
 
             BackendAPI.Client.Configuration config = new BackendAPI.Client.Configuration();
             config.BasePath = ServiceURL;
@@ -76,12 +87,22 @@ namespace ClientAPI
             BackendAPI.Api.DefaultApi api = new BackendAPI.Api.DefaultApi(config);
 
             IEnumerable<FileWithHash> filesWithHashes = GetFilesWithHashes(Files);
+
+            if (progress != null)
+                progress.Report(new UploadProgress { State = UploadProgress.StateEnum.CreatingTransaction });
+
             BackendAPI.Model.UploadTransactionRequest uploadTransactionRequest = CreateUploadTransactionRequest(description, buildId, filesWithHashes);
             BackendAPI.Client.ApiResponse<BackendAPI.Model.UploadTransactionResponse> uploadTransactionResponse = api.CreateTransactionWithHttpInfo(uploadTransactionRequest);
             if (uploadTransactionResponse.ErrorText != null)
                 throw new UploadException(uploadTransactionResponse.ErrorText);
 
-            UploadMissingFiles(uploadTransactionResponse.Data, filesWithHashes);
+            if (progress != null)
+                progress.Report(new UploadProgress { State = UploadProgress.StateEnum.UploadingMissingFiles });
+
+            UploadMissingFiles(uploadTransactionResponse.Data, filesWithHashes, progress);
+
+            if (progress != null)
+                progress.Report(new UploadProgress { State = UploadProgress.StateEnum.Done });
         }
     }
 }
