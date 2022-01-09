@@ -106,8 +106,10 @@ namespace ClientAPI.Tests
         [Fact]
         public void IsMSF7ValidTestSucceedsForPDB()
         {
-            FileStream fileStream = new FileStream("../../../../testdata/example.pdb", FileMode.Open);
-            Assert.True(PDBParser.MSF7Parser.IsValid(fileStream));
+            using (FileStream fileStream = new FileStream("../../../../testdata/example.pdb", FileMode.Open))
+            {
+                Assert.True(PDBParser.MSF7Parser.IsValid(fileStream));
+            }
         }
 
        [Fact]
