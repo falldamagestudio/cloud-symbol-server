@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace ClientAPI
 {
@@ -95,6 +97,29 @@ namespace ClientAPI
             {
                 throw new NotSupportedException();
             }
+        }
+
+        public class MSF7Parser
+        {
+
+            private static readonly byte[] msf7Signature = Encoding.ASCII.GetBytes("Microsoft C/C++ MSF 7.00\r\n\x001ADS\x0000\x0000\x0000");
+
+            public static bool IsValid(Stream stream) {
+                stream.Seek(0, SeekOrigin.Begin);
+                byte[] buffer = new byte[msf7Signature.Length];
+                try {
+                    if (stream.Read(buffer, 0, buffer.Length) != buffer.Length)
+                        return false;
+
+                    if (!buffer.SequenceEqual(msf7Signature))
+                        return false;
+                } catch (Exception) {
+                    return false;
+                }
+
+                return true;
+            }
+
         }
     }
 }

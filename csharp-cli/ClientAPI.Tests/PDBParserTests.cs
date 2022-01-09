@@ -3,6 +3,7 @@ using Xunit;
 using ClientAPI;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text;
 
 namespace ClientAPI.Tests
 {
@@ -100,6 +101,28 @@ namespace ClientAPI.Tests
             byte[] expectedData = new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9};
 
             Assert.True(expectedData.SequenceEqual(data), $"Read data expected to be {{{string.Join(", ", expectedData)}}} but was {{{string.Join(", ", data)}}}");
+        }
+
+        [Fact]
+        public void IsMSF7ValidTestSucceedsForPDB()
+        {
+            FileStream fileStream = new FileStream("../../../../testdata/example.pdb", FileMode.Open);
+            Assert.True(PDBParser.MSF7Parser.IsValid(fileStream));
+        }
+
+       [Fact]
+        public void IsMSF7ValidTestFailsForEmptyFile()
+        {
+            MemoryStream memoryStream = new MemoryStream(new byte[] { });
+            Assert.False(PDBParser.MSF7Parser.IsValid(memoryStream));
+        }
+
+       [Fact]
+        public void IsMSF7ValidTestFailsForNonPDBFile()
+        {
+            MemoryStream memoryStream = new MemoryStream(Encoding.ASCII.GetBytes(
+                "abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh"));
+            Assert.False(PDBParser.MSF7Parser.IsValid(memoryStream));
         }
     }
 }
