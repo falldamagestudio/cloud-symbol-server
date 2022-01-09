@@ -43,20 +43,22 @@ namespace ClientAPI
 
         private static void UploadMissingFiles(BackendAPI.Model.UploadTransactionResponse uploadTransactionResponse, IEnumerable<FileWithHash> filesWithHashes)
         {
-            foreach (BackendAPI.Model.UploadFileResponse uploadFileResponse in uploadTransactionResponse.Files) {
+            if (uploadTransactionResponse.Files != null) {
+                foreach (BackendAPI.Model.UploadFileResponse uploadFileResponse in uploadTransactionResponse.Files) {
 
-                FileWithHash fileWithHash = filesWithHashes.First(fwh => 
-                    fwh.FileWithoutPath == uploadFileResponse.FileName && fwh.Hash == uploadFileResponse.Hash);
+                    FileWithHash fileWithHash = filesWithHashes.First(fwh => 
+                        fwh.FileWithoutPath == uploadFileResponse.FileName && fwh.Hash == uploadFileResponse.Hash);
 
-                Console.WriteLine($"Uploading file {fileWithHash.FileWithPath}...");
+                    Console.WriteLine($"Uploading file {fileWithHash.FileWithPath}...");
 
-                RestClient restClient = new RestClient();
-                RestRequest request = new RestRequest(uploadFileResponse.Url, Method.PUT);
-                IRestResponse rrr = restClient.Execute(request);
+                    RestClient restClient = new RestClient();
+                    RestRequest request = new RestRequest(uploadFileResponse.Url, Method.PUT);
+                    IRestResponse rrr = restClient.Execute(request);
 
-                if (!rrr.IsSuccessful) {
-                    Console.WriteLine($"Upload failed with status code {rrr.StatusCode}; content = {rrr.Content}");
-                    throw new ApplicationException($"Upload failed with status code {rrr.StatusCode}; content = {rrr.Content}");
+                    if (!rrr.IsSuccessful) {
+                        Console.WriteLine($"Upload failed with status code {rrr.StatusCode}; content = {rrr.Content}");
+                        throw new ApplicationException($"Upload failed with status code {rrr.StatusCode}; content = {rrr.Content}");
+                    }
                 }
             }
         }
@@ -72,6 +74,9 @@ namespace ClientAPI
             IEnumerable<FileWithHash> filesWithHashes = GetFilesWithHashes(Files);
             BackendAPI.Model.UploadTransactionRequest uploadTransactionRequest = CreateUploadTransactionRequest("", "", filesWithHashes);
             BackendAPI.Model.UploadTransactionResponse uploadTransactionResponse = api.CreateTransaction(uploadTransactionRequest);
+            if (uploadTransactionResponse == null)
+                throw new ApplicationException("Upload transaction failed");
+
             UploadMissingFiles(uploadTransactionResponse, filesWithHashes);
         }
     }
