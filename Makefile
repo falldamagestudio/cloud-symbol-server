@@ -162,6 +162,7 @@ generate-csharp-client-api:
 
 build-csharp-cli:
 	cd csharp-cli \
+	&& dotnet test \
 	&& dotnet publish \
 		--runtime linux-x64 \
 		--self-contained \
