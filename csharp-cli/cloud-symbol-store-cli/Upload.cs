@@ -18,7 +18,7 @@ namespace CLI
         {
             var Files = FindMatchingFiles(options.Patterns!);
 
-            ClientAPI.Ops.Upload(options.ServiceURL, options.Email, options.PAT, Files);
+            ClientAPI.Ops.Upload(options.ServiceURL, options.Email, options.PAT, options.Description, options.BuildId, Files);
 
             return 0;
         }

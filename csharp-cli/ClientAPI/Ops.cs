@@ -63,7 +63,7 @@ namespace ClientAPI
             }
         }
 
-        public static void Upload(string ServiceURL, string Email, string PAT, IEnumerable<string> Files) {
+        public static void Upload(string ServiceURL, string Email, string PAT, string description, string buildId, IEnumerable<string> Files) {
 
             BackendAPI.Client.Configuration config = new BackendAPI.Client.Configuration();
             config.BasePath = ServiceURL;
@@ -72,7 +72,7 @@ namespace ClientAPI
             BackendAPI.Api.DefaultApi api = new BackendAPI.Api.DefaultApi(config);
 
             IEnumerable<FileWithHash> filesWithHashes = GetFilesWithHashes(Files);
-            BackendAPI.Model.UploadTransactionRequest uploadTransactionRequest = CreateUploadTransactionRequest("", "", filesWithHashes);
+            BackendAPI.Model.UploadTransactionRequest uploadTransactionRequest = CreateUploadTransactionRequest(description, buildId, filesWithHashes);
             BackendAPI.Model.UploadTransactionResponse uploadTransactionResponse = api.CreateTransaction(uploadTransactionRequest);
             if (uploadTransactionResponse == null)
                 throw new ApplicationException("Upload transaction failed");
