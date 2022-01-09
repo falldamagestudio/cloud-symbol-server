@@ -26,7 +26,12 @@ namespace CLI
                 Console.WriteLine($"    {file}");
             }
 
-            ClientAPI.Ops.Upload(options.ServiceURL, options.Email, options.PAT, options.Description, options.BuildId, files);
+            try {
+                ClientAPI.Ops.Upload(options.ServiceURL, options.Email, options.PAT, options.Description, options.BuildId, files);
+                Console.WriteLine("Upload done.");
+            } catch (ClientAPI.Ops.UploadException e) {
+                Console.WriteLine($"Upload failed: {e.Message}");
+            }
 
             return 0;
         }
