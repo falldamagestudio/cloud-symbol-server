@@ -1,9 +1,7 @@
 ﻿using CommandLine;
+using System.Linq;
 
-
-Parser.Default.ParseArguments<CLI.CommandLineOptions>(args)
-        .WithParsed<CLI.CommandLineOptions>(o =>
-        {
-            CLI.Upload.DoUpload(o.ServiceURL, o.Email, o.PAT, new string[] { "*.pdb" });
-        });
-
+int exitCode = Parser.Default.ParseArguments<CLI.UploadOptions, object>(args)
+    .MapResult(
+        (CLI.UploadOptions o) => CLI.Upload.DoUpload(o),
+        errs => 1 );

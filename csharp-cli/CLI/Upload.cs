@@ -14,10 +14,16 @@ namespace CLI
             return matcher.GetResultsInFullPath(".");
         }
 
-        public static void DoUpload(string ServiceURL, string Email, string PAT, IEnumerable<string> Patterns) {
+        public static int DoUpload(UploadOptions options)
+        {
+
+            string[] Patterns = new string[] { "*.pdb" };
+
             var Files = FindMatchingFiles(Patterns);
 
-            ClientAPI.Ops.Upload(ServiceURL, Email, PAT, Files);
+            ClientAPI.Ops.Upload(options.ServiceURL, options.Email, options.PAT, Files);
+
+            return 0;
         }
     }
 }

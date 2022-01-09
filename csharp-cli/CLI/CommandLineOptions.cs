@@ -7,7 +7,7 @@ namespace CLI
         // [Value(index: 0, Required = true, HelpText = "Image file Path upload")]
         // public string UploadFilePath { get; set; }
 
-        [Option(longName: "service-url", Required = false, HelpText = "Service URL, like http://localhos:8084", Default = "http://localhost:8084")]
+        [Option(longName: "service-url", Required = false, HelpText = "Service URL", Default = "http://localhost:8084")]
         public string? ServiceURL { get; set; }
 
         [Option(longName: "email", Required = false, HelpText = "Authentication email", Default = "")]
@@ -15,5 +15,15 @@ namespace CLI
 
         [Option(longName: "pat", Required = false, HelpText = "Authentication Personal Access Token", Default = "")]
         public string? PAT { get; set; }
+    }
+
+    [Verb("upload", HelpText = "Upload symbols")]
+    public class UploadOptions : CommandLineOptions
+    {
+        [Option(longName: "description", Required = true, HelpText = "Textual description of upload")]
+        public string? Description { get; set; }
+
+        [Option(longName: "build-id", Required = true, HelpText = "Build ID for upload")]
+        public string? BuildId { get; set; }
     }
 }
