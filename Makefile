@@ -6,6 +6,10 @@
 .PHONY: run-local-download-api run-local-upload-api
 .PHONY: test-local test-local-download-api test-local-upload-api
 
+.PHONY: generate-apis generate-go-server-api generate-csharp-client-api
+
+.PHONY: test-cli build-cli
+
 ifndef ENV
 ENV:=test
 endif
@@ -100,14 +104,14 @@ test-local-upload-api:
 
 test-local: test-local-download-api test-local-upload-api
 
-build-cli:
-	cd cli \
-	&& GOOS=windows GOARCH=amd64 go build -o cloud-symbol-store-cli.exe ./cmd \
-	&& GOOS=linux GOARCH=amd64 go build -o cloud-symbol-store-cli ./cmd
+#########################################################
+# API regeneration commands
+#########################################################
 
-###
+generate-apis: generate-go-server-api generate-csharp-client-api
 
-generate-apis:
+generate-go-server-api:
+
 	rm -r upload-api/generated/go
 	docker run \
 		--rm \
@@ -121,16 +125,37 @@ generate-apis:
 		-g go-server \
 		-o /local/upload-api/generated
 
-	rm cli/generated/*.go
-	rm -r cli/generated/docs
+generate-client-api:
+
+	rm -r cli/generated/BackendAPI/src
+	rm -r cli/generated/BackendAPI/docs
 	docker run \
 		--rm \
 		-v "${PWD}:/local" \
 		--user $(shell id -u):$(shell id -g) \
 		openapitools/openapi-generator-cli \
 		generate \
-		--git-user-id=falldamagestudio \
-		--git-repo-id=cloud-symbol-store/cli \
 		-i /local/upload-api/upload-api.yaml \
-		-g go \
-		-o /local/cli/generated
+		-g csharp-netcore \
+		--additional-properties=netCoreProjectFile=true,library=httpclient,packageName=BackendAPI \
+		-o /local/cli/generated/BackendAPI
+
+#########################################################
+# CLI commands
+#########################################################
+
+test-cli:
+	cd cli \
+	&& dotnet test
+
+build-cli: test-cli
+	cd cli \
+	&& dotnet publish \
+		--runtime linux-x64 \
+		--self-contained \
+		--configuration Release \
+	&& dotnet publish \
+		--runtime win-x64 \
+		--self-contained \
+		--configuration Release
+

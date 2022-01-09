@@ -1,5 +1,4 @@
-
-# Ignore binaries produced by build script
-
-/cloud-symbol-store-cli
-/cloud-symbol-store-cli.exe
+/*/bin
+/*/obj
+/generated/BackendAPI/src/*/bin
+/generated/BackendAPI/src/*/obj
