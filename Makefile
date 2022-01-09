@@ -6,9 +6,9 @@
 .PHONY: run-local-download-api run-local-upload-api
 .PHONY: test-local test-local-download-api test-local-upload-api
 
-.PHONY: generate-apis generate-go-server-api generate-go-client-api generate-csharp-client-api
+.PHONY: generate-apis generate-go-server-api generate-csharp-client-api
 
-.PHONY: build-csharp-cli
+.PHONY: test-cli build-cli
 
 ifndef ENV
 ENV:=test
@@ -104,14 +104,11 @@ test-local-upload-api:
 
 test-local: test-local-download-api test-local-upload-api
 
-build-cli:
-	cd cli \
-	&& GOOS=windows GOARCH=amd64 go build -o cloud-symbol-store-cli.exe ./cmd \
-	&& GOOS=linux GOARCH=amd64 go build -o cloud-symbol-store-cli ./cmd
+#########################################################
+# API regeneration commands
+#########################################################
 
-###
-
-generate-apis: generate-go-server-api generate-go-client-api generate-csharp-client-api
+generate-apis: generate-go-server-api generate-csharp-client-api
 
 generate-go-server-api:
 
@@ -128,26 +125,10 @@ generate-go-server-api:
 		-g go-server \
 		-o /local/upload-api/generated
 
-generate-go-client-api:
+generate-client-api:
 
-	rm cli/generated/*.go
-	rm -r cli/generated/docs
-	docker run \
-		--rm \
-		-v "${PWD}:/local" \
-		--user $(shell id -u):$(shell id -g) \
-		openapitools/openapi-generator-cli \
-		generate \
-		--git-user-id=falldamagestudio \
-		--git-repo-id=cloud-symbol-store/cli \
-		-i /local/upload-api/upload-api.yaml \
-		-g go \
-		-o /local/cli/generated
-
-generate-csharp-client-api:
-
-	rm -r csharp-cli/generated/BackendAPI/src
-	rm -r csharp-cli/generated/BackendAPI/docs
+	rm -r cli/generated/BackendAPI/src
+	rm -r cli/generated/BackendAPI/docs
 	docker run \
 		--rm \
 		-v "${PWD}:/local" \
@@ -157,12 +138,18 @@ generate-csharp-client-api:
 		-i /local/upload-api/upload-api.yaml \
 		-g csharp-netcore \
 		--additional-properties=netCoreProjectFile=true,library=httpclient,packageName=BackendAPI \
-		-o /local/csharp-cli/generated/BackendAPI
+		-o /local/cli/generated/BackendAPI
 
+#########################################################
+# CLI commands
+#########################################################
 
-build-csharp-cli:
-	cd csharp-cli \
-	&& dotnet test \
+test-cli:
+	cd cli \
+	&& dotnet test
+
+build-cli: test-cli
+	cd cli \
 	&& dotnet publish \
 		--runtime linux-x64 \
 		--self-contained \
@@ -171,3 +158,4 @@ build-csharp-cli:
 		--runtime win-x64 \
 		--self-contained \
 		--configuration Release
+
