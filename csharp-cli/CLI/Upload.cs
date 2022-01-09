@@ -17,7 +17,7 @@ namespace CLI
         public static void DoUpload(string ServiceURL, string Email, string PAT, IEnumerable<string> Patterns) {
             var Files = FindMatchingFiles(Patterns);
 
-            ClassLib.Class1.Upload(ServiceURL, Email, PAT, Files);
+            ClientAPI.Ops.Upload(ServiceURL, Email, PAT, Files);
         }
     }
 }
