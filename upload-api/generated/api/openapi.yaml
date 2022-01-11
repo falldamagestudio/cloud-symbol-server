@@ -11,9 +11,18 @@ servers:
 security:
 - emailAndPat: []
 paths:
-  /transactions:
+  /{storeId}/transactions:
     post:
       operationId: createTransaction
+      parameters:
+      - description: ID of the store containing the transactions
+        explode: false
+        in: path
+        name: storeId
+        required: true
+        schema:
+          type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -34,7 +43,7 @@ paths:
                 $ref: '#/components/schemas/messageResponse'
           description: Not authorized
       summary: Start a new upload transaction
-  /transactions/{transactionId}:
+  /{storeId}/transactions/{transactionId}:
     get:
       operationId: getTransaction
       parameters:
@@ -42,6 +51,14 @@ paths:
         explode: false
         in: path
         name: transactionId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of the store containing the transaction
+        explode: false
+        in: path
+        name: storeId
         required: true
         schema:
           type: string
@@ -64,7 +81,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/messageResponse'
-          description: No such transaction
+          description: No such store/transaction
       summary: Fetch a transaction
 components:
   schemas:
@@ -101,10 +118,10 @@ components:
         files:
         - fileName: Application.pdb
           hash: 7F416863ABF34C3E894BAD1739BAA5571
-          url: https://storage.googleapis.com/storage/v1/b/example-bucket/o/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
+          url: https://storage.googleapis.com/storage/v1/b/example-bucket/o/stores/default/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
         - fileName: Application.pdb
           hash: 7F416863ABF34C3E894BAD1739BAA5571
-          url: https://storage.googleapis.com/storage/v1/b/example-bucket/o/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
+          url: https://storage.googleapis.com/storage/v1/b/example-bucket/o/stores/default/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
         id: s4elWg054qyrpHCsHqLq
       properties:
         id:
@@ -119,7 +136,7 @@ components:
       example:
         fileName: Application.pdb
         hash: 7F416863ABF34C3E894BAD1739BAA5571
-        url: https://storage.googleapis.com/storage/v1/b/example-bucket/o/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
+        url: https://storage.googleapis.com/storage/v1/b/example-bucket/o/stores/default/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
       properties:
         fileName:
           example: Application.pdb
@@ -128,7 +145,7 @@ components:
           example: 7F416863ABF34C3E894BAD1739BAA5571
           type: string
         url:
-          example: https://storage.googleapis.com/storage/v1/b/example-bucket/o/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
+          example: https://storage.googleapis.com/storage/v1/b/example-bucket/o/stores/default/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
           type: string
       type: object
     getTransactionResponse:

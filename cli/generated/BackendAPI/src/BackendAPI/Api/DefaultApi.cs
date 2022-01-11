@@ -30,9 +30,10 @@ namespace BackendAPI.Api
         /// Start a new upload transaction
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the transactions</param>
         /// <param name="uploadTransactionRequest"></param>
         /// <returns>UploadTransactionResponse</returns>
-        UploadTransactionResponse CreateTransaction(UploadTransactionRequest uploadTransactionRequest);
+        UploadTransactionResponse CreateTransaction(string storeId, UploadTransactionRequest uploadTransactionRequest);
 
         /// <summary>
         /// Start a new upload transaction
@@ -41,16 +42,18 @@ namespace BackendAPI.Api
         /// 
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the transactions</param>
         /// <param name="uploadTransactionRequest"></param>
         /// <returns>ApiResponse of UploadTransactionResponse</returns>
-        ApiResponse<UploadTransactionResponse> CreateTransactionWithHttpInfo(UploadTransactionRequest uploadTransactionRequest);
+        ApiResponse<UploadTransactionResponse> CreateTransactionWithHttpInfo(string storeId, UploadTransactionRequest uploadTransactionRequest);
         /// <summary>
         /// Fetch a transaction
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="transactionId">ID of the transaction to fetch</param>
+        /// <param name="storeId">ID of the store containing the transaction</param>
         /// <returns>GetTransactionResponse</returns>
-        GetTransactionResponse GetTransaction(string transactionId);
+        GetTransactionResponse GetTransaction(string transactionId, string storeId);
 
         /// <summary>
         /// Fetch a transaction
@@ -60,8 +63,9 @@ namespace BackendAPI.Api
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="transactionId">ID of the transaction to fetch</param>
+        /// <param name="storeId">ID of the store containing the transaction</param>
         /// <returns>ApiResponse of GetTransactionResponse</returns>
-        ApiResponse<GetTransactionResponse> GetTransactionWithHttpInfo(string transactionId);
+        ApiResponse<GetTransactionResponse> GetTransactionWithHttpInfo(string transactionId, string storeId);
         #endregion Synchronous Operations
     }
 
@@ -78,10 +82,11 @@ namespace BackendAPI.Api
         /// 
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the transactions</param>
         /// <param name="uploadTransactionRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of UploadTransactionResponse</returns>
-        System.Threading.Tasks.Task<UploadTransactionResponse> CreateTransactionAsync(UploadTransactionRequest uploadTransactionRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<UploadTransactionResponse> CreateTransactionAsync(string storeId, UploadTransactionRequest uploadTransactionRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// Start a new upload transaction
@@ -90,10 +95,11 @@ namespace BackendAPI.Api
         /// 
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the transactions</param>
         /// <param name="uploadTransactionRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (UploadTransactionResponse)</returns>
-        System.Threading.Tasks.Task<ApiResponse<UploadTransactionResponse>> CreateTransactionWithHttpInfoAsync(UploadTransactionRequest uploadTransactionRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<ApiResponse<UploadTransactionResponse>> CreateTransactionWithHttpInfoAsync(string storeId, UploadTransactionRequest uploadTransactionRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Fetch a transaction
         /// </summary>
@@ -102,9 +108,10 @@ namespace BackendAPI.Api
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="transactionId">ID of the transaction to fetch</param>
+        /// <param name="storeId">ID of the store containing the transaction</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of GetTransactionResponse</returns>
-        System.Threading.Tasks.Task<GetTransactionResponse> GetTransactionAsync(string transactionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<GetTransactionResponse> GetTransactionAsync(string transactionId, string storeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// Fetch a transaction
@@ -114,9 +121,10 @@ namespace BackendAPI.Api
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="transactionId">ID of the transaction to fetch</param>
+        /// <param name="storeId">ID of the store containing the transaction</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (GetTransactionResponse)</returns>
-        System.Threading.Tasks.Task<ApiResponse<GetTransactionResponse>> GetTransactionWithHttpInfoAsync(string transactionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<ApiResponse<GetTransactionResponse>> GetTransactionWithHttpInfoAsync(string transactionId, string storeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         #endregion Asynchronous Operations
     }
 
@@ -241,11 +249,12 @@ namespace BackendAPI.Api
         /// Start a new upload transaction 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the transactions</param>
         /// <param name="uploadTransactionRequest"></param>
         /// <returns>UploadTransactionResponse</returns>
-        public UploadTransactionResponse CreateTransaction(UploadTransactionRequest uploadTransactionRequest)
+        public UploadTransactionResponse CreateTransaction(string storeId, UploadTransactionRequest uploadTransactionRequest)
         {
-            BackendAPI.Client.ApiResponse<UploadTransactionResponse> localVarResponse = CreateTransactionWithHttpInfo(uploadTransactionRequest);
+            BackendAPI.Client.ApiResponse<UploadTransactionResponse> localVarResponse = CreateTransactionWithHttpInfo(storeId, uploadTransactionRequest);
             return localVarResponse.Data;
         }
 
@@ -253,10 +262,15 @@ namespace BackendAPI.Api
         /// Start a new upload transaction 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the transactions</param>
         /// <param name="uploadTransactionRequest"></param>
         /// <returns>ApiResponse of UploadTransactionResponse</returns>
-        public BackendAPI.Client.ApiResponse<UploadTransactionResponse> CreateTransactionWithHttpInfo(UploadTransactionRequest uploadTransactionRequest)
+        public BackendAPI.Client.ApiResponse<UploadTransactionResponse> CreateTransactionWithHttpInfo(string storeId, UploadTransactionRequest uploadTransactionRequest)
         {
+            // verify the required parameter 'storeId' is set
+            if (storeId == null)
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->CreateTransaction");
+
             // verify the required parameter 'uploadTransactionRequest' is set
             if (uploadTransactionRequest == null)
                 throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'uploadTransactionRequest' when calling DefaultApi->CreateTransaction");
@@ -278,6 +292,7 @@ namespace BackendAPI.Api
             var localVarAccept = BackendAPI.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null) localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
 
+            localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
             localVarRequestOptions.Data = uploadTransactionRequest;
 
             // authentication (emailAndPat) required
@@ -288,7 +303,7 @@ namespace BackendAPI.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<UploadTransactionResponse>("/transactions", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<UploadTransactionResponse>("/{storeId}/transactions", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
@@ -303,12 +318,13 @@ namespace BackendAPI.Api
         /// Start a new upload transaction 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the transactions</param>
         /// <param name="uploadTransactionRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of UploadTransactionResponse</returns>
-        public async System.Threading.Tasks.Task<UploadTransactionResponse> CreateTransactionAsync(UploadTransactionRequest uploadTransactionRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<UploadTransactionResponse> CreateTransactionAsync(string storeId, UploadTransactionRequest uploadTransactionRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            BackendAPI.Client.ApiResponse<UploadTransactionResponse> localVarResponse = await CreateTransactionWithHttpInfoAsync(uploadTransactionRequest, cancellationToken).ConfigureAwait(false);
+            BackendAPI.Client.ApiResponse<UploadTransactionResponse> localVarResponse = await CreateTransactionWithHttpInfoAsync(storeId, uploadTransactionRequest, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
@@ -316,11 +332,16 @@ namespace BackendAPI.Api
         /// Start a new upload transaction 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the transactions</param>
         /// <param name="uploadTransactionRequest"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (UploadTransactionResponse)</returns>
-        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<UploadTransactionResponse>> CreateTransactionWithHttpInfoAsync(UploadTransactionRequest uploadTransactionRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<UploadTransactionResponse>> CreateTransactionWithHttpInfoAsync(string storeId, UploadTransactionRequest uploadTransactionRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
+            // verify the required parameter 'storeId' is set
+            if (storeId == null)
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->CreateTransaction");
+
             // verify the required parameter 'uploadTransactionRequest' is set
             if (uploadTransactionRequest == null)
                 throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'uploadTransactionRequest' when calling DefaultApi->CreateTransaction");
@@ -344,6 +365,7 @@ namespace BackendAPI.Api
             var localVarAccept = BackendAPI.Client.ClientUtils.SelectHeaderAccept(_accepts);
             if (localVarAccept != null) localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
 
+            localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
             localVarRequestOptions.Data = uploadTransactionRequest;
 
             // authentication (emailAndPat) required
@@ -355,7 +377,7 @@ namespace BackendAPI.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<UploadTransactionResponse>("/transactions", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<UploadTransactionResponse>("/{storeId}/transactions", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
@@ -371,10 +393,11 @@ namespace BackendAPI.Api
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="transactionId">ID of the transaction to fetch</param>
+        /// <param name="storeId">ID of the store containing the transaction</param>
         /// <returns>GetTransactionResponse</returns>
-        public GetTransactionResponse GetTransaction(string transactionId)
+        public GetTransactionResponse GetTransaction(string transactionId, string storeId)
         {
-            BackendAPI.Client.ApiResponse<GetTransactionResponse> localVarResponse = GetTransactionWithHttpInfo(transactionId);
+            BackendAPI.Client.ApiResponse<GetTransactionResponse> localVarResponse = GetTransactionWithHttpInfo(transactionId, storeId);
             return localVarResponse.Data;
         }
 
@@ -383,12 +406,17 @@ namespace BackendAPI.Api
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="transactionId">ID of the transaction to fetch</param>
+        /// <param name="storeId">ID of the store containing the transaction</param>
         /// <returns>ApiResponse of GetTransactionResponse</returns>
-        public BackendAPI.Client.ApiResponse<GetTransactionResponse> GetTransactionWithHttpInfo(string transactionId)
+        public BackendAPI.Client.ApiResponse<GetTransactionResponse> GetTransactionWithHttpInfo(string transactionId, string storeId)
         {
             // verify the required parameter 'transactionId' is set
             if (transactionId == null)
                 throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'transactionId' when calling DefaultApi->GetTransaction");
+
+            // verify the required parameter 'storeId' is set
+            if (storeId == null)
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->GetTransaction");
 
             BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
 
@@ -407,6 +435,7 @@ namespace BackendAPI.Api
             if (localVarAccept != null) localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
 
             localVarRequestOptions.PathParameters.Add("transactionId", BackendAPI.Client.ClientUtils.ParameterToString(transactionId)); // path parameter
+            localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
 
             // authentication (emailAndPat) required
             // http basic authentication required
@@ -416,7 +445,7 @@ namespace BackendAPI.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<GetTransactionResponse>("/transactions/{transactionId}", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<GetTransactionResponse>("/{storeId}/transactions/{transactionId}", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
@@ -432,11 +461,12 @@ namespace BackendAPI.Api
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="transactionId">ID of the transaction to fetch</param>
+        /// <param name="storeId">ID of the store containing the transaction</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of GetTransactionResponse</returns>
-        public async System.Threading.Tasks.Task<GetTransactionResponse> GetTransactionAsync(string transactionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<GetTransactionResponse> GetTransactionAsync(string transactionId, string storeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            BackendAPI.Client.ApiResponse<GetTransactionResponse> localVarResponse = await GetTransactionWithHttpInfoAsync(transactionId, cancellationToken).ConfigureAwait(false);
+            BackendAPI.Client.ApiResponse<GetTransactionResponse> localVarResponse = await GetTransactionWithHttpInfoAsync(transactionId, storeId, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
@@ -445,13 +475,18 @@ namespace BackendAPI.Api
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="transactionId">ID of the transaction to fetch</param>
+        /// <param name="storeId">ID of the store containing the transaction</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (GetTransactionResponse)</returns>
-        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetTransactionResponse>> GetTransactionWithHttpInfoAsync(string transactionId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetTransactionResponse>> GetTransactionWithHttpInfoAsync(string transactionId, string storeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'transactionId' is set
             if (transactionId == null)
                 throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'transactionId' when calling DefaultApi->GetTransaction");
+
+            // verify the required parameter 'storeId' is set
+            if (storeId == null)
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->GetTransaction");
 
 
             BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
@@ -472,6 +507,7 @@ namespace BackendAPI.Api
             if (localVarAccept != null) localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
 
             localVarRequestOptions.PathParameters.Add("transactionId", BackendAPI.Client.ClientUtils.ParameterToString(transactionId)); // path parameter
+            localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
 
             // authentication (emailAndPat) required
             // http basic authentication required
@@ -482,7 +518,7 @@ namespace BackendAPI.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.GetAsync<GetTransactionResponse>("/transactions/{transactionId}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<GetTransactionResponse>("/{storeId}/transactions/{transactionId}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {

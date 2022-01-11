@@ -53,13 +53,13 @@ func (c *DefaultApiController) Routes() Routes {
 		{
 			"CreateTransaction",
 			strings.ToUpper("Post"),
-			"/transactions",
+			"/{storeId}/transactions",
 			c.CreateTransaction,
 		},
 		{
 			"GetTransaction",
 			strings.ToUpper("Get"),
-			"/transactions/{transactionId}",
+			"/{storeId}/transactions/{transactionId}",
 			c.GetTransaction,
 		},
 	}
@@ -67,6 +67,9 @@ func (c *DefaultApiController) Routes() Routes {
 
 // CreateTransaction - Start a new upload transaction
 func (c *DefaultApiController) CreateTransaction(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	storeIdParam := params["storeId"]
+	
 	uploadTransactionRequestParam := UploadTransactionRequest{}
 	d := json.NewDecoder(r.Body)
 	d.DisallowUnknownFields()
@@ -78,7 +81,7 @@ func (c *DefaultApiController) CreateTransaction(w http.ResponseWriter, r *http.
 		c.errorHandler(w, r, err, nil)
 		return
 	}
-	result, err := c.service.CreateTransaction(r.Context(), uploadTransactionRequestParam)
+	result, err := c.service.CreateTransaction(r.Context(), storeIdParam, uploadTransactionRequestParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)
@@ -94,7 +97,9 @@ func (c *DefaultApiController) GetTransaction(w http.ResponseWriter, r *http.Req
 	params := mux.Vars(r)
 	transactionIdParam := params["transactionId"]
 	
-	result, err := c.service.GetTransaction(r.Context(), transactionIdParam)
+	storeIdParam := params["storeId"]
+	
+	result, err := c.service.GetTransaction(r.Context(), transactionIdParam, storeIdParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)
