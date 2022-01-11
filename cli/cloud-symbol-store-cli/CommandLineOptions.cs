@@ -20,6 +20,9 @@ namespace CLI
     [Verb("upload", HelpText = "Upload symbols")]
     public class UploadOptions : CommandLineOptions
     {
+        [Option(longName: "store-id", Required = true, HelpText = "ID for stores containing transactions & files")]
+        public string? StoreId { get; set; }
+
         [Option(longName: "description", Required = true, HelpText = "Textual description of upload")]
         public string? Description { get; set; }
 
