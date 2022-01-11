@@ -1,0 +1,17 @@
+{
+  "name": "stores/example/vc142.pdb/",
+  "bucket": "default-bucket",
+  "contentType": "text/plain",
+  "metageneration": 1,
+  "generation": 1641932951993,
+  "storageClass": "STANDARD",
+  "etag": "someETag",
+  "contentDisposition": "inline",
+  "contentEncoding": "identity",
+  "downloadTokens": [],
+  "timeCreated": "2022-01-11T20:29:11.992Z",
+  "updated": "2022-01-11T20:29:11.994Z",
+  "size": 0,
+  "md5Hash": "1B2M2Y8AsgTpgAmY7PhCfg==",
+  "crc32c": "0"
+}

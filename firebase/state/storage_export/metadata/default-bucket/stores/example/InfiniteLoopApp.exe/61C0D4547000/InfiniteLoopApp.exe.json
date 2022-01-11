@@ -1,0 +1,19 @@
+{
+  "name": "stores/example/InfiniteLoopApp.exe/61C0D4547000/InfiniteLoopApp.exe",
+  "bucket": "default-bucket",
+  "contentType": "application/x-msdownload",
+  "metageneration": 1,
+  "generation": 1641932913632,
+  "storageClass": "STANDARD",
+  "etag": "someETag",
+  "contentDisposition": "inline",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "84b87755-207f-4d2d-bbaa-4dad9f601a0e"
+  ],
+  "timeCreated": "2022-01-11T20:28:33.631Z",
+  "updated": "2022-01-11T20:28:33.633Z",
+  "size": 10752,
+  "md5Hash": "sqfTAcxnrG8XSKGV6AzV8w==",
+  "crc32c": "2255095436"
+}

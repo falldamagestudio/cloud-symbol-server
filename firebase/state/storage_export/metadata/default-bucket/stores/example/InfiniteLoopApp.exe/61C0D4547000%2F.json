@@ -1,0 +1,17 @@
+{
+  "name": "stores/example/InfiniteLoopApp.exe/61C0D4547000/",
+  "bucket": "default-bucket",
+  "contentType": "text/plain",
+  "metageneration": 1,
+  "generation": 1641932902306,
+  "storageClass": "STANDARD",
+  "etag": "someETag",
+  "contentDisposition": "inline",
+  "contentEncoding": "identity",
+  "downloadTokens": [],
+  "timeCreated": "2022-01-11T20:28:22.305Z",
+  "updated": "2022-01-11T20:28:22.305Z",
+  "size": 0,
+  "md5Hash": "1B2M2Y8AsgTpgAmY7PhCfg==",
+  "crc32c": "0"
+}

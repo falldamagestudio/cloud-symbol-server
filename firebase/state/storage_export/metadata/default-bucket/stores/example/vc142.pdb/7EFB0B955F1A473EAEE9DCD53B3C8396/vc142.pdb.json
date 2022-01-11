@@ -1,0 +1,19 @@
+{
+  "name": "stores/example/vc142.pdb/7EFB0B955F1A473EAEE9DCD53B3C8396/vc142.pdb",
+  "bucket": "default-bucket",
+  "contentType": "application/octet-stream",
+  "metageneration": 1,
+  "generation": 1641932966166,
+  "storageClass": "STANDARD",
+  "etag": "someETag",
+  "contentDisposition": "inline",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "54741cb4-b534-4f34-90f2-7950c3da6263"
+  ],
+  "timeCreated": "2022-01-11T20:29:26.165Z",
+  "updated": "2022-01-11T20:29:26.165Z",
+  "size": 61440,
+  "md5Hash": "hHR5GDMB2tPfMXRUwGI7KQ==",
+  "crc32c": "1289005130"
+}
