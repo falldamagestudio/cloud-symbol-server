@@ -303,7 +303,7 @@ namespace BackendAPI.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<UploadTransactionResponse>("/{storeId}/transactions", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<UploadTransactionResponse>("/stores/{storeId}/transactions", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
@@ -377,7 +377,7 @@ namespace BackendAPI.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<UploadTransactionResponse>("/{storeId}/transactions", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<UploadTransactionResponse>("/stores/{storeId}/transactions", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
@@ -445,7 +445,7 @@ namespace BackendAPI.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<GetTransactionResponse>("/{storeId}/transactions/{transactionId}", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<GetTransactionResponse>("/stores/{storeId}/transactions/{transactionId}", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
@@ -518,7 +518,7 @@ namespace BackendAPI.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.GetAsync<GetTransactionResponse>("/{storeId}/transactions/{transactionId}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<GetTransactionResponse>("/stores/{storeId}/transactions/{transactionId}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {

@@ -53,13 +53,13 @@ func (c *DefaultApiController) Routes() Routes {
 		{
 			"CreateTransaction",
 			strings.ToUpper("Post"),
-			"/{storeId}/transactions",
+			"/stores/{storeId}/transactions",
 			c.CreateTransaction,
 		},
 		{
 			"GetTransaction",
 			strings.ToUpper("Get"),
-			"/{storeId}/transactions/{transactionId}",
+			"/stores/{storeId}/transactions/{transactionId}",
 			c.GetTransaction,
 		},
 	}

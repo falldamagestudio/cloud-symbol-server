@@ -11,7 +11,7 @@ servers:
 security:
 - emailAndPat: []
 paths:
-  /{storeId}/transactions:
+  /stores/{storeId}/transactions:
     post:
       operationId: createTransaction
       parameters:
@@ -43,7 +43,7 @@ paths:
                 $ref: '#/components/schemas/messageResponse'
           description: Not authorized
       summary: Start a new upload transaction
-  /{storeId}/transactions/{transactionId}:
+  /stores/{storeId}/transactions/{transactionId}:
     get:
       operationId: getTransaction
       parameters:

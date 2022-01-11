@@ -4,8 +4,8 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**CreateTransaction**](DefaultApi.md#createtransaction) | **POST** /{storeId}/transactions | Start a new upload transaction
-[**GetTransaction**](DefaultApi.md#gettransaction) | **GET** /{storeId}/transactions/{transactionId} | Fetch a transaction
+[**CreateTransaction**](DefaultApi.md#createtransaction) | **POST** /stores/{storeId}/transactions | Start a new upload transaction
+[**GetTransaction**](DefaultApi.md#gettransaction) | **GET** /stores/{storeId}/transactions/{transactionId} | Fetch a transaction
 
 
 <a name="createtransaction"></a>
