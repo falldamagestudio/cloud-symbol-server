@@ -6,7 +6,7 @@
 .PHONY: run-local-download-api run-local-upload-api
 .PHONY: test-local test-local-download-api test-local-upload-api
 
-.PHONY: generate-apis generate-go-server-api generate-csharp-client-api
+.PHONY: generate-apis generate-server-api generate-client-api
 
 .PHONY: test-cli build-cli
 
@@ -108,9 +108,9 @@ test-local: test-local-download-api test-local-upload-api
 # API regeneration commands
 #########################################################
 
-generate-apis: generate-go-server-api generate-csharp-client-api
+generate-apis: generate-server-api generate-client-api
 
-generate-go-server-api:
+generate-server-api:
 
 	rm -r upload-api/generated/go
 	docker run \
