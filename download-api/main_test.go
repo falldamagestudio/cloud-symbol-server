@@ -110,7 +110,7 @@ func TestAccessFileThatExists(t *testing.T) {
 
 	// Unsigned URLs are on the format,
 	// http://<host>:<port>/[storage/v1/]b/<bucketname>/o/<objectname>?alt=media
-	desiredUnsignedURLSuffix := "/o/pingme.txt?alt=media"
+	desiredUnsignedURLSuffix := "pingme.txt?alt=media"
 
 	// Signed URLs are on the format,
 	// https://<host>/<bucketname>/<objectname>?<bunch of key-value pairs, including an 'Expires' header that is typically first>

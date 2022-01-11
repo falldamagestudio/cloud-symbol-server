@@ -1,6 +1,8 @@
 package hello
 
 import (
+	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -63,6 +65,20 @@ func DownloadFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	localStoresString := os.Getenv("SYMBOL_STORE_LOCAL_STORES")
+	if localStoresString == "" {
+		log.Print("No local stores configured")
+		http.Error(w, "No local stores configured", http.StatusInternalServerError)
+		return
+	}
+
+	var storeIds []string
+	if err := json.Unmarshal([]byte(localStoresString), &storeIds); err != nil {
+		log.Printf("Error while decoding local stores configuration: %v", err)
+		http.Error(w, "Error while decoding local stores configuration", http.StatusInternalServerError)
+		return
+	}
+
 	gcpProjectId := os.Getenv("GCP_PROJECT_ID")
 	if gcpProjectId == "" {
 		log.Print("No GCP Project ID configured")
@@ -105,41 +121,41 @@ func DownloadFile(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("Validating whether object %v does exists in bucket %v", path, symbolStoreBucketName)
 
-	_, err = storageClient.Bucket(symbolStoreBucketName).Object(path).Attrs(r.Context())
-	if err != nil {
-		log.Printf("Object %v does not exist in bucket %v", path, symbolStoreBucketName)
-		http.Error(w, fmt.Sprintf("Object %v does not exist in bucket", path), http.StatusNotFound)
+	fullPath := findObjectInStores(storageClient, symbolStoreBucketName, storeIds, path, r.Context())
+	if fullPath == nil {
+		log.Printf("Object %v does not exist in any store in bucket %v", path, symbolStoreBucketName)
+		http.Error(w, fmt.Sprintf("Object %v does not exist in any store in bucket", path), http.StatusNotFound)
 		return
 	}
 
 	// Object exists in bucket; respond with a redirect URL
 
-	log.Printf("Object %v exists in bucket %v, preparing a redirect", path, symbolStoreBucketName)
+	log.Printf("Preparing a redirect for %v", path)
 
 	objectURL := ""
 
 	if useSignedURLs {
 
-		objectURL, err = storageClient.Bucket(symbolStoreBucketName).SignedURL(path, &storage.SignedURLOptions{
+		objectURL, err = storageClient.Bucket(symbolStoreBucketName).SignedURL(*fullPath, &storage.SignedURLOptions{
 			Method:  "GET",
 			Expires: time.Now().Add(time.Duration(signedURLExpirationSeconds) * time.Second),
 		})
 
 		if err != nil {
-			log.Printf("Unable to create signed URL for %v: %v", path, err)
-			http.Error(w, fmt.Sprintf("Unable to create signed URL for %v", path), http.StatusInternalServerError)
+			log.Printf("Unable to create signed URL for %v: %v", *fullPath, err)
+			http.Error(w, fmt.Sprintf("Unable to create signed URL for %v", *fullPath), http.StatusInternalServerError)
 			return
 		}
 
-		log.Printf("Object %v has a signed URL %v, valid for %d seconds", path, objectURL, signedURLExpirationSeconds)
+		log.Printf("Object %v has a signed URL %v, valid for %d seconds", *fullPath, objectURL, signedURLExpirationSeconds)
 
 	} else {
 
 		// The Firebase Storage emulator requires the path to be on the format "folder%2Ffilename"
 
-		restAPIPath := path
+		restAPIPath := *fullPath
 		if urlEncodeRestAPIPath {
-			restAPIPath = strings.ReplaceAll(path, "/", "%2F")
+			restAPIPath = strings.ReplaceAll(*fullPath, "/", "%2F")
 		}
 
 		objectURL = fmt.Sprintf("%s/b/%s/o/%s?alt=media", storageEndpoint, symbolStoreBucketName, restAPIPath)
@@ -147,8 +163,26 @@ func DownloadFile(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Object %v has a non-signed URL %v", restAPIPath, objectURL)
 	}
 
-	log.Printf("Path %v redirected to %v", path, objectURL)
+	log.Printf("Path %v redirected to %v", *fullPath, objectURL)
 	http.Redirect(w, r, objectURL, http.StatusTemporaryRedirect)
+}
+
+func findObjectInStores(storageClient *storage.Client, symbolStoreBucketName string, stores []string, path string, context context.Context) *string {
+
+	for _, storeId := range stores {
+
+		fullPath := fmt.Sprintf("stores/%s/%s", storeId, path)
+
+		_, err := storageClient.Bucket(symbolStoreBucketName).Object(fullPath).Attrs(context)
+		if err != nil {
+			log.Printf("Object %v does not exist in bucket %v store %v", path, symbolStoreBucketName, storeId)
+		} else {
+			log.Printf("Object %v exists in bucket %v store %v", path, symbolStoreBucketName, storeId)
+			return &fullPath
+		}
+	}
+
+	return nil
 }
 
 func handlePATAuthentication(r *http.Request, w http.ResponseWriter, firestoreClient *firestore.Client) error {
