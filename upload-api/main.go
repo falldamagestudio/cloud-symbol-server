@@ -52,6 +52,7 @@ func firestoreClient(context context.Context) (*firestore.Client, error) {
 }
 
 func UploadAPI(w http.ResponseWriter, r *http.Request) {
+	log.Print(r.URL.Path)
 
 	router.ServeHTTP(w, r)
 }

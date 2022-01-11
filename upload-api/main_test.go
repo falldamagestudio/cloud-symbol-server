@@ -41,7 +41,7 @@ func TestGetTransactionWithInvalidCredentialsFails(t *testing.T) {
 
 	serviceUrl := getServiceUrl(email, pat)
 
-	path := "/transactions/nonexistentid"
+	path := "/stores/example/transactions/nonexistentid"
 
 	response, err := retryablehttp.Get(serviceUrl + path)
 	defer response.Body.Close()
@@ -63,7 +63,7 @@ func TestGetTransactionThatDoesNotExistFails(t *testing.T) {
 
 	serviceUrl := getServiceUrl(email, pat)
 
-	path := "/transactions/nonexistentid"
+	path := "/stores/example/transactions/nonexistentid"
 
 	response, err := retryablehttp.Get(serviceUrl + path)
 	defer response.Body.Close()
@@ -83,7 +83,7 @@ func TestUploadTransactionSucceeds(t *testing.T) {
 	email := "testuser"
 	pat := "testpat"
 
-	path := "/transactions"
+	path := "/stores/example/transactions"
 
 	serviceUrl := getServiceUrl(email, pat)
 
