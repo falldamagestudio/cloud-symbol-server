@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	upload_api "github.com/falldamagestudio/cloud-symbol-store/upload-api"
+	upload_api "github.com/falldamagestudio/cloud-symbol-server/upload-api"
 
 	"github.com/GoogleCloudPlatform/functions-framework-go/funcframework"
 )

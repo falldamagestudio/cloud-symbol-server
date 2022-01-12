@@ -46,13 +46,13 @@ test-download-api:
 	cd download-api \
 	&&	DOWNLOAD_API_PROTOCOL="$(shell jq -r ".downloadAPIProtocol" < environments/$(ENV)/config.json)" \
 		DOWNLOAD_API_HOST="$(shell jq -r ".downloadAPIHost" < environments/$(ENV)/config.json)" \
-		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-store/download-api
+		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/download-api
 
 test-upload-api:
 	cd upload-api \
 	&&	UPLOAD_API_PROTOCOL="$(shell jq -r ".uploadAPIProtocol" < environments/$(ENV)/config.json)" \
 		UPLOAD_API_HOST="$(shell jq -r ".uploadAPIHost" < environments/$(ENV)/config.json)" \
-		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-store/upload-api
+		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/upload-api
 
 test: test-download-api test-upload-api
 
@@ -61,11 +61,11 @@ test: test-download-api test-upload-api
 #########################################################
 
 run-local-firebase-emulators:
-	cd firebase && firebase emulators:start --project=demo-cloud-symbol-store --import state --export-on-exit
+	cd firebase && firebase emulators:start --project=demo-cloud-symbol-server --import state --export-on-exit
 
 run-local-download-api:
 	cd download-api/cmd \
-	&&	GCP_PROJECT_ID=demo-cloud-symbol-store \
+	&&	GCP_PROJECT_ID=demo-cloud-symbol-server \
 		FIRESTORE_EMULATOR_HOST=localhost:8082 \
 		STORAGE_EMULATOR_HOST=localhost:9199 \
 		SYMBOL_STORE_BUCKET_NAME=default-bucket \
@@ -75,7 +75,7 @@ run-local-download-api:
 
 run-local-upload-api:
 	cd upload-api/cmd \
-	&&	GCP_PROJECT_ID=demo-cloud-symbol-store \
+	&&	GCP_PROJECT_ID=demo-cloud-symbol-server \
 		FIRESTORE_EMULATOR_HOST=localhost:8082 \
 		STORAGE_EMULATOR_HOST=localhost:9199 \
 		SYMBOL_STORE_BUCKET_NAME=default-bucket \
@@ -96,13 +96,13 @@ test-local-download-api:
 	cd download-api \
 	&&	DOWNLOAD_API_PROTOCOL=http \
 		DOWNLOAD_API_HOST=localhost:8083 \
-		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-store/download-api
+		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/download-api
 
 test-local-upload-api:
 	cd upload-api \
 	&&	UPLOAD_API_PROTOCOL=http \
 		UPLOAD_API_HOST=localhost:8084 \
-		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-store/upload-api -count=1
+		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/upload-api -count=1
 
 test-local: test-local-download-api test-local-upload-api
 
@@ -122,7 +122,7 @@ generate-server-api:
 		openapitools/openapi-generator-cli \
 		generate \
 		--git-user-id=falldamagestudio \
-		--git-repo-id=cloud-symbol-store/upload-api \
+		--git-repo-id=cloud-symbol-server/upload-api \
 		-i /local/upload-api/upload-api.yaml \
 		-g go-server \
 		-o /local/upload-api/generated

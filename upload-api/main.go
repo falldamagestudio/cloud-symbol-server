@@ -8,7 +8,7 @@ import (
 	"os"
 
 	"cloud.google.com/go/firestore"
-	openapi "github.com/falldamagestudio/cloud-symbol-store/upload-api/generated/go"
+	openapi "github.com/falldamagestudio/cloud-symbol-server/upload-api/generated/go"
 	"github.com/gorilla/mux"
 )
 

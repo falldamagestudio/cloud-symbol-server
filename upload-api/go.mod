@@ -1,4 +1,4 @@
-module github.com/falldamagestudio/cloud-symbol-store/upload-api
+module github.com/falldamagestudio/cloud-symbol-server/upload-api
 
 go 1.13
 

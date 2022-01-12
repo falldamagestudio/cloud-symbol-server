@@ -8,7 +8,7 @@ import (
 	"os"
 	"testing"
 
-	openapi "github.com/falldamagestudio/cloud-symbol-store/upload-api/generated/go"
+	openapi "github.com/falldamagestudio/cloud-symbol-server/upload-api/generated/go"
 	retryablehttp "github.com/hashicorp/go-retryablehttp"
 )
 
