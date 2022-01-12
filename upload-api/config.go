@@ -16,7 +16,7 @@ func getStoresConfig() ([]string, error) {
 
 	var storesConfig []string
 	if err := json.Unmarshal([]byte(storesConfigString), &storesConfig); err != nil {
-		return nil, errors.New(fmt.Sprintf("Error while decoding local stores configuration: %w", err))
+		return nil, errors.New(fmt.Sprintf("Error while decoding local stores configuration: %v", err))
 	}
 
 	return storesConfig, nil
