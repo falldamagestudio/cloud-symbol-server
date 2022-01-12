@@ -32,4 +32,9 @@ namespace CLI
         [Value(0, MetaName="<pattern1 pattern2 pattern3 ...>", Min = 1, HelpText = "Wildcard patterns for files to upload, like 'folder1/*.pdb'")]
         public IEnumerable<string>? Patterns { get; set; }
     }
+
+    [Verb("list-stores", HelpText = "List all stores")]
+    public class ListStoresOptions : CommandLineOptions
+    {
+    }
 }

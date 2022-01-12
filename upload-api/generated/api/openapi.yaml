@@ -11,6 +11,23 @@ servers:
 security:
 - emailAndPat: []
 paths:
+  /stores:
+    get:
+      operationId: getStores
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getStoresResponse'
+          description: Success
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Not authorized
+      summary: Fetch a list of all stores
   /stores/{storeId}/transactions:
     post:
       operationId: createTransaction
@@ -91,6 +108,11 @@ components:
           example: Invalid API invocation
           type: string
       type: object
+    getStoresResponse:
+      items:
+        example: example-store
+        type: string
+      type: array
     uploadTransactionRequest:
       properties:
         description:

@@ -107,6 +107,7 @@ All URIs are relative to *http://localhost*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**CreateTransaction**](docs/DefaultApi.md#createtransaction) | **POST** /stores/{storeId}/transactions | Start a new upload transaction
+*DefaultApi* | [**GetStores**](docs/DefaultApi.md#getstores) | **GET** /stores | Fetch a list of all stores
 *DefaultApi* | [**GetTransaction**](docs/DefaultApi.md#gettransaction) | **GET** /stores/{storeId}/transactions/{transactionId} | Fetch a transaction
 
 

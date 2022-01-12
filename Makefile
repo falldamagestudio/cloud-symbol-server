@@ -79,6 +79,7 @@ run-local-upload-api:
 		FIRESTORE_EMULATOR_HOST=localhost:8082 \
 		STORAGE_EMULATOR_HOST=localhost:9199 \
 		SYMBOL_STORE_BUCKET_NAME=default-bucket \
+		SYMBOL_STORE_LOCAL_STORES=[\"example\"] \
 		PORT=8084 \
 		go run main.go
 

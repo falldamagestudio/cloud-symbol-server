@@ -9,6 +9,26 @@ info:
   version: 1.0.0
 
 paths:
+  /stores:
+    get:
+      summary: Fetch a list of all stores
+      operationId: getStores
+
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getStoresResponse'
+
+        401:
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+
   /stores/{storeId}/transactions:
     post:
       summary: Start a new upload transaction
@@ -91,6 +111,12 @@ components:
         message:
           type: string
           example: Invalid API invocation
+
+    getStoresResponse:
+      type: array
+      items:
+        type: string
+        example: example-store
 
     uploadTransactionRequest:
       type: object
