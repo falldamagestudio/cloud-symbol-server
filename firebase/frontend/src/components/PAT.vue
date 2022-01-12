@@ -39,7 +39,7 @@
               </v-card-title>
 
               <v-card-text>
-                <p>To configure Visual Studio to access the symbol store using this PAT, do the following:
+                <p>To configure Visual Studio to access the symbol server using this PAT, do the following:
                 </p>
 
                 <ol>

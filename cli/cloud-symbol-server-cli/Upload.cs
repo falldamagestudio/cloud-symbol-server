@@ -18,7 +18,7 @@ namespace CLI
         {
             IEnumerable<string> files = FindMatchingFiles(options.Patterns!);
 
-            Console.WriteLine("Uploading to Cloud Symbol Store...");
+            Console.WriteLine("Uploading to Cloud Symbol Server...");
             Console.WriteLine($"  Store: {options.Store}");
             Console.WriteLine($"  Description: {options.Description}");
             Console.WriteLine($"  Build ID: {options.BuildId}");

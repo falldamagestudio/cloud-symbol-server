@@ -8,7 +8,7 @@
 
         <div class="d-flex align-center">
 
-          Cloud Symbol Store
+          Cloud Symbol Server
 
         </div>
 
