@@ -16,7 +16,7 @@ import (
 	"google.golang.org/api/option"
 )
 
-func DownloadFile(w http.ResponseWriter, r *http.Request) {
+func DownloadAPI(w http.ResponseWriter, r *http.Request) {
 
 	signedURLExpirationSeconds := 15 * 60
 
