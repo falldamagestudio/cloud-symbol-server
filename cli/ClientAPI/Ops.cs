@@ -75,7 +75,7 @@ namespace ClientAPI
             }
         }
 
-        public static void Upload(string ServiceURL, string Email, string PAT, string storeId, string description, string buildId, IEnumerable<string> Files, IProgress<UploadProgress> progress) {
+        public static void Upload(string ServiceURL, string Email, string PAT, string store, string description, string buildId, IEnumerable<string> Files, IProgress<UploadProgress> progress) {
 
             if (progress != null)
                 progress.Report(new UploadProgress { State = UploadProgress.StateEnum.LocalValidation });
@@ -92,7 +92,7 @@ namespace ClientAPI
                 progress.Report(new UploadProgress { State = UploadProgress.StateEnum.CreatingTransaction });
 
             BackendAPI.Model.UploadTransactionRequest uploadTransactionRequest = CreateUploadTransactionRequest(description, buildId, filesWithHashes);
-            BackendAPI.Client.ApiResponse<BackendAPI.Model.UploadTransactionResponse> uploadTransactionResponse = api.CreateTransactionWithHttpInfo(storeId, uploadTransactionRequest);
+            BackendAPI.Client.ApiResponse<BackendAPI.Model.UploadTransactionResponse> uploadTransactionResponse = api.CreateTransactionWithHttpInfo(store, uploadTransactionRequest);
             if (uploadTransactionResponse.ErrorText != null)
                 throw new UploadException(uploadTransactionResponse.ErrorText);
 
