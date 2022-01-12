@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cloud-symbol-store-cli", "cloud-symbol-store-cli\cloud-symbol-store-cli.csproj", "{0DAB613B-4FD5-423A-9EBD-ED10A47306A7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cloud-symbol-server-cli", "cloud-symbol-server-cli\cloud-symbol-server-cli.csproj", "{0DAB613B-4FD5-423A-9EBD-ED10A47306A7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientAPI", "ClientAPI\ClientAPI.csproj", "{C4855F55-C31A-4B22-9383-8EE9D63806E9}"
 EndProject

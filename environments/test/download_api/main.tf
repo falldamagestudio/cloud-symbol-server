@@ -10,5 +10,5 @@ module "download_api" {
     function_region = var.function_region
 
     symbol_store_bucket_name = data.terraform_remote_state.core.outputs.symbol_store_bucket_name
-    symbol_store_local_stores = data.terraform_remote_state.core.outputs.symbol_store_local_stores
+    symbol_server_stores = data.terraform_remote_state.core.outputs.symbol_server_stores
 }

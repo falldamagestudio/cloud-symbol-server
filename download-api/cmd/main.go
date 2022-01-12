@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	download_api "github.com/falldamagestudio/cloud-symbol-store/download-api"
+	download_api "github.com/falldamagestudio/cloud-symbol-server/download-api"
 
 	"github.com/GoogleCloudPlatform/functions-framework-go/funcframework"
 )
@@ -13,7 +13,7 @@ import (
 func main() {
 
 	ctx := context.Background()
-	if err := funcframework.RegisterHTTPFunctionContext(ctx, "/", download_api.DownloadFile); err != nil {
+	if err := funcframework.RegisterHTTPFunctionContext(ctx, "/", download_api.DownloadAPI); err != nil {
 		log.Fatalf("funcframework.RegisterHTTPFunctionContext: %v\n", err)
 	}
 	// Use PORT environment variable, or default to 8080.

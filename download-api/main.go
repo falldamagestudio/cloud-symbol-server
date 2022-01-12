@@ -16,7 +16,7 @@ import (
 	"google.golang.org/api/option"
 )
 
-func DownloadFile(w http.ResponseWriter, r *http.Request) {
+func DownloadAPI(w http.ResponseWriter, r *http.Request) {
 
 	signedURLExpirationSeconds := 15 * 60
 
@@ -65,7 +65,7 @@ func DownloadFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	localStoresString := os.Getenv("SYMBOL_STORE_LOCAL_STORES")
+	localStoresString := os.Getenv("SYMBOL_SERVER_STORES")
 	if localStoresString == "" {
 		log.Print("No local stores configured")
 		http.Error(w, "No local stores configured", http.StatusInternalServerError)

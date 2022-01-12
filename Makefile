@@ -1,10 +1,10 @@
-.PHONY: deploy deploy-core deploy-download-api deploy-upload-api deploy-firebase-and-frontend
+.PHONY: deploy deploy-core deploy-download-api deploy-admin-api deploy-firebase-and-frontend
 .PHONY: destroy
-.PHONY: test test-download-api test-upload-api
+.PHONY: test test-download-api test-admin-api
 
 .PHONY: run-local-firebase-emulators
-.PHONY: run-local-download-api run-local-upload-api
-.PHONY: test-local test-local-download-api test-local-upload-api
+.PHONY: run-local-download-api run-local-admin-api
+.PHONY: test-local test-local-download-api test-local-admin-api
 
 .PHONY: generate-apis generate-server-api generate-client-api
 
@@ -26,8 +26,8 @@ deploy-core:
 deploy-download-api:
 	cd environments/$(ENV)/download_api && terraform init && terraform apply -auto-approve
 
-deploy-upload-api:
-	cd environments/$(ENV)/upload_api && terraform init && terraform apply -auto-approve
+deploy-admin-api:
+	cd environments/$(ENV)/admin_api && terraform init && terraform apply -auto-approve
 
 deploy-firebase-and-frontend:
 	cd firebase/frontend \
@@ -37,7 +37,7 @@ deploy-firebase-and-frontend:
 			npm run build
 	cd firebase && firebase deploy --project="$(shell jq -r ".gcpProjectId" < environments/$(ENV)/firebase/config.json)"
 
-deploy: deploy-core deploy-download-api deploy-upload-api deploy-firebase-and-frontend
+deploy: deploy-core deploy-download-api deploy-admin-api deploy-firebase-and-frontend
 
 destroy:
 	cd environments/$(ENV)/core && terraform destroy
@@ -46,40 +46,40 @@ test-download-api:
 	cd download-api \
 	&&	DOWNLOAD_API_PROTOCOL="$(shell jq -r ".downloadAPIProtocol" < environments/$(ENV)/config.json)" \
 		DOWNLOAD_API_HOST="$(shell jq -r ".downloadAPIHost" < environments/$(ENV)/config.json)" \
-		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-store/download-api
+		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/download-api
 
-test-upload-api:
-	cd upload-api \
-	&&	UPLOAD_API_PROTOCOL="$(shell jq -r ".uploadAPIProtocol" < environments/$(ENV)/config.json)" \
-		UPLOAD_API_HOST="$(shell jq -r ".uploadAPIHost" < environments/$(ENV)/config.json)" \
-		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-store/upload-api
+test-admin-api:
+	cd admin-api \
+	&&	ADMIN_API_PROTOCOL="$(shell jq -r ".adminAPIProtocol" < environments/$(ENV)/config.json)" \
+		ADMIN_API_HOST="$(shell jq -r ".adminAPIHost" < environments/$(ENV)/config.json)" \
+		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/admin-api
 
-test: test-download-api test-upload-api
+test: test-download-api test-admin-api
 
 #########################################################
 # Local (emulator) commands
 #########################################################
 
 run-local-firebase-emulators:
-	cd firebase && firebase emulators:start --project=demo-cloud-symbol-store --import state --export-on-exit
+	cd firebase && firebase emulators:start --project=demo-cloud-symbol-server --import state --export-on-exit
 
 run-local-download-api:
 	cd download-api/cmd \
-	&&	GCP_PROJECT_ID=demo-cloud-symbol-store \
+	&&	GCP_PROJECT_ID=demo-cloud-symbol-server \
 		FIRESTORE_EMULATOR_HOST=localhost:8082 \
 		STORAGE_EMULATOR_HOST=localhost:9199 \
 		SYMBOL_STORE_BUCKET_NAME=default-bucket \
-		SYMBOL_STORE_LOCAL_STORES=[\"example\"] \
+		SYMBOL_SERVER_STORES=[\"example\"] \
 		PORT=8083 \
 		go run main.go
 
-run-local-upload-api:
-	cd upload-api/cmd \
-	&&	GCP_PROJECT_ID=demo-cloud-symbol-store \
+run-local-admin-api:
+	cd admin-api/cmd \
+	&&	GCP_PROJECT_ID=demo-cloud-symbol-server \
 		FIRESTORE_EMULATOR_HOST=localhost:8082 \
 		STORAGE_EMULATOR_HOST=localhost:9199 \
 		SYMBOL_STORE_BUCKET_NAME=default-bucket \
-		SYMBOL_STORE_LOCAL_STORES=[\"example\"] \
+		SYMBOL_SERVER_STORES=[\"example\"] \
 		PORT=8084 \
 		go run main.go
 
@@ -96,15 +96,15 @@ test-local-download-api:
 	cd download-api \
 	&&	DOWNLOAD_API_PROTOCOL=http \
 		DOWNLOAD_API_HOST=localhost:8083 \
-		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-store/download-api
+		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/download-api
 
-test-local-upload-api:
-	cd upload-api \
-	&&	UPLOAD_API_PROTOCOL=http \
-		UPLOAD_API_HOST=localhost:8084 \
-		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-store/upload-api -count=1
+test-local-admin-api:
+	cd admin-api \
+	&&	ADMIN_API_PROTOCOL=http \
+		ADMIN_API_HOST=localhost:8084 \
+		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/admin-api -count=1
 
-test-local: test-local-download-api test-local-upload-api
+test-local: test-local-download-api test-local-admin-api
 
 #########################################################
 # API regeneration commands
@@ -114,7 +114,7 @@ generate-apis: generate-server-api generate-client-api
 
 generate-server-api:
 
-	rm -r upload-api/generated/go
+	rm -r admin-api/generated/go
 	docker run \
 		--rm \
 		-v "${PWD}:/local" \
@@ -122,10 +122,10 @@ generate-server-api:
 		openapitools/openapi-generator-cli \
 		generate \
 		--git-user-id=falldamagestudio \
-		--git-repo-id=cloud-symbol-store/upload-api \
-		-i /local/upload-api/upload-api.yaml \
+		--git-repo-id=cloud-symbol-server/admin-api \
+		-i /local/admin-api/admin-api.yaml \
 		-g go-server \
-		-o /local/upload-api/generated
+		-o /local/admin-api/generated
 
 generate-client-api:
 
@@ -137,7 +137,7 @@ generate-client-api:
 		--user $(shell id -u):$(shell id -g) \
 		openapitools/openapi-generator-cli \
 		generate \
-		-i /local/upload-api/upload-api.yaml \
+		-i /local/admin-api/admin-api.yaml \
 		-g csharp-netcore \
 		--additional-properties=netCoreProjectFile=true,library=httpclient,packageName=BackendAPI \
 		-o /local/cli/generated/BackendAPI
