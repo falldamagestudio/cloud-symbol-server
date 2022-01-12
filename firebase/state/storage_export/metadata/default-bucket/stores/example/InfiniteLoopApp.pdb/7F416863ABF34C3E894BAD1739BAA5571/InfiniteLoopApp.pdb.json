@@ -1,0 +1,19 @@
+{
+  "name": "stores/example/InfiniteLoopApp.pdb/7F416863ABF34C3E894BAD1739BAA5571/InfiniteLoopApp.pdb",
+  "bucket": "default-bucket",
+  "contentType": "application/octet-stream",
+  "metageneration": 1,
+  "generation": 1641932942338,
+  "storageClass": "STANDARD",
+  "etag": "someETag",
+  "contentDisposition": "inline",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "82ff1ef3-bcf2-41b7-a145-de8c102b13c9"
+  ],
+  "timeCreated": "2022-01-11T20:29:02.337Z",
+  "updated": "2022-01-11T20:29:02.348Z",
+  "size": 380928,
+  "md5Hash": "0i+uD5mjUlPe0ZNtcbQWXQ==",
+  "crc32c": "3151659952"
+}

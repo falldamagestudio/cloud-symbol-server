@@ -6,7 +6,7 @@
 .PHONY: run-local-download-api run-local-upload-api
 .PHONY: test-local test-local-download-api test-local-upload-api
 
-.PHONY: generate-apis generate-go-server-api generate-csharp-client-api
+.PHONY: generate-apis generate-server-api generate-client-api
 
 .PHONY: test-cli build-cli
 
@@ -69,6 +69,7 @@ run-local-download-api:
 		FIRESTORE_EMULATOR_HOST=localhost:8082 \
 		STORAGE_EMULATOR_HOST=localhost:9199 \
 		SYMBOL_STORE_BUCKET_NAME=default-bucket \
+		SYMBOL_STORE_LOCAL_STORES=[\"example\"] \
 		PORT=8083 \
 		go run main.go
 
@@ -78,6 +79,7 @@ run-local-upload-api:
 		FIRESTORE_EMULATOR_HOST=localhost:8082 \
 		STORAGE_EMULATOR_HOST=localhost:9199 \
 		SYMBOL_STORE_BUCKET_NAME=default-bucket \
+		SYMBOL_STORE_LOCAL_STORES=[\"example\"] \
 		PORT=8084 \
 		go run main.go
 
@@ -108,9 +110,9 @@ test-local: test-local-download-api test-local-upload-api
 # API regeneration commands
 #########################################################
 
-generate-apis: generate-go-server-api generate-csharp-client-api
+generate-apis: generate-server-api generate-client-api
 
-generate-go-server-api:
+generate-server-api:
 
 	rm -r upload-api/generated/go
 	docker run \

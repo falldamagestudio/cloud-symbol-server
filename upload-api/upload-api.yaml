@@ -9,10 +9,37 @@ info:
   version: 1.0.0
 
 paths:
-  /transactions:
+  /stores:
+    get:
+      summary: Fetch a list of all stores
+      operationId: getStores
+
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getStoresResponse'
+
+        401:
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+
+  /stores/{storeId}/transactions:
     post:
       summary: Start a new upload transaction
       operationId: createTransaction
+      parameters:
+        - in: path
+          name: storeId
+          schema:
+            type: string
+          required: true
+          description: ID of the store containing the transactions
       requestBody:
         required: true
         content:
@@ -35,7 +62,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/messageResponse'
 
-  /transactions/{transactionId}:
+  /stores/{storeId}/transactions/{transactionId}:
     get:
       summary: Fetch a transaction
       operationId: getTransaction
@@ -46,6 +73,12 @@ paths:
             type: string
           required: true
           description: ID of the transaction to fetch
+        - in: path
+          name: storeId
+          schema:
+            type: string
+          required: true
+          description: ID of the store containing the transaction
       
       responses:
         200:
@@ -63,7 +96,7 @@ paths:
                 $ref: '#/components/schemas/messageResponse'
 
         404:
-          description: No such transaction
+          description: No such store/transaction
           content:
             application/json:
               schema:
@@ -78,6 +111,12 @@ components:
         message:
           type: string
           example: Invalid API invocation
+
+    getStoresResponse:
+      type: array
+      items:
+        type: string
+        example: example-store
 
     uploadTransactionRequest:
       type: object
@@ -125,7 +164,7 @@ components:
           example: 7F416863ABF34C3E894BAD1739BAA5571
         url:
           type: string
-          example: https://storage.googleapis.com/storage/v1/b/example-bucket/o/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
+          example: https://storage.googleapis.com/storage/v1/b/example-bucket/o/stores/default/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
 
     getTransactionResponse:
       type: object

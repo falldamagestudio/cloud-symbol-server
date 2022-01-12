@@ -20,6 +20,9 @@ namespace CLI
     [Verb("upload", HelpText = "Upload symbols")]
     public class UploadOptions : CommandLineOptions
     {
+        [Option(longName: "store", Required = true, HelpText = "Which store to upload to")]
+        public string? Store { get; set; }
+
         [Option(longName: "description", Required = true, HelpText = "Textual description of upload")]
         public string? Description { get; set; }
 
@@ -28,5 +31,10 @@ namespace CLI
 
         [Value(0, MetaName="<pattern1 pattern2 pattern3 ...>", Min = 1, HelpText = "Wildcard patterns for files to upload, like 'folder1/*.pdb'")]
         public IEnumerable<string>? Patterns { get; set; }
+    }
+
+    [Verb("list-stores", HelpText = "List all stores")]
+    public class ListStoresOptions : CommandLineOptions
+    {
     }
 }

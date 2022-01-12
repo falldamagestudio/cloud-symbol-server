@@ -53,13 +53,19 @@ func (c *DefaultApiController) Routes() Routes {
 		{
 			"CreateTransaction",
 			strings.ToUpper("Post"),
-			"/transactions",
+			"/stores/{storeId}/transactions",
 			c.CreateTransaction,
+		},
+		{
+			"GetStores",
+			strings.ToUpper("Get"),
+			"/stores",
+			c.GetStores,
 		},
 		{
 			"GetTransaction",
 			strings.ToUpper("Get"),
-			"/transactions/{transactionId}",
+			"/stores/{storeId}/transactions/{transactionId}",
 			c.GetTransaction,
 		},
 	}
@@ -67,6 +73,9 @@ func (c *DefaultApiController) Routes() Routes {
 
 // CreateTransaction - Start a new upload transaction
 func (c *DefaultApiController) CreateTransaction(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	storeIdParam := params["storeId"]
+	
 	uploadTransactionRequestParam := UploadTransactionRequest{}
 	d := json.NewDecoder(r.Body)
 	d.DisallowUnknownFields()
@@ -78,7 +87,20 @@ func (c *DefaultApiController) CreateTransaction(w http.ResponseWriter, r *http.
 		c.errorHandler(w, r, err, nil)
 		return
 	}
-	result, err := c.service.CreateTransaction(r.Context(), uploadTransactionRequestParam)
+	result, err := c.service.CreateTransaction(r.Context(), storeIdParam, uploadTransactionRequestParam)
+	// If an error occurred, encode the error with the status code
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
+	// If no error, encode the body and the result code
+	EncodeJSONResponse(result.Body, &result.Code, w)
+
+}
+
+// GetStores - Fetch a list of all stores
+func (c *DefaultApiController) GetStores(w http.ResponseWriter, r *http.Request) {
+	result, err := c.service.GetStores(r.Context())
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)
@@ -94,7 +116,9 @@ func (c *DefaultApiController) GetTransaction(w http.ResponseWriter, r *http.Req
 	params := mux.Vars(r)
 	transactionIdParam := params["transactionId"]
 	
-	result, err := c.service.GetTransaction(r.Context(), transactionIdParam)
+	storeIdParam := params["storeId"]
+	
+	result, err := c.service.GetTransaction(r.Context(), transactionIdParam, storeIdParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)

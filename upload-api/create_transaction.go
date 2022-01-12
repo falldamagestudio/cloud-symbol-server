@@ -15,11 +15,11 @@ import (
 	"google.golang.org/api/option"
 )
 
-func uploadFileRequestToPath(uploadFileRequest openapi.UploadFileRequest) string {
-	return fmt.Sprintf("%s/%s/%s", uploadFileRequest.FileName, uploadFileRequest.Hash, uploadFileRequest.FileName)
+func uploadFileRequestToPath(storeId string, uploadFileRequest openapi.UploadFileRequest) string {
+	return fmt.Sprintf("stores/%s/%s/%s/%s", storeId, uploadFileRequest.FileName, uploadFileRequest.Hash, uploadFileRequest.FileName)
 }
 
-func (s *ApiService) CreateTransaction(context context.Context, uploadTransactionRequest openapi.UploadTransactionRequest) (openapi.ImplResponse, error) {
+func (s *ApiService) CreateTransaction(context context.Context, storeId string, uploadTransactionRequest openapi.UploadTransactionRequest) (openapi.ImplResponse, error) {
 
 	signedURLExpirationSeconds := 15 * 60
 
@@ -86,7 +86,7 @@ func (s *ApiService) CreateTransaction(context context.Context, uploadTransactio
 		// Validate whether object exists in bucket
 		// This will talk to the Cloud Storage APIs
 
-		path := uploadFileRequestToPath(uploadFileRequest)
+		path := uploadFileRequestToPath(storeId, uploadFileRequest)
 		log.Printf("Validating whether object %v does exists in bucket %v", path, symbolStoreBucketName)
 		_, err = storageClient.Bucket(symbolStoreBucketName).Object(path).Attrs(context)
 		if err != nil {
@@ -139,7 +139,7 @@ func (s *ApiService) CreateTransaction(context context.Context, uploadTransactio
 
 	// Log transaction to Firestore DB
 
-	transactionId, err := logTransaction(context, uploadTransactionRequest, uploadTransactionResponse)
+	transactionId, err := logTransaction(context, storeId, uploadTransactionRequest, uploadTransactionResponse)
 	if err != nil {
 		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Internal error while logging transaction to DB"}), errors.New("Internal error while logging transaction to DB")
 	}
@@ -151,7 +151,7 @@ func (s *ApiService) CreateTransaction(context context.Context, uploadTransactio
 	return openapi.Response(http.StatusOK, uploadTransactionResponse), nil
 }
 
-func logTransaction(context context.Context, uploadTransactionRequest openapi.UploadTransactionRequest, uploadTransactionResponse openapi.UploadTransactionResponse) (string, error) {
+func logTransaction(context context.Context, storeId string, uploadTransactionRequest openapi.UploadTransactionRequest, uploadTransactionResponse openapi.UploadTransactionResponse) (string, error) {
 
 	transactionContent := map[string]interface{}{
 		"description": uploadTransactionRequest.Description,
@@ -168,7 +168,7 @@ func logTransaction(context context.Context, uploadTransactionRequest openapi.Up
 		return "", err
 	}
 
-	transactionDocRef, _, err := firestoreClient.Collection("transactions").Add(context, transactionContent)
+	transactionDocRef, _, err := firestoreClient.Collection("stores").Doc(storeId).Collection("transactions").Add(context, transactionContent)
 
 	if err != nil {
 		log.Printf("Error when logging transaction, err = %v", err)

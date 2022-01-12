@@ -21,6 +21,7 @@ import (
 // pass the data to a DefaultApiServicer to perform the required actions, then write the service results to the http response.
 type DefaultApiRouter interface { 
 	CreateTransaction(http.ResponseWriter, *http.Request)
+	GetStores(http.ResponseWriter, *http.Request)
 	GetTransaction(http.ResponseWriter, *http.Request)
 }
 
@@ -30,6 +31,7 @@ type DefaultApiRouter interface {
 // while the service implementation can ignored with the .openapi-generator-ignore file
 // and updated with the logic required for the API.
 type DefaultApiServicer interface { 
-	CreateTransaction(context.Context, UploadTransactionRequest) (ImplResponse, error)
-	GetTransaction(context.Context, string) (ImplResponse, error)
+	CreateTransaction(context.Context, string, UploadTransactionRequest) (ImplResponse, error)
+	GetStores(context.Context) (ImplResponse, error)
+	GetTransaction(context.Context, string, string) (ImplResponse, error)
 }

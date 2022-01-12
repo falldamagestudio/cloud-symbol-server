@@ -78,12 +78,13 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
+            var storeId = storeId_example;  // string | ID of the store containing the transactions
             var uploadTransactionRequest = new UploadTransactionRequest(); // UploadTransactionRequest | 
 
             try
             {
                 // Start a new upload transaction
-                UploadTransactionResponse result = apiInstance.CreateTransaction(uploadTransactionRequest);
+                UploadTransactionResponse result = apiInstance.CreateTransaction(storeId, uploadTransactionRequest);
                 Debug.WriteLine(result);
             }
             catch (ApiException e)
@@ -105,8 +106,9 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*DefaultApi* | [**CreateTransaction**](docs/DefaultApi.md#createtransaction) | **POST** /transactions | Start a new upload transaction
-*DefaultApi* | [**GetTransaction**](docs/DefaultApi.md#gettransaction) | **GET** /transactions/{transactionId} | Fetch a transaction
+*DefaultApi* | [**CreateTransaction**](docs/DefaultApi.md#createtransaction) | **POST** /stores/{storeId}/transactions | Start a new upload transaction
+*DefaultApi* | [**GetStores**](docs/DefaultApi.md#getstores) | **GET** /stores | Fetch a list of all stores
+*DefaultApi* | [**GetTransaction**](docs/DefaultApi.md#gettransaction) | **GET** /stores/{storeId}/transactions/{transactionId} | Fetch a transaction
 
 
 <a name="documentation-for-models"></a>

@@ -1,0 +1,19 @@
+{
+  "name": "stores/example/pingme.txt",
+  "bucket": "default-bucket",
+  "contentType": "text/plain",
+  "metageneration": 1,
+  "generation": 1641932974518,
+  "storageClass": "STANDARD",
+  "etag": "someETag",
+  "contentDisposition": "inline",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "1cf94bb4-c68f-48e8-8e0c-7ef84e2bb3d7"
+  ],
+  "timeCreated": "2022-01-11T20:29:34.517Z",
+  "updated": "2022-01-11T20:29:34.517Z",
+  "size": 0,
+  "md5Hash": "1B2M2Y8AsgTpgAmY7PhCfg==",
+  "crc32c": "0"
+}
