@@ -1,11 +1,11 @@
-package upload_api
+package admin_api
 
 import (
 	"context"
 	"log"
 	"net/http"
 
-	openapi "github.com/falldamagestudio/cloud-symbol-server/upload-api/generated/go"
+	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go"
 )
 
 func (s *ApiService) GetStores(context context.Context) (openapi.ImplResponse, error) {

@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	upload_api "github.com/falldamagestudio/cloud-symbol-server/upload-api"
+	admin_api "github.com/falldamagestudio/cloud-symbol-server/admin-api"
 
 	"github.com/GoogleCloudPlatform/functions-framework-go/funcframework"
 )
@@ -13,7 +13,7 @@ import (
 func main() {
 
 	ctx := context.Background()
-	if err := funcframework.RegisterHTTPFunctionContext(ctx, "/", upload_api.UploadAPI); err != nil {
+	if err := funcframework.RegisterHTTPFunctionContext(ctx, "/", admin_api.AdminAPI); err != nil {
 		log.Fatalf("funcframework.RegisterHTTPFunctionContext: %v\n", err)
 	}
 	// Use PORT environment variable, or default to 8080.

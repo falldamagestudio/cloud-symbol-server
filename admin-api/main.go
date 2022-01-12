@@ -1,4 +1,4 @@
-package upload_api
+package admin_api
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	"os"
 
 	"cloud.google.com/go/firestore"
-	openapi "github.com/falldamagestudio/cloud-symbol-server/upload-api/generated/go"
+	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go"
 	"github.com/gorilla/mux"
 )
 
@@ -51,7 +51,7 @@ func firestoreClient(context context.Context) (*firestore.Client, error) {
 	return localFirestoreClient, nil
 }
 
-func UploadAPI(w http.ResponseWriter, r *http.Request) {
+func AdminAPI(w http.ResponseWriter, r *http.Request) {
 	log.Print(r.URL.Path)
 
 	router.ServeHTTP(w, r)

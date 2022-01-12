@@ -27,7 +27,7 @@ resource "google_storage_bucket_object" "cloud_function_bucket_object" {
 resource "google_cloudfunctions_function" "function" {
   depends_on = [google_storage_bucket_iam_member.function_symbol_store_access]
 
-  name                  = "UploadAPI"
+  name                  = "AdminAPI"
   description           = "Upload API"
   runtime               = "go113"
   region                = var.function_region
@@ -37,7 +37,7 @@ resource "google_cloudfunctions_function" "function" {
   source_archive_bucket = google_storage_bucket.cloud_function_source_bucket.name
   source_archive_object = google_storage_bucket_object.cloud_function_bucket_object.name
   trigger_http          = true
-  entry_point           = "UploadAPI"
+  entry_point           = "AdminAPI"
   environment_variables = {
     GCP_PROJECT_ID           = var.project_id
     SYMBOL_STORE_BUCKET_NAME = var.symbol_store_bucket_name
@@ -46,7 +46,7 @@ resource "google_cloudfunctions_function" "function" {
 
 # Create a service account. The cloud function will run in the context of this service account
 resource "google_service_account" "function_service_account" {
-  account_id   = "upload-api"
+  account_id   = "admin-api"
   display_name = "Service Account used to run the Upload API Cloud Function"
 }
 

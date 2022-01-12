@@ -1,4 +1,4 @@
-package upload_api
+package admin_api
 
 type FileDBEntry struct {
 	FileName string `firestore:"filename"`

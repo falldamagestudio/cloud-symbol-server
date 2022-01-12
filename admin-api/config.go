@@ -1,4 +1,4 @@
-package upload_api
+package admin_api
 
 import (
 	"encoding/json"

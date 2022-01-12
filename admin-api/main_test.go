@@ -1,4 +1,4 @@
-package upload_api
+package admin_api
 
 import (
 	"encoding/json"
@@ -8,27 +8,27 @@ import (
 	"os"
 	"testing"
 
-	openapi "github.com/falldamagestudio/cloud-symbol-server/upload-api/generated/go"
+	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go"
 	retryablehttp "github.com/hashicorp/go-retryablehttp"
 )
 
 func getServiceUrl(email string, pat string) string {
 
-	uploadAPIProtocol := os.Getenv("UPLOAD_API_PROTOCOL")
-	if uploadAPIProtocol == "" {
-		uploadAPIProtocol = "http"
+	adminAPIProtocol := os.Getenv("ADMIN_API_PROTOCOL")
+	if adminAPIProtocol == "" {
+		adminAPIProtocol = "http"
 	}
 
-	uploadAPIHost := os.Getenv("UPLOAD_API_HOST")
-	if uploadAPIHost == "" {
-		uploadAPIHost = "localhost:8080"
+	adminAPIHost := os.Getenv("ADMIN_API_HOST")
+	if adminAPIHost == "" {
+		adminAPIHost = "localhost:8080"
 	}
 
 	serviceUrl := ""
 	if email != "" || pat != "" {
-		serviceUrl = fmt.Sprintf("%s://%s:%s@%s", uploadAPIProtocol, email, pat, uploadAPIHost)
+		serviceUrl = fmt.Sprintf("%s://%s:%s@%s", adminAPIProtocol, email, pat, adminAPIHost)
 	} else {
-		serviceUrl = fmt.Sprintf("%s://%s", uploadAPIProtocol, uploadAPIHost)
+		serviceUrl = fmt.Sprintf("%s://%s", adminAPIProtocol, adminAPIHost)
 	}
 
 	return serviceUrl
