@@ -41,7 +41,7 @@ resource "google_cloudfunctions_function" "function" {
   environment_variables = {
     GCP_PROJECT_ID           = var.project_id
     SYMBOL_STORE_BUCKET_NAME = var.symbol_store_bucket_name
-    SYMBOL_STORE_LOCAL_STORES = jsonencode(var.symbol_store_local_stores)
+    SYMBOL_SERVER_STORES = jsonencode(var.symbol_server_stores)
   }
 }
 

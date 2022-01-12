@@ -3,7 +3,7 @@ project_id = "test-cloud-symbol-server"
 symbol_store_bucket_name = "test-cloud-symbol-server-symbols"
 symbol_store_bucket_location = "europe-west1"
 
-symbol_store_local_stores = [
+symbol_server_stores = [
     "example"
 ]
 

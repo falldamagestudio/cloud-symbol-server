@@ -9,7 +9,7 @@ import (
 
 func getStoresConfig() ([]string, error) {
 
-	storesConfigString := os.Getenv("SYMBOL_STORE_LOCAL_STORES")
+	storesConfigString := os.Getenv("SYMBOL_SERVER_STORES")
 	if storesConfigString == "" {
 		return nil, errors.New("No local stores configured")
 	}

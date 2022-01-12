@@ -6,6 +6,6 @@ output "symbol_store_bucket_name" {
     value = var.symbol_store_bucket_name
 }
 
-output "symbol_store_local_stores" {
-    value = var.symbol_store_local_stores
+output "symbol_server_stores" {
+    value = var.symbol_server_stores
 }
