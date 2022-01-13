@@ -20,7 +20,7 @@ any symbols that your CI system has uploaded in the past.
 
 # Architecture
 
-[Architecture](docs/images/Architecture.png)
+![Architecture](docs/images/Architecture.png)
 
 # Setup and teardown
 
