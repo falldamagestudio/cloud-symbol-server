@@ -19,8 +19,6 @@ endif
 #########################################################
 
 deploy-core:
-	echo apa3
-	echo $(ENV)
 	cd environments/$(ENV)/core && terraform init && terraform apply -auto-approve
 
 deploy-download-api:
