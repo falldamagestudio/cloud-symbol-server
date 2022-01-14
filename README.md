@@ -22,9 +22,9 @@ any symbols that your CI system has uploaded in the past.
 
 ![Architecture](docs/images/Architecture.png)
 
-# Setup and teardown
+# New deployment setup
 
-See [SETUP_AND_TEARDOWN.md](SETUP_AND_TEARDOWN.md).
+See [NEW_DEPLOYMENT_SETUP.md](NEW_DEPLOYMENT_SETUP.md).
 
 # Debugging and Development
 

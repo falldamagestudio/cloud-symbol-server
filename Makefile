@@ -29,6 +29,7 @@ deploy-admin-api:
 
 deploy-firebase-and-frontend:
 	cd firebase/frontend \
+		&&	npm install \
 		&&	VUE_APP_FIREBASE_CONFIG='$(shell cat environments/$(ENV)/firebase/frontend/firebase-config.json)' \
 			VUE_APP_DOWNLOAD_API_PROTOCOL="$(shell jq -r ".downloadAPIProtocol" < environments/$(ENV)/config.json)" \
 			VUE_APP_DOWNLOAD_API_HOST="$(shell jq -r ".downloadAPIHost" < environments/$(ENV)/config.json)" \
@@ -83,6 +84,7 @@ run-local-admin-api:
 
 run-local-frontend:
 	cd firebase/frontend \
+	&&	npm install \
 	&&	VUE_APP_FIREBASE_CONFIG='$(shell cat environments/local/firebase/frontend/firebase-config.json)' \
 		VUE_APP_FIRESTORE_EMULATOR_PORT=8082 \
 		VUE_APP_AUTH_EMULATOR_URL=http://localhost:9099 \

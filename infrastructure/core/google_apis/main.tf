@@ -2,6 +2,7 @@ locals {
   google_apis = [
     "cloudbuild.googleapis.com",
     "cloudfunctions.googleapis.com",
+    "firestore.googleapis.com",
     "iam.googleapis.com",
   ]
 }
