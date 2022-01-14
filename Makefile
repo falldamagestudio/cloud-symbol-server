@@ -11,7 +11,7 @@
 .PHONY: test-cli build-cli
 
 ifndef ENV
-ENV:=test
+ENV:=environments/test
 endif
 
 #########################################################
@@ -19,38 +19,38 @@ endif
 #########################################################
 
 deploy-core:
-	cd environments/$(ENV)/core && terraform init && terraform apply -auto-approve
+	cd $(ENV)/core && terraform init && terraform apply -auto-approve
 
 deploy-download-api:
-	cd environments/$(ENV)/download_api && terraform init && terraform apply -auto-approve
+	cd $(ENV)/download_api && terraform init && terraform apply -auto-approve
 
 deploy-admin-api:
-	cd environments/$(ENV)/admin_api && terraform init && terraform apply -auto-approve
+	cd $(ENV)/admin_api && terraform init && terraform apply -auto-approve
 
 deploy-firebase-and-frontend:
 	cd firebase/frontend \
 		&&	npm install \
-		&&	VUE_APP_FIREBASE_CONFIG='$(shell cat environments/$(ENV)/firebase/frontend/firebase-config.json)' \
-			VUE_APP_DOWNLOAD_API_PROTOCOL="$(shell jq -r ".downloadAPIProtocol" < environments/$(ENV)/config.json)" \
-			VUE_APP_DOWNLOAD_API_HOST="$(shell jq -r ".downloadAPIHost" < environments/$(ENV)/config.json)" \
+		&&	VUE_APP_FIREBASE_CONFIG='$(shell cat $(ENV)/firebase/frontend/firebase-config.json)' \
+			VUE_APP_DOWNLOAD_API_PROTOCOL="$(shell jq -r ".downloadAPIProtocol" < $(ENV)/config.json)" \
+			VUE_APP_DOWNLOAD_API_HOST="$(shell jq -r ".downloadAPIHost" < $(ENV)/config.json)" \
 			npm run build
-	cd firebase && firebase deploy --project="$(shell jq -r ".gcpProjectId" < environments/$(ENV)/firebase/config.json)"
+	cd firebase && firebase deploy --project="$(shell jq -r ".gcpProjectId" < $(ENV)/firebase/config.json)"
 
 deploy: deploy-core deploy-download-api deploy-admin-api deploy-firebase-and-frontend
 
 destroy:
-	cd environments/$(ENV)/core && terraform destroy
+	cd $(ENV)/core && terraform destroy
 
 test-download-api:
 	cd download-api \
-	&&	DOWNLOAD_API_PROTOCOL="$(shell jq -r ".downloadAPIProtocol" < environments/$(ENV)/config.json)" \
-		DOWNLOAD_API_HOST="$(shell jq -r ".downloadAPIHost" < environments/$(ENV)/config.json)" \
+	&&	DOWNLOAD_API_PROTOCOL="$(shell jq -r ".downloadAPIProtocol" < $(ENV)/config.json)" \
+		DOWNLOAD_API_HOST="$(shell jq -r ".downloadAPIHost" < $(ENV)/config.json)" \
 		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/download-api
 
 test-admin-api:
 	cd admin-api \
-	&&	ADMIN_API_PROTOCOL="$(shell jq -r ".adminAPIProtocol" < environments/$(ENV)/config.json)" \
-		ADMIN_API_HOST="$(shell jq -r ".adminAPIHost" < environments/$(ENV)/config.json)" \
+	&&	ADMIN_API_PROTOCOL="$(shell jq -r ".adminAPIProtocol" < $(ENV)/config.json)" \
+		ADMIN_API_HOST="$(shell jq -r ".adminAPIHost" < $(ENV)/config.json)" \
 		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/admin-api
 
 test: test-download-api test-admin-api
