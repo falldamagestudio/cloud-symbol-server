@@ -46,7 +46,13 @@ deploy-download-api:
 deploy-admin-api:
 	cd $(ENV)/admin_api && terraform init && terraform apply -auto-approve
 
-deploy-firebase-and-frontend:
+inject-cli-binaries-into-frontend:
+	cp cli/cloud-symbol-server-cli/bin/Release/net6.0/linux-x64/publish/cloud-symbol-server-cli \
+		firebase/frontend/public/cloud-symbol-server-cli-linux
+	cp cli/cloud-symbol-server-cli/bin/Release/net6.0/win-x64/publish/cloud-symbol-server-cli.exe \
+		firebase/frontend/public/cloud-symbol-server-cli-win64.exe
+
+deploy-firebase-and-frontend: build-cli inject-cli-binaries-into-frontend
 	cd firebase/frontend \
 		&&	npm install \
 		&&	VUE_APP_FIREBASE_CONFIG='$(shell cat $(ENV)/firebase/frontend/firebase-config.json)' \

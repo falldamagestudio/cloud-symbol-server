@@ -16,6 +16,73 @@
 
         <pre>{{version}}  </pre>
 
+        <!-- "Client tools" modal dialog box -->
+
+        <v-dialog
+          v-model="clientToolsDialogVisible"
+          width="500"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              icon
+            >
+              <v-icon
+                v-bind="attrs"
+                v-on="on"
+                large
+              >
+                mdi-console
+              </v-icon>
+            </v-btn>
+          </template>
+
+          <v-card>
+            <v-card-title>
+              CLI tools
+            </v-card-title>
+
+            <v-tabs
+              v-model="clientToolsDialogTab"
+            >
+              <v-tabs-slider></v-tabs-slider>
+              <v-tab>
+                Windows CLI
+              </v-tab>
+              <v-tab>
+                Linux CLI
+              </v-tab>
+            </v-tabs>
+
+            <v-tabs-items v-model="clientToolsDialogTab">
+              <v-tab-item>
+                <v-card flat>
+                  <v-card-text>
+                    Download the <a href="cloud-symbol-server-cli-win64.exe" download="cloud-symbol-server-cli-win64.exe">Windows CLI tool</a>.
+                  </v-card-text>
+                </v-card>
+              </v-tab-item>
+              <v-tab-item>
+                <v-card flat>
+                  <v-card-text>
+                    Download the <a href="cloud-symbol-server-cli-linux" download="cloud-symbol-server-cli-linux">Linux CLI tool</a>.
+                  </v-card-text>
+                </v-card>
+              </v-tab-item>
+            </v-tabs-items>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="primary"
+                @click="clientToolsDialogVisible = false"
+              >
+                OK
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
+
         <v-btn v-on:click="logout">Logout</v-btn>
 
       </v-app-bar>
@@ -63,6 +130,8 @@ import { version } from './appConfig'
 
 interface Data {
   version: string,
+  clientToolsDialogVisible: boolean,
+  clientToolsDialogTab: any,
 }
 
 export default Vue.extend({
@@ -71,6 +140,8 @@ export default Vue.extend({
   data (): Data {
     return {
       version: version,
+      clientToolsDialogVisible: false,
+      clientToolsDialogTab: null,
     }
   },
 

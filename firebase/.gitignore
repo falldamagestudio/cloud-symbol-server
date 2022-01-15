@@ -6,3 +6,9 @@
 # Ignore all log files
 
 /*-debug.log
+
+
+# Ignore CLI tool binaries
+
+/frontend/public/cloud-symbol-server-cli-win64.exe
+/frontend/public/cloud-symbol-server-cli-linux
