@@ -14,6 +14,8 @@
 
         <v-spacer></v-spacer>
 
+        <pre>{{version}}  </pre>
+
         <v-btn v-on:click="logout">Logout</v-btn>
 
       </v-app-bar>
@@ -57,13 +59,20 @@ import firebase from 'firebase/app'
 import Vue from 'vue';
 import store, { LoginState } from './store/index'
 import { googleProvider } from './google-auth'
+import { version } from './appConfig'
+
+interface Data {
+  version: string,
+}
 
 export default Vue.extend({
   name: 'App',
 
-  data: () => ({
-    //
-  }),
+  data (): Data {
+    return {
+      version: version,
+    }
+  },
 
   methods: {
     login (): void {

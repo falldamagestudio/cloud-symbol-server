@@ -14,6 +14,25 @@ ifndef ENV
 ENV:=environments/test
 endif
 
+# Handle version numbers
+# The default version is going to be a number on the form 1.2.5-local
+#   where 1.2.5 comes from version.json
+# When necessary, both prefix and suffix can be overridden (this is typically done in CI pipelines)
+
+ifndef VERSION_PREFIX
+VERSION_PREFIX:=$(shell jq -r ".version" < "version.json")
+endif
+
+ifndef VERSION_SUFFIX
+VERSION_SUFFIX:=local
+endif
+
+ifneq "$(VERSION_SUFFIX)" ""
+VERSION:=$(VERSION_PREFIX)-$(VERSION_SUFFIX)
+else
+VERSION:=$(VERSION_PREFIX)
+endif
+
 #########################################################
 # Remote (connected to GCP) commands
 #########################################################
@@ -33,6 +52,7 @@ deploy-firebase-and-frontend:
 		&&	VUE_APP_FIREBASE_CONFIG='$(shell cat $(ENV)/firebase/frontend/firebase-config.json)' \
 			VUE_APP_DOWNLOAD_API_PROTOCOL="$(shell jq -r ".downloadAPIProtocol" < $(ENV)/config.json)" \
 			VUE_APP_DOWNLOAD_API_HOST="$(shell jq -r ".downloadAPIHost" < $(ENV)/config.json)" \
+			VUE_APP_VERSION="$(VERSION)" \
 			npm run build
 	cd firebase && firebase deploy --project="$(shell jq -r ".gcpProjectId" < $(ENV)/firebase/config.json)"
 
@@ -90,6 +110,7 @@ run-local-frontend:
 		VUE_APP_AUTH_EMULATOR_URL=http://localhost:9099 \
 		VUE_APP_DOWNLOAD_API_PROTOCOL="$(shell jq -r ".downloadAPIProtocol" < environments/local/config.json)" \
 		VUE_APP_DOWNLOAD_API_HOST="$(shell jq -r ".downloadAPIHost" < environments/local/config.json)" \
+		VUE_APP_VERSION="$(VERSION)" \
 		npm run serve
 
 test-local-download-api:
@@ -156,8 +177,12 @@ build-cli: test-cli
 		--runtime linux-x64 \
 		--self-contained \
 		--configuration Release \
+		/p:VersionPrefix=$(VERSION_PREFIX) \
+		/p:VersionSuffix=$(VERSION_SUFFIX) \
 	&& dotnet publish \
 		--runtime win-x64 \
 		--self-contained \
-		--configuration Release
+		--configuration Release \
+		/p:VersionPrefix=$(VERSION_PREFIX) \
+		/p:VersionSuffix=$(VERSION_SUFFIX)
 
