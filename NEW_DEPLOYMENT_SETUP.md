@@ -43,4 +43,5 @@ You need to make some decisions early on:
 
 * Visit "Hosting" in Firebase Console. Choose to add a custom domain.
 * Enter a suitable domain name, such as `symbols.<your organization domain>`.
+* Configure DNS entries with your DNS registrar.
 * Visit "Authentication". Add the domain as an authorized domain under your authorization provider, if necessary.
