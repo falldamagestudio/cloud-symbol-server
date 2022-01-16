@@ -7,8 +7,8 @@ namespace CLI
         // [Value(index: 0, Required = true, HelpText = "Image file Path upload")]
         // public string UploadFilePath { get; set; }
 
-        [Option(longName: "service-url", Required = false, HelpText = "Service URL", Default = "http://localhost:8084")]
-        public string? ServiceURL { get; set; }
+        [Option(longName: "service-url", Required = false, HelpText = "Service URL")]
+        public string? ServiceURL { get; set; } = ConfigFile.GetOrDefault("service-url", "http://localhost:8084");
 
         [Option(longName: "email", Required = false, HelpText = "Authentication email", Default = "")]
         public string? Email { get; set; }
