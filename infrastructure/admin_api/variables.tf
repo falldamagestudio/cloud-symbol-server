@@ -21,3 +21,7 @@ variable "function_region" {
 variable "symbol_store_bucket_name" {
   type = string
 }
+
+variable "symbol_server_stores" {
+  type = list(string)
+}
