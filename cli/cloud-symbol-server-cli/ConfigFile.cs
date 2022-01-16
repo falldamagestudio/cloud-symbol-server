@@ -31,6 +31,7 @@ namespace CLI
                     config = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
                 } catch {
                     config = new Dictionary<string, string>();
+                    throw;
                 }
             }
 
