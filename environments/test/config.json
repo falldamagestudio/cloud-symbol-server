@@ -1,6 +1,4 @@
 {
-    "downloadAPIProtocol" : "https",
-    "downloadAPIHost" : "europe-west1-test-cloud-symbol-server.cloudfunctions.net/DownloadAPI",
-    "adminAPIProtocol" : "https",
-    "adminAPIHost" : "europe-west1-test-cloud-symbol-server.cloudfunctions.net/AdminAPI"
+    "downloadAPIEndpoint" : "https://europe-west1-test-cloud-symbol-server.cloudfunctions.net/DownloadAPI",
+    "adminAPIEndpoint" : "https://europe-west1-test-cloud-symbol-server.cloudfunctions.net/AdminAPI"
 }

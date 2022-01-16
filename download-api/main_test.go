@@ -12,24 +12,27 @@ import (
 	retry "github.com/hashicorp/go-retryablehttp"
 )
 
-func apiRequest(email string, pat string, path string) (*http.Response, error) {
+func getServiceUrl(email string, pat string) string {
 
-	downloadAPIProtocol := os.Getenv("DOWNLOAD_API_PROTOCOL")
-	if downloadAPIProtocol == "" {
-		downloadAPIProtocol = "http"
-	}
-
-	downloadAPIHost := os.Getenv("DOWNLOAD_API_HOST")
-	if downloadAPIHost == "" {
-		downloadAPIHost = "localhost:8080"
+	downloadAPIEndpoint := os.Getenv("DOWNLOAD_API_ENDPOINT")
+	if downloadAPIEndpoint == "" {
+		downloadAPIEndpoint = "http://localhost:8080"
 	}
 
 	serviceUrl := ""
 	if email != "" || pat != "" {
-		serviceUrl = fmt.Sprintf("%s://%s:%s@%s", downloadAPIProtocol, email, pat, downloadAPIHost)
+		parts := strings.Split(downloadAPIEndpoint, "://")
+		serviceUrl = fmt.Sprintf("%s://%s:%s@%s", parts[0], email, pat, parts[1])
 	} else {
-		serviceUrl = fmt.Sprintf("%s://%s", downloadAPIProtocol, downloadAPIHost)
+		serviceUrl = downloadAPIEndpoint
 	}
+
+	return serviceUrl
+}
+
+func apiRequest(email string, pat string, path string) (*http.Response, error) {
+
+	serviceUrl := getServiceUrl(email, pat)
 
 	httpClient := &http.Client{
 		Transport: cleanhttp.DefaultPooledTransport(),

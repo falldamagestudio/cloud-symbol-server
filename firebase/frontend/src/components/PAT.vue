@@ -148,7 +148,7 @@
 
 import Vue from 'vue'
 import { db } from '../firebase'
-import { downloadAPIProtocol, downloadAPIHost } from '../firebaseConfig'
+import { downloadAPIEndpoint } from '../firebaseConfig'
 
 interface Data {
   useDialogVisible: boolean,
@@ -171,7 +171,7 @@ export default Vue.extend({
       symbolCacheLocation: 'C:\\Symbols',
       openEnvironmentVariablesCommand: 'rundll32 sysdm.cpl,EditEnvironmentVariables',
       ntSymbolPathName: '_NT_SYMBOL_PATH',
-      ntSymbolPathValue: 'SRV*C:\\Symbols*' + downloadAPIProtocol + '://' + encodeURIComponent(this.email) + ':' + this.pat.id + '@' + downloadAPIHost,
+      ntSymbolPathValue: 'SRV*C:\\Symbols*' + downloadAPIEndpoint.split('://')[0] + "://" + encodeURIComponent(this.email) + ':' + this.pat.id + '@' + downloadAPIEndpoint.split('://')[1],
     }
   },
 

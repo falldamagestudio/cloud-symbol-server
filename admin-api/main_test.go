@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strings"
 	"testing"
 
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go"
@@ -14,21 +15,17 @@ import (
 
 func getServiceUrl(email string, pat string) string {
 
-	adminAPIProtocol := os.Getenv("ADMIN_API_PROTOCOL")
-	if adminAPIProtocol == "" {
-		adminAPIProtocol = "http"
-	}
-
-	adminAPIHost := os.Getenv("ADMIN_API_HOST")
-	if adminAPIHost == "" {
-		adminAPIHost = "localhost:8080"
+	adminAPIEndpoint := os.Getenv("ADMIN_API_ENDPOINT")
+	if adminAPIEndpoint == "" {
+		adminAPIEndpoint = "http://localhost:8080"
 	}
 
 	serviceUrl := ""
 	if email != "" || pat != "" {
-		serviceUrl = fmt.Sprintf("%s://%s:%s@%s", adminAPIProtocol, email, pat, adminAPIHost)
+		parts := strings.Split(adminAPIEndpoint, "://")
+		serviceUrl = fmt.Sprintf("%s://%s:%s@%s", parts[0], email, pat, parts[1])
 	} else {
-		serviceUrl = fmt.Sprintf("%s://%s", adminAPIProtocol, adminAPIHost)
+		serviceUrl = adminAPIEndpoint
 	}
 
 	return serviceUrl

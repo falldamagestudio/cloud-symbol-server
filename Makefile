@@ -56,8 +56,8 @@ deploy-firebase-and-frontend: build-cli inject-cli-binaries-into-frontend
 	cd firebase/frontend \
 		&&	npm install \
 		&&	VUE_APP_FIREBASE_CONFIG='$(shell cat $(ENV)/firebase/frontend/firebase-config.json)' \
-			VUE_APP_DOWNLOAD_API_PROTOCOL="$(shell jq -r ".downloadAPIProtocol" < $(ENV)/config.json)" \
-			VUE_APP_DOWNLOAD_API_HOST="$(shell jq -r ".downloadAPIHost" < $(ENV)/config.json)" \
+			VUE_APP_ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < $(ENV)/config.json)" \
+			VUE_APP_DOWNLOAD_API_ENDPOINT="$(shell jq -r ".downloadAPIEndpoint" < $(ENV)/config.json)" \
 			VUE_APP_VERSION="$(VERSION)" \
 			npm run build
 	cd firebase && firebase deploy --project="$(shell jq -r ".gcpProjectId" < $(ENV)/firebase/config.json)"
@@ -69,14 +69,12 @@ destroy:
 
 test-download-api:
 	cd download-api \
-	&&	DOWNLOAD_API_PROTOCOL="$(shell jq -r ".downloadAPIProtocol" < $(ENV)/config.json)" \
-		DOWNLOAD_API_HOST="$(shell jq -r ".downloadAPIHost" < $(ENV)/config.json)" \
+	&&	DOWNLOAD_API_ENDPOINT="$(shell jq -r ".downloadAPIEndpoint" < $(ENV)/config.json)" \
 		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/download-api
 
 test-admin-api:
 	cd admin-api \
-	&&	ADMIN_API_PROTOCOL="$(shell jq -r ".adminAPIProtocol" < $(ENV)/config.json)" \
-		ADMIN_API_HOST="$(shell jq -r ".adminAPIHost" < $(ENV)/config.json)" \
+	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < $(ENV)/config.json)" \
 		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/admin-api
 
 test: test-download-api test-admin-api
@@ -114,21 +112,18 @@ run-local-frontend:
 	&&	VUE_APP_FIREBASE_CONFIG='$(shell cat environments/local/firebase/frontend/firebase-config.json)' \
 		VUE_APP_FIRESTORE_EMULATOR_PORT=8082 \
 		VUE_APP_AUTH_EMULATOR_URL=http://localhost:9099 \
-		VUE_APP_DOWNLOAD_API_PROTOCOL="$(shell jq -r ".downloadAPIProtocol" < environments/local/config.json)" \
-		VUE_APP_DOWNLOAD_API_HOST="$(shell jq -r ".downloadAPIHost" < environments/local/config.json)" \
+		VUE_APP_DOWNLOAD_API_ENDPOINT="$(shell jq -r ".downloadAPIEndpoint" < environments/local/config.json)" \
 		VUE_APP_VERSION="$(VERSION)" \
 		npm run serve
 
 test-local-download-api:
 	cd download-api \
-	&&	DOWNLOAD_API_PROTOCOL=http \
-		DOWNLOAD_API_HOST=localhost:8083 \
+	&&	DOWNLOAD_API_ENDPOINT=http://localhost:8083 \
 		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/download-api
 
 test-local-admin-api:
 	cd admin-api \
-	&&	ADMIN_API_PROTOCOL=http \
-		ADMIN_API_HOST=localhost:8084 \
+	&&	ADMIN_API_ENDPOINT=http://localhost:8084 \
 		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/admin-api -count=1
 
 test-local: test-local-download-api test-local-admin-api

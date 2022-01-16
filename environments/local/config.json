@@ -1,4 +1,3 @@
 {
-    "downloadAPIProtocol" : "http",
-    "downloadAPIHost" : "localhost:8083"
+    "downloadAPIEndpoint" : "http://localhost:8083"
 }
