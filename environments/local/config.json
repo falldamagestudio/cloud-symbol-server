@@ -1,3 +1,4 @@
 {
-    "downloadAPIEndpoint" : "http://localhost:8083"
+    "downloadAPIEndpoint" : "http://localhost:8083",
+    "adminAPIEndpoint" : "http://localhost:8084"
 }

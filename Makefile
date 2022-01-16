@@ -112,6 +112,7 @@ run-local-frontend:
 	&&	VUE_APP_FIREBASE_CONFIG='$(shell cat environments/local/firebase/frontend/firebase-config.json)' \
 		VUE_APP_FIRESTORE_EMULATOR_PORT=8082 \
 		VUE_APP_AUTH_EMULATOR_URL=http://localhost:9099 \
+		VUE_APP_ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < environments/local/config.json)" \
 		VUE_APP_DOWNLOAD_API_ENDPOINT="$(shell jq -r ".downloadAPIEndpoint" < environments/local/config.json)" \
 		VUE_APP_VERSION="$(VERSION)" \
 		npm run serve

@@ -58,6 +58,7 @@
                 <v-card flat>
                   <v-card-text>
                     Download the <a href="cloud-symbol-server-cli-win64.exe" download="cloud-symbol-server-cli-win64.exe">Windows CLI tool</a>.
+                    Also, download the <a :href="downloadConfigFileHref" download="cloud-symbol-server-cli.config.json" target="_blank">config file</a> and place it next to the CLI tool.
                   </v-card-text>
                 </v-card>
               </v-tab-item>
@@ -65,6 +66,7 @@
                 <v-card flat>
                   <v-card-text>
                     Download the <a href="cloud-symbol-server-cli-linux" download="cloud-symbol-server-cli-linux">Linux CLI tool</a>.
+                    Also, download the <a :href="downloadConfigFileHref" download="cloud-symbol-server-cli.config.json" target="_blank">config file</a> and place it next to the CLI tool.
                   </v-card-text>
                 </v-card>
               </v-tab-item>
@@ -127,11 +129,13 @@ import Vue from 'vue';
 import store, { LoginState } from './store/index'
 import { googleProvider } from './google-auth'
 import { version } from './appConfig'
+import { adminAPIEndpoint, downloadAPIEndpoint, firebaseConfig } from './firebaseConfig'
 
 interface Data {
   version: string,
   clientToolsDialogVisible: boolean,
   clientToolsDialogTab: any,
+  downloadConfigFileHref: string,
 }
 
 export default Vue.extend({
@@ -142,6 +146,9 @@ export default Vue.extend({
       version: version,
       clientToolsDialogVisible: false,
       clientToolsDialogTab: null,
+      downloadConfigFileHref: "data:application/json;charset=utf-8," + encodeURI(JSON.stringify({
+        'service-url': adminAPIEndpoint
+      })),
     }
   },
 
