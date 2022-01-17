@@ -5,83 +5,118 @@
       How to use this PAT
     </v-card-title>
 
-    <v-card-text>
-      <p>To configure Visual Studio to access the symbol server using this PAT, do the following:
-      </p>
+    <v-tabs
+      v-model="howToUseTab"
+    >
+      <v-tabs-slider></v-tabs-slider>
+      <v-tab>
+        Debugger
+      </v-tab>
+      <v-tab>
+        Windows CLI
+      </v-tab>
+      <v-tab>
+        Linux CLI
+      </v-tab>
+    </v-tabs>
 
-      <ol>
-        <li>
-          Decide on a location to cache symbol files on your machine, for example
-          <code>{{symbolCacheLocation}}&nbsp;
-            <v-btn
-              icon
-              @click="copyTextToClipboard(symbolCacheLocation)"
-            >
-              <v-icon
-                small
-              >
-                mdi-content-copy
-              </v-icon>
-            </v-btn>
-          </code>
-          . Create the folder if it does not exist.
-        </li>
-        <li>
-          Run the following command to open the Environment Variables editor:
-          <code>{{openEnvironmentVariablesCommand}}&nbsp;
-            <v-btn
-              icon
-              @click="copyTextToClipboard(openEnvironmentVariablesCommand)"
-            >
-              <v-icon
-                small
-              >
-                mdi-content-copy
-              </v-icon>
-            </v-btn>
-          </code>
-        </li>
-        <li>
-          Create or edit an environment variable for the current user with the following name:
-          <code>{{ntSymbolPathName}}&nbsp;
-            <v-btn
-              icon
-              @click="copyTextToClipboard(ntSymbolPathName)"
-            >
-              <v-icon
-                small
-              >
-                mdi-content-copy
-              </v-icon>
-            </v-btn>
-          </code>
-        </li>
-        <li>
-          <p>Set the value of the variable to the following:
-          <code>{{ntSymbolPathValue}}&nbsp;
-            <v-btn
-              icon
-              @click="copyTextToClipboard(ntSymbolPathValue)"
-            >
-              <v-icon
-                small
-              >
-                mdi-content-copy
-              </v-icon>
-            </v-btn>
-          </code>
-          </p>
-          <p>If this variable already exists, be careful to merge the changes above with its previous settings.
-          </p>
-          <p>Adjust the symbol cache folder location if necessary.
-          </p>
-        </li>
-      </ol>
-      <p>For more information on _NT_SYMBOL_PATH, see <a href="https://docs.microsoft.com/en-us/windows/win32/debug/using-symsrv#setting-the-symbol-path">the MSDN documentation</a>.
-      </p>
-    </v-card-text>
+    <v-tabs-items v-model="howToUseTab">
+      <v-tab-item>
+        <v-card flat>
+          <v-card-text>
+            <p>To configure Visual Studio to access the symbol server using this PAT, do the following:
+            </p>
 
-    <v-divider></v-divider>
+            <ol>
+              <li>
+                Decide on a location to cache symbol files on your machine, for example
+                <code>{{symbolCacheLocation}}&nbsp;
+                  <v-btn
+                    icon
+                    @click="copyTextToClipboard(symbolCacheLocation)"
+                  >
+                    <v-icon
+                      small
+                    >
+                      mdi-content-copy
+                    </v-icon>
+                  </v-btn>
+                </code>
+                . Create the folder if it does not exist.
+              </li>
+              <li>
+                Run the following command to open the Environment Variables editor:
+                <code>{{openEnvironmentVariablesCommand}}&nbsp;
+                  <v-btn
+                    icon
+                    @click="copyTextToClipboard(openEnvironmentVariablesCommand)"
+                  >
+                    <v-icon
+                      small
+                    >
+                      mdi-content-copy
+                    </v-icon>
+                  </v-btn>
+                </code>
+              </li>
+              <li>
+                Create or edit an environment variable for the current user with the following name:
+                <code>{{ntSymbolPathName}}&nbsp;
+                  <v-btn
+                    icon
+                    @click="copyTextToClipboard(ntSymbolPathName)"
+                  >
+                    <v-icon
+                      small
+                    >
+                      mdi-content-copy
+                    </v-icon>
+                  </v-btn>
+                </code>
+              </li>
+              <li>
+                <p>Set the value of the variable to the following:
+                <code>{{ntSymbolPathValue}}&nbsp;
+                  <v-btn
+                    icon
+                    @click="copyTextToClipboard(ntSymbolPathValue)"
+                  >
+                    <v-icon
+                      small
+                    >
+                      mdi-content-copy
+                    </v-icon>
+                  </v-btn>
+                </code>
+                </p>
+                <p>If this variable already exists, be careful to merge the changes above with its previous settings.
+                </p>
+                <p>Adjust the symbol cache folder location if necessary.
+                </p>
+              </li>
+            </ol>
+            <p>For more information on _NT_SYMBOL_PATH, see <a href="https://docs.microsoft.com/en-us/windows/win32/debug/using-symsrv#setting-the-symbol-path">the MSDN documentation</a>.
+            </p>
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card flat>
+          <v-card-text>
+            Download the <a href="cloud-symbol-server-cli-win64.exe" download="cloud-symbol-server-cli-win64.exe">Windows CLI tool</a>.
+            Also, download the <a :href="downloadConfigFileHref" download="cloud-symbol-server-cli.config.json" target="_blank">config file</a> and place it next to the CLI tool.
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card flat>
+          <v-card-text>
+            Download the <a href="cloud-symbol-server-cli-linux" download="cloud-symbol-server-cli-linux">Linux CLI tool</a>.
+            Also, download the <a :href="downloadConfigFileHref" download="cloud-symbol-server-cli.config.json" target="_blank">config file</a> and place it next to the CLI tool.
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+    </v-tabs-items>
 
     <v-card-actions>
       <v-spacer></v-spacer>
@@ -98,9 +133,11 @@
 <script lang="ts">
 
 import Vue from 'vue'
-import { downloadAPIEndpoint } from '../firebaseConfig'
+import { adminAPIEndpoint, downloadAPIEndpoint } from '../firebaseConfig'
 
 interface Data {
+  howToUseTab: any,
+  downloadConfigFileHref: string,
   symbolCacheLocation: string,
   openEnvironmentVariablesCommand: string,
   ntSymbolPathName: string,
@@ -116,6 +153,10 @@ export default Vue.extend({
 
   data(): Data {
     return {
+      howToUseTab: null,
+      downloadConfigFileHref: "data:application/json;charset=utf-8," + encodeURI(JSON.stringify({
+        'service-url': adminAPIEndpoint
+      })),
       symbolCacheLocation: 'C:\\Symbols',
       openEnvironmentVariablesCommand: 'rundll32 sysdm.cpl,EditEnvironmentVariables',
       ntSymbolPathName: '_NT_SYMBOL_PATH',

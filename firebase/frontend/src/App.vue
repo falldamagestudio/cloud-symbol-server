@@ -16,75 +16,6 @@
 
         <pre>{{version}}  </pre>
 
-        <!-- "Client tools" modal dialog box -->
-
-        <v-dialog
-          v-model="clientToolsDialogVisible"
-          width="500"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              icon
-            >
-              <v-icon
-                v-bind="attrs"
-                v-on="on"
-                large
-              >
-                mdi-console
-              </v-icon>
-            </v-btn>
-          </template>
-
-          <v-card>
-            <v-card-title>
-              CLI tools
-            </v-card-title>
-
-            <v-tabs
-              v-model="clientToolsDialogTab"
-            >
-              <v-tabs-slider></v-tabs-slider>
-              <v-tab>
-                Windows CLI
-              </v-tab>
-              <v-tab>
-                Linux CLI
-              </v-tab>
-            </v-tabs>
-
-            <v-tabs-items v-model="clientToolsDialogTab">
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>
-                    Download the <a href="cloud-symbol-server-cli-win64.exe" download="cloud-symbol-server-cli-win64.exe">Windows CLI tool</a>.
-                    Also, download the <a :href="downloadConfigFileHref" download="cloud-symbol-server-cli.config.json" target="_blank">config file</a> and place it next to the CLI tool.
-                  </v-card-text>
-                </v-card>
-              </v-tab-item>
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>
-                    Download the <a href="cloud-symbol-server-cli-linux" download="cloud-symbol-server-cli-linux">Linux CLI tool</a>.
-                    Also, download the <a :href="downloadConfigFileHref" download="cloud-symbol-server-cli.config.json" target="_blank">config file</a> and place it next to the CLI tool.
-                  </v-card-text>
-                </v-card>
-              </v-tab-item>
-            </v-tabs-items>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn
-                color="primary"
-                @click="clientToolsDialogVisible = false"
-              >
-                OK
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-
-
         <v-btn v-on:click="logout">Logout</v-btn>
 
       </v-app-bar>
@@ -129,13 +60,9 @@ import Vue from 'vue';
 import store, { LoginState } from './store/index'
 import { googleProvider } from './google-auth'
 import { version } from './appConfig'
-import { adminAPIEndpoint } from './firebaseConfig'
 
 interface Data {
   version: string,
-  clientToolsDialogVisible: boolean,
-  clientToolsDialogTab: any,
-  downloadConfigFileHref: string,
 }
 
 export default Vue.extend({
@@ -144,11 +71,6 @@ export default Vue.extend({
   data (): Data {
     return {
       version: version,
-      clientToolsDialogVisible: false,
-      clientToolsDialogTab: null,
-      downloadConfigFileHref: "data:application/json;charset=utf-8," + encodeURI(JSON.stringify({
-        'service-url': adminAPIEndpoint
-      })),
     }
   },
 
