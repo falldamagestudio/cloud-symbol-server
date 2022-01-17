@@ -8,13 +8,13 @@ namespace CLI
         // public string UploadFilePath { get; set; }
 
         [Option(longName: "service-url", Required = false, HelpText = "Service URL")]
-        public string? ServiceURL { get; set; } = ConfigFile.GetOrDefault("service-url", "http://localhost:8084");
+        public string? ServiceURL { get; set; } = ConfigFile.GetOrDefault("service-url", "");
 
-        [Option(longName: "email", Required = false, HelpText = "Authentication email", Default = "")]
-        public string? Email { get; set; }
+        [Option(longName: "email", Required = false, HelpText = "Authentication email")]
+        public string? Email { get; set; } = ConfigFile.GetOrDefault("email", "");
 
-        [Option(longName: "pat", Required = false, HelpText = "Authentication Personal Access Token", Default = "")]
-        public string? PAT { get; set; }
+        [Option(longName: "pat", Required = false, HelpText = "Authentication Personal Access Token")]
+        public string? PAT { get; set; } = ConfigFile.GetOrDefault("pat", "");
     }
 
     [Verb("upload", HelpText = "Upload symbols")]
