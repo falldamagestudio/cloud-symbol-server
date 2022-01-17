@@ -22,7 +22,7 @@
 
           <v-dialog
             v-model="useDialogVisible"
-            width="500"
+            width="1000"
           >
             <template v-slot:activator="{ on, attrs }">
               <v-btn
