@@ -20,10 +20,26 @@
 
           <!-- "Use" modal dialog box -->
 
-          <PATUsageGuide
-            :email="email"
-            :pat="pat"
-          />
+          <v-dialog
+            v-model="useDialogVisible"
+            width="500"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                v-on="on"
+              >
+                Use
+              </v-btn>
+            </template>
+
+            <PATUsageGuide
+              :email="email"
+              :pat="pat"
+              @done="patUsageGuideDone"
+            />
+
+          </v-dialog>
 
           <!-- "Revoke" button -->
 
@@ -47,6 +63,10 @@ import Vue from 'vue'
 import { db } from '../firebase'
 import PATUsageGuide from './PATUsageGuide.vue'
 
+interface Data {
+  useDialogVisible: boolean,
+}
+
 export default Vue.extend({
 
   components: {
@@ -58,13 +78,23 @@ export default Vue.extend({
     pat: Object,
   },
 
+  data (): Data {
+    return {
+      useDialogVisible: false,
+    }
+  },
+
   methods: {
 
     revoke() {
       db.collection('users').doc(this.email).collection('pats').doc(this.pat.id).delete().then(() => {
         this.$emit('refresh')
       })
-    }
+    },
+
+    patUsageGuideDone() {
+      this.useDialogVisible = false
+    },
   }
 
 })
