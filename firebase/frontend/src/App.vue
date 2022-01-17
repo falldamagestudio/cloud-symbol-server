@@ -129,7 +129,7 @@ import Vue from 'vue';
 import store, { LoginState } from './store/index'
 import { googleProvider } from './google-auth'
 import { version } from './appConfig'
-import { adminAPIEndpoint, downloadAPIEndpoint, firebaseConfig } from './firebaseConfig'
+import { adminAPIEndpoint } from './firebaseConfig'
 
 interface Data {
   version: string,
