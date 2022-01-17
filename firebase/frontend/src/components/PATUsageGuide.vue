@@ -104,7 +104,7 @@
         <v-card flat>
           <v-card-text>
             Download the <a href="cloud-symbol-server-cli-win64.exe" download="cloud-symbol-server-cli-win64.exe">Windows CLI tool</a>.
-            Also, download the <a :href="downloadConfigFileHref" download="cloud-symbol-server-cli.config.json" target="_blank">config file</a> and place it next to the CLI tool.
+            Also, download <a :href="downloadConfigFileHref" download="cloud-symbol-server-cli.config.json" target="_blank">your personalized config file</a> and place it next to the CLI tool.
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -112,7 +112,7 @@
         <v-card flat>
           <v-card-text>
             Download the <a href="cloud-symbol-server-cli-linux" download="cloud-symbol-server-cli-linux">Linux CLI tool</a>.
-            Also, download the <a :href="downloadConfigFileHref" download="cloud-symbol-server-cli.config.json" target="_blank">config file</a> and place it next to the CLI tool.
+            Also, download <a :href="downloadConfigFileHref" download="cloud-symbol-server-cli.config.json" target="_blank">your personalized config file</a> and place it next to the CLI tool.
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -155,8 +155,10 @@ export default Vue.extend({
     return {
       howToUseTab: null,
       downloadConfigFileHref: "data:application/json;charset=utf-8," + encodeURI(JSON.stringify({
-        'service-url': adminAPIEndpoint
-      })),
+        'service-url': adminAPIEndpoint,
+        'email': this.email,
+        'pat': this.pat.id,
+      }, null, 2)),
       symbolCacheLocation: 'C:\\Symbols',
       openEnvironmentVariablesCommand: 'rundll32 sysdm.cpl,EditEnvironmentVariables',
       ntSymbolPathName: '_NT_SYMBOL_PATH',
