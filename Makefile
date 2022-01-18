@@ -137,7 +137,7 @@ generate-apis: generate-server-api generate-client-api
 
 generate-server-api:
 
-	rm -r admin-api/generated/go
+	rm -rf admin-api/generated/go
 	docker run \
 		--rm \
 		-v "${PWD}:/local" \
@@ -152,8 +152,8 @@ generate-server-api:
 
 generate-client-api:
 
-	rm -r cli/generated/BackendAPI/src
-	rm -r cli/generated/BackendAPI/docs
+	rm -rf cli/generated/BackendAPI/src
+	rm -rf cli/generated/BackendAPI/docs
 	docker run \
 		--rm \
 		-v "${PWD}:/local" \
