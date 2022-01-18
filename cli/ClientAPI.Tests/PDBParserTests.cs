@@ -134,5 +134,12 @@ namespace ClientAPI.Tests
             string expectedHash = "7F416863ABF34C3E894BAD1739BAA5571";
             Assert.Equal(expectedHash, hash);
         }
+
+       [Fact]
+        public void GetHashFailsForNonMSF7File()
+        {
+            string hash = PDBParser.GetHash("../../../../testdata/example.exe");
+            Assert.Null(hash);
+        }
     }
 }

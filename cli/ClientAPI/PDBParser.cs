@@ -302,7 +302,7 @@ namespace ClientAPI
                 if (MSF7Parser.IsValid(stream)) {
                     return MSF7Parser.GetHash(stream);
                 } else {
-                    throw new ApplicationException("Unknown file format");
+                    return null;
                 }
             }
         }

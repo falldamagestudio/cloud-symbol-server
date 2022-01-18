@@ -4,6 +4,10 @@
     <ProjectReference Include="..\generated\BackendAPI\src\BackendAPI\BackendAPI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.Reflection.Metadata" Version="6.0.0" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
