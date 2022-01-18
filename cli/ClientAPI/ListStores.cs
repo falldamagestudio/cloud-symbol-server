@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using BackendAPI.Model;
 using RestSharp;
 
@@ -14,7 +15,7 @@ namespace ClientAPI
             public ListStoresException(string message) : base(message) { }
         }
 
-        public static IEnumerable<string> DoListStores(string ServiceURL, string Email, string PAT) {
+        public static async Task<IEnumerable<string>> DoListStores(string ServiceURL, string Email, string PAT) {
 
             BackendAPI.Client.Configuration config = new BackendAPI.Client.Configuration();
             config.BasePath = ServiceURL;
@@ -22,7 +23,7 @@ namespace ClientAPI
             config.Password = PAT;
             BackendAPI.Api.DefaultApi api = new BackendAPI.Api.DefaultApi(config);
 
-            BackendAPI.Client.ApiResponse<List<string>> getStoresResponse = api.GetStoresWithHttpInfo();
+            BackendAPI.Client.ApiResponse<List<string>> getStoresResponse = await api.GetStoresWithHttpInfoAsync();
             if (getStoresResponse.ErrorText != null)
                 throw new ListStoresException(getStoresResponse.ErrorText);
 

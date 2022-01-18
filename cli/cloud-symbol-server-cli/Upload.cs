@@ -14,7 +14,7 @@ namespace CLI
             return matcher.GetResultsInFullPath(".");
         }
 
-        public static int DoUpload(UploadOptions options)
+        public static async Task<int> DoUpload(UploadOptions options)
         {
             IReadOnlyCollection<string> files = FindMatchingFiles(options.Patterns!).ToList();
 
@@ -33,10 +33,11 @@ namespace CLI
                 try {
                     Progress<ClientAPI.Ops.UploadProgress> uploadProgress = new Progress<ClientAPI.Ops.UploadProgress>();
                     uploadProgress.ProgressChanged += (s, e) => Console.WriteLine($"Progress: {e.State} {e.FileName}");
-                    ClientAPI.Ops.Upload(options.ServiceURL, options.Email, options.PAT, options.Store, options.Description, options.BuildId, files, uploadProgress);
+                    await ClientAPI.Ops.Upload(options.ServiceURL, options.Email, options.PAT, options.Store, options.Description, options.BuildId, files, uploadProgress);
                     Console.WriteLine("Upload done.");
                 } catch (ClientAPI.Ops.UploadException e) {
                     Console.WriteLine($"Upload failed: {e.Message}");
+                    return 1;
                 }
             }
 

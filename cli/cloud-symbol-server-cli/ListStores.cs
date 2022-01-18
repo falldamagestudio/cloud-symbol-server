@@ -4,9 +4,9 @@ namespace CLI
 {
     public static class ListStores
     {
-        public static int DoListStores(ListStoresOptions options)
+        public static async Task<int> DoListStores(ListStoresOptions options)
         {
-            IEnumerable<string> stores = ClientAPI.ListStores.DoListStores(options.ServiceURL, options.Email, options.PAT);
+            IEnumerable<string> stores = await ClientAPI.ListStores.DoListStores(options.ServiceURL, options.Email, options.PAT);
             Console.WriteLine("Stores:");
             foreach (string store in stores) {
                 Console.WriteLine($"  {store}");

@@ -12,10 +12,10 @@ try {
     return 1;
 }
 
-int exitCode = Parser.Default.ParseArguments<CLI.UploadOptions, CLI.ListStoresOptions, object>(args)
+int exitCode = await Parser.Default.ParseArguments<CLI.UploadOptions, CLI.ListStoresOptions, object>(args)
     .MapResult(
-        (CLI.UploadOptions o) => CLI.Upload.DoUpload(o),
-        (CLI.ListStoresOptions o) => CLI.ListStores.DoListStores(o),
-        errs => 1 );
+        async (CLI.UploadOptions o) => await CLI.Upload.DoUpload(o),
+        async (CLI.ListStoresOptions o) => await CLI.ListStores.DoListStores(o),
+        errs => Task.FromResult(1) );
 
 return exitCode;

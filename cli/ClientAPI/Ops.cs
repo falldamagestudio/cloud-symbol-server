@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using BackendAPI.Model;
 using RestSharp;
 
@@ -66,7 +67,7 @@ namespace ClientAPI
             public string FileName;
         }
 
-        private static void UploadMissingFiles(BackendAPI.Model.UploadTransactionResponse uploadTransactionResponse, IEnumerable<FileWithHash> filesWithHashes, IProgress<UploadProgress> progress)
+        private static async Task UploadMissingFiles(BackendAPI.Model.UploadTransactionResponse uploadTransactionResponse, IEnumerable<FileWithHash> filesWithHashes, IProgress<UploadProgress> progress)
         {
             if (uploadTransactionResponse.Files != null) {
                 foreach (BackendAPI.Model.UploadFileResponse uploadFileResponse in uploadTransactionResponse.Files) {
@@ -79,7 +80,7 @@ namespace ClientAPI
 
                     RestClient restClient = new RestClient();
                     RestRequest request = new RestRequest(uploadFileResponse.Url, Method.PUT);
-                    IRestResponse rrr = restClient.Execute(request);
+                    IRestResponse rrr = await restClient.ExecuteAsync(request);
 
                     if (!rrr.IsSuccessful) {
                         throw new UploadException($"Upload failed with status code {rrr.StatusCode}; content = {rrr.Content}");
@@ -88,7 +89,7 @@ namespace ClientAPI
             }
         }
 
-        public static void Upload(string ServiceURL, string Email, string PAT, string store, string description, string buildId, IReadOnlyCollection<string> Files, IProgress<UploadProgress> progress) {
+        public static async Task Upload(string ServiceURL, string Email, string PAT, string store, string description, string buildId, IReadOnlyCollection<string> Files, IProgress<UploadProgress> progress) {
 
             if (!Files.Any()) {
                 throw new ArgumentException($"Upload requires at least one filename", nameof(Files));
@@ -116,7 +117,7 @@ namespace ClientAPI
             if (progress != null)
                 progress.Report(new UploadProgress { State = UploadProgress.StateEnum.UploadingMissingFiles });
 
-            UploadMissingFiles(uploadTransactionResponse.Data, filesWithHashes, progress);
+            await UploadMissingFiles(uploadTransactionResponse.Data, filesWithHashes, progress);
 
             if (progress != null)
                 progress.Report(new UploadProgress { State = UploadProgress.StateEnum.Done });
