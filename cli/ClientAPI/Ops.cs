@@ -16,13 +16,26 @@ namespace ClientAPI
         	public string Hash;
         }
 
+        private static string GetHash(string fileName)
+        {
+            string pdbHash = PDBParser.GetHash(fileName);
+            if (pdbHash != null)
+                return pdbHash;
+
+            string peHash = PEParser.GetHash(fileName);
+            if (peHash != null)
+                return peHash;
+
+            throw new ApplicationException($"File {fileName} is not of a recognized format");
+        }
+
         private static IEnumerable<FileWithHash> GetFilesWithHashes(IEnumerable<string> fileNames)
         {
             IEnumerable<FileWithHash> filesWithHashes = fileNames.Select(fileName => new FileWithHash {
                 FileWithPath = fileName,
                 FileWithoutPath = Path.GetFileName(fileName),
-                Hash = PDBParser.GetHash(fileName)
-            });
+                Hash = GetHash(fileName)
+            }).Where(fileWithHash => fileWithHash.Hash != null);
 
             return filesWithHashes;
         }
@@ -75,7 +88,11 @@ namespace ClientAPI
             }
         }
 
-        public static void Upload(string ServiceURL, string Email, string PAT, string store, string description, string buildId, IEnumerable<string> Files, IProgress<UploadProgress> progress) {
+        public static void Upload(string ServiceURL, string Email, string PAT, string store, string description, string buildId, IReadOnlyCollection<string> Files, IProgress<UploadProgress> progress) {
+
+            if (!Files.Any()) {
+                throw new ArgumentException($"Upload requires at least one filename", nameof(Files));
+            }
 
             if (progress != null)
                 progress.Report(new UploadProgress { State = UploadProgress.StateEnum.LocalValidation });
