@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"cloud.google.com/go/firestore"
-	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go"
+	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

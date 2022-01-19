@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go"
+	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
 	retryablehttp "github.com/hashicorp/go-retryablehttp"
 )
 

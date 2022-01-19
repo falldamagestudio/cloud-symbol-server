@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
-	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go"
+	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
 	"google.golang.org/api/option"
 )
 

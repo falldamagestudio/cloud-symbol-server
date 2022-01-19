@@ -133,11 +133,11 @@ test-local: test-local-download-api test-local-admin-api
 # API regeneration commands
 #########################################################
 
-generate-apis: generate-server-api generate-client-api
+generate-apis: generate-go-server-api generate-client-api
 
-generate-server-api:
+generate-go-server-api:
 
-	rm -rf admin-api/generated/go
+	rm -rf admin-api/generated/go-server/go
 	docker run \
 		--rm \
 		-v "${PWD}:/local" \
@@ -148,7 +148,7 @@ generate-server-api:
 		--git-repo-id=cloud-symbol-server/admin-api \
 		-i /local/admin-api/admin-api.yaml \
 		-g go-server \
-		-o /local/admin-api/generated
+		-o /local/admin-api/generated/go-server
 
 generate-client-api:
 

@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go"
+	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
 )
 
 func (s *ApiService) GetStores(context context.Context) (openapi.ImplResponse, error) {
