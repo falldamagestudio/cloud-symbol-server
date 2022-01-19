@@ -78,18 +78,16 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var storeId = storeId_example;  // string | ID of the store containing the transactions
-            var uploadTransactionRequest = new UploadTransactionRequest(); // UploadTransactionRequest | 
+            var store = store_example;  // string | ID of store to create
 
             try
             {
-                // Start a new upload transaction
-                UploadTransactionResponse result = apiInstance.CreateTransaction(storeId, uploadTransactionRequest);
-                Debug.WriteLine(result);
+                // Create a new store
+                apiInstance.CreateStore(store);
             }
             catch (ApiException e)
             {
-                Debug.Print("Exception when calling DefaultApi.CreateTransaction: " + e.Message );
+                Debug.Print("Exception when calling DefaultApi.CreateStore: " + e.Message );
                 Debug.Print("Status Code: "+ e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
@@ -106,7 +104,9 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**CreateStore**](docs/DefaultApi.md#createstore) | **POST** /stores/{store} | Create a new store
 *DefaultApi* | [**CreateTransaction**](docs/DefaultApi.md#createtransaction) | **POST** /stores/{storeId}/transactions | Start a new upload transaction
+*DefaultApi* | [**DeleteStore**](docs/DefaultApi.md#deletestore) | **DELETE** /stores/{store} | Delete an existing store
 *DefaultApi* | [**GetStores**](docs/DefaultApi.md#getstores) | **GET** /stores | Fetch a list of all stores
 *DefaultApi* | [**GetTransaction**](docs/DefaultApi.md#gettransaction) | **GET** /stores/{storeId}/transactions/{transactionId} | Fetch a transaction
 

@@ -28,6 +28,61 @@ paths:
                 $ref: '#/components/schemas/messageResponse'
           description: Not authorized
       summary: Fetch a list of all stores
+  /stores/{store}:
+    delete:
+      operationId: deleteStore
+      parameters:
+      - description: ID of store to delete
+        explode: false
+        in: path
+        name: store
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Store does not exist
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Not authorized
+      summary: Delete an existing store
+    post:
+      operationId: createStore
+      parameters:
+      - description: ID of store to create
+        explode: false
+        in: path
+        name: store
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Success
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Store already exists
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Not authorized
+      summary: Create a new store
   /stores/{storeId}/transactions:
     post:
       operationId: createTransaction

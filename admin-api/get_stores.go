@@ -10,10 +10,10 @@ import (
 
 func (s *ApiService) GetStores(context context.Context) (openapi.ImplResponse, error) {
 
-	stores, err := getStoresConfig()
+	stores, err := getStoresConfig(context)
 	if err != nil {
-		log.Printf("Unable to get stores config: %v", err)
-		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Unable to get stores config"}), err
+		log.Printf("Unable to fetch stores: %v", err)
+		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 
 	log.Printf("Stores: %v", stores)

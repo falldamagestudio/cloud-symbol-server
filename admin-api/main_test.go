@@ -107,3 +107,48 @@ func TestUploadTransactionSucceeds(t *testing.T) {
 	}
 
 }
+
+func deleteStore(apiClient *openapi_client.APIClient, authContext context.Context, storeId string, acceptStoreDoesNotExist bool) error {
+	r, err := apiClient.DefaultApi.DeleteStore(authContext, storeId).Execute()
+	if err != nil {
+		if !acceptStoreDoesNotExist && r.StatusCode != http.StatusNotFound {
+			return err
+		}
+	}
+	return nil
+}
+
+func createStore(apiClient *openapi_client.APIClient, authContext context.Context, storeId string, acceptStoreAlreadyExists bool) error {
+	r, err := apiClient.DefaultApi.CreateStore(authContext, storeId).Execute()
+	if err != nil {
+		if !acceptStoreAlreadyExists && r.StatusCode != http.StatusConflict {
+			return err
+		}
+	}
+	return nil
+}
+
+func TestCreateAndDestroyStore(t *testing.T) {
+
+	email := "testuser"
+	pat := "testpat"
+
+	authContext, apiClient := getAPIClient(email, pat)
+
+	storeId := "test-store"
+
+	err := deleteStore(apiClient, authContext, storeId, true)
+	if err != nil {
+		t.Fatalf("DeleteeStore failed: %v", err)
+	}
+
+	err = createStore(apiClient, authContext, storeId, false)
+	if err != nil {
+		t.Fatalf("CreateStore failed: %v", err)
+	}
+
+	err = deleteStore(apiClient, authContext, storeId, false)
+	if err != nil {
+		t.Fatalf("DeleteStore failed: %v", err)
+	}
+}

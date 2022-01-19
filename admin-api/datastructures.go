@@ -11,3 +11,7 @@ type TransactionDBEntry struct {
 	Timestamp   string        `firestore:"timestamp"`
 	Files       []FileDBEntry `firestore:"files"`
 }
+
+type StoreEntry struct {
+	Dummy bool `firestore:"dummy"`
+}

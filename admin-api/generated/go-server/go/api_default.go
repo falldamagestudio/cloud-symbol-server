@@ -51,10 +51,22 @@ func NewDefaultApiController(s DefaultApiServicer, opts ...DefaultApiOption) Rou
 func (c *DefaultApiController) Routes() Routes {
 	return Routes{ 
 		{
+			"CreateStore",
+			strings.ToUpper("Post"),
+			"/stores/{store}",
+			c.CreateStore,
+		},
+		{
 			"CreateTransaction",
 			strings.ToUpper("Post"),
 			"/stores/{storeId}/transactions",
 			c.CreateTransaction,
+		},
+		{
+			"DeleteStore",
+			strings.ToUpper("Delete"),
+			"/stores/{store}",
+			c.DeleteStore,
 		},
 		{
 			"GetStores",
@@ -69,6 +81,22 @@ func (c *DefaultApiController) Routes() Routes {
 			c.GetTransaction,
 		},
 	}
+}
+
+// CreateStore - Create a new store
+func (c *DefaultApiController) CreateStore(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	storeParam := params["store"]
+	
+	result, err := c.service.CreateStore(r.Context(), storeParam)
+	// If an error occurred, encode the error with the status code
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
+	// If no error, encode the body and the result code
+	EncodeJSONResponse(result.Body, &result.Code, w)
+
 }
 
 // CreateTransaction - Start a new upload transaction
@@ -88,6 +116,22 @@ func (c *DefaultApiController) CreateTransaction(w http.ResponseWriter, r *http.
 		return
 	}
 	result, err := c.service.CreateTransaction(r.Context(), storeIdParam, uploadTransactionRequestParam)
+	// If an error occurred, encode the error with the status code
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
+	// If no error, encode the body and the result code
+	EncodeJSONResponse(result.Body, &result.Code, w)
+
+}
+
+// DeleteStore - Delete an existing store
+func (c *DefaultApiController) DeleteStore(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	storeParam := params["store"]
+	
+	result, err := c.service.DeleteStore(r.Context(), storeParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)

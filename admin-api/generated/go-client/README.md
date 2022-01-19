@@ -78,7 +78,9 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**CreateStore**](docs/DefaultApi.md#createstore) | **Post** /stores/{store} | Create a new store
 *DefaultApi* | [**CreateTransaction**](docs/DefaultApi.md#createtransaction) | **Post** /stores/{storeId}/transactions | Start a new upload transaction
+*DefaultApi* | [**DeleteStore**](docs/DefaultApi.md#deletestore) | **Delete** /stores/{store} | Delete an existing store
 *DefaultApi* | [**GetStores**](docs/DefaultApi.md#getstores) | **Get** /stores | Fetch a list of all stores
 *DefaultApi* | [**GetTransaction**](docs/DefaultApi.md#gettransaction) | **Get** /stores/{storeId}/transactions/{transactionId} | Fetch a transaction
 

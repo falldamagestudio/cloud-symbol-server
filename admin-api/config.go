@@ -1,23 +1,29 @@
 package admin_api
 
 import (
-	"encoding/json"
-	"errors"
-	"fmt"
-	"os"
+	"context"
+	"log"
 )
 
-func getStoresConfig() ([]string, error) {
+func getStoresConfig(context context.Context) ([]string, error) {
 
-	storesConfigString := os.Getenv("SYMBOL_SERVER_STORES")
-	if storesConfigString == "" {
-		return nil, errors.New("No local stores configured")
+	firestoreClient, err := firestoreClient(context)
+	if err != nil {
+		log.Printf("Unable to talk to database: %v", err)
+		return nil, err
 	}
 
-	var storesConfig []string
-	if err := json.Unmarshal([]byte(storesConfigString), &storesConfig); err != nil {
-		return nil, errors.New(fmt.Sprintf("Error while decoding local stores configuration: %v", err))
+	storesDocSnapshots, err := firestoreClient.Collection("stores").Documents(context).GetAll()
+	if err != nil {
+		log.Printf("Error when fetching stores, err = %v", err)
+		return nil, err
 	}
 
-	return storesConfig, nil
+	stores := make([]string, len(storesDocSnapshots))
+
+	for storeIndex, storeDocSnapshot := range storesDocSnapshots {
+		stores[storeIndex] = storeDocSnapshot.Ref.ID
+	}
+
+	return stores, nil
 }

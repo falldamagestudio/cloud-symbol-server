@@ -29,6 +29,65 @@ paths:
               schema:
                 $ref: '#/components/schemas/messageResponse'
 
+  /stores/{store}:
+    post:
+      summary: Create a new store
+      operationId: createStore
+      parameters:
+        - in: path
+          name: store
+          schema:
+            type: string
+          required: true
+          description: ID of store to create
+
+      responses:
+        200:
+          description: Success
+
+        409:
+          description: Store already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+
+        401:
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+
+    delete:
+      summary: Delete an existing store
+      operationId: deleteStore
+      parameters:
+        - in: path
+          name: store
+          schema:
+            type: string
+          required: true
+          description: ID of store to delete
+
+      responses:
+        200:
+          description: Success
+
+        404:
+          description: Store does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+
+        401:
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+
   /stores/{storeId}/transactions:
     post:
       summary: Start a new upload transaction

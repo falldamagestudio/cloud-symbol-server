@@ -133,7 +133,7 @@ test-local: test-local-download-api test-local-admin-api
 # API regeneration commands
 #########################################################
 
-generate-apis: generate-go-server-api generate-csharp-client-api
+generate-apis: generate-go-server-api generate-go-client-api generate-csharp-client-api
 
 generate-go-server-api:
 
@@ -152,7 +152,7 @@ generate-go-server-api:
 
 generate-go-client-api:
 
-	rm -rf admin-api/generated/go-client/go
+	rm -rf admin-api/generated/go-client/*.go
 	docker run \
 		--rm \
 		-v "${PWD}:/local" \
