@@ -133,7 +133,7 @@ test-local: test-local-download-api test-local-admin-api
 # API regeneration commands
 #########################################################
 
-generate-apis: generate-go-server-api generate-client-api
+generate-apis: generate-go-server-api generate-csharp-client-api
 
 generate-go-server-api:
 
@@ -150,7 +150,7 @@ generate-go-server-api:
 		-g go-server \
 		-o /local/admin-api/generated/go-server
 
-generate-client-api:
+generate-csharp-client-api:
 
 	rm -rf cli/generated/BackendAPI/src
 	rm -rf cli/generated/BackendAPI/docs
