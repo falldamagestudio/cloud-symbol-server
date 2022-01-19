@@ -1,34 +1,35 @@
 package admin_api
 
 import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
+	"context"
 	"net/http"
 	"os"
-	"strings"
 	"testing"
 
-	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
-	retryablehttp "github.com/hashicorp/go-retryablehttp"
+	openapi_client "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-client"
 )
 
-func getServiceUrl(email string, pat string) string {
+func getAdminAPIEndpoint() string {
 
 	adminAPIEndpoint := os.Getenv("ADMIN_API_ENDPOINT")
 	if adminAPIEndpoint == "" {
 		adminAPIEndpoint = "http://localhost:8080"
 	}
+	return adminAPIEndpoint
+}
 
-	serviceUrl := ""
-	if email != "" || pat != "" {
-		parts := strings.Split(adminAPIEndpoint, "://")
-		serviceUrl = fmt.Sprintf("%s://%s:%s@%s", parts[0], email, pat, parts[1])
-	} else {
-		serviceUrl = adminAPIEndpoint
-	}
+func getAPIClient(email string, pat string) (context.Context, *openapi_client.APIClient) {
 
-	return serviceUrl
+	authContext := context.WithValue(context.Background(), openapi_client.ContextBasicAuth, openapi_client.BasicAuth{
+		UserName: email,
+		Password: pat,
+	})
+
+	configuration := openapi_client.NewConfiguration()
+	configuration.Servers[0].URL = getAdminAPIEndpoint()
+	api_client := openapi_client.NewAPIClient(configuration)
+
+	return authContext, api_client
 }
 
 func TestGetTransactionWithInvalidCredentialsFails(t *testing.T) {
@@ -36,20 +37,15 @@ func TestGetTransactionWithInvalidCredentialsFails(t *testing.T) {
 	email := "invalidemail"
 	pat := "invalidpat"
 
-	serviceUrl := getServiceUrl(email, pat)
+	authContext, apiClient := getAPIClient(email, pat)
 
-	path := "/stores/example/transactions/nonexistentid"
+	storeId := "example"
+	transactionId := "invalidtransactionId"
 
-	response, err := retryablehttp.Get(serviceUrl + path)
-	defer response.Body.Close()
-
-	if err != nil {
-		t.Fatalf("Error in request: %v", err)
-	}
-
-	if response.StatusCode != http.StatusUnauthorized {
-		responseBody, _ := ioutil.ReadAll(response.Body)
-		t.Fatalf("HTTP GET request failed: StatusCode expected %v, was %v, Body = %v", http.StatusUnauthorized, response.StatusCode, string(responseBody))
+	_, r, err := apiClient.DefaultApi.GetTransaction(authContext, transactionId, storeId).Execute()
+	desiredStatusCode := http.StatusUnauthorized
+	if err == nil || desiredStatusCode != r.StatusCode {
+		t.Fatalf("GetTransaction with invalid email/PAT is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
 	}
 }
 
@@ -58,20 +54,15 @@ func TestGetTransactionThatDoesNotExistFails(t *testing.T) {
 	email := "testuser"
 	pat := "testpat"
 
-	serviceUrl := getServiceUrl(email, pat)
+	authContext, apiClient := getAPIClient(email, pat)
 
-	path := "/stores/example/transactions/nonexistentid"
+	storeId := "example"
+	transactionId := "invalidtransactionId"
 
-	response, err := retryablehttp.Get(serviceUrl + path)
-	defer response.Body.Close()
-
-	if err != nil {
-		t.Fatalf("Error in request: %v", err)
-	}
-
-	if response.StatusCode != http.StatusNotFound {
-		responseBody, _ := ioutil.ReadAll(response.Body)
-		t.Fatalf("HTTP GET request failed: StatusCode expected %v, was %v, Body = %v", http.StatusNotFound, response.StatusCode, string(responseBody))
+	_, r, err := apiClient.DefaultApi.GetTransaction(authContext, transactionId, storeId).Execute()
+	desiredStatusCode := http.StatusNotFound
+	if err == nil || desiredStatusCode != r.StatusCode {
+		t.Fatalf("GetTransaction with invalid transaction ID is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
 	}
 }
 
@@ -80,47 +71,39 @@ func TestUploadTransactionSucceeds(t *testing.T) {
 	email := "testuser"
 	pat := "testpat"
 
-	path := "/stores/example/transactions"
+	authContext, apiClient := getAPIClient(email, pat)
 
-	serviceUrl := getServiceUrl(email, pat)
+	storeId := "example"
 
 	description := "test upload"
 	buildId := "test build id"
-	files := []openapi.UploadFileRequest{
+
+	fileName1 := "file1"
+	hash1 := "hash1"
+	fileName2 := "file2"
+	hash2 := "hash2"
+
+	files := []openapi_client.UploadFileRequest{
 		{
-			FileName: "file1",
-			Hash:     "hash1",
+			FileName: &fileName1,
+			Hash:     &hash1,
 		},
 		{
-			FileName: "file2",
-			Hash:     "hash2",
+			FileName: &fileName2,
+			Hash:     &hash2,
 		},
 	}
 
-	uploadTransaction := &openapi.UploadTransactionRequest{
-		Description: description,
-		BuildId:     buildId,
-		Files:       files,
+	uploadTransactionRequest := openapi_client.UploadTransactionRequest{
+		Description: &description,
+		BuildId:     &buildId,
+		Files:       &files,
 	}
 
-	requestBody, err := json.Marshal(uploadTransaction)
-	if err != nil {
-		t.Fatalf("Error when marshalling json to text: %v", err)
+	_, r, err := apiClient.DefaultApi.CreateTransaction(authContext, storeId).UploadTransactionRequest(uploadTransactionRequest).Execute()
+	desiredStatusCode := http.StatusOK
+	if err != nil || desiredStatusCode != r.StatusCode {
+		t.Fatalf("CreateTransaction is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
 	}
-
-	response, err := retryablehttp.Post(serviceUrl+path, "application/json", requestBody)
-	defer response.Body.Close()
-
-	if err != nil {
-		t.Fatalf("Error in request: %v", err)
-	}
-
-	if response.StatusCode != http.StatusOK {
-		responseBody, _ := ioutil.ReadAll(response.Body)
-		t.Fatalf("HTTP POST request failed: StatusCode = %v, Body = %v", response.StatusCode, string(responseBody))
-	}
-
-	uploadTransactionResponse := openapi.UploadTransactionResponse{}
-	json.NewDecoder(response.Body).Decode(uploadTransactionResponse)
 
 }
