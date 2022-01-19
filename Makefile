@@ -6,7 +6,7 @@
 .PHONY: run-local-download-api run-local-admin-api
 .PHONY: test-local test-local-download-api test-local-admin-api
 
-.PHONY: generate-apis generate-server-api generate-client-api
+.PHONY: generate-apis generate-go-server-api generate-go-client-api generate-csharp-client-api
 
 .PHONY: test-cli build-cli
 
@@ -149,6 +149,21 @@ generate-go-server-api:
 		-i /local/admin-api/admin-api.yaml \
 		-g go-server \
 		-o /local/admin-api/generated/go-server
+
+generate-go-client-api:
+
+	rm -rf admin-api/generated/go-client/go
+	docker run \
+		--rm \
+		-v "${PWD}:/local" \
+		--user $(shell id -u):$(shell id -g) \
+		openapitools/openapi-generator-cli \
+		generate \
+		--git-user-id=falldamagestudio \
+		--git-repo-id=cloud-symbol-server/admin-api \
+		-i /local/admin-api/admin-api.yaml \
+		-g go \
+		-o /local/admin-api/generated/go-client
 
 generate-csharp-client-api:
 
