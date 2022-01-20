@@ -128,6 +128,24 @@ func createStore(apiClient *openapi_client.APIClient, authContext context.Contex
 	return nil
 }
 
+func getStores(apiClient *openapi_client.APIClient, authContext context.Context) ([]string, error) {
+	result, _, err := apiClient.DefaultApi.GetStores(authContext).Execute()
+	if err != nil {
+		return nil, err
+	} else {
+		return result, err
+	}
+}
+
+func stringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
+}
+
 func TestCreateAndDestroyStore(t *testing.T) {
 
 	email := "testuser"
@@ -139,7 +157,15 @@ func TestCreateAndDestroyStore(t *testing.T) {
 
 	err := deleteStore(apiClient, authContext, storeId, true)
 	if err != nil {
-		t.Fatalf("DeleteeStore failed: %v", err)
+		t.Fatalf("DeleteStore failed: %v", err)
+	}
+
+	stores1, err := getStores(apiClient, authContext)
+	if err != nil {
+		t.Fatalf("GetStores failed: %v", err)
+	}
+	if stringInSlice(storeId, stores1) {
+		t.Fatalf("Store %v should not be among stores, but is: %v", storeId, stores1)
 	}
 
 	err = createStore(apiClient, authContext, storeId, false)
@@ -147,8 +173,24 @@ func TestCreateAndDestroyStore(t *testing.T) {
 		t.Fatalf("CreateStore failed: %v", err)
 	}
 
+	stores2, err := getStores(apiClient, authContext)
+	if err != nil {
+		t.Fatalf("GetStores failed: %v", err)
+	}
+	if !stringInSlice(storeId, stores2) {
+		t.Fatalf("Store %v should be among stores, but is not: %v", storeId, stores2)
+	}
+
 	err = deleteStore(apiClient, authContext, storeId, false)
 	if err != nil {
 		t.Fatalf("DeleteStore failed: %v", err)
+	}
+
+	stores3, err := getStores(apiClient, authContext)
+	if err != nil {
+		t.Fatalf("GetStores failed: %v", err)
+	}
+	if stringInSlice(storeId, stores3) {
+		t.Fatalf("Store %v should not be among stores, but is: %v", storeId, stores3)
 	}
 }
