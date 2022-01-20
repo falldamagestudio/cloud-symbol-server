@@ -52,7 +52,7 @@ func firestoreClient(context context.Context) (*firestore.Client, error) {
 }
 
 func AdminAPI(w http.ResponseWriter, r *http.Request) {
-	log.Print(r.URL.Path)
+	log.Print("Path called: " + r.URL.Path)
 
 	router.ServeHTTP(w, r)
 }
