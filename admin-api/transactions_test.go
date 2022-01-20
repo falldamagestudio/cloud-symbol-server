@@ -34,6 +34,10 @@ func TestGetTransactionThatDoesNotExistFails(t *testing.T) {
 	storeId := "example"
 	transactionId := "invalidtransactionId"
 
+	if err := ensureTestStoreExists(apiClient, authContext, storeId); err != nil {
+		t.Fatalf("ensureTestStoreExists failed: %v", err)
+	}
+
 	_, r, err := apiClient.DefaultApi.GetTransaction(authContext, transactionId, storeId).Execute()
 	desiredStatusCode := http.StatusNotFound
 	if err == nil || desiredStatusCode != r.StatusCode {
@@ -49,6 +53,10 @@ func TestUploadTransactionSucceeds(t *testing.T) {
 	authContext, apiClient := getAPIClient(email, pat)
 
 	storeId := "example"
+
+	if err := ensureTestStoreExists(apiClient, authContext, storeId); err != nil {
+		t.Fatalf("ensureTestStoreExists failed: %v", err)
+	}
 
 	description := "test upload"
 	buildId := "test build id"

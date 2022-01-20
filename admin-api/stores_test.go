@@ -1,41 +1,8 @@
 package admin_api
 
 import (
-	"context"
-	"net/http"
 	"testing"
-
-	openapi_client "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-client"
 )
-
-func getStores(apiClient *openapi_client.APIClient, authContext context.Context) ([]string, error) {
-	result, _, err := apiClient.DefaultApi.GetStores(authContext).Execute()
-	if err != nil {
-		return nil, err
-	} else {
-		return result, err
-	}
-}
-
-func createStore(apiClient *openapi_client.APIClient, authContext context.Context, storeId string, acceptStoreAlreadyExists bool) error {
-	r, err := apiClient.DefaultApi.CreateStore(authContext, storeId).Execute()
-	if err != nil {
-		if !acceptStoreAlreadyExists && r.StatusCode != http.StatusConflict {
-			return err
-		}
-	}
-	return nil
-}
-
-func deleteStore(apiClient *openapi_client.APIClient, authContext context.Context, storeId string, acceptStoreDoesNotExist bool) error {
-	r, err := apiClient.DefaultApi.DeleteStore(authContext, storeId).Execute()
-	if err != nil {
-		if !acceptStoreDoesNotExist && r.StatusCode != http.StatusNotFound {
-			return err
-		}
-	}
-	return nil
-}
 
 func TestCreateAndDestroyStore(t *testing.T) {
 
