@@ -61,9 +61,9 @@ func getSymbolStoreBucketName() (string, error) {
 	return symbolStoreBucketName, nil
 }
 
-func deleteAllObjectsInFolder(context context.Context, storageClient *storage.Client, bucketName string, prefix string) error {
+func deleteAllObjectsInStore(context context.Context, storageClient *storage.Client, bucketName string, storeId string) error {
 	query := &storage.Query{
-		Prefix: fmt.Sprintf("%v/", bucketName),
+		Prefix: fmt.Sprintf("stores/%v/", storeId),
 	}
 	iter := storageClient.Bucket(bucketName).Objects(context, query)
 	for {

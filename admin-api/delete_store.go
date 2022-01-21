@@ -28,7 +28,7 @@ func (s *ApiService) DeleteStore(context context.Context, store string) (openapi
 		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Unable to determine symbol store bucket name"}), err
 	}
 
-	if err = deleteAllObjectsInFolder(context, storageClient, symbolStoreBucketName, store); err != nil {
+	if err = deleteAllObjectsInStore(context, storageClient, symbolStoreBucketName, store); err != nil {
 		if err != nil {
 			log.Printf("Unable to delete all documents in collection, err = %v", err)
 			return openapi.Response(http.StatusInternalServerError, nil), err
