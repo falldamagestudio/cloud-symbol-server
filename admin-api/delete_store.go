@@ -35,14 +35,14 @@ func (s *ApiService) DeleteStore(context context.Context, store string) (openapi
 		}
 	}
 
-	if err = deleteAllDocumentsInCollection(context, firestoreClient, firestoreClient.Collection("stores").Doc(store).Collection("transactions"), 100); err != nil {
+	if err = deleteAllDocumentsInCollection(context, firestoreClient, firestoreClient.Collection(storesCollectionName).Doc(store).Collection(storeUploadsCollectionName), 100); err != nil {
 		if err != nil {
 			log.Printf("Unable to delete all documents in collection, err = %v", err)
 			return openapi.Response(http.StatusInternalServerError, nil), err
 		}
 	}
 
-	_, err = firestoreClient.Collection("stores").Doc(store).Delete(context)
+	_, err = firestoreClient.Collection(storesCollectionName).Doc(store).Delete(context)
 	if err != nil {
 		log.Printf("Unable to delete store, err = %v", err)
 		return openapi.Response(http.StatusInternalServerError, nil), err

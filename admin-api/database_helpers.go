@@ -11,6 +11,11 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+const (
+	storesCollectionName       = "stores"
+	storeUploadsCollectionName = "uploads"
+)
+
 func getStoresConfig(context context.Context) ([]string, error) {
 
 	firestoreClient, err := firestoreClient(context)
@@ -19,7 +24,7 @@ func getStoresConfig(context context.Context) ([]string, error) {
 		return nil, err
 	}
 
-	storesDocSnapshots, err := firestoreClient.Collection("stores").Documents(context).GetAll()
+	storesDocSnapshots, err := firestoreClient.Collection(storesCollectionName).Documents(context).GetAll()
 	if err != nil {
 		log.Printf("Error when fetching stores, err = %v", err)
 		return nil, err
@@ -44,7 +49,7 @@ func getStoreDoc(context context.Context, storeId string) (*firestore.DocumentSn
 		return nil, err
 	}
 
-	storeDoc, err := firestoreClient.Collection("stores").Doc(storeId).Get(context)
+	storeDoc, err := firestoreClient.Collection(storesCollectionName).Doc(storeId).Get(context)
 
 	if err != nil {
 		if status.Code(err) == codes.NotFound {
@@ -68,7 +73,7 @@ func getTransactionDoc(context context.Context, storeId string, transactionId st
 		return nil, err
 	}
 
-	transactionDoc, err := firestoreClient.Collection("stores").Doc(storeId).Collection("transactions").Doc(transactionId).Get(context)
+	transactionDoc, err := firestoreClient.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Doc(transactionId).Get(context)
 
 	if err != nil {
 		if status.Code(err) == codes.NotFound {

@@ -18,7 +18,7 @@ func (s *ApiService) CreateStore(context context.Context, store string) (openapi
 		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Unable to talk to database"}), err
 	}
 
-	_, err = firestoreClient.Collection("stores").Doc(store).Create(context, &StoreEntry{LatestTransactionId: -1})
+	_, err = firestoreClient.Collection(storesCollectionName).Doc(store).Create(context, &StoreEntry{LatestTransactionId: -1})
 	if err != nil {
 		if status.Code(err) == codes.AlreadyExists {
 			log.Printf("Store already exists, err = %v", err)

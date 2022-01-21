@@ -5,6 +5,11 @@ import (
 	"log"
 )
 
+const (
+	storesCollectionName       = "stores"
+	storeUploadsCollectionName = "uploads"
+)
+
 func getStoresConfig(context context.Context) ([]string, error) {
 
 	firestoreClient, err := firestoreClient(context)
@@ -13,7 +18,7 @@ func getStoresConfig(context context.Context) ([]string, error) {
 		return nil, err
 	}
 
-	storesDocSnapshots, err := firestoreClient.Collection("stores").Documents(context).GetAll()
+	storesDocSnapshots, err := firestoreClient.Collection(storesCollectionName).Documents(context).GetAll()
 	if err != nil {
 		log.Printf("Error when fetching stores, err = %v", err)
 		return nil, err

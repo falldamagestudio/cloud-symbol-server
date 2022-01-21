@@ -154,7 +154,7 @@ func logTransaction(ctx context.Context, storeId string, uploadTransactionReques
 		return "", err
 	}
 
-	storeDocRef := firestoreClient.Collection("stores").Doc(storeId)
+	storeDocRef := firestoreClient.Collection(storesCollectionName).Doc(storeId)
 
 	newTransactionId := int64(0)
 
@@ -176,7 +176,7 @@ func logTransaction(ctx context.Context, storeId string, uploadTransactionReques
 			return err
 		}
 
-		transactionDocRef := storeDocRef.Collection("transactions").Doc(fmt.Sprint(newTransactionId))
+		transactionDocRef := storeDocRef.Collection(storeUploadsCollectionName).Doc(fmt.Sprint(newTransactionId))
 
 		err = tx.Create(transactionDocRef, transactionContent)
 
