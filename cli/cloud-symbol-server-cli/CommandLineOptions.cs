@@ -20,16 +20,16 @@ namespace CLI
     [Verb("upload", HelpText = "Upload symbols")]
     public class UploadOptions : CommandLineOptions
     {
-        [Option(longName: "store", Required = true, HelpText = "Which store to upload to")]
-        public string? Store { get; set; }
-
         [Option(longName: "description", Required = true, HelpText = "Textual description of upload")]
         public string? Description { get; set; }
 
         [Option(longName: "build-id", Required = true, HelpText = "Build ID for upload")]
         public string? BuildId { get; set; }
 
-        [Value(0, MetaName="<pattern1 pattern2 pattern3 ...>", Min = 1, HelpText = "Wildcard patterns for files to upload, like 'folder1/*.pdb'")]
+        [Value(0, Required = true, HelpText = "Which store to upload to")]
+        public string? Store { get; set; }
+
+        [Value(1, Min = 1, MetaName="<pattern1 pattern2 pattern3 ...>", HelpText = "Wildcard patterns for files to upload, like 'folder1/*.pdb'")]
         public IEnumerable<string>? Patterns { get; set; }
     }
 
@@ -41,14 +41,14 @@ namespace CLI
     [Verb("create-store", HelpText = "Create new store")]
     public class CreateStoreOptions : CommandLineOptions
     {
-        [Option(longName: "store", Required = true, HelpText = "Name of new store")]
+        [Value(0, Required = true, HelpText = "Name of new store")]
         public string? Store { get; set; }
     }
 
     [Verb("delete-store", HelpText = "Delete existing store")]
     public class DeleteStoreOptions : CommandLineOptions
     {
-        [Option(longName: "store", Required = true, HelpText = "Name of store to delete")]
+        [Value(0, Required = true, HelpText = "Name of store to delete")]
         public string? Store { get; set; }
     }
 }
