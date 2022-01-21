@@ -6,6 +6,7 @@ import (
 
 	"cloud.google.com/go/firestore"
 
+	"google.golang.org/api/iterator"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -79,4 +80,44 @@ func getTransactionDoc(context context.Context, storeId string, transactionId st
 	}
 
 	return transactionDoc, nil
+}
+
+// Reference: https://firebase.google.com/docs/firestore/manage-data/delete-data#collections
+func deleteAllDocumentsInCollection(ctx context.Context, client *firestore.Client, ref *firestore.CollectionRef, batchSize int) error {
+
+	log.Printf("Deleting all documents in collection %v", ref.ID)
+
+	for {
+		// Get a batch of documents
+		iter := ref.Limit(batchSize).Documents(ctx)
+		numDeleted := 0
+
+		// Iterate through the documents, adding
+		// a delete operation for each one to a
+		// WriteBatch.
+		batch := client.Batch()
+		for {
+			doc, err := iter.Next()
+			if err == iterator.Done {
+				break
+			}
+			if err != nil {
+				return err
+			}
+
+			batch.Delete(doc.Ref)
+			numDeleted++
+		}
+
+		// If there are no documents to delete,
+		// the process is over.
+		if numDeleted == 0 {
+			return nil
+		}
+
+		_, err := batch.Commit(ctx)
+		if err != nil {
+			return err
+		}
+	}
 }
