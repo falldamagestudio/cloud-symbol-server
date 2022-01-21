@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"cloud.google.com/go/firestore"
 	"cloud.google.com/go/storage"
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
 )
@@ -136,7 +137,7 @@ func (s *ApiService) CreateTransaction(context context.Context, storeId string, 
 	return openapi.Response(http.StatusOK, uploadTransactionResponse), nil
 }
 
-func logTransaction(context context.Context, storeId string, uploadTransactionRequest openapi.UploadTransactionRequest, uploadTransactionResponse openapi.UploadTransactionResponse) (string, error) {
+func logTransaction(ctx context.Context, storeId string, uploadTransactionRequest openapi.UploadTransactionRequest, uploadTransactionResponse openapi.UploadTransactionResponse) (string, error) {
 
 	transactionContent := map[string]interface{}{
 		"description": uploadTransactionRequest.Description,
@@ -147,18 +148,51 @@ func logTransaction(context context.Context, storeId string, uploadTransactionRe
 
 	log.Printf("Writing transaction to database: %v", transactionContent)
 
-	firestoreClient, err := firestoreClient(context)
+	firestoreClient, err := firestoreClient(ctx)
 	if err != nil {
 		log.Printf("Unable to talk to database: %v", err)
 		return "", err
 	}
 
-	transactionDocRef, _, err := firestoreClient.Collection("stores").Doc(storeId).Collection("transactions").Add(context, transactionContent)
+	storeDocRef := firestoreClient.Collection("stores").Doc(storeId)
+
+	newTransactionId := int64(0)
+
+	err = firestoreClient.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+		storeDoc, err := tx.Get(storeDocRef)
+		if err != nil {
+			return err
+		}
+		storeEntry := &StoreEntry{}
+		if err := storeDoc.DataTo(storeEntry); err != nil {
+			return err
+		}
+
+		newTransactionId = storeEntry.LatestTransactionId + 1
+		storeEntry.LatestTransactionId = newTransactionId
+
+		err = tx.Set(storeDocRef, storeEntry)
+		if err != nil {
+			return err
+		}
+
+		transactionDocRef := storeDocRef.Collection("transactions").Doc(fmt.Sprint(newTransactionId))
+
+		err = tx.Create(transactionDocRef, transactionContent)
+
+		return err
+	})
+	if err != nil {
+		// Handle any errors appropriately in this section.
+		log.Printf("An error has occurred: %s", err)
+	}
 
 	if err != nil {
 		log.Printf("Error when logging transaction, err = %v", err)
 		return "", err
 	}
 
-	return transactionDocRef.ID, nil
+	log.Printf("Transaction is given ID %v", newTransactionId)
+
+	return fmt.Sprint(newTransactionId), nil
 }

@@ -13,5 +13,5 @@ type TransactionDBEntry struct {
 }
 
 type StoreEntry struct {
-	Dummy bool `firestore:"dummy"`
+	LatestTransactionId int64 `firestore:"latestTransactionId"`
 }
