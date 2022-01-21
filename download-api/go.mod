@@ -8,5 +8,5 @@ require (
 	github.com/GoogleCloudPlatform/functions-framework-go v1.5.2
 	github.com/hashicorp/go-cleanhttp v0.5.1
 	github.com/hashicorp/go-retryablehttp v0.7.0
-	google.golang.org/api v0.63.0 // indirect
+	google.golang.org/api v0.63.0
 )
