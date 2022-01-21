@@ -1,7 +1,7 @@
 /*
-Cloud Symbol Server Uplaod API
+Cloud Symbol Server Admin API
 
-This is the API that is used to upload symbols to Cloud Symbol Server
+This is the API that is used to manage stores and uploads in Cloud Symbol Server
 
 API version: 1.0.0
 */
@@ -14,32 +14,32 @@ import (
 	"encoding/json"
 )
 
-// UploadTransactionRequest struct for UploadTransactionRequest
-type UploadTransactionRequest struct {
+// CreateStoreUploadRequest struct for CreateStoreUploadRequest
+type CreateStoreUploadRequest struct {
 	Description *string `json:"description,omitempty"`
 	BuildId *string `json:"buildId,omitempty"`
 	Files *[]UploadFileRequest `json:"files,omitempty"`
 }
 
-// NewUploadTransactionRequest instantiates a new UploadTransactionRequest object
+// NewCreateStoreUploadRequest instantiates a new CreateStoreUploadRequest object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewUploadTransactionRequest() *UploadTransactionRequest {
-	this := UploadTransactionRequest{}
+func NewCreateStoreUploadRequest() *CreateStoreUploadRequest {
+	this := CreateStoreUploadRequest{}
 	return &this
 }
 
-// NewUploadTransactionRequestWithDefaults instantiates a new UploadTransactionRequest object
+// NewCreateStoreUploadRequestWithDefaults instantiates a new CreateStoreUploadRequest object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewUploadTransactionRequestWithDefaults() *UploadTransactionRequest {
-	this := UploadTransactionRequest{}
+func NewCreateStoreUploadRequestWithDefaults() *CreateStoreUploadRequest {
+	this := CreateStoreUploadRequest{}
 	return &this
 }
 
 // GetDescription returns the Description field value if set, zero value otherwise.
-func (o *UploadTransactionRequest) GetDescription() string {
+func (o *CreateStoreUploadRequest) GetDescription() string {
 	if o == nil || o.Description == nil {
 		var ret string
 		return ret
@@ -49,7 +49,7 @@ func (o *UploadTransactionRequest) GetDescription() string {
 
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *UploadTransactionRequest) GetDescriptionOk() (*string, bool) {
+func (o *CreateStoreUploadRequest) GetDescriptionOk() (*string, bool) {
 	if o == nil || o.Description == nil {
 		return nil, false
 	}
@@ -57,7 +57,7 @@ func (o *UploadTransactionRequest) GetDescriptionOk() (*string, bool) {
 }
 
 // HasDescription returns a boolean if a field has been set.
-func (o *UploadTransactionRequest) HasDescription() bool {
+func (o *CreateStoreUploadRequest) HasDescription() bool {
 	if o != nil && o.Description != nil {
 		return true
 	}
@@ -66,12 +66,12 @@ func (o *UploadTransactionRequest) HasDescription() bool {
 }
 
 // SetDescription gets a reference to the given string and assigns it to the Description field.
-func (o *UploadTransactionRequest) SetDescription(v string) {
+func (o *CreateStoreUploadRequest) SetDescription(v string) {
 	o.Description = &v
 }
 
 // GetBuildId returns the BuildId field value if set, zero value otherwise.
-func (o *UploadTransactionRequest) GetBuildId() string {
+func (o *CreateStoreUploadRequest) GetBuildId() string {
 	if o == nil || o.BuildId == nil {
 		var ret string
 		return ret
@@ -81,7 +81,7 @@ func (o *UploadTransactionRequest) GetBuildId() string {
 
 // GetBuildIdOk returns a tuple with the BuildId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *UploadTransactionRequest) GetBuildIdOk() (*string, bool) {
+func (o *CreateStoreUploadRequest) GetBuildIdOk() (*string, bool) {
 	if o == nil || o.BuildId == nil {
 		return nil, false
 	}
@@ -89,7 +89,7 @@ func (o *UploadTransactionRequest) GetBuildIdOk() (*string, bool) {
 }
 
 // HasBuildId returns a boolean if a field has been set.
-func (o *UploadTransactionRequest) HasBuildId() bool {
+func (o *CreateStoreUploadRequest) HasBuildId() bool {
 	if o != nil && o.BuildId != nil {
 		return true
 	}
@@ -98,12 +98,12 @@ func (o *UploadTransactionRequest) HasBuildId() bool {
 }
 
 // SetBuildId gets a reference to the given string and assigns it to the BuildId field.
-func (o *UploadTransactionRequest) SetBuildId(v string) {
+func (o *CreateStoreUploadRequest) SetBuildId(v string) {
 	o.BuildId = &v
 }
 
 // GetFiles returns the Files field value if set, zero value otherwise.
-func (o *UploadTransactionRequest) GetFiles() []UploadFileRequest {
+func (o *CreateStoreUploadRequest) GetFiles() []UploadFileRequest {
 	if o == nil || o.Files == nil {
 		var ret []UploadFileRequest
 		return ret
@@ -113,7 +113,7 @@ func (o *UploadTransactionRequest) GetFiles() []UploadFileRequest {
 
 // GetFilesOk returns a tuple with the Files field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *UploadTransactionRequest) GetFilesOk() (*[]UploadFileRequest, bool) {
+func (o *CreateStoreUploadRequest) GetFilesOk() (*[]UploadFileRequest, bool) {
 	if o == nil || o.Files == nil {
 		return nil, false
 	}
@@ -121,7 +121,7 @@ func (o *UploadTransactionRequest) GetFilesOk() (*[]UploadFileRequest, bool) {
 }
 
 // HasFiles returns a boolean if a field has been set.
-func (o *UploadTransactionRequest) HasFiles() bool {
+func (o *CreateStoreUploadRequest) HasFiles() bool {
 	if o != nil && o.Files != nil {
 		return true
 	}
@@ -130,11 +130,11 @@ func (o *UploadTransactionRequest) HasFiles() bool {
 }
 
 // SetFiles gets a reference to the given []UploadFileRequest and assigns it to the Files field.
-func (o *UploadTransactionRequest) SetFiles(v []UploadFileRequest) {
+func (o *CreateStoreUploadRequest) SetFiles(v []UploadFileRequest) {
 	o.Files = &v
 }
 
-func (o UploadTransactionRequest) MarshalJSON() ([]byte, error) {
+func (o CreateStoreUploadRequest) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if o.Description != nil {
 		toSerialize["description"] = o.Description
@@ -148,38 +148,38 @@ func (o UploadTransactionRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-type NullableUploadTransactionRequest struct {
-	value *UploadTransactionRequest
+type NullableCreateStoreUploadRequest struct {
+	value *CreateStoreUploadRequest
 	isSet bool
 }
 
-func (v NullableUploadTransactionRequest) Get() *UploadTransactionRequest {
+func (v NullableCreateStoreUploadRequest) Get() *CreateStoreUploadRequest {
 	return v.value
 }
 
-func (v *NullableUploadTransactionRequest) Set(val *UploadTransactionRequest) {
+func (v *NullableCreateStoreUploadRequest) Set(val *CreateStoreUploadRequest) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableUploadTransactionRequest) IsSet() bool {
+func (v NullableCreateStoreUploadRequest) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableUploadTransactionRequest) Unset() {
+func (v *NullableCreateStoreUploadRequest) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableUploadTransactionRequest(val *UploadTransactionRequest) *NullableUploadTransactionRequest {
-	return &NullableUploadTransactionRequest{value: val, isSet: true}
+func NewNullableCreateStoreUploadRequest(val *CreateStoreUploadRequest) *NullableCreateStoreUploadRequest {
+	return &NullableCreateStoreUploadRequest{value: val, isSet: true}
 }
 
-func (v NullableUploadTransactionRequest) MarshalJSON() ([]byte, error) {
+func (v NullableCreateStoreUploadRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableUploadTransactionRequest) UnmarshalJSON(src []byte) error {
+func (v *NullableCreateStoreUploadRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (s *ApiService) CreateStore(context context.Context, store string) (openapi.ImplResponse, error) {
+func (s *ApiService) CreateStore(context context.Context, storeId string) (openapi.ImplResponse, error) {
 
 	firestoreClient, err := firestoreClient(context)
 	if err != nil {
@@ -18,7 +18,7 @@ func (s *ApiService) CreateStore(context context.Context, store string) (openapi
 		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Unable to talk to database"}), err
 	}
 
-	_, err = firestoreClient.Collection(storesCollectionName).Doc(store).Create(context, &StoreEntry{LatestTransactionId: -1})
+	_, err = firestoreClient.Collection(storesCollectionName).Doc(storeId).Create(context, &StoreEntry{LatestUploadId: -1})
 	if err != nil {
 		if status.Code(err) == codes.AlreadyExists {
 			log.Printf("Store already exists, err = %v", err)

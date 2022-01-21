@@ -1,7 +1,7 @@
 /*
-Cloud Symbol Server Uplaod API
+Cloud Symbol Server Admin API
 
-This is the API that is used to upload symbols to Cloud Symbol Server
+This is the API that is used to manage stores and uploads in Cloud Symbol Server
 
 API version: 1.0.0
 */
@@ -41,7 +41,7 @@ var (
 	xmlCheck  = regexp.MustCompile(`(?i:(?:application|text)/xml)`)
 )
 
-// APIClient manages communication with the Cloud Symbol Server Uplaod API API v1.0.0
+// APIClient manages communication with the Cloud Symbol Server Admin API API v1.0.0
 // In most cases there should be only one, shared, APIClient.
 type APIClient struct {
 	cfg    *Configuration

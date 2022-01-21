@@ -1,4 +1,4 @@
-# BackendAPI.Model.UploadTransactionRequest
+# BackendAPI.Model.GetStoreUploadResponse
 
 ## Properties
 
@@ -6,7 +6,8 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Description** | **string** |  | [optional] 
 **BuildId** | **string** |  | [optional] 
-**Files** | [**List&lt;UploadFileRequest&gt;**](UploadFileRequest.md) |  | [optional] 
+**Timestamp** | **string** |  | [optional] 
+**Files** | [**List&lt;GetFileResponse&gt;**](GetFileResponse.md) |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

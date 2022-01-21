@@ -150,6 +150,7 @@ generate-go-server-api:
 
 generate-go-client-api:
 
+	rm -rf admin-api/generated/go-client/docs
 	rm -rf admin-api/generated/go-client/*.go
 	docker run \
 		--rm \

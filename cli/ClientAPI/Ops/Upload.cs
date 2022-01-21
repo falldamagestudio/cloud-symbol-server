@@ -40,9 +40,9 @@ namespace ClientAPI
             return filesWithHashes;
         }
 
-        private static BackendAPI.Model.UploadTransactionRequest CreateUploadTransactionRequest(string description, string buildId, IEnumerable<FileWithHash> FileWithHash)
+        private static BackendAPI.Model.CreateStoreUploadRequest CreateStoreUploadRequest(string description, string buildId, IEnumerable<FileWithHash> FileWithHash)
         {
-            BackendAPI.Model.UploadTransactionRequest request = new BackendAPI.Model.UploadTransactionRequest(
+            BackendAPI.Model.CreateStoreUploadRequest request = new BackendAPI.Model.CreateStoreUploadRequest(
                 description: description,
                 buildId: buildId,
                 files: FileWithHash.Select(fileWithHash => new BackendAPI.Model.UploadFileRequest(
@@ -60,16 +60,16 @@ namespace ClientAPI
         }
 
         public struct UploadProgress {
-            public enum StateEnum { LocalValidation, CreatingTransaction, UploadingMissingFiles, UploadingMissingFile, Done };
+            public enum StateEnum { LocalValidation, CreatingUploadEntry, UploadingMissingFiles, UploadingMissingFile, Done };
 
             public StateEnum State;
             public string FileName;
         }
 
-        private static async Task UploadMissingFiles(BackendAPI.Model.UploadTransactionResponse uploadTransactionResponse, IEnumerable<FileWithHash> filesWithHashes, IProgress<UploadProgress> progress)
+        private static async Task UploadMissingFiles(BackendAPI.Model.CreateStoreUploadResponse createStoreUploadResponse, IEnumerable<FileWithHash> filesWithHashes, IProgress<UploadProgress> progress)
         {
-            if (uploadTransactionResponse.Files != null) {
-                foreach (BackendAPI.Model.UploadFileResponse uploadFileResponse in uploadTransactionResponse.Files) {
+            if (createStoreUploadResponse.Files != null) {
+                foreach (BackendAPI.Model.UploadFileResponse uploadFileResponse in createStoreUploadResponse.Files) {
 
                     FileWithHash fileWithHash = filesWithHashes.First(fwh => 
                         fwh.FileWithoutPath == uploadFileResponse.FileName && fwh.Hash == uploadFileResponse.Hash);
@@ -106,17 +106,17 @@ namespace ClientAPI
             IEnumerable<FileWithHash> filesWithHashes = GetFilesWithHashes(Files);
 
             if (progress != null)
-                progress.Report(new UploadProgress { State = UploadProgress.StateEnum.CreatingTransaction });
+                progress.Report(new UploadProgress { State = UploadProgress.StateEnum.CreatingUploadEntry });
 
-            BackendAPI.Model.UploadTransactionRequest uploadTransactionRequest = CreateUploadTransactionRequest(description, buildId, filesWithHashes);
-            BackendAPI.Client.ApiResponse<BackendAPI.Model.UploadTransactionResponse> uploadTransactionResponse = api.CreateTransactionWithHttpInfo(store, uploadTransactionRequest);
-            if (uploadTransactionResponse.ErrorText != null)
-                throw new UploadException(uploadTransactionResponse.ErrorText);
+            BackendAPI.Model.CreateStoreUploadRequest createStoreUploadRequest = CreateStoreUploadRequest(description, buildId, filesWithHashes);
+            BackendAPI.Client.ApiResponse<BackendAPI.Model.CreateStoreUploadResponse> createStoreUploadResponse = api.CreateStoreUploadWithHttpInfo(store, createStoreUploadRequest);
+            if (createStoreUploadResponse.ErrorText != null)
+                throw new UploadException(createStoreUploadResponse.ErrorText);
 
             if (progress != null)
                 progress.Report(new UploadProgress { State = UploadProgress.StateEnum.UploadingMissingFiles });
 
-            await UploadMissingFiles(uploadTransactionResponse.Data, filesWithHashes, progress);
+            await UploadMissingFiles(createStoreUploadResponse.Data, filesWithHashes, progress);
 
             if (progress != null)
                 progress.Report(new UploadProgress { State = UploadProgress.StateEnum.Done });

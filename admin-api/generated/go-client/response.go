@@ -1,7 +1,7 @@
 /*
-Cloud Symbol Server Uplaod API
+Cloud Symbol Server Admin API
 
-This is the API that is used to upload symbols to Cloud Symbol Server
+This is the API that is used to manage stores and uploads in Cloud Symbol Server
 
 API version: 1.0.0
 */

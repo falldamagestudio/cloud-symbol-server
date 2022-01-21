@@ -4,17 +4,17 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**CreateStore**](DefaultApi.md#CreateStore) | **Post** /stores/{store} | Create a new store
-[**CreateTransaction**](DefaultApi.md#CreateTransaction) | **Post** /stores/{storeId}/transactions | Start a new upload transaction
-[**DeleteStore**](DefaultApi.md#DeleteStore) | **Delete** /stores/{store} | Delete an existing store
+[**CreateStore**](DefaultApi.md#CreateStore) | **Post** /stores/{storeId} | Create a new store
+[**CreateStoreUpload**](DefaultApi.md#CreateStoreUpload) | **Post** /stores/{storeId}/uploads | Start a new upload
+[**DeleteStore**](DefaultApi.md#DeleteStore) | **Delete** /stores/{storeId} | Delete an existing store
+[**GetStoreUpload**](DefaultApi.md#GetStoreUpload) | **Get** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
 [**GetStores**](DefaultApi.md#GetStores) | **Get** /stores | Fetch a list of all stores
-[**GetTransaction**](DefaultApi.md#GetTransaction) | **Get** /stores/{storeId}/transactions/{transactionId} | Fetch a transaction
 
 
 
 ## CreateStore
 
-> CreateStore(ctx, store).Execute()
+> CreateStore(ctx, storeId).Execute()
 
 Create a new store
 
@@ -31,11 +31,11 @@ import (
 )
 
 func main() {
-    store := "store_example" // string | ID of store to create
+    storeId := "storeId_example" // string | ID of store to create
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.DefaultApi.CreateStore(context.Background(), store).Execute()
+    resp, r, err := api_client.DefaultApi.CreateStore(context.Background(), storeId).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.CreateStore``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -49,7 +49,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**store** | **string** | ID of store to create | 
+**storeId** | **string** | ID of store to create | 
 
 ### Other Parameters
 
@@ -78,11 +78,11 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## CreateTransaction
+## CreateStoreUpload
 
-> UploadTransactionResponse CreateTransaction(ctx, storeId).UploadTransactionRequest(uploadTransactionRequest).Execute()
+> CreateStoreUploadResponse CreateStoreUpload(ctx, storeId).CreateStoreUploadRequest(createStoreUploadRequest).Execute()
 
-Start a new upload transaction
+Start a new upload
 
 ### Example
 
@@ -97,18 +97,18 @@ import (
 )
 
 func main() {
-    storeId := "storeId_example" // string | ID of the store containing the transactions
-    uploadTransactionRequest := *openapiclient.NewUploadTransactionRequest() // UploadTransactionRequest | 
+    storeId := "storeId_example" // string | ID of the store containing the upload
+    createStoreUploadRequest := *openapiclient.NewCreateStoreUploadRequest() // CreateStoreUploadRequest | 
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.DefaultApi.CreateTransaction(context.Background(), storeId).UploadTransactionRequest(uploadTransactionRequest).Execute()
+    resp, r, err := api_client.DefaultApi.CreateStoreUpload(context.Background(), storeId).CreateStoreUploadRequest(createStoreUploadRequest).Execute()
     if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.CreateTransaction``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.CreateStoreUpload``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `CreateTransaction`: UploadTransactionResponse
-    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.CreateTransaction`: %v\n", resp)
+    // response from `CreateStoreUpload`: CreateStoreUploadResponse
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.CreateStoreUpload`: %v\n", resp)
 }
 ```
 
@@ -118,21 +118,21 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**storeId** | **string** | ID of the store containing the transactions | 
+**storeId** | **string** | ID of the store containing the upload | 
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiCreateTransactionRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiCreateStoreUploadRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **uploadTransactionRequest** | [**UploadTransactionRequest**](UploadTransactionRequest.md) |  | 
+ **createStoreUploadRequest** | [**CreateStoreUploadRequest**](CreateStoreUploadRequest.md) |  | 
 
 ### Return type
 
-[**UploadTransactionResponse**](UploadTransactionResponse.md)
+[**CreateStoreUploadResponse**](CreateStoreUploadResponse.md)
 
 ### Authorization
 
@@ -150,7 +150,7 @@ Name | Type | Description  | Notes
 
 ## DeleteStore
 
-> DeleteStore(ctx, store).Execute()
+> DeleteStore(ctx, storeId).Execute()
 
 Delete an existing store
 
@@ -167,11 +167,11 @@ import (
 )
 
 func main() {
-    store := "store_example" // string | ID of store to delete
+    storeId := "storeId_example" // string | ID of store to delete
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.DefaultApi.DeleteStore(context.Background(), store).Execute()
+    resp, r, err := api_client.DefaultApi.DeleteStore(context.Background(), storeId).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.DeleteStore``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -185,7 +185,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**store** | **string** | ID of store to delete | 
+**storeId** | **string** | ID of store to delete | 
 
 ### Other Parameters
 
@@ -199,6 +199,77 @@ Name | Type | Description  | Notes
 ### Return type
 
  (empty response body)
+
+### Authorization
+
+[emailAndPat](../README.md#emailAndPat)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetStoreUpload
+
+> GetStoreUploadResponse GetStoreUpload(ctx, uploadId, storeId).Execute()
+
+Fetch an upload
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    uploadId := "uploadId_example" // string | ID of the upload to fetch
+    storeId := "storeId_example" // string | ID of the store containing the upload
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.GetStoreUpload(context.Background(), uploadId, storeId).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStoreUpload``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `GetStoreUpload`: GetStoreUploadResponse
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetStoreUpload`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**uploadId** | **string** | ID of the upload to fetch | 
+**storeId** | **string** | ID of the store containing the upload | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetStoreUploadRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+
+### Return type
+
+[**GetStoreUploadResponse**](GetStoreUploadResponse.md)
 
 ### Authorization
 
@@ -258,77 +329,6 @@ Other parameters are passed through a pointer to a apiGetStoresRequest struct vi
 ### Return type
 
 **[]string**
-
-### Authorization
-
-[emailAndPat](../README.md#emailAndPat)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## GetTransaction
-
-> GetTransactionResponse GetTransaction(ctx, transactionId, storeId).Execute()
-
-Fetch a transaction
-
-### Example
-
-```go
-package main
-
-import (
-    "context"
-    "fmt"
-    "os"
-    openapiclient "./openapi"
-)
-
-func main() {
-    transactionId := "transactionId_example" // string | ID of the transaction to fetch
-    storeId := "storeId_example" // string | ID of the store containing the transaction
-
-    configuration := openapiclient.NewConfiguration()
-    api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.DefaultApi.GetTransaction(context.Background(), transactionId, storeId).Execute()
-    if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetTransaction``: %v\n", err)
-        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-    }
-    // response from `GetTransaction`: GetTransactionResponse
-    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetTransaction`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**transactionId** | **string** | ID of the transaction to fetch | 
-**storeId** | **string** | ID of the store containing the transaction | 
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiGetTransactionRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-
-
-
-### Return type
-
-[**GetTransactionResponse**](GetTransactionResponse.md)
 
 ### Authorization
 

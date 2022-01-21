@@ -63,9 +63,9 @@ func getStoreDoc(context context.Context, storeId string) (*firestore.DocumentSn
 	return storeDoc, nil
 }
 
-func getTransactionDoc(context context.Context, storeId string, transactionId string) (*firestore.DocumentSnapshot, error) {
+func getStoreUploadDoc(context context.Context, storeId string, uploadId string) (*firestore.DocumentSnapshot, error) {
 
-	log.Printf("Fetching transaction document for %v/%v", storeId, transactionId)
+	log.Printf("Fetching upload document for %v/%v", storeId, uploadId)
 
 	firestoreClient, err := firestoreClient(context)
 	if err != nil {
@@ -73,18 +73,18 @@ func getTransactionDoc(context context.Context, storeId string, transactionId st
 		return nil, err
 	}
 
-	transactionDoc, err := firestoreClient.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Doc(transactionId).Get(context)
+	uploadDoc, err := firestoreClient.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Doc(uploadId).Get(context)
 
 	if err != nil {
 		if status.Code(err) == codes.NotFound {
 			return nil, nil
 		} else {
-			log.Printf("Unable to fetch transaction document for %v/%v, err = %v", storeId, transactionId, err)
+			log.Printf("Unable to fetch upload document for %v/%v, err = %v", storeId, uploadId, err)
 			return nil, err
 		}
 	}
 
-	return transactionDoc, nil
+	return uploadDoc, nil
 }
 
 // Reference: https://firebase.google.com/docs/firestore/manage-data/delete-data#collections

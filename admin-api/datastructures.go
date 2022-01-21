@@ -5,7 +5,7 @@ type FileDBEntry struct {
 	Hash     string `firestore:"hash"`
 }
 
-type TransactionDBEntry struct {
+type StoreUploadEntry struct {
 	Description string        `firestore:"description"`
 	BuildId     string        `firestore:"buildId"`
 	Timestamp   string        `firestore:"timestamp"`
@@ -13,5 +13,5 @@ type TransactionDBEntry struct {
 }
 
 type StoreEntry struct {
-	LatestTransactionId int64 `firestore:"latestTransactionId"`
+	LatestUploadId int64 `firestore:"latestUploadId"`
 }

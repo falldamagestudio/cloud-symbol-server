@@ -18,7 +18,7 @@ func uploadFileRequestToPath(storeId string, uploadFileRequest openapi.UploadFil
 	return fmt.Sprintf("stores/%s/%s/%s/%s", storeId, uploadFileRequest.FileName, uploadFileRequest.Hash, uploadFileRequest.FileName)
 }
 
-func (s *ApiService) CreateTransaction(context context.Context, storeId string, uploadTransactionRequest openapi.UploadTransactionRequest) (openapi.ImplResponse, error) {
+func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, createStoreUploadRequest openapi.CreateStoreUploadRequest) (openapi.ImplResponse, error) {
 
 	signedURLExpirationSeconds := 15 * 60
 
@@ -64,9 +64,9 @@ func (s *ApiService) CreateTransaction(context context.Context, storeId string, 
 		return openapi.Response(http.StatusNotFound, &openapi.MessageResponse{Message: fmt.Sprintf("Store %v does not exist", storeId)}), err
 	}
 
-	uploadTransactionResponse := openapi.UploadTransactionResponse{}
+	createStoreUploadResponse := openapi.CreateStoreUploadResponse{}
 
-	for _, uploadFileRequest := range uploadTransactionRequest.Files {
+	for _, uploadFileRequest := range createStoreUploadRequest.Files {
 
 		// Validate whether object exists in bucket
 		// This will talk to the Cloud Storage APIs
@@ -111,7 +111,7 @@ func (s *ApiService) CreateTransaction(context context.Context, storeId string, 
 
 			}
 
-			uploadTransactionResponse.Files = append(uploadTransactionResponse.Files, openapi.UploadFileResponse{
+			createStoreUploadResponse.Files = append(createStoreUploadResponse.Files, openapi.UploadFileResponse{
 				FileName: uploadFileRequest.FileName,
 				Hash:     uploadFileRequest.Hash,
 				Url:      objectURL,
@@ -123,30 +123,30 @@ func (s *ApiService) CreateTransaction(context context.Context, storeId string, 
 
 	}
 
-	// Log transaction to Firestore DB
+	// Log upload to Firestore DB
 
-	transactionId, err := logTransaction(context, storeId, uploadTransactionRequest, uploadTransactionResponse)
+	uploadId, err := logUpload(context, storeId, createStoreUploadRequest, createStoreUploadResponse)
 	if err != nil {
-		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Internal error while logging transaction to DB"}), errors.New("Internal error while logging transaction to DB")
+		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Internal error while logging upload to DB"}), errors.New("Internal error while logging upload to DB")
 	}
 
-	uploadTransactionResponse.Id = transactionId
+	createStoreUploadResponse.Id = uploadId
 
-	log.Printf("Response: %v", uploadTransactionResponse)
+	log.Printf("Response: %v", createStoreUploadResponse)
 
-	return openapi.Response(http.StatusOK, uploadTransactionResponse), nil
+	return openapi.Response(http.StatusOK, createStoreUploadResponse), nil
 }
 
-func logTransaction(ctx context.Context, storeId string, uploadTransactionRequest openapi.UploadTransactionRequest, uploadTransactionResponse openapi.UploadTransactionResponse) (string, error) {
+func logUpload(ctx context.Context, storeId string, createStoreUploadRequest openapi.CreateStoreUploadRequest, createStoreUploadResponse openapi.CreateStoreUploadResponse) (string, error) {
 
-	transactionContent := map[string]interface{}{
-		"description": uploadTransactionRequest.Description,
-		"buildId":     uploadTransactionRequest.BuildId,
-		"files":       uploadTransactionRequest.Files,
+	uploadContent := map[string]interface{}{
+		"description": createStoreUploadRequest.Description,
+		"buildId":     createStoreUploadRequest.BuildId,
+		"files":       createStoreUploadRequest.Files,
 		"timestamp":   time.Now().Format(time.RFC3339),
 	}
 
-	log.Printf("Writing transaction to database: %v", transactionContent)
+	log.Printf("Writing upload to database: %v", uploadContent)
 
 	firestoreClient, err := firestoreClient(ctx)
 	if err != nil {
@@ -156,7 +156,7 @@ func logTransaction(ctx context.Context, storeId string, uploadTransactionReques
 
 	storeDocRef := firestoreClient.Collection(storesCollectionName).Doc(storeId)
 
-	newTransactionId := int64(0)
+	newUploadId := int64(0)
 
 	err = firestoreClient.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 		storeDoc, err := tx.Get(storeDocRef)
@@ -168,17 +168,17 @@ func logTransaction(ctx context.Context, storeId string, uploadTransactionReques
 			return err
 		}
 
-		newTransactionId = storeEntry.LatestTransactionId + 1
-		storeEntry.LatestTransactionId = newTransactionId
+		newUploadId = storeEntry.LatestUploadId + 1
+		storeEntry.LatestUploadId = newUploadId
 
 		err = tx.Set(storeDocRef, storeEntry)
 		if err != nil {
 			return err
 		}
 
-		transactionDocRef := storeDocRef.Collection(storeUploadsCollectionName).Doc(fmt.Sprint(newTransactionId))
+		uploadDocRef := storeDocRef.Collection(storeUploadsCollectionName).Doc(fmt.Sprint(newUploadId))
 
-		err = tx.Create(transactionDocRef, transactionContent)
+		err = tx.Create(uploadDocRef, uploadContent)
 
 		return err
 	})
@@ -188,11 +188,11 @@ func logTransaction(ctx context.Context, storeId string, uploadTransactionReques
 	}
 
 	if err != nil {
-		log.Printf("Error when logging transaction, err = %v", err)
+		log.Printf("Error when logging upload, err = %v", err)
 		return "", err
 	}
 
-	log.Printf("Transaction is given ID %v", newTransactionId)
+	log.Printf("Upload is given ID %v", newUploadId)
 
-	return fmt.Sprint(newTransactionId), nil
+	return fmt.Sprint(newUploadId), nil
 }

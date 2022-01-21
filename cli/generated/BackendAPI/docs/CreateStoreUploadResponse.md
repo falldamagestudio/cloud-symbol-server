@@ -1,4 +1,4 @@
-# BackendAPI.Model.UploadTransactionResponse
+# BackendAPI.Model.CreateStoreUploadResponse
 
 ## Properties
 

@@ -7,7 +7,7 @@ import (
 	openapi_client "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-client"
 )
 
-func TestGetTransactionWithInvalidCredentialsFails(t *testing.T) {
+func TestGetStoreUploadWithInvalidCredentialsFails(t *testing.T) {
 
 	email := "invalidemail"
 	pat := "invalidpat"
@@ -15,16 +15,16 @@ func TestGetTransactionWithInvalidCredentialsFails(t *testing.T) {
 	authContext, apiClient := getAPIClient(email, pat)
 
 	storeId := "example"
-	transactionId := "invalidtransactionId"
+	uploadId := "invaliduploadid"
 
-	_, r, err := apiClient.DefaultApi.GetTransaction(authContext, transactionId, storeId).Execute()
+	_, r, err := apiClient.DefaultApi.GetStoreUpload(authContext, uploadId, storeId).Execute()
 	desiredStatusCode := http.StatusUnauthorized
 	if err == nil || desiredStatusCode != r.StatusCode {
-		t.Fatalf("GetTransaction with invalid email/PAT is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
+		t.Fatalf("GetStoreUpload with invalid email/PAT is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
 	}
 }
 
-func TestGetTransactionThatDoesNotExistFails(t *testing.T) {
+func TestGetStoreUploadThatDoesNotExistFails(t *testing.T) {
 
 	email := "testuser"
 	pat := "testpat"
@@ -32,20 +32,20 @@ func TestGetTransactionThatDoesNotExistFails(t *testing.T) {
 	authContext, apiClient := getAPIClient(email, pat)
 
 	storeId := "example"
-	transactionId := "invalidtransactionId"
+	uploadId := "invaliduploadid"
 
 	if err := ensureTestStoreExists(apiClient, authContext, storeId); err != nil {
 		t.Fatalf("ensureTestStoreExists failed: %v", err)
 	}
 
-	_, r, err := apiClient.DefaultApi.GetTransaction(authContext, transactionId, storeId).Execute()
+	_, r, err := apiClient.DefaultApi.GetStoreUpload(authContext, uploadId, storeId).Execute()
 	desiredStatusCode := http.StatusNotFound
 	if err == nil || desiredStatusCode != r.StatusCode {
-		t.Fatalf("GetTransaction with invalid transaction ID is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
+		t.Fatalf("GetStoreUpload with invalid upload ID is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
 	}
 }
 
-func TestUploadTransactionSucceeds(t *testing.T) {
+func TestCreateStoreUploadSucceeds(t *testing.T) {
 
 	email := "testuser"
 	pat := "testpat"
@@ -77,16 +77,15 @@ func TestUploadTransactionSucceeds(t *testing.T) {
 		},
 	}
 
-	uploadTransactionRequest := openapi_client.UploadTransactionRequest{
+	createStoreUploadRequest := openapi_client.CreateStoreUploadRequest{
 		Description: &description,
 		BuildId:     &buildId,
 		Files:       &files,
 	}
 
-	_, r, err := apiClient.DefaultApi.CreateTransaction(authContext, storeId).UploadTransactionRequest(uploadTransactionRequest).Execute()
+	_, r, err := apiClient.DefaultApi.CreateStoreUpload(authContext, storeId).CreateStoreUploadRequest(createStoreUploadRequest).Execute()
 	desiredStatusCode := http.StatusOK
 	if err != nil || desiredStatusCode != r.StatusCode {
-		t.Fatalf("CreateTransaction is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
+		t.Fatalf("CreateStoreUpload is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
 	}
-
 }

@@ -4,16 +4,16 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**CreateStore**](DefaultApi.md#createstore) | **POST** /stores/{store} | Create a new store
-[**CreateTransaction**](DefaultApi.md#createtransaction) | **POST** /stores/{storeId}/transactions | Start a new upload transaction
-[**DeleteStore**](DefaultApi.md#deletestore) | **DELETE** /stores/{store} | Delete an existing store
+[**CreateStore**](DefaultApi.md#createstore) | **POST** /stores/{storeId} | Create a new store
+[**CreateStoreUpload**](DefaultApi.md#createstoreupload) | **POST** /stores/{storeId}/uploads | Start a new upload
+[**DeleteStore**](DefaultApi.md#deletestore) | **DELETE** /stores/{storeId} | Delete an existing store
+[**GetStoreUpload**](DefaultApi.md#getstoreupload) | **GET** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
 [**GetStores**](DefaultApi.md#getstores) | **GET** /stores | Fetch a list of all stores
-[**GetTransaction**](DefaultApi.md#gettransaction) | **GET** /stores/{storeId}/transactions/{transactionId} | Fetch a transaction
 
 
 <a name="createstore"></a>
 # **CreateStore**
-> void CreateStore (string store)
+> void CreateStore (string storeId)
 
 Create a new store
 
@@ -38,12 +38,12 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var store = store_example;  // string | ID of store to create
+            var storeId = storeId_example;  // string | ID of store to create
 
             try
             {
                 // Create a new store
-                apiInstance.CreateStore(store);
+                apiInstance.CreateStore(storeId);
             }
             catch (ApiException  e)
             {
@@ -60,7 +60,7 @@ namespace Example
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **store** | **string**| ID of store to create | 
+ **storeId** | **string**| ID of store to create | 
 
 ### Return type
 
@@ -85,11 +85,11 @@ void (empty response body)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-<a name="createtransaction"></a>
-# **CreateTransaction**
-> UploadTransactionResponse CreateTransaction (string storeId, UploadTransactionRequest uploadTransactionRequest)
+<a name="createstoreupload"></a>
+# **CreateStoreUpload**
+> CreateStoreUploadResponse CreateStoreUpload (string storeId, CreateStoreUploadRequest createStoreUploadRequest)
 
-Start a new upload transaction
+Start a new upload
 
 ### Example
 ```csharp
@@ -101,7 +101,7 @@ using BackendAPI.Model;
 
 namespace Example
 {
-    public class CreateTransactionExample
+    public class CreateStoreUploadExample
     {
         public static void Main()
         {
@@ -112,18 +112,18 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var storeId = storeId_example;  // string | ID of the store containing the transactions
-            var uploadTransactionRequest = new UploadTransactionRequest(); // UploadTransactionRequest | 
+            var storeId = storeId_example;  // string | ID of the store containing the upload
+            var createStoreUploadRequest = new CreateStoreUploadRequest(); // CreateStoreUploadRequest | 
 
             try
             {
-                // Start a new upload transaction
-                UploadTransactionResponse result = apiInstance.CreateTransaction(storeId, uploadTransactionRequest);
+                // Start a new upload
+                CreateStoreUploadResponse result = apiInstance.CreateStoreUpload(storeId, createStoreUploadRequest);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DefaultApi.CreateTransaction: " + e.Message );
+                Debug.Print("Exception when calling DefaultApi.CreateStoreUpload: " + e.Message );
                 Debug.Print("Status Code: "+ e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
@@ -136,12 +136,12 @@ namespace Example
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **storeId** | **string**| ID of the store containing the transactions | 
- **uploadTransactionRequest** | [**UploadTransactionRequest**](UploadTransactionRequest.md)|  | 
+ **storeId** | **string**| ID of the store containing the upload | 
+ **createStoreUploadRequest** | [**CreateStoreUploadRequest**](CreateStoreUploadRequest.md)|  | 
 
 ### Return type
 
-[**UploadTransactionResponse**](UploadTransactionResponse.md)
+[**CreateStoreUploadResponse**](CreateStoreUploadResponse.md)
 
 ### Authorization
 
@@ -163,7 +163,7 @@ Name | Type | Description  | Notes
 
 <a name="deletestore"></a>
 # **DeleteStore**
-> void DeleteStore (string store)
+> void DeleteStore (string storeId)
 
 Delete an existing store
 
@@ -188,12 +188,12 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var store = store_example;  // string | ID of store to delete
+            var storeId = storeId_example;  // string | ID of store to delete
 
             try
             {
                 // Delete an existing store
-                apiInstance.DeleteStore(store);
+                apiInstance.DeleteStore(storeId);
             }
             catch (ApiException  e)
             {
@@ -210,7 +210,7 @@ namespace Example
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **store** | **string**| ID of store to delete | 
+ **storeId** | **string**| ID of store to delete | 
 
 ### Return type
 
@@ -232,6 +232,83 @@ void (empty response body)
 | **200** | Success |  -  |
 | **404** | Store does not exist |  -  |
 | **401** | Not authorized |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="getstoreupload"></a>
+# **GetStoreUpload**
+> GetStoreUploadResponse GetStoreUpload (string uploadId, string storeId)
+
+Fetch an upload
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using BackendAPI.Api;
+using BackendAPI.Client;
+using BackendAPI.Model;
+
+namespace Example
+{
+    public class GetStoreUploadExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure HTTP basic authorization: emailAndPat
+            config.Username = "YOUR_USERNAME";
+            config.Password = "YOUR_PASSWORD";
+
+            var apiInstance = new DefaultApi(config);
+            var uploadId = uploadId_example;  // string | ID of the upload to fetch
+            var storeId = storeId_example;  // string | ID of the store containing the upload
+
+            try
+            {
+                // Fetch an upload
+                GetStoreUploadResponse result = apiInstance.GetStoreUpload(uploadId, storeId);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling DefaultApi.GetStoreUpload: " + e.Message );
+                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **uploadId** | **string**| ID of the upload to fetch | 
+ **storeId** | **string**| ID of the store containing the upload | 
+
+### Return type
+
+[**GetStoreUploadResponse**](GetStoreUploadResponse.md)
+
+### Authorization
+
+[emailAndPat](../README.md#emailAndPat)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **401** | Not authorized |  -  |
+| **404** | No such store/upload |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -302,83 +379,6 @@ This endpoint does not need any parameter.
 |-------------|-------------|------------------|
 | **200** | Success |  -  |
 | **401** | Not authorized |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-<a name="gettransaction"></a>
-# **GetTransaction**
-> GetTransactionResponse GetTransaction (string transactionId, string storeId)
-
-Fetch a transaction
-
-### Example
-```csharp
-using System.Collections.Generic;
-using System.Diagnostics;
-using BackendAPI.Api;
-using BackendAPI.Client;
-using BackendAPI.Model;
-
-namespace Example
-{
-    public class GetTransactionExample
-    {
-        public static void Main()
-        {
-            Configuration config = new Configuration();
-            config.BasePath = "http://localhost";
-            // Configure HTTP basic authorization: emailAndPat
-            config.Username = "YOUR_USERNAME";
-            config.Password = "YOUR_PASSWORD";
-
-            var apiInstance = new DefaultApi(config);
-            var transactionId = transactionId_example;  // string | ID of the transaction to fetch
-            var storeId = storeId_example;  // string | ID of the store containing the transaction
-
-            try
-            {
-                // Fetch a transaction
-                GetTransactionResponse result = apiInstance.GetTransaction(transactionId, storeId);
-                Debug.WriteLine(result);
-            }
-            catch (ApiException  e)
-            {
-                Debug.Print("Exception when calling DefaultApi.GetTransaction: " + e.Message );
-                Debug.Print("Status Code: "+ e.ErrorCode);
-                Debug.Print(e.StackTrace);
-            }
-        }
-    }
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **transactionId** | **string**| ID of the transaction to fetch | 
- **storeId** | **string**| ID of the store containing the transaction | 
-
-### Return type
-
-[**GetTransactionResponse**](GetTransactionResponse.md)
-
-### Authorization
-
-[emailAndPat](../README.md#emailAndPat)
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Success |  -  |
-| **401** | Not authorized |  -  |
-| **404** | No such store/transaction |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

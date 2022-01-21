@@ -1,4 +1,4 @@
-# UploadTransactionResponse
+# CreateStoreUploadResponse
 
 ## Properties
 
@@ -9,70 +9,70 @@ Name | Type | Description | Notes
 
 ## Methods
 
-### NewUploadTransactionResponse
+### NewCreateStoreUploadResponse
 
-`func NewUploadTransactionResponse() *UploadTransactionResponse`
+`func NewCreateStoreUploadResponse() *CreateStoreUploadResponse`
 
-NewUploadTransactionResponse instantiates a new UploadTransactionResponse object
+NewCreateStoreUploadResponse instantiates a new CreateStoreUploadResponse object
 This constructor will assign default values to properties that have it defined,
 and makes sure properties required by API are set, but the set of arguments
 will change when the set of required properties is changed
 
-### NewUploadTransactionResponseWithDefaults
+### NewCreateStoreUploadResponseWithDefaults
 
-`func NewUploadTransactionResponseWithDefaults() *UploadTransactionResponse`
+`func NewCreateStoreUploadResponseWithDefaults() *CreateStoreUploadResponse`
 
-NewUploadTransactionResponseWithDefaults instantiates a new UploadTransactionResponse object
+NewCreateStoreUploadResponseWithDefaults instantiates a new CreateStoreUploadResponse object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
 ### GetId
 
-`func (o *UploadTransactionResponse) GetId() string`
+`func (o *CreateStoreUploadResponse) GetId() string`
 
 GetId returns the Id field if non-nil, zero value otherwise.
 
 ### GetIdOk
 
-`func (o *UploadTransactionResponse) GetIdOk() (*string, bool)`
+`func (o *CreateStoreUploadResponse) GetIdOk() (*string, bool)`
 
 GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetId
 
-`func (o *UploadTransactionResponse) SetId(v string)`
+`func (o *CreateStoreUploadResponse) SetId(v string)`
 
 SetId sets Id field to given value.
 
 ### HasId
 
-`func (o *UploadTransactionResponse) HasId() bool`
+`func (o *CreateStoreUploadResponse) HasId() bool`
 
 HasId returns a boolean if a field has been set.
 
 ### GetFiles
 
-`func (o *UploadTransactionResponse) GetFiles() []UploadFileResponse`
+`func (o *CreateStoreUploadResponse) GetFiles() []UploadFileResponse`
 
 GetFiles returns the Files field if non-nil, zero value otherwise.
 
 ### GetFilesOk
 
-`func (o *UploadTransactionResponse) GetFilesOk() (*[]UploadFileResponse, bool)`
+`func (o *CreateStoreUploadResponse) GetFilesOk() (*[]UploadFileResponse, bool)`
 
 GetFilesOk returns a tuple with the Files field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetFiles
 
-`func (o *UploadTransactionResponse) SetFiles(v []UploadFileResponse)`
+`func (o *CreateStoreUploadResponse) SetFiles(v []UploadFileResponse)`
 
 SetFiles sets Files field to given value.
 
 ### HasFiles
 
-`func (o *UploadTransactionResponse) HasFiles() bool`
+`func (o *CreateStoreUploadResponse) HasFiles() bool`
 
 HasFiles returns a boolean if a field has been set.
 

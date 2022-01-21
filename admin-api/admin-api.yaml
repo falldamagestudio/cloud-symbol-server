@@ -1,8 +1,8 @@
 openapi: 3.0.1
 
 info:
-  title: Cloud Symbol Server Uplaod API
-  description: 'This is the API that is used to upload symbols to Cloud Symbol Server'
+  title: Cloud Symbol Server Admin API
+  description: 'This is the API that is used to manage stores and uploads in Cloud Symbol Server'
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
@@ -29,13 +29,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/messageResponse'
 
-  /stores/{store}:
+  /stores/{storeId}:
     post:
       summary: Create a new store
       operationId: createStore
       parameters:
         - in: path
-          name: store
+          name: storeId
           schema:
             type: string
           required: true
@@ -64,7 +64,7 @@ paths:
       operationId: deleteStore
       parameters:
         - in: path
-          name: store
+          name: storeId
           schema:
             type: string
           required: true
@@ -88,23 +88,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/messageResponse'
 
-  /stores/{storeId}/transactions:
+  /stores/{storeId}/uploads:
     post:
-      summary: Start a new upload transaction
-      operationId: createTransaction
+      summary: Start a new upload
+      operationId: createStoreUpload
       parameters:
         - in: path
           name: storeId
           schema:
             type: string
           required: true
-          description: ID of the store containing the transactions
+          description: ID of the store containing the upload
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/uploadTransactionRequest'
+              $ref: '#/components/schemas/createStoreUploadRequest'
       
       responses:
         200:
@@ -112,7 +112,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/uploadTransactionResponse'
+                $ref: '#/components/schemas/createStoreUploadResponse'
 
         401:
           description: Not authorized
@@ -121,23 +121,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/messageResponse'
 
-  /stores/{storeId}/transactions/{transactionId}:
+  /stores/{storeId}/uploads/{uploadId}:
     get:
-      summary: Fetch a transaction
-      operationId: getTransaction
+      summary: Fetch an upload
+      operationId: getStoreUpload
       parameters:
         - in: path
-          name: transactionId
+          name: uploadId
           schema:
             type: string
           required: true
-          description: ID of the transaction to fetch
+          description: ID of the upload to fetch
         - in: path
           name: storeId
           schema:
             type: string
           required: true
-          description: ID of the store containing the transaction
+          description: ID of the store containing the upload
       
       responses:
         200:
@@ -145,7 +145,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getTransactionResponse'
+                $ref: '#/components/schemas/getStoreUploadResponse'
 
         401:
           description: Not authorized
@@ -155,7 +155,7 @@ paths:
                 $ref: '#/components/schemas/messageResponse'
 
         404:
-          description: No such store/transaction
+          description: No such store/upload
           content:
             application/json:
               schema:
@@ -177,7 +177,7 @@ components:
         type: string
         example: example-store
 
-    uploadTransactionRequest:
+    createStoreUploadRequest:
       type: object
       properties:
         description:
@@ -201,7 +201,7 @@ components:
           type: string
           example: 7F416863ABF34C3E894BAD1739BAA5571
 
-    uploadTransactionResponse:
+    createStoreUploadResponse:
       type: object
       properties:
         id:
@@ -225,7 +225,7 @@ components:
           type: string
           example: https://storage.googleapis.com/storage/v1/b/example-bucket/o/stores/default/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
 
-    getTransactionResponse:
+    getStoreUploadResponse:
       type: object
       properties:
         description:
