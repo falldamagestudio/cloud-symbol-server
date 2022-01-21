@@ -37,4 +37,18 @@ namespace CLI
     public class ListStoresOptions : CommandLineOptions
     {
     }
+
+    [Verb("create-store", HelpText = "Create new store")]
+    public class CreateStoreOptions : CommandLineOptions
+    {
+        [Option(longName: "store", Required = true, HelpText = "Name of new store")]
+        public string? Store { get; set; }
+    }
+
+    [Verb("delete-store", HelpText = "Delete existing store")]
+    public class DeleteStoreOptions : CommandLineOptions
+    {
+        [Option(longName: "store", Required = true, HelpText = "Name of store to delete")]
+        public string? Store { get; set; }
+    }
 }

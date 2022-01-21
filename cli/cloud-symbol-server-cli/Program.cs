@@ -12,10 +12,18 @@ try {
     return 1;
 }
 
-int exitCode = await Parser.Default.ParseArguments<CLI.UploadOptions, CLI.ListStoresOptions, object>(args)
+int exitCode = await Parser.Default.ParseArguments<
+        CLI.UploadOptions,
+        CLI.ListStoresOptions,
+        CLI.CreateStoreOptions,
+        CLI.DeleteStoreOptions,
+        object
+    >(args)
     .MapResult(
         async (CLI.UploadOptions o) => await CLI.Upload.DoUpload(o),
         async (CLI.ListStoresOptions o) => await CLI.ListStores.DoListStores(o),
+        async (CLI.CreateStoreOptions o) => await CLI.CreateStore.DoCreateStore(o),
+        async (CLI.DeleteStoreOptions o) => await CLI.DeleteStore.DoDeleteStore(o),
         errs => Task.FromResult(1) );
 
 return exitCode;
