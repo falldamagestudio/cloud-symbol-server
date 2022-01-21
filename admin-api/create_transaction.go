@@ -6,13 +6,11 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 
 	"cloud.google.com/go/storage"
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
-	"google.golang.org/api/option"
 )
 
 func uploadFileRequestToPath(storeId string, uploadFileRequest openapi.UploadFileRequest) string {
@@ -23,19 +21,10 @@ func (s *ApiService) CreateTransaction(context context.Context, storeId string, 
 
 	signedURLExpirationSeconds := 15 * 60
 
-	// This is only set when the service is configured to run against a
-	//  local emulator. When run against the real Cloud Storage APIs,
-	//  the environment variable will be empty.
-	storageEmulatorHost := os.Getenv("STORAGE_EMULATOR_HOST")
-
-	// The Firebase Storage emulator has a non-standard endpoint
-	// Normally, the API endpoint would be at http[s]://<site>:<port>/storage/v1
-	//  but the storage emulator has it at http[s]://<site>:<port>
-	// Therefore we need to specify an explicit endpoint when using the emulator
-
-	storageEndpoint := ""
-	if storageEmulatorHost != "" {
-		storageEndpoint = fmt.Sprintf("http://%s", storageEmulatorHost)
+	storageClient, storageEndpoint, err := getStorageClient(context)
+	if err != nil {
+		log.Printf("Unable to create storageClient: %v", err)
+		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: fmt.Sprintf("Unable to create storage client")}), err
 	}
 
 	// The Firebase Storage emulator has a non-standard format when referring to files
@@ -44,10 +33,7 @@ func (s *ApiService) CreateTransaction(context context.Context, storeId string, 
 	// Therefore we need to activate override logic when using the emulator
 	//  to access files directly (REST API, outside of SDK)
 
-	urlEncodeRestAPIPath := false
-	if storageEmulatorHost != "" {
-		urlEncodeRestAPIPath = true
-	}
+	urlEncodeRestAPIPath := (storageEndpoint != "")
 
 	// Use signed URLs only when talking to the real Cloud Storage APIs
 	// Otherwise, create public, unsigned URLs directly to the storage service
@@ -59,24 +45,12 @@ func (s *ApiService) CreateTransaction(context context.Context, storeId string, 
 	//   Cloud Storage API, even when STORAGE_EMULATOR_HOST is set.
 	// Because of this, when we use local emulators, we fall back to manually
 	//  constructing download URLs.
-	useSignedURLs := (storageEmulatorHost == "")
+	useSignedURLs := (storageEndpoint == "")
 
-	symbolStoreBucketName := os.Getenv("SYMBOL_STORE_BUCKET_NAME")
-	if symbolStoreBucketName == "" {
-		log.Print("No storage bucket configured")
-		return openapi.Response(http.StatusInternalServerError, "No storage bucket configured"), errors.New("No storage bucket configured")
-	}
-
-	storageClientOpts := []option.ClientOption{}
-
-	if storageEndpoint != "" {
-		storageClientOpts = append(storageClientOpts, option.WithEndpoint(storageEndpoint))
-	}
-
-	storageClient, err := storage.NewClient(context, storageClientOpts...)
+	symbolStoreBucketName, err := getSymbolStoreBucketName()
 	if err != nil {
-		log.Printf("Unable to create storageClient: %v", err)
-		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Unable to create storageClient"}), errors.New("Unable to create storageClient")
+		log.Printf("Unable to determine symbol store bucket name: %v", err)
+		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: fmt.Sprintf("Unable to determine symbol store bucket name")}), err
 	}
 
 	storeDoc, err := getStoreDoc(context, storeId)
@@ -125,6 +99,7 @@ func (s *ApiService) CreateTransaction(context context.Context, storeId string, 
 				// The Firebase Storage emulator requires the path to be on the format "folder%2Ffilename"
 
 				restAPIPath := path
+
 				if urlEncodeRestAPIPath {
 					restAPIPath = strings.ReplaceAll(path, "/", "%2F")
 				}
