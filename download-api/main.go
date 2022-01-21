@@ -1,8 +1,7 @@
-package hello
+package download_api
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -13,26 +12,40 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"cloud.google.com/go/storage"
-	"google.golang.org/api/option"
 )
+
+var localFirestoreClient *firestore.Client
+
+func firestoreClient(context context.Context) (*firestore.Client, error) {
+
+	if localFirestoreClient == nil {
+
+		gcpProjectId := os.Getenv("GCP_PROJECT_ID")
+		if gcpProjectId == "" {
+			log.Print("No GCP Project ID configured")
+			return nil, errors.New("no GCP Project ID configured")
+		}
+
+		err := (error)(nil)
+		localFirestoreClient, err = firestore.NewClient(context, gcpProjectId)
+		if err != nil {
+			log.Printf("Unable to create firestoreClient: %v", err)
+			return nil, errors.New("unable to create firestoreClient")
+		}
+	}
+
+	return localFirestoreClient, nil
+}
 
 func DownloadAPI(w http.ResponseWriter, r *http.Request) {
 
 	signedURLExpirationSeconds := 15 * 60
 
-	// This is only set when the service is configured to run against a
-	//  local emulator. When run against the real Cloud Storage APIs,
-	//  the environment variable will be empty.
-	storageEmulatorHost := os.Getenv("STORAGE_EMULATOR_HOST")
-
-	// The Firebase Storage emulator has a non-standard endpoint
-	// Normally, the API endpoint would be at http[s]://<site>:<port>/storage/v1
-	//  but the storage emulator has it at http[s]://<site>:<port>
-	// Therefore we need to specify an explicit endpoint when using the emulator
-
-	storageEndpoint := ""
-	if storageEmulatorHost != "" {
-		storageEndpoint = fmt.Sprintf("http://%s", storageEmulatorHost)
+	storageClient, storageEndpoint, err := getStorageClient(r.Context())
+	if err != nil {
+		log.Printf("Unable to create storageClient: %v", err)
+		http.Error(w, "Unable to create storageClient", http.StatusInternalServerError)
+		return
 	}
 
 	// The Firebase Storage emulator has a non-standard format when referring to files
@@ -41,10 +54,7 @@ func DownloadAPI(w http.ResponseWriter, r *http.Request) {
 	// Therefore we need to activate override logic when using the emulator
 	//  to access files directly (REST API, outside of SDK)
 
-	urlEncodeRestAPIPath := false
-	if storageEmulatorHost != "" {
-		urlEncodeRestAPIPath = true
-	}
+	urlEncodeRestAPIPath := (storageEndpoint != "")
 
 	// Use signed URLs only when talking to the real Cloud Storage APIs
 	// Otherwise, create public, unsigned URLs directly to the storage service
@@ -56,37 +66,16 @@ func DownloadAPI(w http.ResponseWriter, r *http.Request) {
 	//   Cloud Storage API, even when STORAGE_EMULATOR_HOST is set.
 	// Because of this, when we use local emulators, we fall back to manually
 	//  constructing download URLs.
-	useSignedURLs := (storageEmulatorHost == "")
+	useSignedURLs := (storageEndpoint == "")
 
-	symbolStoreBucketName := os.Getenv("SYMBOL_STORE_BUCKET_NAME")
-	if symbolStoreBucketName == "" {
+	symbolStoreBucketName, err := getSymbolStoreBucketName()
+	if err != nil {
 		log.Print("No storage bucket configured")
 		http.Error(w, "No storage bucket configured", http.StatusInternalServerError)
 		return
 	}
 
-	localStoresString := os.Getenv("SYMBOL_SERVER_STORES")
-	if localStoresString == "" {
-		log.Print("No local stores configured")
-		http.Error(w, "No local stores configured", http.StatusInternalServerError)
-		return
-	}
-
-	var storeIds []string
-	if err := json.Unmarshal([]byte(localStoresString), &storeIds); err != nil {
-		log.Printf("Error while decoding local stores configuration: %v", err)
-		http.Error(w, "Error while decoding local stores configuration", http.StatusInternalServerError)
-		return
-	}
-
-	gcpProjectId := os.Getenv("GCP_PROJECT_ID")
-	if gcpProjectId == "" {
-		log.Print("No GCP Project ID configured")
-		http.Error(w, "No GCP Project ID configured", http.StatusInternalServerError)
-		return
-	}
-
-	firestoreClient, err := firestore.NewClient(r.Context(), gcpProjectId)
+	firestoreClient, err := firestoreClient(r.Context())
 	if err != nil {
 		log.Printf("Unable to create firestoreClient: %v", err)
 		http.Error(w, "Unable to create firestoreClient", http.StatusInternalServerError)
@@ -98,16 +87,10 @@ func DownloadAPI(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	storageClientOpts := []option.ClientOption{}
-
-	if storageEndpoint != "" {
-		storageClientOpts = append(storageClientOpts, option.WithEndpoint(storageEndpoint))
-	}
-
-	storageClient, err := storage.NewClient(r.Context(), storageClientOpts...)
+	storeIds, err := getStoresConfig(r.Context())
 	if err != nil {
-		log.Printf("Unable to create storageClient: %v", err)
-		http.Error(w, "Unable to create storageClient", http.StatusInternalServerError)
+		log.Printf("Error while decoding local stores configuration: %v", err)
+		http.Error(w, "Error while decoding local stores configuration", http.StatusInternalServerError)
 		return
 	}
 
