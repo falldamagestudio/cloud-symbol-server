@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"cloud.google.com/go/storage"
+	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 )
 
@@ -58,4 +59,27 @@ func getSymbolStoreBucketName() (string, error) {
 	}
 
 	return symbolStoreBucketName, nil
+}
+
+func deleteAllObjectsInFolder(context context.Context, storageClient *storage.Client, bucketName string, prefix string) error {
+	query := &storage.Query{
+		Prefix: fmt.Sprintf("%v/", bucketName),
+	}
+	iter := storageClient.Bucket(bucketName).Objects(context, query)
+	for {
+		attrs, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return err
+		}
+
+		err = storageClient.Bucket(bucketName).Object(attrs.Name).Delete(context)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
