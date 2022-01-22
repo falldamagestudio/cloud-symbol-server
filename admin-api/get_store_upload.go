@@ -9,7 +9,7 @@ import (
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
 )
 
-func (s *ApiService) GetStoreUpload(context context.Context, storeId string, uploadId string) (openapi.ImplResponse, error) {
+func (s *ApiService) GetStoreUpload(context context.Context, uploadId string, storeId string) (openapi.ImplResponse, error) {
 
 	storeDoc, err := getStoreDoc(context, storeId)
 	if err != nil {
