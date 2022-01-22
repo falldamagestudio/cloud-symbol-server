@@ -86,7 +86,7 @@ paths:
       summary: Create a new store
   /stores/{storeId}/uploads:
     get:
-      operationId: getStoreUploads
+      operationId: getStoreUploadIds
       parameters:
       - description: ID of the store containing the uploads
         explode: false
@@ -101,7 +101,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getStoreUploadsResponse'
+                $ref: '#/components/schemas/getStoreUploadIdsResponse'
           description: Success
         "401":
           content:
@@ -222,7 +222,7 @@ components:
           example: 7F416863ABF34C3E894BAD1739BAA5571
           type: string
       type: object
-    getStoreUploadsResponse:
+    getStoreUploadIdsResponse:
       items:
         example: '["1","2","3"]'
         type: string

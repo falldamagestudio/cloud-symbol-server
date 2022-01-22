@@ -91,7 +91,7 @@ paths:
   /stores/{storeId}/uploads:
     get:
       summary: Fetch a list of all uploads in store
-      operationId: getStoreUploads
+      operationId: getStoreUploadIds
       parameters:
         - in: path
           name: storeId
@@ -106,7 +106,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getStoreUploadsResponse'
+                $ref: '#/components/schemas/getStoreUploadIdsResponse'
 
         401:
           description: Not authorized
@@ -234,7 +234,7 @@ components:
           type: string
           example: 7F416863ABF34C3E894BAD1739BAA5571
 
-    getStoreUploadsResponse:
+    getStoreUploadIdsResponse:
       type: array
       items:
         type: string

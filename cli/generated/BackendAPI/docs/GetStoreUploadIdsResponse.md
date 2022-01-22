@@ -1,4 +1,4 @@
-# BackendAPI.Model.GetStoreUploadsResponse
+# BackendAPI.Model.GetStoreUploadIdsResponse
 
 ## Properties
 

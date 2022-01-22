@@ -8,7 +8,7 @@ Method | HTTP request | Description
 [**CreateStoreUpload**](DefaultApi.md#createstoreupload) | **POST** /stores/{storeId}/uploads | Start a new upload
 [**DeleteStore**](DefaultApi.md#deletestore) | **DELETE** /stores/{storeId} | Delete an existing store
 [**GetStoreUpload**](DefaultApi.md#getstoreupload) | **GET** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
-[**GetStoreUploads**](DefaultApi.md#getstoreuploads) | **GET** /stores/{storeId}/uploads | Fetch a list of all uploads in store
+[**GetStoreUploadIds**](DefaultApi.md#getstoreuploadids) | **GET** /stores/{storeId}/uploads | Fetch a list of all uploads in store
 [**GetStores**](DefaultApi.md#getstores) | **GET** /stores | Fetch a list of all stores
 
 
@@ -313,9 +313,9 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-<a name="getstoreuploads"></a>
-# **GetStoreUploads**
-> GetStoreUploadsResponse GetStoreUploads (string storeId)
+<a name="getstoreuploadids"></a>
+# **GetStoreUploadIds**
+> GetStoreUploadIdsResponse GetStoreUploadIds (string storeId)
 
 Fetch a list of all uploads in store
 
@@ -329,7 +329,7 @@ using BackendAPI.Model;
 
 namespace Example
 {
-    public class GetStoreUploadsExample
+    public class GetStoreUploadIdsExample
     {
         public static void Main()
         {
@@ -345,12 +345,12 @@ namespace Example
             try
             {
                 // Fetch a list of all uploads in store
-                GetStoreUploadsResponse result = apiInstance.GetStoreUploads(storeId);
+                GetStoreUploadIdsResponse result = apiInstance.GetStoreUploadIds(storeId);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DefaultApi.GetStoreUploads: " + e.Message );
+                Debug.Print("Exception when calling DefaultApi.GetStoreUploadIds: " + e.Message );
                 Debug.Print("Status Code: "+ e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
@@ -367,7 +367,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetStoreUploadsResponse**](GetStoreUploadsResponse.md)
+[**GetStoreUploadIdsResponse**](GetStoreUploadIdsResponse.md)
 
 ### Authorization
 

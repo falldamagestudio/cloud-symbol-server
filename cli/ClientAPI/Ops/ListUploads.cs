@@ -19,11 +19,11 @@ namespace ClientAPI
             config.Password = PAT;
             BackendAPI.Api.DefaultApi api = new BackendAPI.Api.DefaultApi(config);
 
-            BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreUploadsResponse> getStoreUploadsResponse = await api.GetStoreUploadsWithHttpInfoAsync(store);
-            if (getStoreUploadsResponse.ErrorText != null)
-                throw new ListUploadsException(getStoreUploadsResponse.ErrorText);
+            BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreUploadIdsResponse> getStoreUploadIdsResponse = await api.GetStoreUploadIdsWithHttpInfoAsync(store);
+            if (getStoreUploadIdsResponse.ErrorText != null)
+                throw new ListUploadsException(getStoreUploadIdsResponse.ErrorText);
 
-            return getStoreUploadsResponse.Data;
+            return getStoreUploadIdsResponse.Data;
         }
     }
 }

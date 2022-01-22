@@ -75,10 +75,10 @@ func (c *DefaultApiController) Routes() Routes {
 			c.GetStoreUpload,
 		},
 		{
-			"GetStoreUploads",
+			"GetStoreUploadIds",
 			strings.ToUpper("Get"),
 			"/stores/{storeId}/uploads",
-			c.GetStoreUploads,
+			c.GetStoreUploadIds,
 		},
 		{
 			"GetStores",
@@ -166,12 +166,12 @@ func (c *DefaultApiController) GetStoreUpload(w http.ResponseWriter, r *http.Req
 
 }
 
-// GetStoreUploads - Fetch a list of all uploads in store
-func (c *DefaultApiController) GetStoreUploads(w http.ResponseWriter, r *http.Request) {
+// GetStoreUploadIds - Fetch a list of all uploads in store
+func (c *DefaultApiController) GetStoreUploadIds(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	storeIdParam := params["storeId"]
 	
-	result, err := c.service.GetStoreUploads(r.Context(), storeIdParam)
+	result, err := c.service.GetStoreUploadIds(r.Context(), storeIdParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)

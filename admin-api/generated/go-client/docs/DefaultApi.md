@@ -8,7 +8,7 @@ Method | HTTP request | Description
 [**CreateStoreUpload**](DefaultApi.md#CreateStoreUpload) | **Post** /stores/{storeId}/uploads | Start a new upload
 [**DeleteStore**](DefaultApi.md#DeleteStore) | **Delete** /stores/{storeId} | Delete an existing store
 [**GetStoreUpload**](DefaultApi.md#GetStoreUpload) | **Get** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
-[**GetStoreUploads**](DefaultApi.md#GetStoreUploads) | **Get** /stores/{storeId}/uploads | Fetch a list of all uploads in store
+[**GetStoreUploadIds**](DefaultApi.md#GetStoreUploadIds) | **Get** /stores/{storeId}/uploads | Fetch a list of all uploads in store
 [**GetStores**](DefaultApi.md#GetStores) | **Get** /stores | Fetch a list of all stores
 
 
@@ -286,9 +286,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## GetStoreUploads
+## GetStoreUploadIds
 
-> GetStoreUploadsResponse GetStoreUploads(ctx, storeId).Execute()
+> GetStoreUploadIdsResponse GetStoreUploadIds(ctx, storeId).Execute()
 
 Fetch a list of all uploads in store
 
@@ -309,13 +309,13 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.DefaultApi.GetStoreUploads(context.Background(), storeId).Execute()
+    resp, r, err := api_client.DefaultApi.GetStoreUploadIds(context.Background(), storeId).Execute()
     if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStoreUploads``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStoreUploadIds``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetStoreUploads`: GetStoreUploadsResponse
-    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetStoreUploads`: %v\n", resp)
+    // response from `GetStoreUploadIds`: GetStoreUploadIdsResponse
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetStoreUploadIds`: %v\n", resp)
 }
 ```
 
@@ -329,7 +329,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiGetStoreUploadsRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetStoreUploadIdsRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -338,7 +338,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetStoreUploadsResponse**](GetStoreUploadsResponse.md)
+[**GetStoreUploadIdsResponse**](GetStoreUploadIdsResponse.md)
 
 ### Authorization
 

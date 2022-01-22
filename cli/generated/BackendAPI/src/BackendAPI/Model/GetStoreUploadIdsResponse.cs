@@ -26,16 +26,16 @@ using OpenAPIDateConverter = BackendAPI.Client.OpenAPIDateConverter;
 namespace BackendAPI.Model
 {
     /// <summary>
-    /// GetStoreUploadsResponse
+    /// GetStoreUploadIdsResponse
     /// </summary>
-    [DataContract(Name = "getStoreUploadsResponse")]
-    public partial class GetStoreUploadsResponse : List<string>, IEquatable<GetStoreUploadsResponse>, IValidatableObject
+    [DataContract(Name = "getStoreUploadIdsResponse")]
+    public partial class GetStoreUploadIdsResponse : List<string>, IEquatable<GetStoreUploadIdsResponse>, IValidatableObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="GetStoreUploadsResponse" /> class.
+        /// Initializes a new instance of the <see cref="GetStoreUploadIdsResponse" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        public GetStoreUploadsResponse() : base()
+        public GetStoreUploadIdsResponse() : base()
         {
         }
 
@@ -46,7 +46,7 @@ namespace BackendAPI.Model
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class GetStoreUploadsResponse {\n");
+            sb.Append("class GetStoreUploadIdsResponse {\n");
             sb.Append("  ").Append(base.ToString().Replace("\n", "\n  ")).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -68,15 +68,15 @@ namespace BackendAPI.Model
         /// <returns>Boolean</returns>
         public override bool Equals(object input)
         {
-            return this.Equals(input as GetStoreUploadsResponse);
+            return this.Equals(input as GetStoreUploadIdsResponse);
         }
 
         /// <summary>
-        /// Returns true if GetStoreUploadsResponse instances are equal
+        /// Returns true if GetStoreUploadIdsResponse instances are equal
         /// </summary>
-        /// <param name="input">Instance of GetStoreUploadsResponse to be compared</param>
+        /// <param name="input">Instance of GetStoreUploadIdsResponse to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(GetStoreUploadsResponse input)
+        public bool Equals(GetStoreUploadIdsResponse input)
         {
             if (input == null)
                 return false;

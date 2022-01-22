@@ -90,14 +90,14 @@ func TestCreateStoreUploadSucceeds(t *testing.T) {
 		t.Fatalf("CreateStoreUpload is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
 	}
 
-	getStoreUploadsResponse, r, err := apiClient.DefaultApi.GetStoreUploads(authContext, storeId).Execute()
+	getStoreUploadIdsResponse, r, err := apiClient.DefaultApi.GetStoreUploadIds(authContext, storeId).Execute()
 	desiredStatusCode = http.StatusOK
 	if err != nil || desiredStatusCode != r.StatusCode {
 		t.Fatalf("GetStoreUploads is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
 	}
 
 	expectedStoreUploads := []string{"0"}
-	if !reflect.DeepEqual(expectedStoreUploads, getStoreUploadsResponse.Items) {
-		t.Fatalf("Expected GetStoreUploads is expected to return %v, but returned %v", expectedStoreUploads, getStoreUploadsResponse.Items)
+	if !reflect.DeepEqual(expectedStoreUploads, getStoreUploadIdsResponse.Items) {
+		t.Fatalf("Expected GetStoreUploads is expected to return %v, but returned %v", expectedStoreUploads, getStoreUploadIdsResponse.Items)
 	}
 }

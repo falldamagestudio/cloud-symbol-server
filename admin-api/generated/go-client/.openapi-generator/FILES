@@ -8,8 +8,8 @@ docs/CreateStoreUploadRequest.md
 docs/CreateStoreUploadResponse.md
 docs/DefaultApi.md
 docs/GetFileResponse.md
+docs/GetStoreUploadIdsResponse.md
 docs/GetStoreUploadResponse.md
-docs/GetStoreUploadsResponse.md
 docs/GetStoresResponse.md
 docs/MessageResponse.md
 docs/UploadFileRequest.md
@@ -17,8 +17,8 @@ docs/UploadFileResponse.md
 model_create_store_upload_request.go
 model_create_store_upload_response.go
 model_get_file_response.go
+model_get_store_upload_ids_response.go
 model_get_store_upload_response.go
-model_get_store_uploads_response.go
 model_get_stores_response.go
 model_message_response.go
 model_upload_file_request.go

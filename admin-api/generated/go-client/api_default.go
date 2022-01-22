@@ -501,26 +501,26 @@ func (a *DefaultApiService) GetStoreUploadExecute(r ApiGetStoreUploadRequest) (G
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiGetStoreUploadsRequest struct {
+type ApiGetStoreUploadIdsRequest struct {
 	ctx _context.Context
 	ApiService *DefaultApiService
 	storeId string
 }
 
 
-func (r ApiGetStoreUploadsRequest) Execute() (GetStoreUploadsResponse, *_nethttp.Response, error) {
-	return r.ApiService.GetStoreUploadsExecute(r)
+func (r ApiGetStoreUploadIdsRequest) Execute() (GetStoreUploadIdsResponse, *_nethttp.Response, error) {
+	return r.ApiService.GetStoreUploadIdsExecute(r)
 }
 
 /*
-GetStoreUploads Fetch a list of all uploads in store
+GetStoreUploadIds Fetch a list of all uploads in store
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param storeId ID of the store containing the uploads
- @return ApiGetStoreUploadsRequest
+ @return ApiGetStoreUploadIdsRequest
 */
-func (a *DefaultApiService) GetStoreUploads(ctx _context.Context, storeId string) ApiGetStoreUploadsRequest {
-	return ApiGetStoreUploadsRequest{
+func (a *DefaultApiService) GetStoreUploadIds(ctx _context.Context, storeId string) ApiGetStoreUploadIdsRequest {
+	return ApiGetStoreUploadIdsRequest{
 		ApiService: a,
 		ctx: ctx,
 		storeId: storeId,
@@ -528,18 +528,18 @@ func (a *DefaultApiService) GetStoreUploads(ctx _context.Context, storeId string
 }
 
 // Execute executes the request
-//  @return GetStoreUploadsResponse
-func (a *DefaultApiService) GetStoreUploadsExecute(r ApiGetStoreUploadsRequest) (GetStoreUploadsResponse, *_nethttp.Response, error) {
+//  @return GetStoreUploadIdsResponse
+func (a *DefaultApiService) GetStoreUploadIdsExecute(r ApiGetStoreUploadIdsRequest) (GetStoreUploadIdsResponse, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  GetStoreUploadsResponse
+		localVarReturnValue  GetStoreUploadIdsResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetStoreUploads")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetStoreUploadIds")
 	if err != nil {
 		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
