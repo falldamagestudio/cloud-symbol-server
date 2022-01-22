@@ -27,8 +27,7 @@ func TestGetStoreUploadWithInvalidCredentialsFails(t *testing.T) {
 
 func TestGetStoreUploadThatDoesNotExistFails(t *testing.T) {
 
-	email := "testuser"
-	pat := "testpat"
+	email, pat := getTestEmailAndPat()
 
 	authContext, apiClient := getAPIClient(email, pat)
 
@@ -48,8 +47,7 @@ func TestGetStoreUploadThatDoesNotExistFails(t *testing.T) {
 
 func TestCreateStoreUploadSucceeds(t *testing.T) {
 
-	email := "testuser"
-	pat := "testpat"
+	email, pat := getTestEmailAndPat()
 
 	authContext, apiClient := getAPIClient(email, pat)
 

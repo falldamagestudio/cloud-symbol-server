@@ -10,3 +10,8 @@
 # Ignore any local per-user Terraform pre-defined variable files
 
 user.auto.tfvars
+
+# Ignore any credentials for tests
+
+/environments/*/test-credentials.json
+/environments/*/*/google_application_credentials.json

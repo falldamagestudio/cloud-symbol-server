@@ -83,33 +83,25 @@ test: test-download-api test-admin-api
 # Local (emulator) commands
 #########################################################
 
-run-local-firebase-emulators:
-	cd firebase && firebase emulators:start --project=demo-cloud-symbol-server --import state --export-on-exit
-
 run-local-download-api:
 	cd download-api/cmd \
-	&&	GCP_PROJECT_ID=demo-cloud-symbol-server \
-		FIRESTORE_EMULATOR_HOST=localhost:8082 \
-		STORAGE_EMULATOR_HOST=localhost:9199 \
+	&&	GCP_PROJECT_ID=test-cloud-symbol-server \
 		SYMBOL_STORE_BUCKET_NAME=default-bucket \
 		PORT=8083 \
 		go run main.go
 
 run-local-admin-api:
 	cd admin-api/cmd \
-	&&	GCP_PROJECT_ID=demo-cloud-symbol-server \
-		FIRESTORE_EMULATOR_HOST=localhost:8082 \
-		STORAGE_EMULATOR_HOST=localhost:9199 \
+	&&	GCP_PROJECT_ID=test-cloud-symbol-server \
 		SYMBOL_STORE_BUCKET_NAME=default-bucket \
 		PORT=8084 \
+		GOOGLE_APPLICATION_CREDENTIALS="../../environments/local/admin_api/google_application_credentials.json" \
 		go run main.go
 
 run-local-frontend:
 	cd firebase/frontend \
 	&&	npm install \
 	&&	VUE_APP_FIREBASE_CONFIG='$(shell cat environments/local/firebase/frontend/firebase-config.json)' \
-		VUE_APP_FIRESTORE_EMULATOR_PORT=8082 \
-		VUE_APP_AUTH_EMULATOR_URL=http://localhost:9099 \
 		VUE_APP_ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < environments/local/config.json)" \
 		VUE_APP_DOWNLOAD_API_ENDPOINT="$(shell jq -r ".downloadAPIEndpoint" < environments/local/config.json)" \
 		VUE_APP_VERSION="$(VERSION)" \
@@ -118,11 +110,15 @@ run-local-frontend:
 test-local-download-api:
 	cd download-api \
 	&&	DOWNLOAD_API_ENDPOINT=http://localhost:8083 \
+		TEST_EMAIL="$(shell jq -r ".email" < environments/local/test-credentials.json)" \
+		TEST_PAT="$(shell jq -r ".pat" < environments/local/test-credentials.json)" \
 		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/download-api
 
 test-local-admin-api:
 	cd admin-api \
 	&&	ADMIN_API_ENDPOINT=http://localhost:8084 \
+		TEST_EMAIL="$(shell jq -r ".email" < environments/local/test-credentials.json)" \
+		TEST_PAT="$(shell jq -r ".pat" < environments/local/test-credentials.json)" \
 		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/admin-api -count=1
 
 test-local: test-local-download-api test-local-admin-api

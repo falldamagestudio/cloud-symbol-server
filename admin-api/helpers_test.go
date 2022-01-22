@@ -10,6 +10,12 @@ import (
 	openapi_client "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-client"
 )
 
+func getTestEmailAndPat() (string, string) {
+	email := os.Getenv("TEST_EMAIL")
+	pat := os.Getenv("TEST_PAT")
+	return email, pat
+}
+
 func stringInSlice(a string, list []string) bool {
 	for _, b := range list {
 		if b == a {

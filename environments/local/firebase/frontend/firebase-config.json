@@ -1,9 +1,9 @@
 {
-  "apiKey": "xxx",
-  "authDomain": "xxx",
-  "projectId": "xxx",
-  "storageBucket": "xxx",
-  "messagingSenderId": "xxx",
-  "appId": "xxx",
-  "measurementId": "xxx"
+  "apiKey": "AIzaSyBTTnDzXE-VwsRNhFN5D_ahNxMGHN6DV2s",
+  "authDomain": "test-cloud-symbol-server.firebaseapp.com",
+  "projectId": "test-cloud-symbol-server",
+  "storageBucket": "test-cloud-symbol-server.appspot.com",
+  "messagingSenderId": "131773836560",
+  "appId": "1:131773836560:web:6af3400b76df1678c48995",
+  "measurementId": "G-F8GBKQLG9M"
 }

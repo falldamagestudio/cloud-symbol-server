@@ -6,8 +6,7 @@ import (
 
 func TestCreateAndDestroyStore(t *testing.T) {
 
-	email := "testuser"
-	pat := "testpat"
+	email, pat := getTestEmailAndPat()
 
 	authContext, apiClient := getAPIClient(email, pat)
 
