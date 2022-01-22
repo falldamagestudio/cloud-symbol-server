@@ -103,11 +103,29 @@ namespace BackendAPI.Api
         /// <returns>ApiResponse of GetStoreUploadResponse</returns>
         ApiResponse<GetStoreUploadResponse> GetStoreUploadWithHttpInfo(string uploadId, string storeId);
         /// <summary>
+        /// Fetch a list of all uploads in store
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the uploads</param>
+        /// <returns>GetStoreUploadsResponse</returns>
+        GetStoreUploadsResponse GetStoreUploads(string storeId);
+
+        /// <summary>
+        /// Fetch a list of all uploads in store
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the uploads</param>
+        /// <returns>ApiResponse of GetStoreUploadsResponse</returns>
+        ApiResponse<GetStoreUploadsResponse> GetStoreUploadsWithHttpInfo(string storeId);
+        /// <summary>
         /// Fetch a list of all stores
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <returns>List&lt;string&gt;</returns>
-        List<string> GetStores();
+        /// <returns>GetStoresResponse</returns>
+        GetStoresResponse GetStores();
 
         /// <summary>
         /// Fetch a list of all stores
@@ -116,8 +134,8 @@ namespace BackendAPI.Api
         /// 
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <returns>ApiResponse of List&lt;string&gt;</returns>
-        ApiResponse<List<string>> GetStoresWithHttpInfo();
+        /// <returns>ApiResponse of GetStoresResponse</returns>
+        ApiResponse<GetStoresResponse> GetStoresWithHttpInfo();
         #endregion Synchronous Operations
     }
 
@@ -224,6 +242,29 @@ namespace BackendAPI.Api
         /// <returns>Task of ApiResponse (GetStoreUploadResponse)</returns>
         System.Threading.Tasks.Task<ApiResponse<GetStoreUploadResponse>> GetStoreUploadWithHttpInfoAsync(string uploadId, string storeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
+        /// Fetch a list of all uploads in store
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the uploads</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of GetStoreUploadsResponse</returns>
+        System.Threading.Tasks.Task<GetStoreUploadsResponse> GetStoreUploadsAsync(string storeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <summary>
+        /// Fetch a list of all uploads in store
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the uploads</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (GetStoreUploadsResponse)</returns>
+        System.Threading.Tasks.Task<ApiResponse<GetStoreUploadsResponse>> GetStoreUploadsWithHttpInfoAsync(string storeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <summary>
         /// Fetch a list of all stores
         /// </summary>
         /// <remarks>
@@ -231,8 +272,8 @@ namespace BackendAPI.Api
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of List&lt;string&gt;</returns>
-        System.Threading.Tasks.Task<List<string>> GetStoresAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <returns>Task of GetStoresResponse</returns>
+        System.Threading.Tasks.Task<GetStoresResponse> GetStoresAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// Fetch a list of all stores
@@ -242,8 +283,8 @@ namespace BackendAPI.Api
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (List&lt;string&gt;)</returns>
-        System.Threading.Tasks.Task<ApiResponse<List<string>>> GetStoresWithHttpInfoAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <returns>Task of ApiResponse (GetStoresResponse)</returns>
+        System.Threading.Tasks.Task<ApiResponse<GetStoresResponse>> GetStoresWithHttpInfoAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         #endregion Asynchronous Operations
     }
 
@@ -899,13 +940,140 @@ namespace BackendAPI.Api
         }
 
         /// <summary>
+        /// Fetch a list of all uploads in store 
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the uploads</param>
+        /// <returns>GetStoreUploadsResponse</returns>
+        public GetStoreUploadsResponse GetStoreUploads(string storeId)
+        {
+            BackendAPI.Client.ApiResponse<GetStoreUploadsResponse> localVarResponse = GetStoreUploadsWithHttpInfo(storeId);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Fetch a list of all uploads in store 
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the uploads</param>
+        /// <returns>ApiResponse of GetStoreUploadsResponse</returns>
+        public BackendAPI.Client.ApiResponse<GetStoreUploadsResponse> GetStoreUploadsWithHttpInfo(string storeId)
+        {
+            // verify the required parameter 'storeId' is set
+            if (storeId == null)
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->GetStoreUploads");
+
+            BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = BackendAPI.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null) localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+
+            var localVarAccept = BackendAPI.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null) localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+
+            localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
+
+            // authentication (emailAndPat) required
+            // http basic authentication required
+            if (!string.IsNullOrEmpty(this.Configuration.Username) || !string.IsNullOrEmpty(this.Configuration.Password))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", "Basic " + BackendAPI.Client.ClientUtils.Base64Encode(this.Configuration.Username + ":" + this.Configuration.Password));
+            }
+
+            // make the HTTP request
+            var localVarResponse = this.Client.Get<GetStoreUploadsResponse>("/stores/{storeId}/uploads", localVarRequestOptions, this.Configuration);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("GetStoreUploads", localVarResponse);
+                if (_exception != null) throw _exception;
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Fetch a list of all uploads in store 
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the uploads</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of GetStoreUploadsResponse</returns>
+        public async System.Threading.Tasks.Task<GetStoreUploadsResponse> GetStoreUploadsAsync(string storeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            BackendAPI.Client.ApiResponse<GetStoreUploadsResponse> localVarResponse = await GetStoreUploadsWithHttpInfoAsync(storeId, cancellationToken).ConfigureAwait(false);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Fetch a list of all uploads in store 
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the uploads</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (GetStoreUploadsResponse)</returns>
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetStoreUploadsResponse>> GetStoreUploadsWithHttpInfoAsync(string storeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            // verify the required parameter 'storeId' is set
+            if (storeId == null)
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->GetStoreUploads");
+
+
+            BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+
+            var localVarContentType = BackendAPI.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null) localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+
+            var localVarAccept = BackendAPI.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null) localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+
+            localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
+
+            // authentication (emailAndPat) required
+            // http basic authentication required
+            if (!string.IsNullOrEmpty(this.Configuration.Username) || !string.IsNullOrEmpty(this.Configuration.Password))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", "Basic " + BackendAPI.Client.ClientUtils.Base64Encode(this.Configuration.Username + ":" + this.Configuration.Password));
+            }
+
+            // make the HTTP request
+
+            var localVarResponse = await this.AsynchronousClient.GetAsync<GetStoreUploadsResponse>("/stores/{storeId}/uploads", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("GetStoreUploads", localVarResponse);
+                if (_exception != null) throw _exception;
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
         /// Fetch a list of all stores 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <returns>List&lt;string&gt;</returns>
-        public List<string> GetStores()
+        /// <returns>GetStoresResponse</returns>
+        public GetStoresResponse GetStores()
         {
-            BackendAPI.Client.ApiResponse<List<string>> localVarResponse = GetStoresWithHttpInfo();
+            BackendAPI.Client.ApiResponse<GetStoresResponse> localVarResponse = GetStoresWithHttpInfo();
             return localVarResponse.Data;
         }
 
@@ -913,8 +1081,8 @@ namespace BackendAPI.Api
         /// Fetch a list of all stores 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <returns>ApiResponse of List&lt;string&gt;</returns>
-        public BackendAPI.Client.ApiResponse<List<string>> GetStoresWithHttpInfo()
+        /// <returns>ApiResponse of GetStoresResponse</returns>
+        public BackendAPI.Client.ApiResponse<GetStoresResponse> GetStoresWithHttpInfo()
         {
             BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
 
@@ -941,7 +1109,7 @@ namespace BackendAPI.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<List<string>>("/stores", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<GetStoresResponse>("/stores", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
@@ -957,10 +1125,10 @@ namespace BackendAPI.Api
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of List&lt;string&gt;</returns>
-        public async System.Threading.Tasks.Task<List<string>> GetStoresAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        /// <returns>Task of GetStoresResponse</returns>
+        public async System.Threading.Tasks.Task<GetStoresResponse> GetStoresAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            BackendAPI.Client.ApiResponse<List<string>> localVarResponse = await GetStoresWithHttpInfoAsync(cancellationToken).ConfigureAwait(false);
+            BackendAPI.Client.ApiResponse<GetStoresResponse> localVarResponse = await GetStoresWithHttpInfoAsync(cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
@@ -969,8 +1137,8 @@ namespace BackendAPI.Api
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (List&lt;string&gt;)</returns>
-        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<List<string>>> GetStoresWithHttpInfoAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        /// <returns>Task of ApiResponse (GetStoresResponse)</returns>
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetStoresResponse>> GetStoresWithHttpInfoAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
             BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
@@ -1000,7 +1168,7 @@ namespace BackendAPI.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.GetAsync<List<string>>("/stores", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<GetStoresResponse>("/stores", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {

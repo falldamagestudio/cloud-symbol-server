@@ -8,6 +8,7 @@ Method | HTTP request | Description
 [**CreateStoreUpload**](DefaultApi.md#CreateStoreUpload) | **Post** /stores/{storeId}/uploads | Start a new upload
 [**DeleteStore**](DefaultApi.md#DeleteStore) | **Delete** /stores/{storeId} | Delete an existing store
 [**GetStoreUpload**](DefaultApi.md#GetStoreUpload) | **Get** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
+[**GetStoreUploads**](DefaultApi.md#GetStoreUploads) | **Get** /stores/{storeId}/uploads | Fetch a list of all uploads in store
 [**GetStores**](DefaultApi.md#GetStores) | **Get** /stores | Fetch a list of all stores
 
 
@@ -285,9 +286,77 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
+## GetStoreUploads
+
+> GetStoreUploadsResponse GetStoreUploads(ctx, storeId).Execute()
+
+Fetch a list of all uploads in store
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    storeId := "storeId_example" // string | ID of the store containing the uploads
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.GetStoreUploads(context.Background(), storeId).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStoreUploads``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `GetStoreUploads`: GetStoreUploadsResponse
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetStoreUploads`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**storeId** | **string** | ID of the store containing the uploads | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetStoreUploadsRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+[**GetStoreUploadsResponse**](GetStoreUploadsResponse.md)
+
+### Authorization
+
+[emailAndPat](../README.md#emailAndPat)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## GetStores
 
-> []string GetStores(ctx).Execute()
+> GetStoresResponse GetStores(ctx).Execute()
 
 Fetch a list of all stores
 
@@ -312,7 +381,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStores``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetStores`: []string
+    // response from `GetStores`: GetStoresResponse
     fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetStores`: %v\n", resp)
 }
 ```
@@ -328,7 +397,7 @@ Other parameters are passed through a pointer to a apiGetStoresRequest struct vi
 
 ### Return type
 
-**[]string**
+[**GetStoresResponse**](GetStoresResponse.md)
 
 ### Authorization
 

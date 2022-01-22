@@ -146,6 +146,7 @@ generate-go-server-api:
 		--git-repo-id=cloud-symbol-server/admin-api \
 		-i /local/admin-api/admin-api.yaml \
 		-g go-server \
+		--additional-properties=generateAliasAsModel=true \
 		-o /local/admin-api/generated/go-server
 
 generate-go-client-api:
@@ -162,6 +163,7 @@ generate-go-client-api:
 		--git-repo-id=cloud-symbol-server/admin-api \
 		-i /local/admin-api/admin-api.yaml \
 		-g go \
+		--additional-properties=generateAliasAsModel=true \
 		-o /local/admin-api/generated/go-client
 
 generate-csharp-client-api:
@@ -176,7 +178,7 @@ generate-csharp-client-api:
 		generate \
 		-i /local/admin-api/admin-api.yaml \
 		-g csharp-netcore \
-		--additional-properties=netCoreProjectFile=true,library=httpclient,packageName=BackendAPI \
+		--additional-properties=netCoreProjectFile=true,library=httpclient,packageName=BackendAPI,generateAliasAsModel=true \
 		-o /local/cli/generated/BackendAPI
 
 #########################################################

@@ -108,6 +108,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**CreateStoreUpload**](docs/DefaultApi.md#createstoreupload) | **POST** /stores/{storeId}/uploads | Start a new upload
 *DefaultApi* | [**DeleteStore**](docs/DefaultApi.md#deletestore) | **DELETE** /stores/{storeId} | Delete an existing store
 *DefaultApi* | [**GetStoreUpload**](docs/DefaultApi.md#getstoreupload) | **GET** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
+*DefaultApi* | [**GetStoreUploads**](docs/DefaultApi.md#getstoreuploads) | **GET** /stores/{storeId}/uploads | Fetch a list of all uploads in store
 *DefaultApi* | [**GetStores**](docs/DefaultApi.md#getstores) | **GET** /stores | Fetch a list of all stores
 
 
@@ -118,6 +119,8 @@ Class | Method | HTTP request | Description
  - [Model.CreateStoreUploadResponse](docs/CreateStoreUploadResponse.md)
  - [Model.GetFileResponse](docs/GetFileResponse.md)
  - [Model.GetStoreUploadResponse](docs/GetStoreUploadResponse.md)
+ - [Model.GetStoreUploadsResponse](docs/GetStoreUploadsResponse.md)
+ - [Model.GetStoresResponse](docs/GetStoresResponse.md)
  - [Model.MessageResponse](docs/MessageResponse.md)
  - [Model.UploadFileRequest](docs/UploadFileRequest.md)
  - [Model.UploadFileResponse](docs/UploadFileResponse.md)

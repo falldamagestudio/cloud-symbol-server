@@ -13,6 +13,7 @@ try {
 }
 
 int exitCode = await Parser.Default.ParseArguments<
+        CLI.ListUploadsOptions,
         CLI.UploadOptions,
         CLI.ListStoresOptions,
         CLI.CreateStoreOptions,
@@ -20,6 +21,7 @@ int exitCode = await Parser.Default.ParseArguments<
         object
     >(args)
     .MapResult(
+        async (CLI.ListUploadsOptions o) => await CLI.ListUploads.DoListUploads(o),
         async (CLI.UploadOptions o) => await CLI.Upload.DoUpload(o),
         async (CLI.ListStoresOptions o) => await CLI.ListStores.DoListStores(o),
         async (CLI.CreateStoreOptions o) => await CLI.CreateStore.DoCreateStore(o),

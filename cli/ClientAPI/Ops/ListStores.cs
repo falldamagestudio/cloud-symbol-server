@@ -19,7 +19,7 @@ namespace ClientAPI
             config.Password = PAT;
             BackendAPI.Api.DefaultApi api = new BackendAPI.Api.DefaultApi(config);
 
-            BackendAPI.Client.ApiResponse<List<string>> getStoresResponse = await api.GetStoresWithHttpInfoAsync();
+            BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoresResponse> getStoresResponse = await api.GetStoresWithHttpInfoAsync();
             if (getStoresResponse.ErrorText != null)
                 throw new ListStoresException(getStoresResponse.ErrorText);
 

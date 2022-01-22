@@ -75,6 +75,12 @@ func (c *DefaultApiController) Routes() Routes {
 			c.GetStoreUpload,
 		},
 		{
+			"GetStoreUploads",
+			strings.ToUpper("Get"),
+			"/stores/{storeId}/uploads",
+			c.GetStoreUploads,
+		},
+		{
 			"GetStores",
 			strings.ToUpper("Get"),
 			"/stores",
@@ -150,6 +156,22 @@ func (c *DefaultApiController) GetStoreUpload(w http.ResponseWriter, r *http.Req
 	storeIdParam := params["storeId"]
 	
 	result, err := c.service.GetStoreUpload(r.Context(), uploadIdParam, storeIdParam)
+	// If an error occurred, encode the error with the status code
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
+	// If no error, encode the body and the result code
+	EncodeJSONResponse(result.Body, &result.Code, w)
+
+}
+
+// GetStoreUploads - Fetch a list of all uploads in store
+func (c *DefaultApiController) GetStoreUploads(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	storeIdParam := params["storeId"]
+	
+	result, err := c.service.GetStoreUploads(r.Context(), storeIdParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)

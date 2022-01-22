@@ -10,6 +10,8 @@ go/model_create_store_upload_request.go
 go/model_create_store_upload_response.go
 go/model_get_file_response.go
 go/model_get_store_upload_response.go
+go/model_get_store_uploads_response.go
+go/model_get_stores_response.go
 go/model_message_response.go
 go/model_upload_file_request.go
 go/model_upload_file_response.go

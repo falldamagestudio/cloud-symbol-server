@@ -24,6 +24,7 @@ type DefaultApiRouter interface {
 	CreateStoreUpload(http.ResponseWriter, *http.Request)
 	DeleteStore(http.ResponseWriter, *http.Request)
 	GetStoreUpload(http.ResponseWriter, *http.Request)
+	GetStoreUploads(http.ResponseWriter, *http.Request)
 	GetStores(http.ResponseWriter, *http.Request)
 }
 
@@ -37,5 +38,6 @@ type DefaultApiServicer interface {
 	CreateStoreUpload(context.Context, string, CreateStoreUploadRequest) (ImplResponse, error)
 	DeleteStore(context.Context, string) (ImplResponse, error)
 	GetStoreUpload(context.Context, string, string) (ImplResponse, error)
+	GetStoreUploads(context.Context, string) (ImplResponse, error)
 	GetStores(context.Context) (ImplResponse, error)
 }

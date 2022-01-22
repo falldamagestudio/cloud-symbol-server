@@ -2,6 +2,7 @@ package admin_api
 
 import (
 	"net/http"
+	"reflect"
 	"testing"
 
 	openapi_client "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-client"
@@ -87,5 +88,16 @@ func TestCreateStoreUploadSucceeds(t *testing.T) {
 	desiredStatusCode := http.StatusOK
 	if err != nil || desiredStatusCode != r.StatusCode {
 		t.Fatalf("CreateStoreUpload is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
+	}
+
+	getStoreUploadsResponse, r, err := apiClient.DefaultApi.GetStoreUploads(authContext, storeId).Execute()
+	desiredStatusCode = http.StatusOK
+	if err != nil || desiredStatusCode != r.StatusCode {
+		t.Fatalf("GetStoreUploads is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
+	}
+
+	expectedStoreUploads := []string{"0"}
+	if !reflect.DeepEqual(expectedStoreUploads, getStoreUploadsResponse.Items) {
+		t.Fatalf("Expected GetStoreUploads is expected to return %v, but returned %v", expectedStoreUploads, getStoreUploadsResponse.Items)
 	}
 }

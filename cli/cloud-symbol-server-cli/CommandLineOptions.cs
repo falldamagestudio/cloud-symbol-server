@@ -17,6 +17,13 @@ namespace CLI
         public string? PAT { get; set; } = ConfigFile.GetOrDefault("pat", "");
     }
 
+    [Verb("list-uploads", HelpText = "List all uploads in store")]
+    public class ListUploadsOptions : CommandLineOptions
+    {
+       [Value(0, Required = true, HelpText = "Name of store to list uploads for")]
+        public string? Store { get; set; }
+    }
+
     [Verb("upload", HelpText = "Upload symbols")]
     public class UploadOptions : CommandLineOptions
     {

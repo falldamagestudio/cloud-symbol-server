@@ -89,6 +89,39 @@ paths:
                 $ref: '#/components/schemas/messageResponse'
 
   /stores/{storeId}/uploads:
+    get:
+      summary: Fetch a list of all uploads in store
+      operationId: getStoreUploads
+      parameters:
+        - in: path
+          name: storeId
+          schema:
+            type: string
+          required: true
+          description: ID of the store containing the uploads
+
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getStoreUploadsResponse'
+
+        401:
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+
+        404:
+          description: No such store
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+
     post:
       summary: Start a new upload
       operationId: createStoreUpload
@@ -200,6 +233,15 @@ components:
         hash:
           type: string
           example: 7F416863ABF34C3E894BAD1739BAA5571
+
+    getStoreUploadsResponse:
+      type: array
+      items:
+        type: string
+        example: 
+          - "1"
+          - "2"
+          - "3"
 
     createStoreUploadResponse:
       type: object

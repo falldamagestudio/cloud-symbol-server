@@ -82,6 +82,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**CreateStoreUpload**](docs/DefaultApi.md#createstoreupload) | **Post** /stores/{storeId}/uploads | Start a new upload
 *DefaultApi* | [**DeleteStore**](docs/DefaultApi.md#deletestore) | **Delete** /stores/{storeId} | Delete an existing store
 *DefaultApi* | [**GetStoreUpload**](docs/DefaultApi.md#getstoreupload) | **Get** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
+*DefaultApi* | [**GetStoreUploads**](docs/DefaultApi.md#getstoreuploads) | **Get** /stores/{storeId}/uploads | Fetch a list of all uploads in store
 *DefaultApi* | [**GetStores**](docs/DefaultApi.md#getstores) | **Get** /stores | Fetch a list of all stores
 
 
@@ -91,6 +92,8 @@ Class | Method | HTTP request | Description
  - [CreateStoreUploadResponse](docs/CreateStoreUploadResponse.md)
  - [GetFileResponse](docs/GetFileResponse.md)
  - [GetStoreUploadResponse](docs/GetStoreUploadResponse.md)
+ - [GetStoreUploadsResponse](docs/GetStoreUploadsResponse.md)
+ - [GetStoresResponse](docs/GetStoresResponse.md)
  - [MessageResponse](docs/MessageResponse.md)
  - [UploadFileRequest](docs/UploadFileRequest.md)
  - [UploadFileResponse](docs/UploadFileResponse.md)

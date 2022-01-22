@@ -63,6 +63,30 @@ func getStoreDoc(context context.Context, storeId string) (*firestore.DocumentSn
 	return storeDoc, nil
 }
 
+func getStoreUploadIds(context context.Context, storeId string) ([]string, error) {
+
+	log.Printf("Fetching all upload document IDs for %v", storeId)
+
+	firestoreClient, err := firestoreClient(context)
+	if err != nil {
+		log.Printf("Unable to talk to database: %v", err)
+		return nil, err
+	}
+
+	uploadDocsIterator := firestoreClient.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Documents(context)
+	uploadDocs, err := uploadDocsIterator.GetAll()
+	if err != nil {
+		log.Printf("Error while fetching documents in %v: %v", storeId, err)
+		return nil, err
+	}
+
+	uploadIds := make([]string, len(uploadDocs))
+	for uploadDocIndex, uploadDoc := range uploadDocs {
+		uploadIds[uploadDocIndex] = uploadDoc.Ref.ID
+	}
+	return uploadIds, nil
+}
+
 func getStoreUploadDoc(context context.Context, storeId string, uploadId string) (*firestore.DocumentSnapshot, error) {
 
 	log.Printf("Fetching upload document for %v/%v", storeId, uploadId)

@@ -85,6 +85,37 @@ paths:
           description: Not authorized
       summary: Create a new store
   /stores/{storeId}/uploads:
+    get:
+      operationId: getStoreUploads
+      parameters:
+      - description: ID of the store containing the uploads
+        explode: false
+        in: path
+        name: storeId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getStoreUploadsResponse'
+          description: Success
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Not authorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: No such store
+      summary: Fetch a list of all uploads in store
     post:
       operationId: createStoreUpload
       parameters:
@@ -191,6 +222,11 @@ components:
           example: 7F416863ABF34C3E894BAD1739BAA5571
           type: string
       type: object
+    getStoreUploadsResponse:
+      items:
+        example: '["1","2","3"]'
+        type: string
+      type: array
     createStoreUploadResponse:
       example:
         files:

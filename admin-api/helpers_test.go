@@ -47,7 +47,7 @@ func getStores(apiClient *openapi_client.APIClient, authContext context.Context)
 	if err != nil {
 		return nil, err
 	} else {
-		return result, err
+		return result.Items, err
 	}
 }
 
