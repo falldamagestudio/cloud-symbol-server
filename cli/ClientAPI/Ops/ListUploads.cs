@@ -11,7 +11,18 @@ namespace ClientAPI
             public ListUploadsException(string message) : base(message) { }
         }
 
-        public static async Task<IEnumerable<string>> DoListUploads(string ServiceURL, string Email, string PAT, string store) {
+        public class StoreUpload
+        {
+            public string UploadId;
+            public BackendAPI.Model.GetStoreUploadResponse Upload;
+
+            public StoreUpload(string uploadId, BackendAPI.Model.GetStoreUploadResponse upload) {
+                UploadId = uploadId;
+                Upload = upload;
+            }
+        }
+
+        public static async Task<IEnumerable<StoreUpload>> DoListUploads(string ServiceURL, string Email, string PAT, string store) {
 
             BackendAPI.Client.Configuration config = new BackendAPI.Client.Configuration();
             config.BasePath = ServiceURL;
@@ -23,7 +34,17 @@ namespace ClientAPI
             if (getStoreUploadIdsResponse.ErrorText != null)
                 throw new ListUploadsException(getStoreUploadIdsResponse.ErrorText);
 
-            return getStoreUploadIdsResponse.Data;
+            List<StoreUpload> uploads = new List<StoreUpload>();
+
+            foreach (string uploadId in getStoreUploadIdsResponse.Data) {
+                BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreUploadResponse> getStoreUploadResponse = await api.GetStoreUploadWithHttpInfoAsync(uploadId, store);
+                if (getStoreUploadResponse.ErrorText != null)
+                    throw new ListUploadsException(getStoreUploadResponse.ErrorText);
+
+                uploads.Add(new StoreUpload(uploadId: uploadId, upload: getStoreUploadResponse.Data));
+            }
+
+            return uploads;
         }
     }
 }
