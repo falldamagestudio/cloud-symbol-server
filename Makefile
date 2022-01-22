@@ -86,14 +86,14 @@ test: test-download-api test-admin-api
 run-local-download-api:
 	cd download-api/cmd \
 	&&	GCP_PROJECT_ID=test-cloud-symbol-server \
-		SYMBOL_STORE_BUCKET_NAME=default-bucket \
+		SYMBOL_STORE_BUCKET_NAME="$(shell jq -r ".symbol_store_bucket_name" < environments/local/core/config.json)" \
 		PORT=8083 \
 		go run main.go
 
 run-local-admin-api:
 	cd admin-api/cmd \
 	&&	GCP_PROJECT_ID=test-cloud-symbol-server \
-		SYMBOL_STORE_BUCKET_NAME=default-bucket \
+		SYMBOL_STORE_BUCKET_NAME="$(shell jq -r ".symbol_store_bucket_name" < environments/local/core/config.json)" \
 		PORT=8084 \
 		GOOGLE_APPLICATION_CREDENTIALS="../../environments/local/admin_api/google_application_credentials.json" \
 		go run main.go
@@ -109,14 +109,14 @@ run-local-frontend:
 
 test-local-download-api:
 	cd download-api \
-	&&	DOWNLOAD_API_ENDPOINT=http://localhost:8083 \
+	&&	DOWNLOAD_API_ENDPOINT="$(shell jq -r ".downloadAPIEndpoint" < environments/local/config.json)" \
 		TEST_EMAIL="$(shell jq -r ".email" < environments/local/test-credentials.json)" \
 		TEST_PAT="$(shell jq -r ".pat" < environments/local/test-credentials.json)" \
 		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/download-api
 
 test-local-admin-api:
 	cd admin-api \
-	&&	ADMIN_API_ENDPOINT=http://localhost:8084 \
+	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < environments/local/config.json)" \
 		TEST_EMAIL="$(shell jq -r ".email" < environments/local/test-credentials.json)" \
 		TEST_PAT="$(shell jq -r ".pat" < environments/local/test-credentials.json)" \
 		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/admin-api -count=1
