@@ -1,11 +1,28 @@
 package admin_api
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
+
+	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
 )
 
 type patAuthenticationMiddleware struct{}
+
+func writePatHttpError(w http.ResponseWriter, status int, message string) error {
+
+	messageResponse := openapi.MessageResponse{Message: message}
+	messageJsonBytes, err := json.Marshal(messageResponse)
+	if err != nil {
+		return err
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	w.Write(messageJsonBytes)
+	return nil
+}
 
 func (patAM *patAuthenticationMiddleware) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -16,9 +33,10 @@ func (patAM *patAuthenticationMiddleware) Middleware(next http.Handler) http.Han
 
 		if !basicAuthPresent {
 
-			w.Header().Set("WWW-Authenticate", `Basic realm="restricted", charset="UTF-8"`)
 			log.Print("Basic auth header (with email/token) not provided")
-			http.Error(w, "Unauthorized; please provide email + personal access token using Basic Authentication", http.StatusUnauthorized)
+
+			w.Header().Set("WWW-Authenticate", `Basic realm="restricted", charset="UTF-8"`)
+			_ = writePatHttpError(w, http.StatusUnauthorized, "Unauthorized; please provide email + personal access token using Basic Authentication")
 			return
 		}
 
@@ -29,7 +47,7 @@ func (patAM *patAuthenticationMiddleware) Middleware(next http.Handler) http.Han
 		firestoreClient, err := firestoreClient(r.Context())
 		if err != nil {
 			log.Printf("Unable to talk to database: %v", err)
-			http.Error(w, "Unable to talk to database", http.StatusInternalServerError)
+			_ = writePatHttpError(w, http.StatusInternalServerError, "Unable to talk to database")
 			return
 		}
 
@@ -37,9 +55,10 @@ func (patAM *patAuthenticationMiddleware) Middleware(next http.Handler) http.Han
 
 		if _, err := patDocRef.Get(r.Context()); err != nil {
 
-			w.Header().Set("WWW-Authenticate", `Basic realm="restricted", charset="UTF-8"`)
 			log.Printf("Unable to find email %v, pat %v combination in database: %v", email, pat, err)
-			http.Error(w, "Unauthorized; unable to find email / pat combination in database", http.StatusUnauthorized)
+
+			w.Header().Set("WWW-Authenticate", `Basic realm="restricted", charset="UTF-8"`)
+			_ = writePatHttpError(w, http.StatusUnauthorized, "Unauthorized; unable to find email / pat combination in database")
 			return
 		}
 
