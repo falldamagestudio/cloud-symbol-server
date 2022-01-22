@@ -23,11 +23,7 @@ paths:
                 $ref: '#/components/schemas/getStoresResponse'
 
         401:
-          description: Not authorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/messageResponse'
+          $ref: '#/components/responses/401'
 
   /stores/{storeId}:
     post:
@@ -45,15 +41,11 @@ paths:
         200:
           description: Success
 
+        401:
+          $ref: '#/components/responses/401'
+
         409:
           description: Store already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/messageResponse'
-
-        401:
-          description: Not authorized
           content:
             application/json:
               schema:
@@ -74,15 +66,11 @@ paths:
         200:
           description: Success
 
+        401:
+          $ref: '#/components/responses/401'
+
         404:
           description: Store does not exist
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/messageResponse'
-
-        401:
-          description: Not authorized
           content:
             application/json:
               schema:
@@ -109,11 +97,7 @@ paths:
                 $ref: '#/components/schemas/getStoreUploadIdsResponse'
 
         401:
-          description: Not authorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/messageResponse'
+          $ref: '#/components/responses/401'
 
         404:
           description: No such store
@@ -148,11 +132,7 @@ paths:
                 $ref: '#/components/schemas/createStoreUploadResponse'
 
         401:
-          description: Not authorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/messageResponse'
+          $ref: '#/components/responses/401'
 
   /stores/{storeId}/uploads/{uploadId}:
     get:
@@ -181,11 +161,7 @@ paths:
                 $ref: '#/components/schemas/getStoreUploadResponse'
 
         401:
-          description: Not authorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/messageResponse'
+          $ref: '#/components/responses/401'
 
         404:
           description: No such store/upload
@@ -195,6 +171,15 @@ paths:
                 $ref: '#/components/schemas/messageResponse'
 
 components:
+
+  responses:
+    401:
+      description: Not authorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/messageResponse'
+
   schemas:
 
     messageResponse:

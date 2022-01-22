@@ -44,18 +44,18 @@ paths:
       responses:
         "200":
           description: Success
-        "404":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/messageResponse'
-          description: Store does not exist
         "401":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/messageResponse'
           description: Not authorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Store does not exist
       summary: Delete an existing store
     post:
       operationId: createStore
@@ -71,18 +71,18 @@ paths:
       responses:
         "200":
           description: Success
-        "409":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/messageResponse'
-          description: Store already exists
         "401":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/messageResponse'
           description: Not authorized
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Store already exists
       summary: Create a new store
   /stores/{storeId}/uploads:
     get:
@@ -188,6 +188,13 @@ paths:
           description: No such store/upload
       summary: Fetch an upload
 components:
+  responses:
+    "401":
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/messageResponse'
+      description: Not authorized
   schemas:
     messageResponse:
       properties:

@@ -114,7 +114,7 @@ func (a *DefaultApiService) CreateStoreExecute(r ApiCreateStoreRequest) (*_netht
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-		if localVarHTTPResponse.StatusCode == 409 {
+		if localVarHTTPResponse.StatusCode == 401 {
 			var v MessageResponse
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -124,7 +124,7 @@ func (a *DefaultApiService) CreateStoreExecute(r ApiCreateStoreRequest) (*_netht
 			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
-		if localVarHTTPResponse.StatusCode == 401 {
+		if localVarHTTPResponse.StatusCode == 409 {
 			var v MessageResponse
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -349,7 +349,7 @@ func (a *DefaultApiService) DeleteStoreExecute(r ApiDeleteStoreRequest) (*_netht
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-		if localVarHTTPResponse.StatusCode == 404 {
+		if localVarHTTPResponse.StatusCode == 401 {
 			var v MessageResponse
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -359,7 +359,7 @@ func (a *DefaultApiService) DeleteStoreExecute(r ApiDeleteStoreRequest) (*_netht
 			newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
-		if localVarHTTPResponse.StatusCode == 401 {
+		if localVarHTTPResponse.StatusCode == 404 {
 			var v MessageResponse
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
