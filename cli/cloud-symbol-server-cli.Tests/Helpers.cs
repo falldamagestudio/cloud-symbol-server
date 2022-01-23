@@ -5,6 +5,32 @@ namespace cloud_symbol_server_cli.Tests;
 
 public static class Helpers
 {
+    public class CLICommandResult
+    {
+        public readonly int ExitCode;
+        public readonly string Stdout;
+        public readonly string Stderr;
+
+        public CLICommandResult(int exitCode, string stdout, string stderr)
+        {
+            ExitCode = exitCode;
+            Stdout = stdout;
+            Stderr = stderr;
+        }
+    }
+
+    public static async Task<CLICommandResult> RunCLICommand(string[] args)
+    {
+        using (var consoleStdout = new CaptureStdout()) {
+            using (var consoleStderr = new CaptureStderr()) {
+                
+                int exitCode = await CLI.Program.Main(args);
+
+                return new CLICommandResult(exitCode, consoleStdout.GetOutput(), consoleStderr.GetError());
+            }
+        }
+    }
+
     public const string TestStore = "example";
 
     public static string GetAdminAPIEndpoint()

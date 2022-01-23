@@ -3,41 +3,15 @@ using System.Threading.Tasks;
 
 namespace cloud_symbol_server_cli.Tests;
 
-public class TestStoreCommands
+public partial class TestCommands
 {
-    public class CLICommandResult
-    {
-        public readonly int ExitCode;
-        public readonly string Stdout;
-        public readonly string Stderr;
-
-        public CLICommandResult(int exitCode, string stdout, string stderr)
-        {
-            ExitCode = exitCode;
-            Stdout = stdout;
-            Stderr = stderr;
-        }
-    }
-
-    public async Task<CLICommandResult> RunCLICommand(string[] args)
-    {
-        using (var consoleStdout = new CaptureStdout()) {
-            using (var consoleStderr = new CaptureStderr()) {
-                
-                int exitCode = await CLI.Program.Main(args);
-
-                return new CLICommandResult(exitCode, consoleStdout.GetOutput(), consoleStderr.GetError());
-            }
-        }
-    }
-
     [Fact]
     public async Task TestListStores()
     {
         {
             await Helpers.EnsureTestStoreDoesNotExist();
 
-            CLICommandResult result = await RunCLICommand(new string[]{
+            Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
                 "list-stores",
                 "--service-url", Helpers.GetAdminAPIEndpoint(),
                 "--email", Helpers.GetTestEmail(),
@@ -52,7 +26,7 @@ public class TestStoreCommands
         {
             await Helpers.EnsureTestStoreExists();
 
-            CLICommandResult result = await RunCLICommand(new string[]{
+            Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
                 "list-stores",
                 "--service-url", Helpers.GetAdminAPIEndpoint(),
                 "--email", Helpers.GetTestEmail(),
@@ -70,7 +44,7 @@ public class TestStoreCommands
     {
         await Helpers.EnsureTestStoreDoesNotExist();
 
-        CLICommandResult result = await RunCLICommand(new string[]{
+        Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
             "create-store",
             Helpers.TestStore,
             "--service-url", Helpers.GetAdminAPIEndpoint(),
@@ -88,7 +62,7 @@ public class TestStoreCommands
     {
         await Helpers.EnsureTestStoreExists();
 
-        CLICommandResult result = await RunCLICommand(new string[]{
+        Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
             "create-store",
             Helpers.TestStore,
             "--service-url", Helpers.GetAdminAPIEndpoint(),
@@ -106,7 +80,7 @@ public class TestStoreCommands
     {
         await Helpers.EnsureTestStoreExists();
 
-        CLICommandResult result = await RunCLICommand(new string[]{
+        Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
             "delete-store",
             Helpers.TestStore,
             "--service-url", Helpers.GetAdminAPIEndpoint(),
@@ -124,7 +98,7 @@ public class TestStoreCommands
     {
         await Helpers.EnsureTestStoreDoesNotExist();
 
-        CLICommandResult result = await RunCLICommand(new string[]{
+        Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
             "delete-store",
             Helpers.TestStore,
             "--service-url", Helpers.GetAdminAPIEndpoint(),
