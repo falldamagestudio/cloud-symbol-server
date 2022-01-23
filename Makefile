@@ -1,6 +1,6 @@
 .PHONY: deploy deploy-core deploy-download-api deploy-admin-api deploy-firebase-and-frontend
 .PHONY: destroy
-.PHONY: test test-download-api test-admin-api
+.PHONY: test test-download-api test-admin-api test-cli
 
 .PHONY: run-local-firebase-emulators
 .PHONY: run-local-download-api run-local-admin-api
@@ -69,15 +69,27 @@ destroy:
 
 test-download-api:
 	cd download-api \
-	&&	DOWNLOAD_API_ENDPOINT="$(shell jq -r ".downloadAPIEndpoint" < $(ENV)/config.json)" \
-		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/download-api
+	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < $(ENV)/config.json)" \
+		DOWNLOAD_API_ENDPOINT="$(shell jq -r ".downloadAPIEndpoint" < $(ENV)/config.json)" \
+		TEST_EMAIL="$(shell jq -r ".email" < environments/test/test-credentials.json)" \
+		TEST_PAT="$(shell jq -r ".pat" < environments/test/test-credentials.json)" \
+		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/download-api -count=1
 
 test-admin-api:
 	cd admin-api \
 	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < $(ENV)/config.json)" \
-		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/admin-api
+		TEST_EMAIL="$(shell jq -r ".email" < environments/test/test-credentials.json)" \
+		TEST_PAT="$(shell jq -r ".pat" < environments/test/test-credentials.json)" \
+		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/admin-api -count=1
 
-test: test-download-api test-admin-api
+test-cli:
+	cd cli \
+	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < $(ENV)/config.json)" \
+		TEST_EMAIL="$(shell jq -r ".email" < environments/test/test-credentials.json)" \
+		TEST_PAT="$(shell jq -r ".pat" < environments/test/test-credentials.json)" \
+		dotnet test
+
+test: test-download-api test-admin-api test-cli
 
 #########################################################
 # Local (emulator) commands
