@@ -4,11 +4,11 @@
 
 .PHONY: run-local-firebase-emulators
 .PHONY: run-local-download-api run-local-admin-api
-.PHONY: test-local test-local-download-api test-local-admin-api
+.PHONY: test-local test-local-download-api test-local-admin-api test-local-cli
 
 .PHONY: generate-apis generate-go-server-api generate-go-client-api generate-csharp-client-api
 
-.PHONY: test-cli build-cli
+.PHONY: build-cli
 
 ifndef ENV
 ENV:=environments/test
@@ -123,7 +123,14 @@ test-local-admin-api:
 		TEST_PAT="$(shell jq -r ".pat" < environments/local/test-credentials.json)" \
 		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/admin-api/test -count=1
 
-test-local: test-local-download-api test-local-admin-api
+test-local-cli:
+	cd cli \
+	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < environments/local/config.json)" \
+		TEST_EMAIL="$(shell jq -r ".email" < environments/local/test-credentials.json)" \
+		TEST_PAT="$(shell jq -r ".pat" < environments/local/test-credentials.json)" \
+		dotnet test
+
+test-local: test-local-download-api test-local-admin-api test-local-cli
 
 #########################################################
 # API regeneration commands
@@ -183,11 +190,7 @@ generate-csharp-client-api:
 # CLI commands
 #########################################################
 
-test-cli:
-	cd cli \
-	&& dotnet test
-
-build-cli: test-cli
+build-cli:
 	cd cli \
 	&& dotnet publish \
 		--runtime linux-x64 \

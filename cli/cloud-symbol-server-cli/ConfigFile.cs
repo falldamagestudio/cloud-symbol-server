@@ -6,6 +6,11 @@ namespace CLI
     {
         private static InternalConfigFile? internalConfigFile;
 
+        public static void Init()
+        {
+            internalConfigFile = new InternalConfigFile();
+        }
+
         public static void Init(string path)
         {
             internalConfigFile = new InternalConfigFile(path);
@@ -23,6 +28,11 @@ namespace CLI
         public class InternalConfigFile {
 
             private Dictionary<string, string> config;
+
+            public InternalConfigFile()
+            {
+                config = new Dictionary<string, string>();
+            }
 
             public InternalConfigFile(string path)
             {
