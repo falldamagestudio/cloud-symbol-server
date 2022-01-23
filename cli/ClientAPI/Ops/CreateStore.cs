@@ -19,13 +19,18 @@ namespace ClientAPI
             config.Password = PAT;
             BackendAPI.Api.DefaultApi api = new BackendAPI.Api.DefaultApi(config);
 
-            BackendAPI.Client.ApiResponse<Object> createStoreResponse = await api.CreateStoreWithHttpInfoAsync(StoreId);
-            if (createStoreResponse.StatusCode == HttpStatusCode.Conflict)
-                return false;
-            else if (createStoreResponse.ErrorText != null)
-                throw new CreateStoreException(createStoreResponse.ErrorText);
-            else
-                return true;
+            try {
+                BackendAPI.Client.ApiResponse<Object> createStoreResponse = await api.CreateStoreWithHttpInfoAsync(StoreId);
+                if (createStoreResponse.ErrorText != null)
+                    throw new CreateStoreException(createStoreResponse.ErrorText);
+                else
+                    return true;
+            } catch (BackendAPI.Client.ApiException apiException) {
+                if (apiException.ErrorCode == (int)HttpStatusCode.Conflict)
+                    return false;
+                else
+                    throw;
+            }
         }
     }
 }

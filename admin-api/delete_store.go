@@ -28,6 +28,15 @@ func (s *ApiService) DeleteStore(context context.Context, storeId string) (opena
 		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Unable to determine symbol store bucket name"}), err
 	}
 
+	storeDoc, err := getStoreDoc(context, storeId)
+	if storeDoc == nil && err == nil {
+		log.Printf("Store does not exist")
+		return openapi.Response(http.StatusNotFound, &openapi.MessageResponse{Message: "Store does not exist"}), nil
+	} else if err != nil {
+		log.Printf("Unable to fetch store doc, err = %v", err)
+		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Unable to fetch store doc"}), err
+	}
+
 	if err = deleteAllObjectsInStore(context, storageClient, symbolStoreBucketName, storeId); err != nil {
 		if err != nil {
 			log.Printf("Unable to delete all documents in collection, err = %v", err)

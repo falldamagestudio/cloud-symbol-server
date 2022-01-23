@@ -14,7 +14,7 @@ namespace CLI
             }
             else
             {
-                Console.WriteLine($"Store {options.Store} does not exist");
+                Console.Error.WriteLine($"Store {options.Store} does not exist");
                 return 1;
             }
         }

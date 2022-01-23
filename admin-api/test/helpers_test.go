@@ -107,3 +107,21 @@ func ensureTestStoreExists(apiClient *openapi_client.APIClient, authContext cont
 
 	return nil
 }
+
+func ensureTestStoreDoesNotExist(apiClient *openapi_client.APIClient, authContext context.Context, storeId string) error {
+
+	err := deleteStore(apiClient, authContext, storeId, true)
+	if err != nil {
+		return err
+	}
+
+	stores1, err := getStores(apiClient, authContext)
+	if err != nil {
+		return err
+	}
+	if stringInSlice(storeId, stores1) {
+		return errors.New(fmt.Sprintf("Store %v should not be among stores, but is: %v", storeId, stores1))
+	}
+
+	return nil
+}

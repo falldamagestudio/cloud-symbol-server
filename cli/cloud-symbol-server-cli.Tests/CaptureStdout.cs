@@ -3,15 +3,15 @@ using System.IO;
 
 namespace cloud_symbol_server_cli.Tests;
 
-public class CaptureStderr : IDisposable
+public class CaptureStdout : IDisposable
 {
     private StringWriter stringWriter;
-    private TextWriter originalError;
+    private TextWriter originalOutput;
 
-    public CaptureStderr()
+    public CaptureStdout()
     {
         stringWriter = new StringWriter();
-        originalError = Console.Out;
+        originalOutput = Console.Out;
         Console.SetOut(stringWriter);
     }
 
@@ -22,7 +22,7 @@ public class CaptureStderr : IDisposable
 
     public void Dispose()
     {
-        Console.SetOut(originalError);
+        Console.SetOut(originalOutput);
         stringWriter.Dispose();
     }
 }

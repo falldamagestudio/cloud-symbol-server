@@ -19,13 +19,18 @@ namespace ClientAPI
             config.Password = PAT;
             BackendAPI.Api.DefaultApi api = new BackendAPI.Api.DefaultApi(config);
 
-            BackendAPI.Client.ApiResponse<Object> deleteStoreResponse = await api.DeleteStoreWithHttpInfoAsync(StoreId);
-            if (deleteStoreResponse.StatusCode == HttpStatusCode.NotFound)
-                return false;
-            else if (deleteStoreResponse.ErrorText != null)
-                throw new DeleteStoreException(deleteStoreResponse.ErrorText);
-            else
-                return true;
+            try {
+                BackendAPI.Client.ApiResponse<Object> deleteStoreResponse = await api.DeleteStoreWithHttpInfoAsync(StoreId);
+                if (deleteStoreResponse.ErrorText != null)
+                    throw new DeleteStoreException(deleteStoreResponse.ErrorText);
+                else
+                    return true;
+            } catch (BackendAPI.Client.ApiException apiException) {
+                if (apiException.ErrorCode == (int)HttpStatusCode.NotFound)
+                    return false;
+                else
+                    throw;
+            }
         }
     }
 }
