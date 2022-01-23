@@ -1,7 +1,6 @@
 package download_api
 
 import (
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -12,27 +11,9 @@ import (
 	retry "github.com/hashicorp/go-retryablehttp"
 )
 
-func getServiceUrl(email string, pat string) string {
-
-	downloadAPIEndpoint := os.Getenv("DOWNLOAD_API_ENDPOINT")
-	if downloadAPIEndpoint == "" {
-		downloadAPIEndpoint = "http://localhost:8080"
-	}
-
-	serviceUrl := ""
-	if email != "" || pat != "" {
-		parts := strings.Split(downloadAPIEndpoint, "://")
-		serviceUrl = fmt.Sprintf("%s://%s:%s@%s", parts[0], email, pat, parts[1])
-	} else {
-		serviceUrl = downloadAPIEndpoint
-	}
-
-	return serviceUrl
-}
-
 func apiRequest(email string, pat string, path string) (*http.Response, error) {
 
-	serviceUrl := getServiceUrl(email, pat)
+	serviceUrl := getDownloadAPIServiceURL(email, pat)
 
 	httpClient := &http.Client{
 		Transport: cleanhttp.DefaultPooledTransport(),
@@ -93,22 +74,28 @@ func fileRequest(url string) (*http.Response, error) {
 
 func TestAccessFileThatExists(t *testing.T) {
 
-	email := "testuser"
-	pat := "testpat"
-	path := "pingme.txt"
+	email, pat := getTestEmailAndPat()
+
+	storeId := "example"
+
+	if err := ensureTestStoreExistsAndIsPopulated(email, pat, storeId); err != nil {
+		t.Fatalf("Error when creating/populating test store: %v", err)
+	}
+
+	path := "file1/hash1/file1"
 
 	// Request contents of a file that exists
 
 	resp, err := apiRequest(email, pat, path)
 
 	if err != nil {
-		t.Errorf("Error in request: %v", err)
+		t.Fatalf("Error in request: %v", err)
 	}
 
 	// API response should be a HTTP 307 redirect URL, to a download location for the actual file
 
 	if statusCode := resp.StatusCode; statusCode != http.StatusTemporaryRedirect {
-		t.Errorf("HTTP Response status: got %d, want %d", statusCode, http.StatusTemporaryRedirect)
+		t.Fatalf("HTTP Response status: got %d, want %d", statusCode, http.StatusTemporaryRedirect)
 	}
 
 	// Unsigned URLs are on the format,
@@ -122,9 +109,9 @@ func TestAccessFileThatExists(t *testing.T) {
 	location, err := resp.Location()
 
 	if err == http.ErrNoLocation {
-		t.Error("HTTP Response should include a Location header")
+		t.Fatal("HTTP Response should include a Location header")
 	} else if !strings.HasSuffix(location.String(), desiredUnsignedURLSuffix) && !strings.Contains(location.String(), desiredSignedURLComponent) {
-		t.Errorf("HTTP Response Location: got %v, want string to either have unsigned suffix %v or signed substring %v", location, desiredUnsignedURLSuffix, desiredSignedURLComponent)
+		t.Fatalf("HTTP Response Location: got %v, want string to either have unsigned suffix %v or signed substring %v", location, desiredUnsignedURLSuffix, desiredSignedURLComponent)
 	}
 
 	_, err = ioutil.ReadAll(resp.Body)
@@ -136,34 +123,40 @@ func TestAccessFileThatExists(t *testing.T) {
 
 	resp, err = fileRequest(location.String())
 	if err != nil {
-		t.Errorf("Error in request: %v", err)
+		t.Fatalf("Error in request: %v", err)
 	}
 
 	// Downloding actual file should result in a HTTP 200 response
 
 	if statusCode := resp.StatusCode; statusCode != http.StatusOK {
-		t.Errorf("HTTP Response status: got %d, want %d", statusCode, http.StatusOK)
+		t.Fatalf("HTTP Response status: got %d, want %d", statusCode, http.StatusOK)
 	}
 }
 
 func TestAccessFileThatDoesNotExist(t *testing.T) {
 
-	email := "testuser"
-	pat := "testpat"
+	email, pat := getTestEmailAndPat()
+
+	storeId := "example"
+
+	if err := ensureTestStoreExistsAndIsPopulated(email, pat, storeId); err != nil {
+		t.Fatalf("Error when creating/populating test store: %v", err)
+	}
+
 	path := "pingme2.txt"
 
-	// Request contents of a file that exists
+	// Request contents of a file that does not exist
 
 	resp, err := apiRequest(email, pat, path)
 
 	if err != nil {
-		t.Errorf("Error in request: %v", err)
+		t.Fatalf("Error in request: %v", err)
 	}
 
 	// API response should be a HTTP 404
 
 	if statusCode := resp.StatusCode; statusCode != http.StatusNotFound {
-		t.Errorf("HTTP Response status: got %d, want %d", statusCode, http.StatusNotFound)
+		t.Fatalf("HTTP Response status: got %d, want %d", statusCode, http.StatusNotFound)
 	}
 
 	_, err = ioutil.ReadAll(resp.Body)
@@ -176,18 +169,18 @@ func TestAccessWithoutBasicAuthFails(t *testing.T) {
 
 	path := "pingme.txt"
 
-	// Request contents of a file that exists
+	// Request contents of a file that may or may not exist
 
 	resp, err := apiRequest("", "", path)
 
 	if err != nil {
-		t.Errorf("Error in request: %v", err)
+		t.Fatalf("Error in request: %v", err)
 	}
 
 	// API response should be a HTTP 401 Forbidden
 
 	if statusCode := resp.StatusCode; statusCode != http.StatusUnauthorized {
-		t.Errorf("HTTP Response status: got %d, want %d", statusCode, http.StatusUnauthorized)
+		t.Fatalf("HTTP Response status: got %d, want %d", statusCode, http.StatusUnauthorized)
 	}
 
 	_, err = ioutil.ReadAll(resp.Body)
@@ -202,18 +195,18 @@ func TestAccessWithInvalidPATFails(t *testing.T) {
 	pat := "invalidpat"
 	path := "pingme.txt"
 
-	// Request contents of a file that exists
+	// Request contents of a file that may or may not exist
 
 	resp, err := apiRequest(email, pat, path)
 
 	if err != nil {
-		t.Errorf("Error in request: %v", err)
+		t.Fatalf("Error in request: %v", err)
 	}
 
 	// API response should be a HTTP 401 Forbidden
 
 	if statusCode := resp.StatusCode; statusCode != http.StatusUnauthorized {
-		t.Errorf("HTTP Response status: got %d, want %d", statusCode, http.StatusUnauthorized)
+		t.Fatalf("HTTP Response status: got %d, want %d", statusCode, http.StatusUnauthorized)
 	}
 
 	_, err = ioutil.ReadAll(resp.Body)

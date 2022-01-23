@@ -88,6 +88,7 @@ run-local-download-api:
 	&&	GCP_PROJECT_ID=test-cloud-symbol-server \
 		SYMBOL_STORE_BUCKET_NAME="$(shell jq -r ".symbol_store_bucket_name" < environments/local/core/config.json)" \
 		PORT=8083 \
+		GOOGLE_APPLICATION_CREDENTIALS="../../environments/local/download_api/google_application_credentials.json" \
 		go run main.go
 
 run-local-admin-api:
@@ -109,10 +110,11 @@ run-local-frontend:
 
 test-local-download-api:
 	cd download-api \
-	&&	DOWNLOAD_API_ENDPOINT="$(shell jq -r ".downloadAPIEndpoint" < environments/local/config.json)" \
+	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < environments/local/config.json)" \
+		DOWNLOAD_API_ENDPOINT="$(shell jq -r ".downloadAPIEndpoint" < environments/local/config.json)" \
 		TEST_EMAIL="$(shell jq -r ".email" < environments/local/test-credentials.json)" \
 		TEST_PAT="$(shell jq -r ".pat" < environments/local/test-credentials.json)" \
-		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/download-api
+		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/download-api -count=1
 
 test-local-admin-api:
 	cd admin-api \
