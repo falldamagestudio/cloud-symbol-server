@@ -71,22 +71,23 @@ test-download-api:
 	cd download-api \
 	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < $(ENV)/config.json)" \
 		DOWNLOAD_API_ENDPOINT="$(shell jq -r ".downloadAPIEndpoint" < $(ENV)/config.json)" \
-		TEST_EMAIL="$(shell jq -r ".email" < environments/test/test-credentials.json)" \
-		TEST_PAT="$(shell jq -r ".pat" < environments/test/test-credentials.json)" \
+		TEST_EMAIL="$(shell jq -r ".email" < $(ENV)/test-credentials.json)" \
+		TEST_PAT="$(shell jq -r ".pat" < $(ENV)/test-credentials.json)" \
 		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/download-api -count=1
 
 test-admin-api:
 	cd admin-api \
 	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < $(ENV)/config.json)" \
-		TEST_EMAIL="$(shell jq -r ".email" < environments/test/test-credentials.json)" \
-		TEST_PAT="$(shell jq -r ".pat" < environments/test/test-credentials.json)" \
+		TEST_EMAIL="$(shell jq -r ".email" < $(ENV)/test-credentials.json)" \
+		TEST_PAT="$(shell jq -r ".pat" < $(ENV)/test-credentials.json)" \
 		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/admin-api -count=1
 
 test-cli:
 	cd cli \
 	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < $(ENV)/config.json)" \
-		TEST_EMAIL="$(shell jq -r ".email" < environments/test/test-credentials.json)" \
-		TEST_PAT="$(shell jq -r ".pat" < environments/test/test-credentials.json)" \
+		DOWNLOAD_API_ENDPOINT="$(shell jq -r ".downloadAPIEndpoint" < $(ENV)/config.json)" \
+		TEST_EMAIL="$(shell jq -r ".email" < $(ENV)/test-credentials.json)" \
+		TEST_PAT="$(shell jq -r ".pat" < $(ENV)/test-credentials.json)" \
 		dotnet test
 
 test: test-download-api test-admin-api test-cli
@@ -138,6 +139,7 @@ test-local-admin-api:
 test-local-cli:
 	cd cli \
 	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < environments/local/config.json)" \
+		DOWNLOAD_API_ENDPOINT="$(shell jq -r ".downloadAPIEndpoint" < environments/local/config.json)" \
 		TEST_EMAIL="$(shell jq -r ".email" < environments/local/test-credentials.json)" \
 		TEST_PAT="$(shell jq -r ".pat" < environments/local/test-credentials.json)" \
 		dotnet test

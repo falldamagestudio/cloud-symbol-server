@@ -1,4 +1,5 @@
 using Xunit;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace cloud_symbol_server_cli.Tests;
@@ -25,6 +26,10 @@ public partial class TestCommands
 
             Assert.Equal("", result.Stderr);
             Assert.Equal(0, result.ExitCode);
+            byte[] content = await Helpers.DownloadFile("example.pdb", "7F416863ABF34C3E894BAD1739BAA5571");
+            byte[] desiredContent = File.ReadAllBytes("../../../../testdata/example.pdb");
+            Assert.NotNull(content);
+            Assert.Equal(desiredContent, content);
         }
     }
 }
