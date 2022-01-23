@@ -1,4 +1,4 @@
-package admin_api
+package admin_api_test
 
 import (
 	"context"
