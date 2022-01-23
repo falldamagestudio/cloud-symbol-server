@@ -121,7 +121,7 @@ run-local-frontend:
 		npm run serve
 
 test-local-download-api:
-	cd download-api \
+	cd download-api/test \
 	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < environments/local/config.json)" \
 		DOWNLOAD_API_ENDPOINT="$(shell jq -r ".downloadAPIEndpoint" < environments/local/config.json)" \
 		TEST_EMAIL="$(shell jq -r ".email" < environments/local/test-credentials.json)" \
@@ -129,7 +129,7 @@ test-local-download-api:
 		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/download-api/test -count=1
 
 test-local-admin-api:
-	cd admin-api \
+	cd admin-api/test \
 	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < environments/local/config.json)" \
 		TEST_EMAIL="$(shell jq -r ".email" < environments/local/test-credentials.json)" \
 		TEST_PAT="$(shell jq -r ".pat" < environments/local/test-credentials.json)" \
