@@ -27,9 +27,13 @@ func (s *ApiService) GetStoreUpload(context context.Context, uploadId string, st
 		log.Printf("Unable to fetch upload document for %v/%v, err = %v", storeId, uploadId, err)
 		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: fmt.Sprintf("Unable to fetch upload document for %v/%v", storeId, uploadId)}), err
 	}
+	if storeUploadDoc == nil {
+		log.Printf("Upload doc %v/%v does not exist", storeId, uploadId)
+		return openapi.Response(http.StatusNotFound, &openapi.MessageResponse{Message: fmt.Sprintf("Upload %v/%v does not exist", storeId, uploadId)}), err
+	}
 
 	log.Printf("Extracting upload doc data")
-	storeUploadEntry := StoreUploadEntry{}
+	var storeUploadEntry StoreUploadEntry
 	if err = storeUploadDoc.DataTo(&storeUploadEntry); err != nil {
 		log.Printf("Extracting upload doc data failed")
 		return openapi.Response(http.StatusOK, &openapi.MessageResponse{Message: "Error while extracting contents of doc"}), err
