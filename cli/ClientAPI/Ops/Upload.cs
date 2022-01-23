@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using RestSharp;
 
@@ -66,6 +67,8 @@ namespace ClientAPI
             public string FileName;
         }
 
+        private static HttpClient HttpClient = new HttpClient();
+
         private static async Task UploadMissingFiles(BackendAPI.Model.CreateStoreUploadResponse createStoreUploadResponse, IEnumerable<FileWithHash> filesWithHashes, IProgress<UploadProgress> progress)
         {
             if (createStoreUploadResponse.Files != null) {
@@ -77,12 +80,12 @@ namespace ClientAPI
                     if (progress != null)
                         progress.Report(new UploadProgress { State = UploadProgress.StateEnum.UploadingMissingFile, FileName = fileWithHash.FileWithPath });
 
-                    RestClient restClient = new RestClient();
-                    RestRequest request = new RestRequest(uploadFileResponse.Url, Method.PUT);
-                    IRestResponse rrr = await restClient.ExecuteAsync(request);
+                    byte[] content = File.ReadAllBytes(fileWithHash.FileWithPath);
 
-                    if (!rrr.IsSuccessful) {
-                        throw new UploadException($"Upload failed with status code {rrr.StatusCode}; content = {rrr.Content}");
+                    HttpResponseMessage response = await HttpClient.PutAsync(uploadFileResponse.Url, new ByteArrayContent(content));
+
+                    if (!response.IsSuccessStatusCode) {
+                        throw new UploadException($"Upload failed with status code {response.StatusCode}; content = {response.Content}");
                     }
                 }
             }
