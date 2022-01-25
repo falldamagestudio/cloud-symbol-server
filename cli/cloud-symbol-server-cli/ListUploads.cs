@@ -9,15 +9,20 @@ namespace CLI
                 return 1;
             }
 
-            IEnumerable<ClientAPI.ListUploads.StoreUpload> uploads = await ClientAPI.ListUploads.DoListUploads(globalOptions.ServiceUrl, globalOptions.Email, globalOptions.Pat, store);
-            Console.WriteLine($"Uploads in store {store}:");
-            foreach (ClientAPI.ListUploads.StoreUpload upload in uploads) {
-                Console.WriteLine($"  Upload {upload.UploadId}:");
-                Console.WriteLine($"    Description: {upload.Upload.Description}");
-                Console.WriteLine($"    Build ID: {upload.Upload.BuildId}");
-                foreach (var uploadFile in upload.Upload.Files) {
-                    Console.WriteLine($"      FileName: {uploadFile.FileName}, Hash: {uploadFile.Hash}");
+            try {
+                IEnumerable<ClientAPI.ListUploads.StoreUpload> uploads = await ClientAPI.ListUploads.DoListUploads(globalOptions.ServiceUrl, globalOptions.Email, globalOptions.Pat, store);
+                Console.WriteLine($"Uploads in store {store}:");
+                foreach (ClientAPI.ListUploads.StoreUpload upload in uploads) {
+                    Console.WriteLine($"  Upload {upload.UploadId}:");
+                    Console.WriteLine($"    Description: {upload.Upload.Description}");
+                    Console.WriteLine($"    Build ID: {upload.Upload.BuildId}");
+                    foreach (var uploadFile in upload.Upload.Files) {
+                        Console.WriteLine($"      FileName: {uploadFile.FileName}, Hash: {uploadFile.Hash}");
+                    }
                 }
+            } catch (ClientAPI.ListUploads.ListUploadsException listUploadsException) {
+                Console.Error.WriteLine($"Error while listing uploads in store {store}: {listUploadsException.Message}");
+                return 1;
             }
 
             return 0;

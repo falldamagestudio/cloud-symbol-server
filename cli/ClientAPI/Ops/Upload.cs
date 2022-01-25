@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using RestSharp;
 
 namespace ClientAPI
 {
@@ -112,9 +112,17 @@ namespace ClientAPI
                 progress.Report(new UploadProgress { State = UploadProgress.StateEnum.CreatingUploadEntry });
 
             BackendAPI.Model.CreateStoreUploadRequest createStoreUploadRequest = CreateStoreUploadRequest(description, buildId, filesWithHashes);
-            BackendAPI.Client.ApiResponse<BackendAPI.Model.CreateStoreUploadResponse> createStoreUploadResponse = api.CreateStoreUploadWithHttpInfo(store, createStoreUploadRequest);
-            if (createStoreUploadResponse.ErrorText != null)
-                throw new UploadException(createStoreUploadResponse.ErrorText);
+            BackendAPI.Client.ApiResponse<BackendAPI.Model.CreateStoreUploadResponse> createStoreUploadResponse;
+            try {
+                createStoreUploadResponse = api.CreateStoreUploadWithHttpInfo(store, createStoreUploadRequest);
+                if (createStoreUploadResponse.ErrorText != null)
+                    throw new UploadException(createStoreUploadResponse.ErrorText);
+            } catch (BackendAPI.Client.ApiException apiException) {
+                if (apiException.ErrorCode == (int)HttpStatusCode.NotFound)
+                    throw new UploadException($"Store {store} does not exist");
+                else
+                    throw;
+            }
 
             if (progress != null)
                 progress.Report(new UploadProgress { State = UploadProgress.StateEnum.UploadingMissingFiles });

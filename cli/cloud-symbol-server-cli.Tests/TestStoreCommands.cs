@@ -75,6 +75,7 @@ public partial class TestCommands
         });
 
         Assert.NotEqual("", result.Stderr);
+        Assert.DoesNotContain("Exception", result.Stderr);
         Assert.Equal("", result.Stdout);
         Assert.Equal(1, result.ExitCode);
     }
@@ -113,6 +114,7 @@ public partial class TestCommands
         });
 
         Assert.NotEqual("", result.Stderr);
+        Assert.DoesNotContain("Exception", result.Stderr);
         Assert.Equal("", result.Stdout);
         Assert.Equal(1, result.ExitCode);
     }

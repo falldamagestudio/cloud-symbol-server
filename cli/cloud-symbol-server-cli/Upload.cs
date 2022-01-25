@@ -41,7 +41,7 @@ namespace CLI
                     await ClientAPI.Ops.Upload(globalOptions.ServiceUrl, globalOptions.Email, globalOptions.Pat, store, description, buildId, files, uploadProgress);
                     Console.WriteLine("Upload done.");
                 } catch (ClientAPI.Ops.UploadException e) {
-                    Console.WriteLine($"Upload failed: {e.Message}");
+                    Console.Error.WriteLine($"Upload failed: {e.Message}");
                     return 1;
                 }
             }

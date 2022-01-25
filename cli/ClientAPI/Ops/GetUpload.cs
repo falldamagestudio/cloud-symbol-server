@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace ClientAPI
@@ -19,9 +19,17 @@ namespace ClientAPI
             config.Password = PAT;
             BackendAPI.Api.DefaultApi api = new BackendAPI.Api.DefaultApi(config);
 
-            BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreUploadResponse> getStoreUploadResponse = await api.GetStoreUploadWithHttpInfoAsync(upload, store);
-            if (getStoreUploadResponse.ErrorText != null)
-                throw new GetUploadException(getStoreUploadResponse.ErrorText);
+            BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreUploadResponse> getStoreUploadResponse;
+            try {
+                getStoreUploadResponse = await api.GetStoreUploadWithHttpInfoAsync(upload, store);
+                if (getStoreUploadResponse.ErrorText != null)
+                    throw new GetUploadException(getStoreUploadResponse.ErrorText);
+            } catch (BackendAPI.Client.ApiException apiException) {
+                if (apiException.ErrorCode == (int)HttpStatusCode.NotFound)
+                    throw new GetUploadException($"Upload {upload} does not exist in store {store}");
+                else
+                    throw;
+            }
 
             return getStoreUploadResponse.Data;
         }
