@@ -13,10 +13,11 @@ public partial class TestCommands
             await Helpers.EnsureTestStoreExists();
 
             Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-                "upload",
                 "--service-url", Helpers.GetAdminAPIEndpoint(),
                 "--email", Helpers.GetTestEmail(),
                 "--pat", Helpers.GetTestPAT(),
+                "uploads",
+                "create",
                 "--description", "testupload",
                 "--build-id", "build 432",
                 Helpers.TestStore,

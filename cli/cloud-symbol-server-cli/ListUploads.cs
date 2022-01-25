@@ -4,10 +4,15 @@ namespace CLI
 {
     public static class ListUploads
     {
-        public static async Task<int> DoListUploads(ListUploadsOptions options)
+        public static async Task<int> DoListUploads(GlobalOptions globalOptions, string store)
         {
-            IEnumerable<ClientAPI.ListUploads.StoreUpload> uploads = await ClientAPI.ListUploads.DoListUploads(options.ServiceURL, options.Email, options.PAT, options.Store);
-            Console.WriteLine($"Uploads in store {options.Store}:");
+            if (!globalOptions.Validate()) {
+                Console.Error.WriteLine("Please set service-url, email and pat via config.json or commandline options");
+                return 1;
+            }
+
+            IEnumerable<ClientAPI.ListUploads.StoreUpload> uploads = await ClientAPI.ListUploads.DoListUploads(globalOptions.ServiceUrl, globalOptions.Email, globalOptions.Pat, store);
+            Console.WriteLine($"Uploads in store {store}:");
             foreach (ClientAPI.ListUploads.StoreUpload upload in uploads) {
                 Console.WriteLine($"  Upload {upload.UploadId}:");
                 Console.WriteLine($"    Description: {upload.Upload.Description}");

@@ -14,17 +14,22 @@ namespace CLI
             return matcher.GetResultsInFullPath(".");
         }
 
-        public static async Task<int> DoUpload(UploadOptions options)
+        public static async Task<int> DoUpload(GlobalOptions globalOptions, string description, string buildId, string store, string[] patterns)
         {
-            IReadOnlyCollection<string> files = FindMatchingFiles(options.Patterns!).ToList();
+            if (!globalOptions.Validate()) {
+                Console.Error.WriteLine("Please set service-url, email and pat via config.json or commandline options");
+                return 1;
+            }
+
+            IReadOnlyCollection<string> files = FindMatchingFiles(patterns).ToList();
 
             if (!files.Any()) {
-                Console.WriteLine($"No files matching patterns: [{String.Join(", ", options.Patterns!)}], upload skipped");
+                Console.WriteLine($"No files matching patterns: [{String.Join(", ", patterns)}], upload skipped");
             } else {
                 Console.WriteLine("Uploading to Cloud Symbol Server...");
-                Console.WriteLine($"  Store: {options.Store}");
-                Console.WriteLine($"  Description: {options.Description}");
-                Console.WriteLine($"  Build ID: {options.BuildId}");
+                Console.WriteLine($"  Store: {store}");
+                Console.WriteLine($"  Description: {description}");
+                Console.WriteLine($"  Build ID: {buildId}");
                 Console.WriteLine("  Files:");
                 foreach (string file in files) {
                     Console.WriteLine($"    {file}");
@@ -33,7 +38,7 @@ namespace CLI
                 try {
                     Progress<ClientAPI.Ops.UploadProgress> uploadProgress = new Progress<ClientAPI.Ops.UploadProgress>();
                     uploadProgress.ProgressChanged += (s, e) => Console.WriteLine($"Progress: {e.State} {e.FileName}");
-                    await ClientAPI.Ops.Upload(options.ServiceURL, options.Email, options.PAT, options.Store, options.Description, options.BuildId, files, uploadProgress);
+                    await ClientAPI.Ops.Upload(globalOptions.ServiceUrl, globalOptions.Email, globalOptions.Pat, store, description, buildId, files, uploadProgress);
                     Console.WriteLine("Upload done.");
                 } catch (ClientAPI.Ops.UploadException e) {
                     Console.WriteLine($"Upload failed: {e.Message}");

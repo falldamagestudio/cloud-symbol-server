@@ -4,17 +4,22 @@ namespace CLI
 {
     public static class DeleteStore
     {
-        public static async Task<int> DoDeleteStore(DeleteStoreOptions options)
+        public static async Task<int> DoDeleteStore(GlobalOptions globalOptions, string store)
         {
-            bool deleted = await ClientAPI.DeleteStore.DoDeleteStore(options.ServiceURL, options.Email, options.PAT, options.Store);
+            if (!globalOptions.Validate()) {
+                Console.Error.WriteLine("Please set service-url, email and pat via config.json or commandline options");
+                return 1;
+            }
+
+            bool deleted = await ClientAPI.DeleteStore.DoDeleteStore(globalOptions.ServiceUrl, globalOptions.Email, globalOptions.Pat, store);
             if (deleted)
             {
-                Console.WriteLine($"Deleted existing store: {options.Store}");
+                Console.WriteLine($"Deleted existing store: {store}");
                 return 0;
             }
             else
             {
-                Console.Error.WriteLine($"Store {options.Store} does not exist");
+                Console.Error.WriteLine($"Store {store} does not exist");
                 return 1;
             }
         }

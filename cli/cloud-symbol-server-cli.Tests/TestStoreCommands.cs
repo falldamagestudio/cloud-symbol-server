@@ -12,10 +12,11 @@ public partial class TestCommands
             await Helpers.EnsureTestStoreDoesNotExist();
 
             Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-                "list-stores",
                 "--service-url", Helpers.GetAdminAPIEndpoint(),
                 "--email", Helpers.GetTestEmail(),
                 "--pat", Helpers.GetTestPAT(),
+                "stores",
+                "list"
             });
 
             Assert.Equal("", result.Stderr);
@@ -27,10 +28,11 @@ public partial class TestCommands
             await Helpers.EnsureTestStoreExists();
 
             Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-                "list-stores",
                 "--service-url", Helpers.GetAdminAPIEndpoint(),
                 "--email", Helpers.GetTestEmail(),
                 "--pat", Helpers.GetTestPAT(),
+                "stores",
+                "list"
             });
 
             Assert.Equal("", result.Stderr);
@@ -45,11 +47,12 @@ public partial class TestCommands
         await Helpers.EnsureTestStoreDoesNotExist();
 
         Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-            "create-store",
-            Helpers.TestStore,
             "--service-url", Helpers.GetAdminAPIEndpoint(),
             "--email", Helpers.GetTestEmail(),
             "--pat", Helpers.GetTestPAT(),
+            "stores",
+            "create",
+            Helpers.TestStore,
         });
 
         Assert.Equal("", result.Stderr);
@@ -63,11 +66,12 @@ public partial class TestCommands
         await Helpers.EnsureTestStoreExists();
 
         Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-            "create-store",
-            Helpers.TestStore,
             "--service-url", Helpers.GetAdminAPIEndpoint(),
             "--email", Helpers.GetTestEmail(),
             "--pat", Helpers.GetTestPAT(),
+            "stores",
+            "create",
+            Helpers.TestStore,
         });
 
         Assert.NotEqual("", result.Stderr);
@@ -81,11 +85,12 @@ public partial class TestCommands
         await Helpers.EnsureTestStoreExists();
 
         Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-            "delete-store",
-            Helpers.TestStore,
             "--service-url", Helpers.GetAdminAPIEndpoint(),
             "--email", Helpers.GetTestEmail(),
             "--pat", Helpers.GetTestPAT(),
+            "stores",
+            "delete",
+            Helpers.TestStore,
         });
 
         Assert.Equal("", result.Stderr);
@@ -99,11 +104,12 @@ public partial class TestCommands
         await Helpers.EnsureTestStoreDoesNotExist();
 
         Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-            "delete-store",
-            Helpers.TestStore,
             "--service-url", Helpers.GetAdminAPIEndpoint(),
             "--email", Helpers.GetTestEmail(),
             "--pat", Helpers.GetTestPAT(),
+            "stores",
+            "delete",
+            Helpers.TestStore,
         });
 
         Assert.NotEqual("", result.Stderr);
