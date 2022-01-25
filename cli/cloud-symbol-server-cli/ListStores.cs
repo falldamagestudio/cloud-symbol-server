@@ -1,5 +1,3 @@
-using Microsoft.Extensions.FileSystemGlobbing;
-
 namespace CLI
 {
     public static class ListStores
