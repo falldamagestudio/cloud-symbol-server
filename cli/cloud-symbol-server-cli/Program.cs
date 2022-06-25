@@ -86,26 +86,5 @@ namespace CLI
             // Parse the incoming args and invoke the handler
             return await rootCommand.InvokeAsync(args);
         }
-    //     public static async Task<int> Main(string[] args)
-    //     {
-
-    //         int exitCode = await Parser.Default.ParseArguments<
-    //                 CLI.ListUploadsOptions,
-    //                 CLI.UploadOptions,
-    //                 CLI.ListStoresOptions,
-    //                 CLI.CreateStoreOptions,
-    //                 CLI.DeleteStoreOptions,
-    //                 object
-    //             >(args)
-    //             .MapResult(
-    //                 async (CLI.ListUploadsOptions o) => await CLI.ListUploads.DoListUploads(o),
-    //                 async (CLI.UploadOptions o) => await CLI.Upload.DoUpload(o),
-    //                 async (CLI.ListStoresOptions o) => await CLI.ListStores.DoListStores(o),
-    //                 async (CLI.CreateStoreOptions o) => await CLI.CreateStore.DoCreateStore(o),
-    //                 async (CLI.DeleteStoreOptions o) => await CLI.DeleteStore.DoDeleteStore(o),
-    //                 errs => Task.FromResult(1) );
-
-    //         return exitCode;
-    //     }
     }
 }
