@@ -10,38 +10,7 @@ namespace ClientAPI
 {
     public class Ops
     {
-        private struct FileWithHash
-        {
-        	public string FileWithPath;
-        	public string FileWithoutPath;
-        	public string Hash;
-        }
-
-        private static string GetHash(string fileName)
-        {
-            string pdbHash = PDBParser.GetHash(fileName);
-            if (pdbHash != null)
-                return pdbHash;
-
-            string peHash = PEParser.GetHash(fileName);
-            if (peHash != null)
-                return peHash;
-
-            throw new ApplicationException($"File {fileName} is not of a recognized format");
-        }
-
-        private static IEnumerable<FileWithHash> GetFilesWithHashes(IEnumerable<string> fileNames)
-        {
-            IEnumerable<FileWithHash> filesWithHashes = fileNames.Select(fileName => new FileWithHash {
-                FileWithPath = fileName,
-                FileWithoutPath = Path.GetFileName(fileName),
-                Hash = GetHash(fileName)
-            }).Where(fileWithHash => fileWithHash.Hash != null);
-
-            return filesWithHashes;
-        }
-
-        private static BackendAPI.Model.CreateStoreUploadRequest CreateStoreUploadRequest(string description, string buildId, IEnumerable<FileWithHash> FileWithHash)
+        private static BackendAPI.Model.CreateStoreUploadRequest CreateStoreUploadRequest(string description, string buildId, IEnumerable<HashFiles.FileWithHash> FileWithHash)
         {
             BackendAPI.Model.CreateStoreUploadRequest request = new BackendAPI.Model.CreateStoreUploadRequest(
                 description: description,
@@ -69,12 +38,12 @@ namespace ClientAPI
 
         private static HttpClient HttpClient = new HttpClient();
 
-        private static async Task UploadMissingFiles(BackendAPI.Model.CreateStoreUploadResponse createStoreUploadResponse, IEnumerable<FileWithHash> filesWithHashes, IProgress<UploadProgress> progress)
+        private static async Task UploadMissingFiles(BackendAPI.Model.CreateStoreUploadResponse createStoreUploadResponse, IEnumerable<HashFiles.FileWithHash> filesWithHashes, IProgress<UploadProgress> progress)
         {
             if (createStoreUploadResponse.Files != null) {
                 foreach (BackendAPI.Model.UploadFileResponse uploadFileResponse in createStoreUploadResponse.Files) {
 
-                    FileWithHash fileWithHash = filesWithHashes.First(fwh => 
+                    HashFiles.FileWithHash fileWithHash = filesWithHashes.First(fwh => 
                         fwh.FileWithoutPath == uploadFileResponse.FileName && fwh.Hash == uploadFileResponse.Hash);
 
                     if (progress != null)
@@ -106,7 +75,7 @@ namespace ClientAPI
             config.Password = PAT;
             BackendAPI.Api.DefaultApi api = new BackendAPI.Api.DefaultApi(config);
 
-            IEnumerable<FileWithHash> filesWithHashes = GetFilesWithHashes(Files);
+            IEnumerable<HashFiles.FileWithHash> filesWithHashes = HashFiles.GetFilesWithHashes(Files);
 
             if (progress != null)
                 progress.Report(new UploadProgress { State = UploadProgress.StateEnum.CreatingUploadEntry });

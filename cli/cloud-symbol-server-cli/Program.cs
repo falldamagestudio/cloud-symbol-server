@@ -65,9 +65,16 @@ namespace CLI
                 listUploadsCommand,
             };
 
+            Command hashFilesCommand = new Command("hash") {
+                new Argument<string>("patterns", "Globbing patterns of files to compute hashes for") { Arity = ArgumentArity.OneOrMore },
+            };
+            hashFilesCommand.Handler = CommandHandler.Create((string[] patterns)
+                => { return CLI.HashFiles.DoHashFiles(patterns); });
+
             RootCommand rootCommand = new RootCommand {
                 storesCommand,
                 uploadsCommand,
+                hashFilesCommand,
 
                 // Global options, available to all subcommands
                 new Option<string>("--service-url", () => ConfigFile.GetOrDefault("service-url", "")),
