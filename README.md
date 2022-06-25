@@ -26,6 +26,6 @@ any symbols that your CI system has uploaded in the past.
 
 See [NEW_DEPLOYMENT_SETUP.md](NEW_DEPLOYMENT_SETUP.md).
 
-# Debugging and Development
+# Development and debugging
 
-See [DEBUGGING_AND_DEVELOPMENT.md](DEBUGGING_AND_DEVELOPMENT.md).
+See [DEVELOPMENT_AND_DEBUGGING.md](DEVELOPMENT_AND_DEBUGGING.md).
