@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import PATsView from '../views/PATsView.vue'
+import NewPATView from '../views/NewPATView.vue'
 
 Vue.use(VueRouter)
 
@@ -13,6 +14,11 @@ const routes: Array<RouteConfig> = [
     path: '/pats',
     name: 'pats',
     component: PATsView
+  },
+  {
+    path: '/pats/new',
+    name: 'new-pat',
+    component: NewPATView
   },
 ]
 

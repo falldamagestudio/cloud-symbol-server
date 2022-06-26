@@ -7,6 +7,12 @@
       {{ pat.id | abbreviateId }}
     </td>
 
+    <!-- Personal Access Token description -->
+
+    <td>
+      {{ pat.get('description') }}
+    </td>
+
     <td>
       <div class="text-right">
 

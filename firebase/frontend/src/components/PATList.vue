@@ -15,7 +15,7 @@
       >
 
         <v-btn
-          v-on:click="generate()"
+          :to="{ name: 'new-pat' }"
         >
           <v-icon>mdi-plus</v-icon>
           Generate new token
@@ -36,6 +36,9 @@
           <tr>
             <th class="text-left">
               ID
+            </th>
+            <th class="text-left">
+              Description
             </th>
             <th class="text-right">
               Actions
@@ -74,19 +77,6 @@ interface Data {
   pats: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>[]
 }
 
-// dec2hex :: Integer -> String
-// i.e. 0-255 -> '00'-'ff'
-function dec2hex (dec: number) : string {
-  return dec.toString(16).padStart(2, "0")
-}
-
-// generateId :: Integer -> String
-function generateId (len: number) {
-  var arr = new Uint8Array((len || 40) / 2)
-  window.crypto.getRandomValues(arr)
-  return Array.from(arr, dec2hex).join('')
-}
-
 export default Vue.extend({
 
   components: {
@@ -113,15 +103,6 @@ export default Vue.extend({
 
       query.get().then((pats) => {
         this.pats = pats.docs
-      })
-    },
-
-    generate() {
-
-      const id = generateId(32)
-
-      db.collection('users').doc(this.email).collection('pats').doc(id).set({}).then(() => {
-        this.fetch()
       })
     },
 
