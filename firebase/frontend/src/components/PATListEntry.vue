@@ -5,6 +5,18 @@
 
     <td>
       {{ pat.id | abbreviateId }}
+
+      <!-- Shortcut for copying full PAT ID to clipboard -->
+      <v-btn
+        icon
+        @click="copyTextToClipboard(pat.id)"
+      >
+        <v-icon
+          small
+        >
+          mdi-content-copy
+        </v-icon>
+      </v-btn>
     </td>
 
     <!-- Personal Access Token creation timestamp -->
@@ -105,6 +117,10 @@ export default Vue.extend({
   },
 
   methods: {
+
+    copyTextToClipboard(text: string) {
+      navigator.clipboard.writeText(text)
+    },
 
     revoke() {
       db.collection('users').doc(this.email).collection('pats').doc(this.pat.id).delete().then(() => {
