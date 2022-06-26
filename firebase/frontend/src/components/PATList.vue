@@ -38,6 +38,9 @@
               ID
             </th>
             <th class="text-left">
+              Created
+            </th>
+            <th class="text-left">
               Description
             </th>
             <th class="text-right">

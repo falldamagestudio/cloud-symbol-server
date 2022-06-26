@@ -7,6 +7,12 @@
       {{ pat.id | abbreviateId }}
     </td>
 
+    <!-- Personal Access Token creation timestamp -->
+
+    <td>
+      {{ pat.get('creationTimestamp') | timestampToDisplayString }}
+    </td>
+
     <!-- Personal Access Token description -->
 
     <td>
@@ -58,8 +64,12 @@
 <script lang="ts">
 
 import Vue from 'vue'
+import firebase from 'firebase/app'
 import { db } from '../firebase'
 import PATUsageGuide from './PATUsageGuide.vue'
+
+import dayjs from 'dayjs'
+
 
 interface Data {
   useDialogVisible: boolean,
@@ -86,6 +96,10 @@ export default Vue.extend({
     
     abbreviateId: function (id: string): string {
       return `${id.slice(0, 4)}...${id.slice(-4)}`;
+    },
+
+    timestampToDisplayString: function (timestamp: firebase.firestore.Timestamp): string {
+      return dayjs(timestamp.toDate()).format('YYYY-MM-DD HH:mm');
     }
 
   },

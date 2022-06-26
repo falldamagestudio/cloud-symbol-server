@@ -36,6 +36,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import firebase from 'firebase/app'
 import store from '../store/index'
 import { db } from '../firebase'
 
@@ -72,7 +73,12 @@ export default Vue.extend({
     generate() {
       const id = generateId(32)
 
-      db.collection('users').doc(this.email).collection('pats').doc(id).set({ description: this.description }).then(() => {
+      const patFields = {
+        description: this.description,
+        creationTimestamp: firebase.firestore.FieldValue.serverTimestamp()
+      }
+
+      db.collection('users').doc(this.email).collection('pats').doc(id).set(patFields).then(() => {
         this.$router.push({ name: 'pats' })
       })
     },
