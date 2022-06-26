@@ -288,7 +288,7 @@ namespace ClientAPI
 
                 PdbStreamHeader pdbStreamHeader = ReadPdbStreamHeader(pagedStreamDirectory, streamDirectoryHeader);
 
-                string hash = string.Format("{0}{1}", pdbStreamHeader.UniqueId.ToString("N").ToUpper(), pdbStreamHeader.Age);
+                string hash = string.Format("{0}{1:X}", pdbStreamHeader.UniqueId.ToString("N").ToUpper(), pdbStreamHeader.Age);
 
                 return hash;
             }
