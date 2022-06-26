@@ -27,19 +27,39 @@
 
     <!-- Existing tokens -->
 
-    <v-row>
-      <template v-for="pat in pats">
-        <v-col v-bind:key="pat.id" cols="12">
+    <v-simple-table>
 
-          <PAT
-            :email="email"
-            :pat="pat"
-            @refresh="refresh()"
-          />
+      <template
+        v-slot:default
+      >
+        <thead>
+          <tr>
+            <th class="text-left">
+              ID
+            </th>
+            <th class="text-right">
+              Actions
+            </th>
+          </tr>
+        </thead>
 
-        </v-col>
+        <tbody>
+
+          <template
+            v-for="pat in pats"
+          >
+            <PATListEntry
+              v-bind:key="pat.id"
+              :email="email"
+              :pat="pat"
+              @refresh="refresh()"
+            />
+          </template>
+
+        </tbody>
       </template>
-    </v-row>
+
+    </v-simple-table>
   </div>
 </template>
 
@@ -48,7 +68,7 @@
 import Vue from 'vue'
 import type firebase from 'firebase'
 import { db } from '../firebase'
-import PAT from './PAT.vue'
+import PATListEntry from './PATListEntry.vue'
 
 interface Data {
   pats: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>[]
@@ -70,7 +90,7 @@ function generateId (len: number) {
 export default Vue.extend({
 
   components: {
-    PAT
+    PATListEntry
   },
 
   props: {
