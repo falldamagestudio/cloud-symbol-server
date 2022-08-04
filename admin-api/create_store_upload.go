@@ -124,7 +124,21 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 
 	// Log upload to Firestore DB
 
-	uploadId, err := logUpload(context, storeId, createStoreUploadRequest, createStoreUploadResponse)
+	files := make([]FileDBEntry, 0)
+
+	for _, file := range createStoreUploadResponse.Files {
+		status := FileDBEntry_Status_AlreadyPresent
+		if file.Url != "" {
+			status = FileDBEntry_Status_Pending
+		}
+		files = append(files, FileDBEntry{
+			FileName: file.FileName,
+			Hash:     file.Hash,
+			Status:   status,
+		})
+	}
+
+	uploadId, err := logUpload(context, storeId, createStoreUploadRequest.Description, createStoreUploadRequest.BuildId, files)
 	if err != nil {
 		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Internal error while logging upload to DB"}), errors.New("Internal error while logging upload to DB")
 	}
@@ -136,13 +150,14 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 	return openapi.Response(http.StatusOK, createStoreUploadResponse), nil
 }
 
-func logUpload(ctx context.Context, storeId string, createStoreUploadRequest openapi.CreateStoreUploadRequest, createStoreUploadResponse openapi.CreateStoreUploadResponse) (string, error) {
+func logUpload(ctx context.Context, storeId string, description string, buildId string, files []FileDBEntry) (string, error) {
 
 	uploadContent := map[string]interface{}{
-		"description": createStoreUploadRequest.Description,
-		"buildId":     createStoreUploadRequest.BuildId,
-		"files":       createStoreUploadRequest.Files,
+		"description": description,
+		"buildId":     buildId,
+		"files":       files,
 		"timestamp":   time.Now().Format(time.RFC3339),
+		"status":      StoreUploadEntry_Status_InProgress,
 	}
 
 	log.Printf("Writing upload to database: %v", uploadContent)
