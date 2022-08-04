@@ -30,7 +30,7 @@ namespace ClientAPI
         }
 
         public struct UploadProgress {
-            public enum StateEnum { LocalValidation, CreatingUploadEntry, UploadingMissingFiles, UploadingMissingFile, Done };
+            public enum StateEnum { LocalValidation, CreatingUploadEntry, UploadingMissingFiles, UploadingMissingFile, FileAlreadyPresent, Done };
 
             public StateEnum State;
             public string FileName;
@@ -46,15 +46,23 @@ namespace ClientAPI
                     HashFiles.FileWithHash fileWithHash = filesWithHashes.First(fwh => 
                         fwh.FileWithoutPath == uploadFileResponse.FileName && fwh.Hash == uploadFileResponse.Hash);
 
-                    if (progress != null)
-                        progress.Report(new UploadProgress { State = UploadProgress.StateEnum.UploadingMissingFile, FileName = fileWithHash.FileWithPath });
+                    if (!string.IsNullOrEmpty(uploadFileResponse.Url)) {
 
-                    byte[] content = File.ReadAllBytes(fileWithHash.FileWithPath);
+                        if (progress != null)
+                            progress.Report(new UploadProgress { State = UploadProgress.StateEnum.UploadingMissingFile, FileName = fileWithHash.FileWithPath });
 
-                    HttpResponseMessage response = await HttpClient.PutAsync(uploadFileResponse.Url, new ByteArrayContent(content));
+                        byte[] content = File.ReadAllBytes(fileWithHash.FileWithPath);
 
-                    if (!response.IsSuccessStatusCode) {
-                        throw new UploadException($"Upload failed with status code {response.StatusCode}; content = {response.Content}");
+                        HttpResponseMessage response = await HttpClient.PutAsync(uploadFileResponse.Url, new ByteArrayContent(content));
+
+                        if (!response.IsSuccessStatusCode) {
+                            throw new UploadException($"Upload failed with status code {response.StatusCode}; content = {response.Content}");
+                        }
+
+                    } else {
+
+                        if (progress != null)
+                            progress.Report(new UploadProgress { State = UploadProgress.StateEnum.FileAlreadyPresent, FileName = fileWithHash.FileWithPath });
                     }
                 }
             }

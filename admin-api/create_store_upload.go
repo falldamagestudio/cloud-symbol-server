@@ -68,6 +68,8 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 
 	for _, uploadFileRequest := range createStoreUploadRequest.Files {
 
+		objectURL := ""
+
 		// Validate whether object exists in bucket
 		// This will talk to the Cloud Storage APIs
 
@@ -78,8 +80,6 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 			log.Printf("Object %v does not exist in bucket %v, preparing a redirect", path, symbolStoreBucketName)
 
 			// Object does not exist in bucket; determine upload URL
-
-			objectURL := ""
 
 			if useSignedURLs {
 
@@ -111,16 +111,15 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 
 			}
 
-			createStoreUploadResponse.Files = append(createStoreUploadResponse.Files, openapi.UploadFileResponse{
-				FileName: uploadFileRequest.FileName,
-				Hash:     uploadFileRequest.Hash,
-				Url:      objectURL,
-			})
-
 		} else {
 			log.Printf("Object %v already exists in bucket %v", path, symbolStoreBucketName)
 		}
 
+		createStoreUploadResponse.Files = append(createStoreUploadResponse.Files, openapi.UploadFileResponse{
+			FileName: uploadFileRequest.FileName,
+			Hash:     uploadFileRequest.Hash,
+			Url:      objectURL,
+		})
 	}
 
 	// Log upload to Firestore DB
