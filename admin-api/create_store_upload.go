@@ -64,6 +64,11 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 		return openapi.Response(http.StatusNotFound, &openapi.MessageResponse{Message: fmt.Sprintf("Store %v does not exist", storeId)}), err
 	}
 
+	// Legacy API users (those who do not use the progress API) expect the response to filter
+	//  out any files that already are present; those that do use the progress API
+	//  expect to have all files listed in the response, even if they should not be uploaded
+	includeAlreadyPresentFiles := createStoreUploadRequest.UseProgressApi
+
 	createStoreUploadResponse := openapi.CreateStoreUploadResponse{}
 
 	for _, uploadFileRequest := range createStoreUploadRequest.Files {
@@ -115,11 +120,13 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 			log.Printf("Object %v already exists in bucket %v", path, symbolStoreBucketName)
 		}
 
-		createStoreUploadResponse.Files = append(createStoreUploadResponse.Files, openapi.UploadFileResponse{
-			FileName: uploadFileRequest.FileName,
-			Hash:     uploadFileRequest.Hash,
-			Url:      objectURL,
-		})
+		if includeAlreadyPresentFiles || (objectURL != "") {
+			createStoreUploadResponse.Files = append(createStoreUploadResponse.Files, openapi.UploadFileResponse{
+				FileName: uploadFileRequest.FileName,
+				Hash:     uploadFileRequest.Hash,
+				Url:      objectURL,
+			})
+		}
 	}
 
 	// Log upload to Firestore DB
@@ -129,7 +136,13 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 	for _, file := range createStoreUploadResponse.Files {
 		status := FileDBEntry_Status_AlreadyPresent
 		if file.Url != "" {
-			status = FileDBEntry_Status_Pending
+			// Legacy API users will not report completion of individual file upload; therefore the file's stats will remain unknown
+			// For those that use the progress API, however, we can say for sure that the file is pending upload at this point
+			if createStoreUploadRequest.UseProgressApi {
+				status = FileDBEntry_Status_Pending
+			} else {
+				status = FileDBEntry_Status_Unknown
+			}
 		}
 		files = append(files, FileDBEntry{
 			FileName: file.FileName,
@@ -138,7 +151,14 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 		})
 	}
 
-	uploadId, err := logUpload(context, storeId, createStoreUploadRequest.Description, createStoreUploadRequest.BuildId, files)
+	// Legacy API users will not report completion/abortion of the upload operation; therefore the upload's state will remain unkonwn
+	// For those that use the progress API, however, we can say for sure that the upload is in progress at this point
+	uploadStatus := StoreUploadEntry_Status_Unknown
+	if createStoreUploadRequest.UseProgressApi {
+		uploadStatus = StoreUploadEntry_Status_InProgress
+	}
+
+	uploadId, err := logUpload(context, storeId, uploadStatus, createStoreUploadRequest.Description, createStoreUploadRequest.BuildId, files)
 	if err != nil {
 		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Internal error while logging upload to DB"}), errors.New("Internal error while logging upload to DB")
 	}
@@ -150,14 +170,14 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 	return openapi.Response(http.StatusOK, createStoreUploadResponse), nil
 }
 
-func logUpload(ctx context.Context, storeId string, description string, buildId string, files []FileDBEntry) (string, error) {
+func logUpload(ctx context.Context, storeId string, uploadStatus string, description string, buildId string, files []FileDBEntry) (string, error) {
 
 	uploadContent := map[string]interface{}{
 		"description": description,
 		"buildId":     buildId,
 		"files":       files,
 		"timestamp":   time.Now().Format(time.RFC3339),
-		"status":      StoreUploadEntry_Status_InProgress,
+		"status":      uploadStatus,
 	}
 
 	log.Printf("Writing upload to database: %v", uploadContent)

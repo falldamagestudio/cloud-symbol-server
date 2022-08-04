@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**UseProgressApi** | Pointer to **bool** | When present and set to true, the client will provide progress updates; Legacy clients will create an upload, then upload the required files to GCS, without progress/completion callbacks | [optional] 
 **Description** | Pointer to **string** |  | [optional] 
 **BuildId** | Pointer to **string** |  | [optional] 
 **Files** | Pointer to [**[]UploadFileRequest**](UploadFileRequest.md) |  | [optional] 
@@ -26,6 +27,31 @@ will change when the set of required properties is changed
 NewCreateStoreUploadRequestWithDefaults instantiates a new CreateStoreUploadRequest object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetUseProgressApi
+
+`func (o *CreateStoreUploadRequest) GetUseProgressApi() bool`
+
+GetUseProgressApi returns the UseProgressApi field if non-nil, zero value otherwise.
+
+### GetUseProgressApiOk
+
+`func (o *CreateStoreUploadRequest) GetUseProgressApiOk() (*bool, bool)`
+
+GetUseProgressApiOk returns a tuple with the UseProgressApi field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetUseProgressApi
+
+`func (o *CreateStoreUploadRequest) SetUseProgressApi(v bool)`
+
+SetUseProgressApi sets UseProgressApi field to given value.
+
+### HasUseProgressApi
+
+`func (o *CreateStoreUploadRequest) HasUseProgressApi() bool`
+
+HasUseProgressApi returns a boolean if a field has been set.
 
 ### GetDescription
 

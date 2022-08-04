@@ -20,6 +20,7 @@ type GetStoreUploadResponse struct {
 	BuildId *string `json:"buildId,omitempty"`
 	Timestamp *string `json:"timestamp,omitempty"`
 	Files *[]GetFileResponse `json:"files,omitempty"`
+	Status *string `json:"status,omitempty"`
 }
 
 // NewGetStoreUploadResponse instantiates a new GetStoreUploadResponse object
@@ -167,6 +168,38 @@ func (o *GetStoreUploadResponse) SetFiles(v []GetFileResponse) {
 	o.Files = &v
 }
 
+// GetStatus returns the Status field value if set, zero value otherwise.
+func (o *GetStoreUploadResponse) GetStatus() string {
+	if o == nil || o.Status == nil {
+		var ret string
+		return ret
+	}
+	return *o.Status
+}
+
+// GetStatusOk returns a tuple with the Status field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *GetStoreUploadResponse) GetStatusOk() (*string, bool) {
+	if o == nil || o.Status == nil {
+		return nil, false
+	}
+	return o.Status, true
+}
+
+// HasStatus returns a boolean if a field has been set.
+func (o *GetStoreUploadResponse) HasStatus() bool {
+	if o != nil && o.Status != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetStatus gets a reference to the given string and assigns it to the Status field.
+func (o *GetStoreUploadResponse) SetStatus(v string) {
+	o.Status = &v
+}
+
 func (o GetStoreUploadResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if o.Description != nil {
@@ -180,6 +213,9 @@ func (o GetStoreUploadResponse) MarshalJSON() ([]byte, error) {
 	}
 	if o.Files != nil {
 		toSerialize["files"] = o.Files
+	}
+	if o.Status != nil {
+		toSerialize["status"] = o.Status
 	}
 	return json.Marshal(toSerialize)
 }

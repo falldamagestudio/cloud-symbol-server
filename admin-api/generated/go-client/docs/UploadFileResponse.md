@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **FileName** | Pointer to **string** |  | [optional] 
 **Hash** | Pointer to **string** |  | [optional] 
-**Url** | Pointer to **string** |  | [optional] 
+**Url** | Pointer to **string** | Short-lived signed URL where the client should upload the file to, or blank if the file already exists in the storage backend | [optional] 
 
 ## Methods
 

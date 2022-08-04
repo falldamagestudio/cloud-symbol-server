@@ -36,7 +36,7 @@ namespace BackendAPI.Model
         /// </summary>
         /// <param name="fileName">fileName.</param>
         /// <param name="hash">hash.</param>
-        /// <param name="url">url.</param>
+        /// <param name="url">Short-lived signed URL where the client should upload the file to, or blank if the file already exists in the storage backend.</param>
         public UploadFileResponse(string fileName = default(string), string hash = default(string), string url = default(string))
         {
             this.FileName = fileName;
@@ -57,8 +57,9 @@ namespace BackendAPI.Model
         public string Hash { get; set; }
 
         /// <summary>
-        /// Gets or Sets Url
+        /// Short-lived signed URL where the client should upload the file to, or blank if the file already exists in the storage backend
         /// </summary>
+        /// <value>Short-lived signed URL where the client should upload the file to, or blank if the file already exists in the storage backend</value>
         [DataMember(Name = "url", EmitDefaultValue = false)]
         public string Url { get; set; }
 

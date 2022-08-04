@@ -11,6 +11,9 @@ package openapi
 
 type CreateStoreUploadRequest struct {
 
+	// When present and set to true, the client will provide progress updates; Legacy clients will create an upload, then upload the required files to GCS, without progress/completion callbacks
+	UseProgressApi bool `json:"useProgressApi,omitempty"`
+
 	Description string `json:"description,omitempty"`
 
 	BuildId string `json:"buildId,omitempty"`

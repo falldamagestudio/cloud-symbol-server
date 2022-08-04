@@ -18,6 +18,7 @@ import (
 type GetFileResponse struct {
 	FileName *string `json:"fileName,omitempty"`
 	Hash *string `json:"hash,omitempty"`
+	Status *string `json:"status,omitempty"`
 }
 
 // NewGetFileResponse instantiates a new GetFileResponse object
@@ -101,6 +102,38 @@ func (o *GetFileResponse) SetHash(v string) {
 	o.Hash = &v
 }
 
+// GetStatus returns the Status field value if set, zero value otherwise.
+func (o *GetFileResponse) GetStatus() string {
+	if o == nil || o.Status == nil {
+		var ret string
+		return ret
+	}
+	return *o.Status
+}
+
+// GetStatusOk returns a tuple with the Status field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *GetFileResponse) GetStatusOk() (*string, bool) {
+	if o == nil || o.Status == nil {
+		return nil, false
+	}
+	return o.Status, true
+}
+
+// HasStatus returns a boolean if a field has been set.
+func (o *GetFileResponse) HasStatus() bool {
+	if o != nil && o.Status != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetStatus gets a reference to the given string and assigns it to the Status field.
+func (o *GetFileResponse) SetStatus(v string) {
+	o.Status = &v
+}
+
 func (o GetFileResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if o.FileName != nil {
@@ -108,6 +141,9 @@ func (o GetFileResponse) MarshalJSON() ([]byte, error) {
 	}
 	if o.Hash != nil {
 		toSerialize["hash"] = o.Hash
+	}
+	if o.Status != nil {
+		toSerialize["status"] = o.Status
 	}
 	return json.Marshal(toSerialize)
 }

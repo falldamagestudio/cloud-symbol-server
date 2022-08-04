@@ -1,6 +1,7 @@
 package admin_api
 
 const (
+	FileDBEntry_Status_Unknown        = "unknown"
 	FileDBEntry_Status_AlreadyPresent = "already_present"
 	FileDBEntry_Status_Pending        = "pending"
 	FileDBEntry_Status_Uploaded       = "uploaded"
@@ -13,8 +14,9 @@ type FileDBEntry struct {
 }
 
 const (
+	StoreUploadEntry_Status_Unknown    = "unknown"
 	StoreUploadEntry_Status_InProgress = "in_progress"
-	StoreUploadEntry_Status_Complete   = "complete"
+	StoreUploadEntry_Status_Completed  = "completed"
 )
 
 type StoreUploadEntry struct {

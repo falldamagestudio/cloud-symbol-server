@@ -14,6 +14,8 @@ type GetFileResponse struct {
 	FileName string `json:"fileName,omitempty"`
 
 	Hash string `json:"hash,omitempty"`
+
+	Status string `json:"status,omitempty"`
 }
 
 // AssertGetFileResponseRequired checks if the required fields are not zero-ed

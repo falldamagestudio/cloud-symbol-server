@@ -26,6 +26,8 @@ type DefaultApiRouter interface {
 	GetStoreUpload(http.ResponseWriter, *http.Request)
 	GetStoreUploadIds(http.ResponseWriter, *http.Request)
 	GetStores(http.ResponseWriter, *http.Request)
+	MarkStoreUploadCompleted(http.ResponseWriter, *http.Request)
+	MarkStoreUploadFileUploaded(http.ResponseWriter, *http.Request)
 }
 
 
@@ -40,4 +42,6 @@ type DefaultApiServicer interface {
 	GetStoreUpload(context.Context, string, string) (ImplResponse, error)
 	GetStoreUploadIds(context.Context, string) (ImplResponse, error)
 	GetStores(context.Context) (ImplResponse, error)
+	MarkStoreUploadCompleted(context.Context, string, string) (ImplResponse, error)
+	MarkStoreUploadFileUploaded(context.Context, string, string, int32) (ImplResponse, error)
 }
