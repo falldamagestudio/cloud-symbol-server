@@ -16,7 +16,7 @@ func (s *ApiService) DeleteStore(context context.Context, storeId string) (opena
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 
-	storageClient, _, err := getStorageClient(context)
+	storageClient, err := getStorageClient(context)
 	if err != nil {
 		log.Printf("Unable to create storageClient: %v", err)
 		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Unable to create storage client"}), err

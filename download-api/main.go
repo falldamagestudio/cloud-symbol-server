@@ -41,32 +41,12 @@ func DownloadAPI(w http.ResponseWriter, r *http.Request) {
 
 	signedURLExpirationSeconds := 15 * 60
 
-	storageClient, storageEndpoint, err := getStorageClient(r.Context())
+	storageClient, err := getStorageClient(r.Context())
 	if err != nil {
 		log.Printf("Unable to create storageClient: %v", err)
 		http.Error(w, "Unable to create storageClient", http.StatusInternalServerError)
 		return
 	}
-
-	// The Firebase Storage emulator has a non-standard format when referring to files
-	// Normally, files should be referred to as "folder/filename"
-	//  but the storage emulator expects them to be as "folder%2Ffilename" in Storage API paths
-	// Therefore we need to activate override logic when using the emulator
-	//  to access files directly (REST API, outside of SDK)
-
-	urlEncodeRestAPIPath := (storageEndpoint != "")
-
-	// Use signed URLs only when talking to the real Cloud Storage APIs
-	// Otherwise, create public, unsigned URLs directly to the storage service
-	//
-	// The Cloud Storage SDK has support for working against local emulators,
-	//  via the STORAGE_EMULATOR_HOST setting. However, this setting does not
-	//  work properly for the SignedURL() functions when using local emulators:
-	// The SignURL() function will always return URLs that point to the real
-	//   Cloud Storage API, even when STORAGE_EMULATOR_HOST is set.
-	// Because of this, when we use local emulators, we fall back to manually
-	//  constructing download URLs.
-	useSignedURLs := (storageEndpoint == "")
 
 	symbolStoreBucketName, err := getSymbolStoreBucketName()
 	if err != nil {
@@ -115,36 +95,18 @@ func DownloadAPI(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("Preparing a redirect for %v", path)
 
-	objectURL := ""
+	objectURL, err := storageClient.Bucket(symbolStoreBucketName).SignedURL(*fullPath, &storage.SignedURLOptions{
+		Method:  "GET",
+		Expires: time.Now().Add(time.Duration(signedURLExpirationSeconds) * time.Second),
+	})
 
-	if useSignedURLs {
-
-		objectURL, err = storageClient.Bucket(symbolStoreBucketName).SignedURL(*fullPath, &storage.SignedURLOptions{
-			Method:  "GET",
-			Expires: time.Now().Add(time.Duration(signedURLExpirationSeconds) * time.Second),
-		})
-
-		if err != nil {
-			log.Printf("Unable to create signed URL for %v: %v", *fullPath, err)
-			http.Error(w, fmt.Sprintf("Unable to create signed URL for %v", *fullPath), http.StatusInternalServerError)
-			return
-		}
-
-		log.Printf("Object %v has a signed URL %v, valid for %d seconds", *fullPath, objectURL, signedURLExpirationSeconds)
-
-	} else {
-
-		// The Firebase Storage emulator requires the path to be on the format "folder%2Ffilename"
-
-		restAPIPath := *fullPath
-		if urlEncodeRestAPIPath {
-			restAPIPath = strings.ReplaceAll(*fullPath, "/", "%2F")
-		}
-
-		objectURL = fmt.Sprintf("%s/b/%s/o/%s?alt=media", storageEndpoint, symbolStoreBucketName, restAPIPath)
-
-		log.Printf("Object %v has a non-signed URL %v", restAPIPath, objectURL)
+	if err != nil {
+		log.Printf("Unable to create signed URL for %v: %v", *fullPath, err)
+		http.Error(w, fmt.Sprintf("Unable to create signed URL for %v", *fullPath), http.StatusInternalServerError)
+		return
 	}
+
+	log.Printf("Object %v has a signed URL %v, valid for %d seconds", *fullPath, objectURL, signedURLExpirationSeconds)
 
 	log.Printf("Path %v redirected to %v", *fullPath, objectURL)
 	http.Redirect(w, r, objectURL, http.StatusTemporaryRedirect)
