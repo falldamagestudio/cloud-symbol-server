@@ -25,11 +25,7 @@ namespace ClientAPI
 
         public static async Task<IEnumerable<StoreUpload>> DoListUploads(string ServiceURL, string Email, string PAT, string store) {
 
-            BackendAPI.Client.Configuration config = new BackendAPI.Client.Configuration();
-            config.BasePath = ServiceURL;
-            config.Username = Email;
-            config.Password = PAT;
-            BackendAPI.Api.DefaultApi api = new BackendAPI.Api.DefaultApi(config);
+            BackendAPI.Api.DefaultApi api = Helpers.CreateApi(ServiceURL, Email, PAT);
 
             BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreUploadIdsResponse> getStoreUploadIdsResponse;
             try {

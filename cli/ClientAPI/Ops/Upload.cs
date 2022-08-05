@@ -93,11 +93,7 @@ namespace ClientAPI
             if (progress != null)
                 progress.Report(new UploadProgress { State = UploadProgress.StateEnum.LocalValidation });
 
-            BackendAPI.Client.Configuration config = new BackendAPI.Client.Configuration();
-            config.BasePath = ServiceURL;
-            config.Username = Email;
-            config.Password = PAT;
-            BackendAPI.Api.DefaultApi api = new BackendAPI.Api.DefaultApi(config);
+            BackendAPI.Api.DefaultApi api = Helpers.CreateApi(ServiceURL, Email, PAT);
 
             IEnumerable<HashFiles.FileWithHash> filesWithHashes = HashFiles.GetFilesWithHashes(Files);
 
