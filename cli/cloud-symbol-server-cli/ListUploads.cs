@@ -21,8 +21,8 @@ namespace CLI
                         Console.WriteLine($"      FileName: {uploadFile.FileName}, Hash: {uploadFile.Hash}, Status: {uploadFile.Status}");
                     }
                 }
-            } catch (ClientAPI.ListUploads.ListUploadsException listUploadsException) {
-                Console.Error.WriteLine($"Error while listing uploads in store {store}: {listUploadsException.Message}");
+            } catch (ClientAPI.ClientAPIException exception) {
+                Console.Error.WriteLine($"Error while listing uploads in store {store}: {exception.Message}");
                 return 1;
             }
 

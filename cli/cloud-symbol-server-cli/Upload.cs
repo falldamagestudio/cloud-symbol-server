@@ -40,7 +40,7 @@ namespace CLI
                     uploadProgress.ProgressChanged += (s, e) => Console.WriteLine($"Progress: {e.State} {e.FileName}");
                     await ClientAPI.Ops.Upload(globalOptions.ServiceUrl, globalOptions.Email, globalOptions.Pat, store, description, buildId, files, uploadProgress);
                     Console.WriteLine("Upload done.");
-                } catch (ClientAPI.Ops.UploadException e) {
+                } catch (ClientAPI.ClientAPIException e) {
                     Console.Error.WriteLine($"Upload failed: {e.Message}");
                     return 1;
                 }
