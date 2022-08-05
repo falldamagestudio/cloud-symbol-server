@@ -39,7 +39,7 @@ namespace ClientAPI
 
         private static HttpClient HttpClient = new HttpClient();
 
-        private static async Task UploadMissingFiles(BackendAPI.Api.DefaultApi api, string store, BackendAPI.Model.CreateStoreUploadResponse createStoreUploadResponse, IEnumerable<HashFiles.FileWithHash> filesWithHashes, IProgress<UploadProgress> progress)
+        private static async Task UploadMissingFiles(BackendApiWrapper backendApiWrapper, string store, BackendAPI.Model.CreateStoreUploadResponse createStoreUploadResponse, IEnumerable<HashFiles.FileWithHash> filesWithHashes, IProgress<UploadProgress> progress)
         {
             if (createStoreUploadResponse.Files != null) {
 
@@ -64,7 +64,7 @@ namespace ClientAPI
 
                         string uploadId = createStoreUploadResponse.Id;
 
-                        await ApiWrapper.MarkStoreUploadFileUploadedAsync(api, store, uploadId, fileId);
+                        await backendApiWrapper.MarkStoreUploadFileUploadedAsync(store, uploadId, fileId);
 
                     } else {
 
@@ -84,7 +84,7 @@ namespace ClientAPI
             if (progress != null)
                 progress.Report(new UploadProgress { State = UploadProgress.StateEnum.LocalValidation });
 
-            BackendAPI.Api.DefaultApi api = Helpers.CreateApi(ServiceURL, Email, PAT);
+            BackendApiWrapper backendApiWrapper = new BackendApiWrapper(ServiceURL, Email, PAT);
 
             IEnumerable<HashFiles.FileWithHash> filesWithHashes = HashFiles.GetFilesWithHashes(Files);
 
@@ -94,7 +94,7 @@ namespace ClientAPI
 
             BackendAPI.Model.CreateStoreUploadRequest createStoreUploadRequest = CreateStoreUploadRequest(description, buildId, filesWithHashes);
             BackendAPI.Model.CreateStoreUploadResponse createStoreUploadResponse;
-            createStoreUploadResponse = await ApiWrapper.CreateStoreUploadAsync(api, store, createStoreUploadRequest);
+            createStoreUploadResponse = await backendApiWrapper.CreateStoreUploadAsync(store, createStoreUploadRequest);
 
             string uploadId = createStoreUploadResponse.Id;
 
@@ -103,19 +103,19 @@ namespace ClientAPI
                 if (progress != null)
                     progress.Report(new UploadProgress { State = UploadProgress.StateEnum.UploadingMissingFiles });
 
-                await UploadMissingFiles(api, store, createStoreUploadResponse, filesWithHashes, progress);
+                await UploadMissingFiles(backendApiWrapper, store, createStoreUploadResponse, filesWithHashes, progress);
 
                 if (progress != null)
                     progress.Report(new UploadProgress { State = UploadProgress.StateEnum.Done });
 
-                await ApiWrapper.MarkStoreUploadCompletedAsync(api, store, uploadId);
+                await backendApiWrapper.MarkStoreUploadCompletedAsync(store, uploadId);
 
             } catch {
 
                 try {
                     if (progress != null)
                         progress.Report(new UploadProgress { State = UploadProgress.StateEnum.Aborting });
-                    await ApiWrapper.MarkStoreUploadAbortedAsync(api, store, uploadId);
+                    await backendApiWrapper.MarkStoreUploadAbortedAsync(store, uploadId);
                 } catch {}
 
                 throw;

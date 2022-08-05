@@ -20,14 +20,14 @@ namespace ClientAPI
 
         public static async Task<IEnumerable<StoreUpload>> DoListUploads(string ServiceURL, string Email, string PAT, string store) {
 
-            BackendAPI.Api.DefaultApi api = Helpers.CreateApi(ServiceURL, Email, PAT);
+            BackendApiWrapper backendApiWrapper = new BackendApiWrapper(ServiceURL, Email, PAT);
 
-            BackendAPI.Model.GetStoreUploadIdsResponse getStoreUploadIdsResponse = await ApiWrapper.GetStoreUploadIdsAsync(api, store);
+            BackendAPI.Model.GetStoreUploadIdsResponse getStoreUploadIdsResponse = await backendApiWrapper.GetStoreUploadIdsAsync(store);
 
             List<StoreUpload> uploads = new List<StoreUpload>();
 
             foreach (string uploadId in getStoreUploadIdsResponse) {
-                BackendAPI.Model.GetStoreUploadResponse getStoreUploadResponse = await ApiWrapper.GetStoreUploadAsync(api, store, uploadId);
+                BackendAPI.Model.GetStoreUploadResponse getStoreUploadResponse = await backendApiWrapper.GetStoreUploadAsync(store, uploadId);
 
                 uploads.Add(new StoreUpload(uploadId: uploadId, upload: getStoreUploadResponse));
             }

@@ -8,9 +8,9 @@ namespace ClientAPI
     {
         public static async Task<IEnumerable<string>> DoListStores(string ServiceURL, string Email, string PAT) {
 
-            BackendAPI.Api.DefaultApi api = Helpers.CreateApi(ServiceURL, Email, PAT);
+            BackendApiWrapper backendApiWrapper = new BackendApiWrapper(ServiceURL, Email, PAT);
 
-            return await ApiWrapper.GetStoresAsync(api);
+            return await backendApiWrapper.GetStoresAsync();
         }
     }
 }

@@ -4,8 +4,19 @@ using System.Threading.Tasks;
 
 namespace ClientAPI
 {
-    public static class ApiWrapper
+    public class BackendApiWrapper
     {
+        BackendAPI.Api.DefaultApi backendApi;
+
+        public BackendApiWrapper(string ServiceURL, string Email, string PAT) {
+
+            BackendAPI.Client.Configuration config = new BackendAPI.Client.Configuration();
+            config.BasePath = ServiceURL;
+            config.Username = Email;
+            config.Password = PAT;
+            backendApi = new BackendAPI.Api.DefaultApi(config);
+        }
+
         public class ApiException : ClientAPIException
         {
             public ApiException(string message) : base(message) { }
@@ -16,10 +27,10 @@ namespace ClientAPI
             public CreateStoreUploadException(string message) : base(message) { }
         }
 
-        public static async Task<BackendAPI.Model.CreateStoreUploadResponse> CreateStoreUploadAsync(BackendAPI.Api.DefaultApi api, string store, BackendAPI.Model.CreateStoreUploadRequest request) {
+        public async Task<BackendAPI.Model.CreateStoreUploadResponse> CreateStoreUploadAsync(string store, BackendAPI.Model.CreateStoreUploadRequest request) {
 
             try {
-                BackendAPI.Client.ApiResponse<BackendAPI.Model.CreateStoreUploadResponse> response = await api.CreateStoreUploadWithHttpInfoAsync(store, request);
+                BackendAPI.Client.ApiResponse<BackendAPI.Model.CreateStoreUploadResponse> response = await backendApi.CreateStoreUploadWithHttpInfoAsync(store, request);
                 if (response.ErrorText != null)
                     throw new ApiException(response.ErrorText);
                 return response.Data;
@@ -36,10 +47,10 @@ namespace ClientAPI
             public MarkStoreUploadCompletedException(string message) : base(message) { }
         }
 
-        public static async Task MarkStoreUploadCompletedAsync(BackendAPI.Api.DefaultApi api, string store, string uploadId) {
+        public async Task MarkStoreUploadCompletedAsync(string store, string uploadId) {
 
             try {
-                BackendAPI.Client.ApiResponse<object> response = await api.MarkStoreUploadCompletedWithHttpInfoAsync(uploadId, store);
+                BackendAPI.Client.ApiResponse<object> response = await backendApi.MarkStoreUploadCompletedWithHttpInfoAsync(uploadId, store);
                 if (response.ErrorText != null)
                     throw new ApiException(response.ErrorText);
                 return;
@@ -56,10 +67,10 @@ namespace ClientAPI
             public MarkStoreUploadAbortedException(string message) : base(message) { }
         }
 
-        public static async Task MarkStoreUploadAbortedAsync(BackendAPI.Api.DefaultApi api, string store, string uploadId) {
+        public async Task MarkStoreUploadAbortedAsync(string store, string uploadId) {
 
             try {
-                BackendAPI.Client.ApiResponse<object> response = await api.MarkStoreUploadAbortedWithHttpInfoAsync(uploadId, store);
+                BackendAPI.Client.ApiResponse<object> response = await backendApi.MarkStoreUploadAbortedWithHttpInfoAsync(uploadId, store);
                 if (response.ErrorText != null)
                     throw new ApiException(response.ErrorText);
                 return;
@@ -76,10 +87,10 @@ namespace ClientAPI
             public MarkStoreUploadFileUploadedException(string message) : base(message) { }
         }
 
-        public static async Task MarkStoreUploadFileUploadedAsync(BackendAPI.Api.DefaultApi api, string store, string uploadId, int fileId) {
+        public async Task MarkStoreUploadFileUploadedAsync(string store, string uploadId, int fileId) {
 
             try {
-                BackendAPI.Client.ApiResponse<object> response = await api.MarkStoreUploadFileUploadedWithHttpInfoAsync(uploadId, store, fileId);
+                BackendAPI.Client.ApiResponse<object> response = await backendApi.MarkStoreUploadFileUploadedWithHttpInfoAsync(uploadId, store, fileId);
                 if (response.ErrorText != null)
                     throw new ApiException(response.ErrorText);
                 return;
@@ -96,10 +107,10 @@ namespace ClientAPI
             public GetStoreUploadIdsException(string message) : base(message) { }
         }
 
-        public static async Task<BackendAPI.Model.GetStoreUploadIdsResponse> GetStoreUploadIdsAsync(BackendAPI.Api.DefaultApi api, string store) {
+        public async Task<BackendAPI.Model.GetStoreUploadIdsResponse> GetStoreUploadIdsAsync(string store) {
 
             try {
-                BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreUploadIdsResponse> response = await api.GetStoreUploadIdsWithHttpInfoAsync(store);
+                BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreUploadIdsResponse> response = await backendApi.GetStoreUploadIdsWithHttpInfoAsync(store);
                 if (response.ErrorText != null)
                     throw new ApiException(response.ErrorText);
                 return response.Data;
@@ -116,10 +127,10 @@ namespace ClientAPI
             public GetStoreUploadException(string message) : base(message) { }
         }
 
-        public static async Task<BackendAPI.Model.GetStoreUploadResponse> GetStoreUploadAsync(BackendAPI.Api.DefaultApi api, string store, string uploadId) {
+        public async Task<BackendAPI.Model.GetStoreUploadResponse> GetStoreUploadAsync(string store, string uploadId) {
 
             try {
-                BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreUploadResponse> response = await api.GetStoreUploadWithHttpInfoAsync(uploadId, store);
+                BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreUploadResponse> response = await backendApi.GetStoreUploadWithHttpInfoAsync(uploadId, store);
                 if (response.ErrorText != null)
                     throw new ApiException(response.ErrorText);
                 return response.Data;
@@ -131,10 +142,10 @@ namespace ClientAPI
             }
         }
 
-        public static async Task<bool> CreateStoreAsync(BackendAPI.Api.DefaultApi api, string store) {
+        public async Task<bool> CreateStoreAsync(string store) {
 
             try {
-                BackendAPI.Client.ApiResponse<object> response = await api.CreateStoreWithHttpInfoAsync(store);
+                BackendAPI.Client.ApiResponse<object> response = await backendApi.CreateStoreWithHttpInfoAsync(store);
                 if (response.ErrorText != null)
                     throw new ApiException(response.ErrorText);
                 return true;
@@ -146,10 +157,10 @@ namespace ClientAPI
             }
         }
 
-        public static async Task<bool> DeleteStoreAsync(BackendAPI.Api.DefaultApi api, string store) {
+        public async Task<bool> DeleteStoreAsync(string store) {
 
             try {
-                BackendAPI.Client.ApiResponse<object> response = await api.DeleteStoreWithHttpInfoAsync(store);
+                BackendAPI.Client.ApiResponse<object> response = await backendApi.DeleteStoreWithHttpInfoAsync(store);
                 if (response.ErrorText != null)
                     throw new ApiException(response.ErrorText);
                 return true;
@@ -161,9 +172,9 @@ namespace ClientAPI
             }
         }
 
-        public static async Task<BackendAPI.Model.GetStoresResponse> GetStoresAsync(BackendAPI.Api.DefaultApi api) {
+        public async Task<BackendAPI.Model.GetStoresResponse> GetStoresAsync() {
 
-            BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoresResponse> response = await api.GetStoresWithHttpInfoAsync();
+            BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoresResponse> response = await backendApi.GetStoresWithHttpInfoAsync();
             if (response.ErrorText != null)
                 throw new ApiException(response.ErrorText);
             return response.Data;
