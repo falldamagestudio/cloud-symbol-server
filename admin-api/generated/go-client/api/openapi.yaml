@@ -426,6 +426,7 @@ components:
           - unknown
           - in_progress
           - completed
+          - aborted
           example: completed
           type: string
       type: object
@@ -447,6 +448,7 @@ components:
           - already_present
           - pending
           - uploaded
+          - aborted
           example: uploaded
           type: string
       type: object

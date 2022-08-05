@@ -59,7 +59,13 @@ namespace BackendAPI.Model
             /// Enum Uploaded for value: uploaded
             /// </summary>
             [EnumMember(Value = "uploaded")]
-            Uploaded = 4
+            Uploaded = 4,
+
+            /// <summary>
+            /// Enum Aborted for value: aborted
+            /// </summary>
+            [EnumMember(Value = "aborted")]
+            Aborted = 5
 
         }
 

@@ -384,6 +384,7 @@ components:
             - unknown
             - in_progress
             - completed
+            - aborted
 
     getFileResponse:
       type: object
@@ -402,6 +403,7 @@ components:
             - already_present
             - pending
             - uploaded
+            - aborted
 
   securitySchemes:
     emailAndPat:

@@ -53,7 +53,13 @@ namespace BackendAPI.Model
             /// Enum Completed for value: completed
             /// </summary>
             [EnumMember(Value = "completed")]
-            Completed = 3
+            Completed = 3,
+
+            /// <summary>
+            /// Enum Aborted for value: aborted
+            /// </summary>
+            [EnumMember(Value = "aborted")]
+            Aborted = 4
 
         }
 
