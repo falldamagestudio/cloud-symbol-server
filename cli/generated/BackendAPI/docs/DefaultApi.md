@@ -10,6 +10,9 @@ Method | HTTP request | Description
 [**GetStoreUpload**](DefaultApi.md#getstoreupload) | **GET** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
 [**GetStoreUploadIds**](DefaultApi.md#getstoreuploadids) | **GET** /stores/{storeId}/uploads | Fetch a list of all uploads in store
 [**GetStores**](DefaultApi.md#getstores) | **GET** /stores | Fetch a list of all stores
+[**MarkStoreUploadAborted**](DefaultApi.md#markstoreuploadaborted) | **POST** /stores/{storeId}/uploads/{uploadId}/aborted | Mark an upload as aborted
+[**MarkStoreUploadCompleted**](DefaultApi.md#markstoreuploadcompleted) | **POST** /stores/{storeId}/uploads/{uploadId}/completed | Mark an upload as completed
+[**MarkStoreUploadFileUploaded**](DefaultApi.md#markstoreuploadfileuploaded) | **POST** /stores/{storeId}/uploads/{uploadId}/files/{fileId}/uploaded | Mark a file within an upload as uploaded
 
 
 <a name="createstore"></a>
@@ -455,6 +458,236 @@ This endpoint does not need any parameter.
 |-------------|-------------|------------------|
 | **200** | Success |  -  |
 | **401** | Not authorized |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="markstoreuploadaborted"></a>
+# **MarkStoreUploadAborted**
+> void MarkStoreUploadAborted (string uploadId, string storeId)
+
+Mark an upload as aborted
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using BackendAPI.Api;
+using BackendAPI.Client;
+using BackendAPI.Model;
+
+namespace Example
+{
+    public class MarkStoreUploadAbortedExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure HTTP basic authorization: emailAndPat
+            config.Username = "YOUR_USERNAME";
+            config.Password = "YOUR_PASSWORD";
+
+            var apiInstance = new DefaultApi(config);
+            var uploadId = uploadId_example;  // string | ID of the upload to mark as aborted
+            var storeId = storeId_example;  // string | ID of the store containing the upload
+
+            try
+            {
+                // Mark an upload as aborted
+                apiInstance.MarkStoreUploadAborted(uploadId, storeId);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling DefaultApi.MarkStoreUploadAborted: " + e.Message );
+                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **uploadId** | **string**| ID of the upload to mark as aborted | 
+ **storeId** | **string**| ID of the store containing the upload | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[emailAndPat](../README.md#emailAndPat)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **401** | Not authorized |  -  |
+| **404** | No such store/upload |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="markstoreuploadcompleted"></a>
+# **MarkStoreUploadCompleted**
+> void MarkStoreUploadCompleted (string uploadId, string storeId)
+
+Mark an upload as completed
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using BackendAPI.Api;
+using BackendAPI.Client;
+using BackendAPI.Model;
+
+namespace Example
+{
+    public class MarkStoreUploadCompletedExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure HTTP basic authorization: emailAndPat
+            config.Username = "YOUR_USERNAME";
+            config.Password = "YOUR_PASSWORD";
+
+            var apiInstance = new DefaultApi(config);
+            var uploadId = uploadId_example;  // string | ID of the upload to fetch
+            var storeId = storeId_example;  // string | ID of the store containing the upload
+
+            try
+            {
+                // Mark an upload as completed
+                apiInstance.MarkStoreUploadCompleted(uploadId, storeId);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling DefaultApi.MarkStoreUploadCompleted: " + e.Message );
+                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **uploadId** | **string**| ID of the upload to fetch | 
+ **storeId** | **string**| ID of the store containing the upload | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[emailAndPat](../README.md#emailAndPat)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **401** | Not authorized |  -  |
+| **404** | No such store/upload |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="markstoreuploadfileuploaded"></a>
+# **MarkStoreUploadFileUploaded**
+> void MarkStoreUploadFileUploaded (string uploadId, string storeId, int fileId)
+
+Mark a file within an upload as uploaded
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using BackendAPI.Api;
+using BackendAPI.Client;
+using BackendAPI.Model;
+
+namespace Example
+{
+    public class MarkStoreUploadFileUploadedExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure HTTP basic authorization: emailAndPat
+            config.Username = "YOUR_USERNAME";
+            config.Password = "YOUR_PASSWORD";
+
+            var apiInstance = new DefaultApi(config);
+            var uploadId = uploadId_example;  // string | ID of the upload to fetch
+            var storeId = storeId_example;  // string | ID of the store containing the upload
+            var fileId = 56;  // int | Index of the file within the upload that should be marked as uploaded
+
+            try
+            {
+                // Mark a file within an upload as uploaded
+                apiInstance.MarkStoreUploadFileUploaded(uploadId, storeId, fileId);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling DefaultApi.MarkStoreUploadFileUploaded: " + e.Message );
+                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **uploadId** | **string**| ID of the upload to fetch | 
+ **storeId** | **string**| ID of the store containing the upload | 
+ **fileId** | **int**| Index of the file within the upload that should be marked as uploaded | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[emailAndPat](../README.md#emailAndPat)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **401** | Not authorized |  -  |
+| **404** | No such store/upload/item |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -64,9 +64,16 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 		return openapi.Response(http.StatusNotFound, &openapi.MessageResponse{Message: fmt.Sprintf("Store %v does not exist", storeId)}), err
 	}
 
+	// Legacy API users (those who do not use the progress API) expect the response to filter
+	//  out any files that already are present; those that do use the progress API
+	//  expect to have all files listed in the response, even if they should not be uploaded
+	includeAlreadyPresentFiles := createStoreUploadRequest.UseProgressApi
+
 	createStoreUploadResponse := openapi.CreateStoreUploadResponse{}
 
 	for _, uploadFileRequest := range createStoreUploadRequest.Files {
+
+		objectURL := ""
 
 		// Validate whether object exists in bucket
 		// This will talk to the Cloud Storage APIs
@@ -78,8 +85,6 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 			log.Printf("Object %v does not exist in bucket %v, preparing a redirect", path, symbolStoreBucketName)
 
 			// Object does not exist in bucket; determine upload URL
-
-			objectURL := ""
 
 			if useSignedURLs {
 
@@ -111,21 +116,49 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 
 			}
 
+		} else {
+			log.Printf("Object %v already exists in bucket %v", path, symbolStoreBucketName)
+		}
+
+		if includeAlreadyPresentFiles || (objectURL != "") {
 			createStoreUploadResponse.Files = append(createStoreUploadResponse.Files, openapi.UploadFileResponse{
 				FileName: uploadFileRequest.FileName,
 				Hash:     uploadFileRequest.Hash,
 				Url:      objectURL,
 			})
-
-		} else {
-			log.Printf("Object %v already exists in bucket %v", path, symbolStoreBucketName)
 		}
-
 	}
 
 	// Log upload to Firestore DB
 
-	uploadId, err := logUpload(context, storeId, createStoreUploadRequest, createStoreUploadResponse)
+	files := make([]FileDBEntry, 0)
+
+	for _, file := range createStoreUploadResponse.Files {
+		status := FileDBEntry_Status_AlreadyPresent
+		if file.Url != "" {
+			// Legacy API users will not report completion of individual file upload; therefore the file's stats will remain unknown
+			// For those that use the progress API, however, we can say for sure that the file is pending upload at this point
+			if createStoreUploadRequest.UseProgressApi {
+				status = FileDBEntry_Status_Pending
+			} else {
+				status = FileDBEntry_Status_Unknown
+			}
+		}
+		files = append(files, FileDBEntry{
+			FileName: file.FileName,
+			Hash:     file.Hash,
+			Status:   status,
+		})
+	}
+
+	// Legacy API users will not report completion/abortion of the upload operation; therefore the upload's state will remain unkonwn
+	// For those that use the progress API, however, we can say for sure that the upload is in progress at this point
+	uploadStatus := StoreUploadEntry_Status_Unknown
+	if createStoreUploadRequest.UseProgressApi {
+		uploadStatus = StoreUploadEntry_Status_InProgress
+	}
+
+	uploadId, err := logUpload(context, storeId, uploadStatus, createStoreUploadRequest.Description, createStoreUploadRequest.BuildId, files)
 	if err != nil {
 		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Internal error while logging upload to DB"}), errors.New("Internal error while logging upload to DB")
 	}
@@ -137,13 +170,14 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 	return openapi.Response(http.StatusOK, createStoreUploadResponse), nil
 }
 
-func logUpload(ctx context.Context, storeId string, createStoreUploadRequest openapi.CreateStoreUploadRequest, createStoreUploadResponse openapi.CreateStoreUploadResponse) (string, error) {
+func logUpload(ctx context.Context, storeId string, uploadStatus string, description string, buildId string, files []FileDBEntry) (string, error) {
 
 	uploadContent := map[string]interface{}{
-		"description": createStoreUploadRequest.Description,
-		"buildId":     createStoreUploadRequest.BuildId,
-		"files":       createStoreUploadRequest.Files,
+		"description": description,
+		"buildId":     buildId,
+		"files":       files,
 		"timestamp":   time.Now().Format(time.RFC3339),
+		"status":      uploadStatus,
 	}
 
 	log.Printf("Writing upload to database: %v", uploadContent)

@@ -9,7 +9,7 @@ import (
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
 )
 
-func (s *ApiService) GetStoreUpload(context context.Context, uploadId string, storeId string) (openapi.ImplResponse, error) {
+func (s *ApiService) MarkStoreUploadCompleted(context context.Context, uploadId string, storeId string) (openapi.ImplResponse, error) {
 
 	storeDoc, err := getStoreDoc(context, storeId)
 	if err != nil {
@@ -39,35 +39,22 @@ func (s *ApiService) GetStoreUpload(context context.Context, uploadId string, st
 		return openapi.Response(http.StatusOK, &openapi.MessageResponse{Message: "Error while extracting contents of doc"}), err
 	}
 
-	getStoreUploadResponse := openapi.GetStoreUploadResponse{}
-	getStoreUploadResponse.Description = storeUploadEntry.Description
-	getStoreUploadResponse.BuildId = storeUploadEntry.BuildId
-	getStoreUploadResponse.Timestamp = storeUploadEntry.Timestamp
-	// Uploads created before the progress API existed do not have any Status field in the DB
-	// These uploads should be interpreted as having status "Unknown"
-	if storeUploadEntry.Status != "" {
-		getStoreUploadResponse.Status = storeUploadEntry.Status
-	} else {
-		getStoreUploadResponse.Status = StoreUploadEntry_Status_Unknown
+	log.Printf("Getting store upload ref")
+	storeUploadRef, err := getStoreUploadRef(context, storeId, uploadId)
+	if err != nil {
+		log.Printf("Unable to fetch upload document for %v/%v, err = %v", storeId, uploadId, err)
+		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: fmt.Sprintf("Unable to fetch upload document for %v/%v", storeId, uploadId)}), err
 	}
 
-	for _, file := range storeUploadEntry.Files {
+	storeUploadEntry.Status = StoreUploadEntry_Status_Completed
 
-		// Uploaded files created before the progress API existed do not have any Status field in the DB
-		// These files should be interpreted as having status "Unknown"
-		status := FileDBEntry_Status_Unknown
-		if file.Status != "" {
-			status = file.Status
-		}
-
-		getStoreUploadResponse.Files = append(getStoreUploadResponse.Files, openapi.GetFileResponse{
-			FileName: file.FileName,
-			Hash:     file.Hash,
-			Status:   status,
-		})
+	_, err = storeUploadRef.Set(context, storeUploadEntry)
+	if err != nil {
+		log.Printf("Unable to modify status for for %v/%v, err = %v", storeId, uploadId, err)
+		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: fmt.Sprintf("Unable to modify status document for %v/%v", storeId, uploadId)}), err
 	}
 
-	log.Printf("Response: %v", getStoreUploadResponse)
+	log.Printf("Status for %v/%v set to %v", storeId, uploadId, StoreUploadEntry_Status_Completed)
 
-	return openapi.Response(http.StatusOK, getStoreUploadResponse), nil
+	return openapi.Response(http.StatusOK, nil), nil
 }

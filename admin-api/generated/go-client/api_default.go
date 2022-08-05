@@ -732,3 +732,355 @@ func (a *DefaultApiService) GetStoresExecute(r ApiGetStoresRequest) (GetStoresRe
 
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
+
+type ApiMarkStoreUploadAbortedRequest struct {
+	ctx _context.Context
+	ApiService *DefaultApiService
+	uploadId string
+	storeId string
+}
+
+
+func (r ApiMarkStoreUploadAbortedRequest) Execute() (*_nethttp.Response, error) {
+	return r.ApiService.MarkStoreUploadAbortedExecute(r)
+}
+
+/*
+MarkStoreUploadAborted Mark an upload as aborted
+
+ @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param uploadId ID of the upload to mark as aborted
+ @param storeId ID of the store containing the upload
+ @return ApiMarkStoreUploadAbortedRequest
+*/
+func (a *DefaultApiService) MarkStoreUploadAborted(ctx _context.Context, uploadId string, storeId string) ApiMarkStoreUploadAbortedRequest {
+	return ApiMarkStoreUploadAbortedRequest{
+		ApiService: a,
+		ctx: ctx,
+		uploadId: uploadId,
+		storeId: storeId,
+	}
+}
+
+// Execute executes the request
+func (a *DefaultApiService) MarkStoreUploadAbortedExecute(r ApiMarkStoreUploadAbortedRequest) (*_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodPost
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.MarkStoreUploadAborted")
+	if err != nil {
+		return nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/stores/{storeId}/uploads/{uploadId}/aborted"
+	localVarPath = strings.Replace(localVarPath, "{"+"uploadId"+"}", _neturl.PathEscape(parameterToString(r.uploadId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", _neturl.PathEscape(parameterToString(r.storeId, "")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v MessageResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 404 {
+			var v MessageResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+		}
+		return localVarHTTPResponse, newErr
+	}
+
+	return localVarHTTPResponse, nil
+}
+
+type ApiMarkStoreUploadCompletedRequest struct {
+	ctx _context.Context
+	ApiService *DefaultApiService
+	uploadId string
+	storeId string
+}
+
+
+func (r ApiMarkStoreUploadCompletedRequest) Execute() (*_nethttp.Response, error) {
+	return r.ApiService.MarkStoreUploadCompletedExecute(r)
+}
+
+/*
+MarkStoreUploadCompleted Mark an upload as completed
+
+ @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param uploadId ID of the upload to fetch
+ @param storeId ID of the store containing the upload
+ @return ApiMarkStoreUploadCompletedRequest
+*/
+func (a *DefaultApiService) MarkStoreUploadCompleted(ctx _context.Context, uploadId string, storeId string) ApiMarkStoreUploadCompletedRequest {
+	return ApiMarkStoreUploadCompletedRequest{
+		ApiService: a,
+		ctx: ctx,
+		uploadId: uploadId,
+		storeId: storeId,
+	}
+}
+
+// Execute executes the request
+func (a *DefaultApiService) MarkStoreUploadCompletedExecute(r ApiMarkStoreUploadCompletedRequest) (*_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodPost
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.MarkStoreUploadCompleted")
+	if err != nil {
+		return nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/stores/{storeId}/uploads/{uploadId}/completed"
+	localVarPath = strings.Replace(localVarPath, "{"+"uploadId"+"}", _neturl.PathEscape(parameterToString(r.uploadId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", _neturl.PathEscape(parameterToString(r.storeId, "")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v MessageResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 404 {
+			var v MessageResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+		}
+		return localVarHTTPResponse, newErr
+	}
+
+	return localVarHTTPResponse, nil
+}
+
+type ApiMarkStoreUploadFileUploadedRequest struct {
+	ctx _context.Context
+	ApiService *DefaultApiService
+	uploadId string
+	storeId string
+	fileId int32
+}
+
+
+func (r ApiMarkStoreUploadFileUploadedRequest) Execute() (*_nethttp.Response, error) {
+	return r.ApiService.MarkStoreUploadFileUploadedExecute(r)
+}
+
+/*
+MarkStoreUploadFileUploaded Mark a file within an upload as uploaded
+
+ @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param uploadId ID of the upload to fetch
+ @param storeId ID of the store containing the upload
+ @param fileId Index of the file within the upload that should be marked as uploaded
+ @return ApiMarkStoreUploadFileUploadedRequest
+*/
+func (a *DefaultApiService) MarkStoreUploadFileUploaded(ctx _context.Context, uploadId string, storeId string, fileId int32) ApiMarkStoreUploadFileUploadedRequest {
+	return ApiMarkStoreUploadFileUploadedRequest{
+		ApiService: a,
+		ctx: ctx,
+		uploadId: uploadId,
+		storeId: storeId,
+		fileId: fileId,
+	}
+}
+
+// Execute executes the request
+func (a *DefaultApiService) MarkStoreUploadFileUploadedExecute(r ApiMarkStoreUploadFileUploadedRequest) (*_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodPost
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.MarkStoreUploadFileUploaded")
+	if err != nil {
+		return nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/stores/{storeId}/uploads/{uploadId}/files/{fileId}/uploaded"
+	localVarPath = strings.Replace(localVarPath, "{"+"uploadId"+"}", _neturl.PathEscape(parameterToString(r.uploadId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", _neturl.PathEscape(parameterToString(r.storeId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"fileId"+"}", _neturl.PathEscape(parameterToString(r.fileId, "")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 401 {
+			var v MessageResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 404 {
+			var v MessageResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+		}
+		return localVarHTTPResponse, newErr
+	}
+
+	return localVarHTTPResponse, nil
+}

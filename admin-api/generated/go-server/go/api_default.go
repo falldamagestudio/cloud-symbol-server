@@ -86,6 +86,24 @@ func (c *DefaultApiController) Routes() Routes {
 			"/stores",
 			c.GetStores,
 		},
+		{
+			"MarkStoreUploadAborted",
+			strings.ToUpper("Post"),
+			"/stores/{storeId}/uploads/{uploadId}/aborted",
+			c.MarkStoreUploadAborted,
+		},
+		{
+			"MarkStoreUploadCompleted",
+			strings.ToUpper("Post"),
+			"/stores/{storeId}/uploads/{uploadId}/completed",
+			c.MarkStoreUploadCompleted,
+		},
+		{
+			"MarkStoreUploadFileUploaded",
+			strings.ToUpper("Post"),
+			"/stores/{storeId}/uploads/{uploadId}/files/{fileId}/uploaded",
+			c.MarkStoreUploadFileUploaded,
+		},
 	}
 }
 
@@ -185,6 +203,66 @@ func (c *DefaultApiController) GetStoreUploadIds(w http.ResponseWriter, r *http.
 // GetStores - Fetch a list of all stores
 func (c *DefaultApiController) GetStores(w http.ResponseWriter, r *http.Request) {
 	result, err := c.service.GetStores(r.Context())
+	// If an error occurred, encode the error with the status code
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
+	// If no error, encode the body and the result code
+	EncodeJSONResponse(result.Body, &result.Code, w)
+
+}
+
+// MarkStoreUploadAborted - Mark an upload as aborted
+func (c *DefaultApiController) MarkStoreUploadAborted(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	uploadIdParam := params["uploadId"]
+	
+	storeIdParam := params["storeId"]
+	
+	result, err := c.service.MarkStoreUploadAborted(r.Context(), uploadIdParam, storeIdParam)
+	// If an error occurred, encode the error with the status code
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
+	// If no error, encode the body and the result code
+	EncodeJSONResponse(result.Body, &result.Code, w)
+
+}
+
+// MarkStoreUploadCompleted - Mark an upload as completed
+func (c *DefaultApiController) MarkStoreUploadCompleted(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	uploadIdParam := params["uploadId"]
+	
+	storeIdParam := params["storeId"]
+	
+	result, err := c.service.MarkStoreUploadCompleted(r.Context(), uploadIdParam, storeIdParam)
+	// If an error occurred, encode the error with the status code
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
+	// If no error, encode the body and the result code
+	EncodeJSONResponse(result.Body, &result.Code, w)
+
+}
+
+// MarkStoreUploadFileUploaded - Mark a file within an upload as uploaded
+func (c *DefaultApiController) MarkStoreUploadFileUploaded(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	uploadIdParam := params["uploadId"]
+	
+	storeIdParam := params["storeId"]
+	
+	fileIdParam, err := parseInt32Parameter(params["fileId"], true)
+	if err != nil {
+		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		return
+	}
+
+	result, err := c.service.MarkStoreUploadFileUploaded(r.Context(), uploadIdParam, storeIdParam, fileIdParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)

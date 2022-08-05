@@ -136,6 +136,68 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <returns>ApiResponse of GetStoresResponse</returns>
         ApiResponse<GetStoresResponse> GetStoresWithHttpInfo();
+        /// <summary>
+        /// Mark an upload as aborted
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to mark as aborted</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <returns></returns>
+        void MarkStoreUploadAborted(string uploadId, string storeId);
+
+        /// <summary>
+        /// Mark an upload as aborted
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to mark as aborted</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <returns>ApiResponse of Object(void)</returns>
+        ApiResponse<Object> MarkStoreUploadAbortedWithHttpInfo(string uploadId, string storeId);
+        /// <summary>
+        /// Mark an upload as completed
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to fetch</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <returns></returns>
+        void MarkStoreUploadCompleted(string uploadId, string storeId);
+
+        /// <summary>
+        /// Mark an upload as completed
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to fetch</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <returns>ApiResponse of Object(void)</returns>
+        ApiResponse<Object> MarkStoreUploadCompletedWithHttpInfo(string uploadId, string storeId);
+        /// <summary>
+        /// Mark a file within an upload as uploaded
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to fetch</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="fileId">Index of the file within the upload that should be marked as uploaded</param>
+        /// <returns></returns>
+        void MarkStoreUploadFileUploaded(string uploadId, string storeId, int fileId);
+
+        /// <summary>
+        /// Mark a file within an upload as uploaded
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to fetch</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="fileId">Index of the file within the upload that should be marked as uploaded</param>
+        /// <returns>ApiResponse of Object(void)</returns>
+        ApiResponse<Object> MarkStoreUploadFileUploadedWithHttpInfo(string uploadId, string storeId, int fileId);
         #endregion Synchronous Operations
     }
 
@@ -285,6 +347,83 @@ namespace BackendAPI.Api
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (GetStoresResponse)</returns>
         System.Threading.Tasks.Task<ApiResponse<GetStoresResponse>> GetStoresWithHttpInfoAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <summary>
+        /// Mark an upload as aborted
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to mark as aborted</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of void</returns>
+        System.Threading.Tasks.Task MarkStoreUploadAbortedAsync(string uploadId, string storeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <summary>
+        /// Mark an upload as aborted
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to mark as aborted</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse</returns>
+        System.Threading.Tasks.Task<ApiResponse<Object>> MarkStoreUploadAbortedWithHttpInfoAsync(string uploadId, string storeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <summary>
+        /// Mark an upload as completed
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to fetch</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of void</returns>
+        System.Threading.Tasks.Task MarkStoreUploadCompletedAsync(string uploadId, string storeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <summary>
+        /// Mark an upload as completed
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to fetch</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse</returns>
+        System.Threading.Tasks.Task<ApiResponse<Object>> MarkStoreUploadCompletedWithHttpInfoAsync(string uploadId, string storeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <summary>
+        /// Mark a file within an upload as uploaded
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to fetch</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="fileId">Index of the file within the upload that should be marked as uploaded</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of void</returns>
+        System.Threading.Tasks.Task MarkStoreUploadFileUploadedAsync(string uploadId, string storeId, int fileId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <summary>
+        /// Mark a file within an upload as uploaded
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to fetch</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="fileId">Index of the file within the upload that should be marked as uploaded</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse</returns>
+        System.Threading.Tasks.Task<ApiResponse<Object>> MarkStoreUploadFileUploadedWithHttpInfoAsync(string uploadId, string storeId, int fileId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         #endregion Asynchronous Operations
     }
 
@@ -1173,6 +1312,429 @@ namespace BackendAPI.Api
             if (this.ExceptionFactory != null)
             {
                 Exception _exception = this.ExceptionFactory("GetStores", localVarResponse);
+                if (_exception != null) throw _exception;
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Mark an upload as aborted 
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to mark as aborted</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <returns></returns>
+        public void MarkStoreUploadAborted(string uploadId, string storeId)
+        {
+            MarkStoreUploadAbortedWithHttpInfo(uploadId, storeId);
+        }
+
+        /// <summary>
+        /// Mark an upload as aborted 
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to mark as aborted</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <returns>ApiResponse of Object(void)</returns>
+        public BackendAPI.Client.ApiResponse<Object> MarkStoreUploadAbortedWithHttpInfo(string uploadId, string storeId)
+        {
+            // verify the required parameter 'uploadId' is set
+            if (uploadId == null)
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'uploadId' when calling DefaultApi->MarkStoreUploadAborted");
+
+            // verify the required parameter 'storeId' is set
+            if (storeId == null)
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->MarkStoreUploadAborted");
+
+            BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = BackendAPI.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null) localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+
+            var localVarAccept = BackendAPI.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null) localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+
+            localVarRequestOptions.PathParameters.Add("uploadId", BackendAPI.Client.ClientUtils.ParameterToString(uploadId)); // path parameter
+            localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
+
+            // authentication (emailAndPat) required
+            // http basic authentication required
+            if (!string.IsNullOrEmpty(this.Configuration.Username) || !string.IsNullOrEmpty(this.Configuration.Password))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", "Basic " + BackendAPI.Client.ClientUtils.Base64Encode(this.Configuration.Username + ":" + this.Configuration.Password));
+            }
+
+            // make the HTTP request
+            var localVarResponse = this.Client.Post<Object>("/stores/{storeId}/uploads/{uploadId}/aborted", localVarRequestOptions, this.Configuration);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("MarkStoreUploadAborted", localVarResponse);
+                if (_exception != null) throw _exception;
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Mark an upload as aborted 
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to mark as aborted</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of void</returns>
+        public async System.Threading.Tasks.Task MarkStoreUploadAbortedAsync(string uploadId, string storeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            await MarkStoreUploadAbortedWithHttpInfoAsync(uploadId, storeId, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Mark an upload as aborted 
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to mark as aborted</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse</returns>
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<Object>> MarkStoreUploadAbortedWithHttpInfoAsync(string uploadId, string storeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            // verify the required parameter 'uploadId' is set
+            if (uploadId == null)
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'uploadId' when calling DefaultApi->MarkStoreUploadAborted");
+
+            // verify the required parameter 'storeId' is set
+            if (storeId == null)
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->MarkStoreUploadAborted");
+
+
+            BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+
+            var localVarContentType = BackendAPI.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null) localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+
+            var localVarAccept = BackendAPI.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null) localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+
+            localVarRequestOptions.PathParameters.Add("uploadId", BackendAPI.Client.ClientUtils.ParameterToString(uploadId)); // path parameter
+            localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
+
+            // authentication (emailAndPat) required
+            // http basic authentication required
+            if (!string.IsNullOrEmpty(this.Configuration.Username) || !string.IsNullOrEmpty(this.Configuration.Password))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", "Basic " + BackendAPI.Client.ClientUtils.Base64Encode(this.Configuration.Username + ":" + this.Configuration.Password));
+            }
+
+            // make the HTTP request
+
+            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/stores/{storeId}/uploads/{uploadId}/aborted", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("MarkStoreUploadAborted", localVarResponse);
+                if (_exception != null) throw _exception;
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Mark an upload as completed 
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to fetch</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <returns></returns>
+        public void MarkStoreUploadCompleted(string uploadId, string storeId)
+        {
+            MarkStoreUploadCompletedWithHttpInfo(uploadId, storeId);
+        }
+
+        /// <summary>
+        /// Mark an upload as completed 
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to fetch</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <returns>ApiResponse of Object(void)</returns>
+        public BackendAPI.Client.ApiResponse<Object> MarkStoreUploadCompletedWithHttpInfo(string uploadId, string storeId)
+        {
+            // verify the required parameter 'uploadId' is set
+            if (uploadId == null)
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'uploadId' when calling DefaultApi->MarkStoreUploadCompleted");
+
+            // verify the required parameter 'storeId' is set
+            if (storeId == null)
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->MarkStoreUploadCompleted");
+
+            BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = BackendAPI.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null) localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+
+            var localVarAccept = BackendAPI.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null) localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+
+            localVarRequestOptions.PathParameters.Add("uploadId", BackendAPI.Client.ClientUtils.ParameterToString(uploadId)); // path parameter
+            localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
+
+            // authentication (emailAndPat) required
+            // http basic authentication required
+            if (!string.IsNullOrEmpty(this.Configuration.Username) || !string.IsNullOrEmpty(this.Configuration.Password))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", "Basic " + BackendAPI.Client.ClientUtils.Base64Encode(this.Configuration.Username + ":" + this.Configuration.Password));
+            }
+
+            // make the HTTP request
+            var localVarResponse = this.Client.Post<Object>("/stores/{storeId}/uploads/{uploadId}/completed", localVarRequestOptions, this.Configuration);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("MarkStoreUploadCompleted", localVarResponse);
+                if (_exception != null) throw _exception;
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Mark an upload as completed 
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to fetch</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of void</returns>
+        public async System.Threading.Tasks.Task MarkStoreUploadCompletedAsync(string uploadId, string storeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            await MarkStoreUploadCompletedWithHttpInfoAsync(uploadId, storeId, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Mark an upload as completed 
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to fetch</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse</returns>
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<Object>> MarkStoreUploadCompletedWithHttpInfoAsync(string uploadId, string storeId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            // verify the required parameter 'uploadId' is set
+            if (uploadId == null)
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'uploadId' when calling DefaultApi->MarkStoreUploadCompleted");
+
+            // verify the required parameter 'storeId' is set
+            if (storeId == null)
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->MarkStoreUploadCompleted");
+
+
+            BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+
+            var localVarContentType = BackendAPI.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null) localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+
+            var localVarAccept = BackendAPI.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null) localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+
+            localVarRequestOptions.PathParameters.Add("uploadId", BackendAPI.Client.ClientUtils.ParameterToString(uploadId)); // path parameter
+            localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
+
+            // authentication (emailAndPat) required
+            // http basic authentication required
+            if (!string.IsNullOrEmpty(this.Configuration.Username) || !string.IsNullOrEmpty(this.Configuration.Password))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", "Basic " + BackendAPI.Client.ClientUtils.Base64Encode(this.Configuration.Username + ":" + this.Configuration.Password));
+            }
+
+            // make the HTTP request
+
+            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/stores/{storeId}/uploads/{uploadId}/completed", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("MarkStoreUploadCompleted", localVarResponse);
+                if (_exception != null) throw _exception;
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Mark a file within an upload as uploaded 
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to fetch</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="fileId">Index of the file within the upload that should be marked as uploaded</param>
+        /// <returns></returns>
+        public void MarkStoreUploadFileUploaded(string uploadId, string storeId, int fileId)
+        {
+            MarkStoreUploadFileUploadedWithHttpInfo(uploadId, storeId, fileId);
+        }
+
+        /// <summary>
+        /// Mark a file within an upload as uploaded 
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to fetch</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="fileId">Index of the file within the upload that should be marked as uploaded</param>
+        /// <returns>ApiResponse of Object(void)</returns>
+        public BackendAPI.Client.ApiResponse<Object> MarkStoreUploadFileUploadedWithHttpInfo(string uploadId, string storeId, int fileId)
+        {
+            // verify the required parameter 'uploadId' is set
+            if (uploadId == null)
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'uploadId' when calling DefaultApi->MarkStoreUploadFileUploaded");
+
+            // verify the required parameter 'storeId' is set
+            if (storeId == null)
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->MarkStoreUploadFileUploaded");
+
+            BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = BackendAPI.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null) localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+
+            var localVarAccept = BackendAPI.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null) localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+
+            localVarRequestOptions.PathParameters.Add("uploadId", BackendAPI.Client.ClientUtils.ParameterToString(uploadId)); // path parameter
+            localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
+            localVarRequestOptions.PathParameters.Add("fileId", BackendAPI.Client.ClientUtils.ParameterToString(fileId)); // path parameter
+
+            // authentication (emailAndPat) required
+            // http basic authentication required
+            if (!string.IsNullOrEmpty(this.Configuration.Username) || !string.IsNullOrEmpty(this.Configuration.Password))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", "Basic " + BackendAPI.Client.ClientUtils.Base64Encode(this.Configuration.Username + ":" + this.Configuration.Password));
+            }
+
+            // make the HTTP request
+            var localVarResponse = this.Client.Post<Object>("/stores/{storeId}/uploads/{uploadId}/files/{fileId}/uploaded", localVarRequestOptions, this.Configuration);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("MarkStoreUploadFileUploaded", localVarResponse);
+                if (_exception != null) throw _exception;
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Mark a file within an upload as uploaded 
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to fetch</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="fileId">Index of the file within the upload that should be marked as uploaded</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of void</returns>
+        public async System.Threading.Tasks.Task MarkStoreUploadFileUploadedAsync(string uploadId, string storeId, int fileId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            await MarkStoreUploadFileUploadedWithHttpInfoAsync(uploadId, storeId, fileId, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Mark a file within an upload as uploaded 
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="uploadId">ID of the upload to fetch</param>
+        /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="fileId">Index of the file within the upload that should be marked as uploaded</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse</returns>
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<Object>> MarkStoreUploadFileUploadedWithHttpInfoAsync(string uploadId, string storeId, int fileId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            // verify the required parameter 'uploadId' is set
+            if (uploadId == null)
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'uploadId' when calling DefaultApi->MarkStoreUploadFileUploaded");
+
+            // verify the required parameter 'storeId' is set
+            if (storeId == null)
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->MarkStoreUploadFileUploaded");
+
+
+            BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+
+            var localVarContentType = BackendAPI.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null) localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+
+            var localVarAccept = BackendAPI.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null) localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+
+            localVarRequestOptions.PathParameters.Add("uploadId", BackendAPI.Client.ClientUtils.ParameterToString(uploadId)); // path parameter
+            localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
+            localVarRequestOptions.PathParameters.Add("fileId", BackendAPI.Client.ClientUtils.ParameterToString(fileId)); // path parameter
+
+            // authentication (emailAndPat) required
+            // http basic authentication required
+            if (!string.IsNullOrEmpty(this.Configuration.Username) || !string.IsNullOrEmpty(this.Configuration.Password))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", "Basic " + BackendAPI.Client.ClientUtils.Base64Encode(this.Configuration.Username + ":" + this.Configuration.Password));
+            }
+
+            // make the HTTP request
+
+            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/stores/{storeId}/uploads/{uploadId}/files/{fileId}/uploaded", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("MarkStoreUploadFileUploaded", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 

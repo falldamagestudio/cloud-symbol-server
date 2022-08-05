@@ -16,6 +16,8 @@ import (
 
 // CreateStoreUploadRequest struct for CreateStoreUploadRequest
 type CreateStoreUploadRequest struct {
+	// When present and set to true, the client will provide progress updates; Legacy clients will create an upload, then upload the required files to GCS, without progress/completion callbacks
+	UseProgressApi *bool `json:"useProgressApi,omitempty"`
 	Description *string `json:"description,omitempty"`
 	BuildId *string `json:"buildId,omitempty"`
 	Files *[]UploadFileRequest `json:"files,omitempty"`
@@ -36,6 +38,38 @@ func NewCreateStoreUploadRequest() *CreateStoreUploadRequest {
 func NewCreateStoreUploadRequestWithDefaults() *CreateStoreUploadRequest {
 	this := CreateStoreUploadRequest{}
 	return &this
+}
+
+// GetUseProgressApi returns the UseProgressApi field value if set, zero value otherwise.
+func (o *CreateStoreUploadRequest) GetUseProgressApi() bool {
+	if o == nil || o.UseProgressApi == nil {
+		var ret bool
+		return ret
+	}
+	return *o.UseProgressApi
+}
+
+// GetUseProgressApiOk returns a tuple with the UseProgressApi field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CreateStoreUploadRequest) GetUseProgressApiOk() (*bool, bool) {
+	if o == nil || o.UseProgressApi == nil {
+		return nil, false
+	}
+	return o.UseProgressApi, true
+}
+
+// HasUseProgressApi returns a boolean if a field has been set.
+func (o *CreateStoreUploadRequest) HasUseProgressApi() bool {
+	if o != nil && o.UseProgressApi != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetUseProgressApi gets a reference to the given bool and assigns it to the UseProgressApi field.
+func (o *CreateStoreUploadRequest) SetUseProgressApi(v bool) {
+	o.UseProgressApi = &v
 }
 
 // GetDescription returns the Description field value if set, zero value otherwise.
@@ -136,6 +170,9 @@ func (o *CreateStoreUploadRequest) SetFiles(v []UploadFileRequest) {
 
 func (o CreateStoreUploadRequest) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
+	if o.UseProgressApi != nil {
+		toSerialize["useProgressApi"] = o.UseProgressApi
+	}
 	if o.Description != nil {
 		toSerialize["description"] = o.Description
 	}

@@ -34,15 +34,24 @@ namespace BackendAPI.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateStoreUploadRequest" /> class.
         /// </summary>
+        /// <param name="useProgressApi">When present and set to true, the client will provide progress updates; Legacy clients will create an upload, then upload the required files to GCS, without progress/completion callbacks.</param>
         /// <param name="description">description.</param>
         /// <param name="buildId">buildId.</param>
         /// <param name="files">files.</param>
-        public CreateStoreUploadRequest(string description = default(string), string buildId = default(string), List<UploadFileRequest> files = default(List<UploadFileRequest>))
+        public CreateStoreUploadRequest(bool useProgressApi = default(bool), string description = default(string), string buildId = default(string), List<UploadFileRequest> files = default(List<UploadFileRequest>))
         {
+            this.UseProgressApi = useProgressApi;
             this.Description = description;
             this.BuildId = buildId;
             this.Files = files;
         }
+
+        /// <summary>
+        /// When present and set to true, the client will provide progress updates; Legacy clients will create an upload, then upload the required files to GCS, without progress/completion callbacks
+        /// </summary>
+        /// <value>When present and set to true, the client will provide progress updates; Legacy clients will create an upload, then upload the required files to GCS, without progress/completion callbacks</value>
+        [DataMember(Name = "useProgressApi", EmitDefaultValue = true)]
+        public bool UseProgressApi { get; set; }
 
         /// <summary>
         /// Gets or Sets Description
@@ -70,6 +79,7 @@ namespace BackendAPI.Model
         {
             var sb = new StringBuilder();
             sb.Append("class CreateStoreUploadRequest {\n");
+            sb.Append("  UseProgressApi: ").Append(UseProgressApi).Append("\n");
             sb.Append("  Description: ").Append(Description).Append("\n");
             sb.Append("  BuildId: ").Append(BuildId).Append("\n");
             sb.Append("  Files: ").Append(Files).Append("\n");
@@ -108,6 +118,10 @@ namespace BackendAPI.Model
 
             return 
                 (
+                    this.UseProgressApi == input.UseProgressApi ||
+                    this.UseProgressApi.Equals(input.UseProgressApi)
+                ) && 
+                (
                     this.Description == input.Description ||
                     (this.Description != null &&
                     this.Description.Equals(input.Description))
@@ -134,6 +148,7 @@ namespace BackendAPI.Model
             unchecked // Overflow is fine, just wrap
             {
                 int hashCode = 41;
+                hashCode = hashCode * 59 + this.UseProgressApi.GetHashCode();
                 if (this.Description != null)
                     hashCode = hashCode * 59 + this.Description.GetHashCode();
                 if (this.BuildId != null)

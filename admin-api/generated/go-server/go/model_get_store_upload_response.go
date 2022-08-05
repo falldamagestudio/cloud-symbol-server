@@ -18,6 +18,8 @@ type GetStoreUploadResponse struct {
 	Timestamp string `json:"timestamp,omitempty"`
 
 	Files []GetFileResponse `json:"files,omitempty"`
+
+	Status string `json:"status,omitempty"`
 }
 
 // AssertGetStoreUploadResponseRequired checks if the required fields are not zero-ed

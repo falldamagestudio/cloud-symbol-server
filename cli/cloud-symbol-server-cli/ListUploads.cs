@@ -14,10 +14,11 @@ namespace CLI
                 Console.WriteLine($"Uploads in store {store}:");
                 foreach (ClientAPI.ListUploads.StoreUpload upload in uploads) {
                     Console.WriteLine($"  Upload {upload.UploadId}:");
+                    Console.WriteLine($"    Status: {upload.Upload.Status}");
                     Console.WriteLine($"    Description: {upload.Upload.Description}");
                     Console.WriteLine($"    Build ID: {upload.Upload.BuildId}");
                     foreach (var uploadFile in upload.Upload.Files) {
-                        Console.WriteLine($"      FileName: {uploadFile.FileName}, Hash: {uploadFile.Hash}");
+                        Console.WriteLine($"      FileName: {uploadFile.FileName}, Hash: {uploadFile.Hash}, Status: {uploadFile.Status}");
                     }
                 }
             } catch (ClientAPI.ListUploads.ListUploadsException listUploadsException) {

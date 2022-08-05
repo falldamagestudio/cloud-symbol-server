@@ -187,6 +187,123 @@ paths:
                 $ref: '#/components/schemas/messageResponse'
           description: No such store/upload
       summary: Fetch an upload
+  /stores/{storeId}/uploads/{uploadId}/completed:
+    post:
+      operationId: markStoreUploadCompleted
+      parameters:
+      - description: ID of the upload to fetch
+        explode: false
+        in: path
+        name: uploadId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of the store containing the upload
+        explode: false
+        in: path
+        name: storeId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Success
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Not authorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: No such store/upload
+      summary: Mark an upload as completed
+  /stores/{storeId}/uploads/{uploadId}/aborted:
+    post:
+      operationId: markStoreUploadAborted
+      parameters:
+      - description: ID of the upload to mark as aborted
+        explode: false
+        in: path
+        name: uploadId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of the store containing the upload
+        explode: false
+        in: path
+        name: storeId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Success
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Not authorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: No such store/upload
+      summary: Mark an upload as aborted
+  /stores/{storeId}/uploads/{uploadId}/files/{fileId}/uploaded:
+    post:
+      operationId: markStoreUploadFileUploaded
+      parameters:
+      - description: ID of the upload to fetch
+        explode: false
+        in: path
+        name: uploadId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of the store containing the upload
+        explode: false
+        in: path
+        name: storeId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Index of the file within the upload that should be marked as
+          uploaded
+        explode: false
+        in: path
+        name: fileId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          description: Success
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Not authorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: No such store/upload/item
+      summary: Mark a file within an upload as uploaded
 components:
   responses:
     "401":
@@ -209,6 +326,12 @@ components:
       type: array
     createStoreUploadRequest:
       properties:
+        useProgressApi:
+          description: When present and set to true, the client will provide progress
+            updates; Legacy clients will create an upload, then upload the required
+            files to GCS, without progress/completion callbacks
+          example: true
+          type: boolean
         description:
           example: Example application
           type: string
@@ -266,6 +389,8 @@ components:
           example: 7F416863ABF34C3E894BAD1739BAA5571
           type: string
         url:
+          description: Short-lived signed URL where the client should upload the file
+            to, or blank if the file already exists in the storage backend
           example: https://storage.googleapis.com/storage/v1/b/example-bucket/o/stores/default/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
           type: string
       type: object
@@ -275,10 +400,13 @@ components:
         files:
         - fileName: Application.pdb
           hash: 7F416863ABF34C3E894BAD1739BAA5571
+          status: uploaded
         - fileName: Application.pdb
           hash: 7F416863ABF34C3E894BAD1739BAA5571
+          status: uploaded
         buildId: Build 432
         timestamp: 2019-10-12T07:20:50.52Z
+        status: completed
       properties:
         description:
           example: Example application
@@ -293,17 +421,33 @@ components:
           items:
             $ref: '#/components/schemas/getFileResponse'
           type: array
+        status:
+          enum:
+          - unknown
+          - in_progress
+          - completed
+          example: completed
+          type: string
       type: object
     getFileResponse:
       example:
         fileName: Application.pdb
         hash: 7F416863ABF34C3E894BAD1739BAA5571
+        status: uploaded
       properties:
         fileName:
           example: Application.pdb
           type: string
         hash:
           example: 7F416863ABF34C3E894BAD1739BAA5571
+          type: string
+        status:
+          enum:
+          - unknown
+          - already_present
+          - pending
+          - uploaded
+          example: uploaded
           type: string
       type: object
   securitySchemes:

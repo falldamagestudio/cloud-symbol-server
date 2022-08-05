@@ -170,6 +170,108 @@ paths:
               schema:
                 $ref: '#/components/schemas/messageResponse'
 
+  /stores/{storeId}/uploads/{uploadId}/completed:
+    post:
+      summary: Mark an upload as completed
+      operationId: markStoreUploadCompleted
+      parameters:
+        - in: path
+          name: uploadId
+          schema:
+            type: string
+          required: true
+          description: ID of the upload to fetch
+        - in: path
+          name: storeId
+          schema:
+            type: string
+          required: true
+          description: ID of the store containing the upload
+
+      responses:
+        200:
+          description: Success
+
+        401:
+          $ref: '#/components/responses/401'
+
+        404:
+          description: No such store/upload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+
+  /stores/{storeId}/uploads/{uploadId}/aborted:
+    post:
+      summary: Mark an upload as aborted
+      operationId: markStoreUploadAborted
+      parameters:
+        - in: path
+          name: uploadId
+          schema:
+            type: string
+          required: true
+          description: ID of the upload to mark as aborted
+        - in: path
+          name: storeId
+          schema:
+            type: string
+          required: true
+          description: ID of the store containing the upload
+
+      responses:
+        200:
+          description: Success
+
+        401:
+          $ref: '#/components/responses/401'
+
+        404:
+          description: No such store/upload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+
+  /stores/{storeId}/uploads/{uploadId}/files/{fileId}/uploaded:
+    post:
+      summary: Mark a file within an upload as uploaded
+      operationId: markStoreUploadFileUploaded
+      parameters:
+        - in: path
+          name: uploadId
+          schema:
+            type: string
+          required: true
+          description: ID of the upload to fetch
+        - in: path
+          name: storeId
+          schema:
+            type: string
+          required: true
+          description: ID of the store containing the upload
+        - in: path
+          name: fileId
+          schema:
+            type: integer
+          required: true
+          description: Index of the file within the upload that should be marked as uploaded
+
+      responses:
+        200:
+          description: Success
+
+        401:
+          $ref: '#/components/responses/401'
+
+        404:
+          description: No such store/upload/item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+
 components:
 
   responses:
@@ -198,6 +300,12 @@ components:
     createStoreUploadRequest:
       type: object
       properties:
+        useProgressApi:
+          type: boolean
+          example: true
+          description: When present and set to true, the client will provide progress updates;
+            Legacy clients will create an upload, then upload the required files to GCS, without
+            progress/completion callbacks
         description:
           type: string
           example: Example application
@@ -251,6 +359,7 @@ components:
         url:
           type: string
           example: https://storage.googleapis.com/storage/v1/b/example-bucket/o/stores/default/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
+          description: Short-lived signed URL where the client should upload the file to, or blank if the file already exists in the storage backend
 
     getStoreUploadResponse:
       type: object
@@ -268,6 +377,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/getFileResponse'
+        status:
+          type: string
+          example: completed
+          enum:
+            - unknown
+            - in_progress
+            - completed
 
     getFileResponse:
       type: object
@@ -278,6 +394,14 @@ components:
         hash:
           type: string
           example: 7F416863ABF34C3E894BAD1739BAA5571
+        status:
+          type: string
+          example: uploaded
+          enum:
+            - unknown
+            - already_present
+            - pending
+            - uploaded
 
   securitySchemes:
     emailAndPat:

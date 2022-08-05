@@ -32,14 +32,54 @@ namespace BackendAPI.Model
     public partial class GetFileResponse : IEquatable<GetFileResponse>, IValidatableObject
     {
         /// <summary>
+        /// Defines Status
+        /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public enum StatusEnum
+        {
+            /// <summary>
+            /// Enum Unknown for value: unknown
+            /// </summary>
+            [EnumMember(Value = "unknown")]
+            Unknown = 1,
+
+            /// <summary>
+            /// Enum AlreadyPresent for value: already_present
+            /// </summary>
+            [EnumMember(Value = "already_present")]
+            AlreadyPresent = 2,
+
+            /// <summary>
+            /// Enum Pending for value: pending
+            /// </summary>
+            [EnumMember(Value = "pending")]
+            Pending = 3,
+
+            /// <summary>
+            /// Enum Uploaded for value: uploaded
+            /// </summary>
+            [EnumMember(Value = "uploaded")]
+            Uploaded = 4
+
+        }
+
+
+        /// <summary>
+        /// Gets or Sets Status
+        /// </summary>
+        [DataMember(Name = "status", EmitDefaultValue = false)]
+        public StatusEnum? Status { get; set; }
+        /// <summary>
         /// Initializes a new instance of the <see cref="GetFileResponse" /> class.
         /// </summary>
         /// <param name="fileName">fileName.</param>
         /// <param name="hash">hash.</param>
-        public GetFileResponse(string fileName = default(string), string hash = default(string))
+        /// <param name="status">status.</param>
+        public GetFileResponse(string fileName = default(string), string hash = default(string), StatusEnum? status = default(StatusEnum?))
         {
             this.FileName = fileName;
             this.Hash = hash;
+            this.Status = status;
         }
 
         /// <summary>
@@ -64,6 +104,7 @@ namespace BackendAPI.Model
             sb.Append("class GetFileResponse {\n");
             sb.Append("  FileName: ").Append(FileName).Append("\n");
             sb.Append("  Hash: ").Append(Hash).Append("\n");
+            sb.Append("  Status: ").Append(Status).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -107,6 +148,10 @@ namespace BackendAPI.Model
                     this.Hash == input.Hash ||
                     (this.Hash != null &&
                     this.Hash.Equals(input.Hash))
+                ) && 
+                (
+                    this.Status == input.Status ||
+                    this.Status.Equals(input.Status)
                 );
         }
 
@@ -123,6 +168,7 @@ namespace BackendAPI.Model
                     hashCode = hashCode * 59 + this.FileName.GetHashCode();
                 if (this.Hash != null)
                     hashCode = hashCode * 59 + this.Hash.GetHashCode();
+                hashCode = hashCode * 59 + this.Status.GetHashCode();
                 return hashCode;
             }
         }

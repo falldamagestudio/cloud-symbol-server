@@ -32,18 +32,52 @@ namespace BackendAPI.Model
     public partial class GetStoreUploadResponse : IEquatable<GetStoreUploadResponse>, IValidatableObject
     {
         /// <summary>
+        /// Defines Status
+        /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public enum StatusEnum
+        {
+            /// <summary>
+            /// Enum Unknown for value: unknown
+            /// </summary>
+            [EnumMember(Value = "unknown")]
+            Unknown = 1,
+
+            /// <summary>
+            /// Enum InProgress for value: in_progress
+            /// </summary>
+            [EnumMember(Value = "in_progress")]
+            InProgress = 2,
+
+            /// <summary>
+            /// Enum Completed for value: completed
+            /// </summary>
+            [EnumMember(Value = "completed")]
+            Completed = 3
+
+        }
+
+
+        /// <summary>
+        /// Gets or Sets Status
+        /// </summary>
+        [DataMember(Name = "status", EmitDefaultValue = false)]
+        public StatusEnum? Status { get; set; }
+        /// <summary>
         /// Initializes a new instance of the <see cref="GetStoreUploadResponse" /> class.
         /// </summary>
         /// <param name="description">description.</param>
         /// <param name="buildId">buildId.</param>
         /// <param name="timestamp">timestamp.</param>
         /// <param name="files">files.</param>
-        public GetStoreUploadResponse(string description = default(string), string buildId = default(string), string timestamp = default(string), List<GetFileResponse> files = default(List<GetFileResponse>))
+        /// <param name="status">status.</param>
+        public GetStoreUploadResponse(string description = default(string), string buildId = default(string), string timestamp = default(string), List<GetFileResponse> files = default(List<GetFileResponse>), StatusEnum? status = default(StatusEnum?))
         {
             this.Description = description;
             this.BuildId = buildId;
             this.Timestamp = timestamp;
             this.Files = files;
+            this.Status = status;
         }
 
         /// <summary>
@@ -82,6 +116,7 @@ namespace BackendAPI.Model
             sb.Append("  BuildId: ").Append(BuildId).Append("\n");
             sb.Append("  Timestamp: ").Append(Timestamp).Append("\n");
             sb.Append("  Files: ").Append(Files).Append("\n");
+            sb.Append("  Status: ").Append(Status).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -136,6 +171,10 @@ namespace BackendAPI.Model
                     this.Files != null &&
                     input.Files != null &&
                     this.Files.SequenceEqual(input.Files)
+                ) && 
+                (
+                    this.Status == input.Status ||
+                    this.Status.Equals(input.Status)
                 );
         }
 
@@ -156,6 +195,7 @@ namespace BackendAPI.Model
                     hashCode = hashCode * 59 + this.Timestamp.GetHashCode();
                 if (this.Files != null)
                     hashCode = hashCode * 59 + this.Files.GetHashCode();
+                hashCode = hashCode * 59 + this.Status.GetHashCode();
                 return hashCode;
             }
         }
