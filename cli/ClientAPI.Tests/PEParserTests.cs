@@ -14,7 +14,6 @@ namespace ClientAPI.Tests
         [Fact]
         public void GetHashSucceedsForExe()
         {
-            Console.WriteLine($"CWD: [{Environment.CurrentDirectory}]");
             string hash = PEParser.GetHash("../../../../testdata/example.exe");
             string expectedHash = "61C0D4547000";
             Assert.Equal(expectedHash, hash);

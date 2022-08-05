@@ -67,7 +67,6 @@ public static class Helpers
         HttpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes(basicAuthString)));
 
         string url = $"{endpoint}/{fileName}/{hash}/{fileName}";
-        Console.WriteLine(url);
         try {
             byte[] result = await HttpClient.GetByteArrayAsync(url);
             return result;

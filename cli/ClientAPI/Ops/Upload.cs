@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -25,7 +24,7 @@ namespace ClientAPI
             return request;
         }
 
-        public class UploadException : Exception
+        public class UploadException : ClientAPIException
         {
             public UploadException(string message) : base(message) { }
         }
@@ -39,7 +38,7 @@ namespace ClientAPI
 
         private static HttpClient HttpClient = new HttpClient();
 
-        private static async Task UploadMissingFiles(BackendAPI.Api.DefaultApi api, string store, BackendAPI.Model.CreateStoreUploadResponse createStoreUploadResponse, IEnumerable<HashFiles.FileWithHash> filesWithHashes, IProgress<UploadProgress> progress)
+        private static async Task UploadMissingFiles(BackendApiWrapper backendApiWrapper, string store, BackendAPI.Model.CreateStoreUploadResponse createStoreUploadResponse, IEnumerable<HashFiles.FileWithHash> filesWithHashes, IProgress<UploadProgress> progress)
         {
             if (createStoreUploadResponse.Files != null) {
 
@@ -63,17 +62,8 @@ namespace ClientAPI
                         }
 
                         string uploadId = createStoreUploadResponse.Id;
-                        BackendAPI.Client.ApiResponse<object> markStoreUploadFileUploadedResponse;
-                        try {
-                            markStoreUploadFileUploadedResponse = api.MarkStoreUploadFileUploadedWithHttpInfo(uploadId, store, fileId);
-                            if (markStoreUploadFileUploadedResponse.ErrorText != null)
-                                throw new UploadException(markStoreUploadFileUploadedResponse.ErrorText);
-                        } catch (BackendAPI.Client.ApiException apiException) {
-                            if (apiException.ErrorCode == (int)HttpStatusCode.NotFound)
-                                throw new UploadException($"Error Store {store} / upload {uploadId} / file {fileId} does not exist");
-                            else
-                                throw;
-                        }
+
+                        await backendApiWrapper.MarkStoreUploadFileUploadedAsync(store, uploadId, fileId);
 
                     } else {
 
@@ -93,60 +83,38 @@ namespace ClientAPI
             if (progress != null)
                 progress.Report(new UploadProgress { State = UploadProgress.StateEnum.LocalValidation });
 
-            BackendAPI.Client.Configuration config = new BackendAPI.Client.Configuration();
-            config.BasePath = ServiceURL;
-            config.Username = Email;
-            config.Password = PAT;
-            BackendAPI.Api.DefaultApi api = new BackendAPI.Api.DefaultApi(config);
+            BackendApiWrapper backendApiWrapper = new BackendApiWrapper(ServiceURL, Email, PAT);
 
             IEnumerable<HashFiles.FileWithHash> filesWithHashes = HashFiles.GetFilesWithHashes(Files);
 
             if (progress != null)
                 progress.Report(new UploadProgress { State = UploadProgress.StateEnum.CreatingUploadEntry });
 
-            BackendAPI.Model.CreateStoreUploadRequest createStoreUploadRequest = CreateStoreUploadRequest(description, buildId, filesWithHashes);
-            BackendAPI.Client.ApiResponse<BackendAPI.Model.CreateStoreUploadResponse> createStoreUploadResponse;
-            try {
-                createStoreUploadResponse = api.CreateStoreUploadWithHttpInfo(store, createStoreUploadRequest);
-                if (createStoreUploadResponse.ErrorText != null)
-                    throw new UploadException(createStoreUploadResponse.ErrorText);
-            } catch (BackendAPI.Client.ApiException apiException) {
-                if (apiException.ErrorCode == (int)HttpStatusCode.NotFound)
-                    throw new UploadException($"Store {store} does not exist");
-                else
-                    throw;
-            }
 
-            string uploadId = createStoreUploadResponse.Data.Id;
+            BackendAPI.Model.CreateStoreUploadRequest createStoreUploadRequest = CreateStoreUploadRequest(description, buildId, filesWithHashes);
+            BackendAPI.Model.CreateStoreUploadResponse createStoreUploadResponse;
+            createStoreUploadResponse = await backendApiWrapper.CreateStoreUploadAsync(store, createStoreUploadRequest);
+
+            string uploadId = createStoreUploadResponse.Id;
 
             try {
 
                 if (progress != null)
                     progress.Report(new UploadProgress { State = UploadProgress.StateEnum.UploadingMissingFiles });
 
-                await UploadMissingFiles(api, store, createStoreUploadResponse.Data, filesWithHashes, progress);
+                await UploadMissingFiles(backendApiWrapper, store, createStoreUploadResponse, filesWithHashes, progress);
 
                 if (progress != null)
                     progress.Report(new UploadProgress { State = UploadProgress.StateEnum.Done });
 
-                BackendAPI.Client.ApiResponse<object> markStoreUploadCompletedResponse;
-                try {
-                    markStoreUploadCompletedResponse = api.MarkStoreUploadCompletedWithHttpInfo(uploadId, store);
-                    if (markStoreUploadCompletedResponse.ErrorText != null)
-                        throw new UploadException(markStoreUploadCompletedResponse.ErrorText);
-                } catch (BackendAPI.Client.ApiException apiException) {
-                    if (apiException.ErrorCode == (int)HttpStatusCode.NotFound)
-                        throw new UploadException($"Store {store} / upload {uploadId} does not exist");
-                    else
-                        throw;
-                }
+                await backendApiWrapper.MarkStoreUploadCompletedAsync(store, uploadId);
 
             } catch {
 
                 try {
                     if (progress != null)
                         progress.Report(new UploadProgress { State = UploadProgress.StateEnum.Aborting });
-                    api.MarkStoreUploadAbortedWithHttpInfo(uploadId, store);
+                    await backendApiWrapper.MarkStoreUploadAbortedAsync(store, uploadId);
                 } catch {}
 
                 throw;

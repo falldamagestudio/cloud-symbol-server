@@ -1,17 +1,10 @@
-﻿using System;
-using System.Net;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ClientAPI
 {
     public class ListUploads
     {
-        public class ListUploadsException : Exception
-        {
-            public ListUploadsException(string message) : base(message) { }
-        }
-
         public class StoreUpload
         {
             public string UploadId;
@@ -25,40 +18,16 @@ namespace ClientAPI
 
         public static async Task<IEnumerable<StoreUpload>> DoListUploads(string ServiceURL, string Email, string PAT, string store) {
 
-            BackendAPI.Client.Configuration config = new BackendAPI.Client.Configuration();
-            config.BasePath = ServiceURL;
-            config.Username = Email;
-            config.Password = PAT;
-            BackendAPI.Api.DefaultApi api = new BackendAPI.Api.DefaultApi(config);
+            BackendApiWrapper backendApiWrapper = new BackendApiWrapper(ServiceURL, Email, PAT);
 
-            BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreUploadIdsResponse> getStoreUploadIdsResponse;
-            try {
-                getStoreUploadIdsResponse = await api.GetStoreUploadIdsWithHttpInfoAsync(store);
-                if (getStoreUploadIdsResponse.ErrorText != null)
-                    throw new ListUploadsException(getStoreUploadIdsResponse.ErrorText);
-            } catch (BackendAPI.Client.ApiException apiException) {
-                if (apiException.ErrorCode == (int)HttpStatusCode.NotFound)
-                    throw new ListUploadsException($"Store {store} does not exist");
-                else
-                    throw;
-            }
+            BackendAPI.Model.GetStoreUploadIdsResponse getStoreUploadIdsResponse = await backendApiWrapper.GetStoreUploadIdsAsync(store);
 
             List<StoreUpload> uploads = new List<StoreUpload>();
 
-            foreach (string uploadId in getStoreUploadIdsResponse.Data) {
-                BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreUploadResponse> getStoreUploadResponse;
-                try {
-                    getStoreUploadResponse = await api.GetStoreUploadWithHttpInfoAsync(uploadId, store);
-                    if (getStoreUploadResponse.ErrorText != null)
-                        throw new ListUploadsException(getStoreUploadResponse.ErrorText);
-                } catch (BackendAPI.Client.ApiException apiException) {
-                    if (apiException.ErrorCode == (int)HttpStatusCode.NotFound)
-                        throw new ListUploadsException($"UploadId {uploadId} does not exist in store {store}");
-                    else
-                        throw;
-                }
+            foreach (string uploadId in getStoreUploadIdsResponse) {
+                BackendAPI.Model.GetStoreUploadResponse getStoreUploadResponse = await backendApiWrapper.GetStoreUploadAsync(store, uploadId);
 
-                uploads.Add(new StoreUpload(uploadId: uploadId, upload: getStoreUploadResponse.Data));
+                uploads.Add(new StoreUpload(uploadId: uploadId, upload: getStoreUploadResponse));
             }
 
             return uploads;
