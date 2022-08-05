@@ -31,7 +31,7 @@ namespace ClientAPI
         }
 
         public struct UploadProgress {
-            public enum StateEnum { LocalValidation, CreatingUploadEntry, UploadingMissingFiles, UploadingMissingFile, FileAlreadyPresent, Done };
+            public enum StateEnum { LocalValidation, CreatingUploadEntry, UploadingMissingFiles, UploadingMissingFile, FileAlreadyPresent, Aborting, Done };
 
             public StateEnum State;
             public string FileName;
@@ -117,25 +117,39 @@ namespace ClientAPI
                     throw;
             }
 
-            if (progress != null)
-                progress.Report(new UploadProgress { State = UploadProgress.StateEnum.UploadingMissingFiles });
-
-            await UploadMissingFiles(api, store, createStoreUploadResponse.Data, filesWithHashes, progress);
-
-            if (progress != null)
-                progress.Report(new UploadProgress { State = UploadProgress.StateEnum.Done });
-
             string uploadId = createStoreUploadResponse.Data.Id;
-            BackendAPI.Client.ApiResponse<object> markStoreUploadCompletedResponse;
+
             try {
-                markStoreUploadCompletedResponse = api.MarkStoreUploadCompletedWithHttpInfo(uploadId, store);
-                if (markStoreUploadCompletedResponse.ErrorText != null)
-                    throw new UploadException(markStoreUploadCompletedResponse.ErrorText);
-            } catch (BackendAPI.Client.ApiException apiException) {
-                if (apiException.ErrorCode == (int)HttpStatusCode.NotFound)
-                    throw new UploadException($"Store {store} / upload {uploadId} does not exist");
-                else
-                    throw;
+
+                if (progress != null)
+                    progress.Report(new UploadProgress { State = UploadProgress.StateEnum.UploadingMissingFiles });
+
+                await UploadMissingFiles(api, store, createStoreUploadResponse.Data, filesWithHashes, progress);
+
+                if (progress != null)
+                    progress.Report(new UploadProgress { State = UploadProgress.StateEnum.Done });
+
+                BackendAPI.Client.ApiResponse<object> markStoreUploadCompletedResponse;
+                try {
+                    markStoreUploadCompletedResponse = api.MarkStoreUploadCompletedWithHttpInfo(uploadId, store);
+                    if (markStoreUploadCompletedResponse.ErrorText != null)
+                        throw new UploadException(markStoreUploadCompletedResponse.ErrorText);
+                } catch (BackendAPI.Client.ApiException apiException) {
+                    if (apiException.ErrorCode == (int)HttpStatusCode.NotFound)
+                        throw new UploadException($"Store {store} / upload {uploadId} does not exist");
+                    else
+                        throw;
+                }
+
+            } catch {
+
+                try {
+                    if (progress != null)
+                        progress.Report(new UploadProgress { State = UploadProgress.StateEnum.Aborting });
+                    api.MarkStoreUploadAbortedWithHttpInfo(uploadId, store);
+                } catch {}
+
+                throw;
             }
 
         }

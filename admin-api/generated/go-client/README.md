@@ -84,6 +84,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**GetStoreUpload**](docs/DefaultApi.md#getstoreupload) | **Get** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
 *DefaultApi* | [**GetStoreUploadIds**](docs/DefaultApi.md#getstoreuploadids) | **Get** /stores/{storeId}/uploads | Fetch a list of all uploads in store
 *DefaultApi* | [**GetStores**](docs/DefaultApi.md#getstores) | **Get** /stores | Fetch a list of all stores
+*DefaultApi* | [**MarkStoreUploadAborted**](docs/DefaultApi.md#markstoreuploadaborted) | **Post** /stores/{storeId}/uploads/{uploadId}/aborted | Mark an upload as aborted
 *DefaultApi* | [**MarkStoreUploadCompleted**](docs/DefaultApi.md#markstoreuploadcompleted) | **Post** /stores/{storeId}/uploads/{uploadId}/completed | Mark an upload as completed
 *DefaultApi* | [**MarkStoreUploadFileUploaded**](docs/DefaultApi.md#markstoreuploadfileuploaded) | **Post** /stores/{storeId}/uploads/{uploadId}/files/{fileId}/uploaded | Mark a file within an upload as uploaded
 
