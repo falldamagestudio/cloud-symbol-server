@@ -22,30 +22,31 @@ namespace CLI
                 return 1;
             }
 
-            Command createStoreCommand = new Command("create") {
+            Command createStoreCommand = new Command("create", "Create a new store within Cloud Symbol Server") {
                 new Argument<string>("store", "Name of store to create"),
             };
             createStoreCommand.Handler = CommandHandler.Create(async (GlobalOptions globalOptions, string store)
                 => { return await CLI.CreateStore.DoCreateStore(globalOptions, store); });
 
-            Command deleteStoreCommand = new Command("delete") {
+            Command deleteStoreCommand = new Command("delete", "Delete a store within Cloud Symbol Server") {
                 new Argument<string>("store", "Name of store to delete"),
             };
             deleteStoreCommand.Handler = CommandHandler.Create(async (GlobalOptions globalOptions, string store)
                 => { return await CLI.DeleteStore.DoDeleteStore(globalOptions, store); });
 
-            Command listStoresCommand = new Command("list") {
+            Command listStoresCommand = new Command("list", "List stores present within Cloud Symbol Server") {
             };
             listStoresCommand.Handler = CommandHandler.Create(async (GlobalOptions globalOptions)
                 => { return await CLI.ListStores.DoListStores(globalOptions); });
 
-            Command storesCommand = new Command("stores") {
+            Command storesCommand = new Command("stores", "Manage stores within Cloud Symbol Server") {
                 createStoreCommand,
                 deleteStoreCommand,
                 listStoresCommand,
             };
+            storesCommand.Handler = CommandHandler.Create(() => storesCommand.Invoke("--help"));
 
-            Command createUploadCommand = new Command("create") {
+            Command createUploadCommand = new Command("create", "Upload files to a store") {
                 new Option<string>("--description", "Textual description of upload"),
                 new Option<string>("--build-id", "Build ID for upload"),
                 new Argument<string>("store", "Name of store to upload to"),
@@ -54,24 +55,25 @@ namespace CLI
             createUploadCommand.Handler = CommandHandler.Create(async (GlobalOptions globalOptions, string description, string buildId, string store, string[] patterns)
                 => { return await CLI.Upload.DoUpload(globalOptions, description, buildId, store, patterns); });
 
-            Command listUploadsCommand = new Command("list") {
+            Command listUploadsCommand = new Command("list", "List existing uploads within a store") {
                 new Argument<string>("store", "Name of store to list uploads in"),
             };
             listUploadsCommand.Handler = CommandHandler.Create(async (GlobalOptions globalOptions, string store)
                 => { return await CLI.ListUploads.DoListUploads(globalOptions, store); });
 
-            Command uploadsCommand = new Command("uploads") {
+            Command uploadsCommand = new Command("uploads", "Upload files, and manage uploaded files within a store") {
                 createUploadCommand,
                 listUploadsCommand,
             };
+            uploadsCommand.Handler = CommandHandler.Create(() => uploadsCommand.Invoke("--help"));
 
-            Command hashFilesCommand = new Command("hash") {
+            Command hashFilesCommand = new Command("hash", "Compute hashes for files") {
                 new Argument<string>("patterns", "Globbing patterns of files to compute hashes for") { Arity = ArgumentArity.OneOrMore },
             };
             hashFilesCommand.Handler = CommandHandler.Create((string[] patterns)
                 => { return CLI.HashFiles.DoHashFiles(patterns); });
 
-            RootCommand rootCommand = new RootCommand {
+            RootCommand rootCommand = new RootCommand("Cloud Symbol Server CLI tool") {
                 storesCommand,
                 uploadsCommand,
                 hashFilesCommand,
