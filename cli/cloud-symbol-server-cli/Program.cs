@@ -81,7 +81,9 @@ namespace CLI
                 new Option<string>("--email", () => ConfigFile.GetOrDefault("email", "")),
                 new Option<string>("--pat", () => ConfigFile.GetOrDefault("pat", "")),
             };
-            rootCommand.Handler = CommandHandler.Create(() => {});
+
+            // When the CLI command is invoked with no arguments at all, print help
+            rootCommand.Handler = CommandHandler.Create(() => rootCommand.Invoke("--help"));
 
             // Parse the incoming args and invoke the handler
             return await rootCommand.InvokeAsync(args);
