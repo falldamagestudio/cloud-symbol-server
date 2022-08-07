@@ -152,7 +152,7 @@ func incrementStoreUploadId(tx *firestore.Transaction, storeDocRef *firestore.Do
 	return newUploadId, nil
 }
 
-func createUploadDoc(tx *firestore.Transaction, storeDocRef *firestore.DocumentRef, newUploadId int64, uploadContent map[string]interface{}) error {
+func createUploadDoc(tx *firestore.Transaction, storeDocRef *firestore.DocumentRef, newUploadId int64, uploadContent StoreUploadEntry) error {
 	uploadDocRef := storeDocRef.Collection(storeUploadsCollectionName).Doc(fmt.Sprint(newUploadId))
 
 	err := tx.Create(uploadDocRef, uploadContent)
@@ -161,12 +161,12 @@ func createUploadDoc(tx *firestore.Transaction, storeDocRef *firestore.DocumentR
 
 func logUpload(ctx context.Context, storeId string, uploadStatus string, description string, buildId string, files []FileDBEntry) (string, error) {
 
-	uploadContent := map[string]interface{}{
-		"description": description,
-		"buildId":     buildId,
-		"files":       files,
-		"timestamp":   time.Now().Format(time.RFC3339),
-		"status":      uploadStatus,
+	uploadContent := StoreUploadEntry{
+		Description: description,
+		BuildId:     buildId,
+		Files:       files,
+		Timestamp:   time.Now().Format(time.RFC3339),
+		Status:      uploadStatus,
 	}
 
 	log.Printf("Writing upload to database: %v", uploadContent)
