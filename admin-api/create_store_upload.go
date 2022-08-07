@@ -119,7 +119,15 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 		uploadStatus = StoreUploadEntry_Status_InProgress
 	}
 
-	uploadId, err := logUpload(context, storeId, uploadStatus, createStoreUploadRequest.Description, createStoreUploadRequest.BuildId, files)
+	uploadContent := StoreUploadEntry{
+		Description: createStoreUploadRequest.Description,
+		BuildId:     createStoreUploadRequest.BuildId,
+		Files:       files,
+		Timestamp:   time.Now().Format(time.RFC3339),
+		Status:      uploadStatus,
+	}
+
+	uploadId, err := logUpload(context, storeId, uploadContent)
 	if err != nil {
 		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Internal error while logging upload to DB"}), errors.New("Internal error while logging upload to DB")
 	}
@@ -159,17 +167,9 @@ func createUploadDoc(tx *firestore.Transaction, storeDocRef *firestore.DocumentR
 	return err
 }
 
-func logUpload(ctx context.Context, storeId string, uploadStatus string, description string, buildId string, files []FileDBEntry) (string, error) {
+func logUpload(ctx context.Context, storeId string, upload StoreUploadEntry) (string, error) {
 
-	uploadContent := StoreUploadEntry{
-		Description: description,
-		BuildId:     buildId,
-		Files:       files,
-		Timestamp:   time.Now().Format(time.RFC3339),
-		Status:      uploadStatus,
-	}
-
-	log.Printf("Writing upload to database: %v", uploadContent)
+	log.Printf("Writing upload to database: %v", upload)
 
 	firestoreClient, err := firestoreClient(ctx)
 	if err != nil {
@@ -188,7 +188,7 @@ func logUpload(ctx context.Context, storeId string, uploadStatus string, descrip
 			return err
 		}
 
-		err = createUploadDoc(tx, storeDocRef, newUploadId, uploadContent)
+		err = createUploadDoc(tx, storeDocRef, newUploadId, upload)
 		if err != nil {
 			return err
 		}
