@@ -131,6 +131,34 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 	return openapi.Response(http.StatusOK, createStoreUploadResponse), nil
 }
 
+func incrementStoreUploadId(tx *firestore.Transaction, storeDocRef *firestore.DocumentRef) (int64, error) {
+	storeDoc, err := tx.Get(storeDocRef)
+	if err != nil {
+		return 0, err
+	}
+	storeEntry := &StoreEntry{}
+	if err := storeDoc.DataTo(storeEntry); err != nil {
+		return 0, err
+	}
+
+	newUploadId := storeEntry.LatestUploadId + 1
+	storeEntry.LatestUploadId = newUploadId
+
+	err = tx.Set(storeDocRef, storeEntry)
+	if err != nil {
+		return 0, err
+	}
+
+	return newUploadId, nil
+}
+
+func createUploadDoc(tx *firestore.Transaction, storeDocRef *firestore.DocumentRef, newUploadId int64, uploadContent map[string]interface{}) error {
+	uploadDocRef := storeDocRef.Collection(storeUploadsCollectionName).Doc(fmt.Sprint(newUploadId))
+
+	err := tx.Create(uploadDocRef, uploadContent)
+	return err
+}
+
 func logUpload(ctx context.Context, storeId string, uploadStatus string, description string, buildId string, files []FileDBEntry) (string, error) {
 
 	uploadContent := map[string]interface{}{
@@ -154,28 +182,18 @@ func logUpload(ctx context.Context, storeId string, uploadStatus string, descrip
 	newUploadId := int64(0)
 
 	err = firestoreClient.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
-		storeDoc, err := tx.Get(storeDocRef)
-		if err != nil {
-			return err
-		}
-		storeEntry := &StoreEntry{}
-		if err := storeDoc.DataTo(storeEntry); err != nil {
-			return err
-		}
 
-		newUploadId = storeEntry.LatestUploadId + 1
-		storeEntry.LatestUploadId = newUploadId
-
-		err = tx.Set(storeDocRef, storeEntry)
+		newUploadId, err := incrementStoreUploadId(tx, storeDocRef)
 		if err != nil {
 			return err
 		}
 
-		uploadDocRef := storeDocRef.Collection(storeUploadsCollectionName).Doc(fmt.Sprint(newUploadId))
+		err = createUploadDoc(tx, storeDocRef, newUploadId, uploadContent)
+		if err != nil {
+			return err
+		}
 
-		err = tx.Create(uploadDocRef, uploadContent)
-
-		return err
+		return nil
 	})
 	if err != nil {
 		// Handle any errors appropriately in this section.
