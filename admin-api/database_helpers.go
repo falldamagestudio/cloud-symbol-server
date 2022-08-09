@@ -12,8 +12,11 @@ import (
 )
 
 const (
-	storesCollectionName       = "stores"
-	storeUploadsCollectionName = "uploads"
+	storesCollectionName               = "stores"
+	storeUploadsCollectionName         = "uploads"
+	storeFilesCollectionName           = "files"
+	storeFileHashesCollectionName      = "hashes"
+	storeFileHashUploadsCollectionName = "uploads"
 )
 
 func getStoresConfig(context context.Context) ([]string, error) {

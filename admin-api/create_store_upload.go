@@ -160,10 +160,24 @@ func incrementStoreUploadId(tx *firestore.Transaction, storeDocRef *firestore.Do
 	return newUploadId, nil
 }
 
-func createUploadDoc(tx *firestore.Transaction, storeDocRef *firestore.DocumentRef, newUploadId int64, uploadContent StoreUploadEntry) error {
+func createStoreUploadDoc(tx *firestore.Transaction, storeDocRef *firestore.DocumentRef, newUploadId int64, uploadContent StoreUploadEntry) error {
 	uploadDocRef := storeDocRef.Collection(storeUploadsCollectionName).Doc(fmt.Sprint(newUploadId))
 
 	err := tx.Create(uploadDocRef, uploadContent)
+	return err
+}
+
+func createStoreFileHashDoc(tx *firestore.Transaction, storeDocRef *firestore.DocumentRef, fileId string, hashId string, content StoreFileHashEntry) error {
+	storeFileHashDocRef := storeDocRef.Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileHashesCollectionName).Doc(hashId)
+
+	err := tx.Set(storeFileHashDocRef, content)
+	return err
+}
+
+func createStoreFileHashUploadDoc(tx *firestore.Transaction, storeDocRef *firestore.DocumentRef, fileId string, hashId string, uploadId int64, content StoreFileHashUploadEntry) error {
+	storeFileHashUploadDocRef := storeDocRef.Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileHashesCollectionName).Doc(hashId).Collection(storeFileHashUploadsCollectionName).Doc(fmt.Sprint(uploadId))
+
+	err := tx.Set(storeFileHashUploadDocRef, content)
 	return err
 }
 
@@ -188,9 +202,22 @@ func logUpload(ctx context.Context, storeId string, upload StoreUploadEntry) (st
 			return err
 		}
 
-		err = createUploadDoc(tx, storeDocRef, newUploadId, upload)
+		err = createStoreUploadDoc(tx, storeDocRef, newUploadId, upload)
 		if err != nil {
 			return err
+		}
+
+		for _, file := range upload.Files {
+
+			err = createStoreFileHashDoc(tx, storeDocRef, file.FileName, file.Hash, StoreFileHashEntry{})
+			if err != nil {
+				return err
+			}
+
+			err = createStoreFileHashUploadDoc(tx, storeDocRef, file.FileName, file.Hash, newUploadId, StoreFileHashUploadEntry{})
+			if err != nil {
+				return err
+			}
 		}
 
 		return nil
