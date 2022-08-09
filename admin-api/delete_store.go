@@ -44,17 +44,11 @@ func (s *ApiService) DeleteStore(context context.Context, storeId string) (opena
 		}
 	}
 
-	if err = deleteAllDocumentsInCollection(context, firestoreClient, firestoreClient.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName), 100); err != nil {
+	if err = deleteDocument(context, firestoreClient, firestoreClient.Collection(storesCollectionName).Doc(storeId), true); err != nil {
 		if err != nil {
-			log.Printf("Unable to delete all documents in collection, err = %v", err)
+			log.Printf("Unable to delete document + child documents, err = %v", err)
 			return openapi.Response(http.StatusInternalServerError, nil), err
 		}
-	}
-
-	_, err = firestoreClient.Collection(storesCollectionName).Doc(storeId).Delete(context)
-	if err != nil {
-		log.Printf("Unable to delete store, err = %v", err)
-		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 
 	return openapi.Response(http.StatusOK, nil), err
