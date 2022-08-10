@@ -32,3 +32,9 @@ type StoreUploadEntry struct {
 type StoreEntry struct {
 	LatestUploadId int64 `firestore:"latestUploadId"`
 }
+
+type StoreFileHashEntry struct {
+}
+
+type StoreFileHashUploadEntry struct {
+}

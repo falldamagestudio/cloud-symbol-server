@@ -119,7 +119,15 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 		uploadStatus = StoreUploadEntry_Status_InProgress
 	}
 
-	uploadId, err := logUpload(context, storeId, uploadStatus, createStoreUploadRequest.Description, createStoreUploadRequest.BuildId, files)
+	uploadContent := StoreUploadEntry{
+		Description: createStoreUploadRequest.Description,
+		BuildId:     createStoreUploadRequest.BuildId,
+		Files:       files,
+		Timestamp:   time.Now().Format(time.RFC3339),
+		Status:      uploadStatus,
+	}
+
+	uploadId, err := logUpload(context, storeId, uploadContent)
 	if err != nil {
 		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Internal error while logging upload to DB"}), errors.New("Internal error while logging upload to DB")
 	}
@@ -131,17 +139,51 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 	return openapi.Response(http.StatusOK, createStoreUploadResponse), nil
 }
 
-func logUpload(ctx context.Context, storeId string, uploadStatus string, description string, buildId string, files []FileDBEntry) (string, error) {
-
-	uploadContent := map[string]interface{}{
-		"description": description,
-		"buildId":     buildId,
-		"files":       files,
-		"timestamp":   time.Now().Format(time.RFC3339),
-		"status":      uploadStatus,
+func incrementStoreUploadId(tx *firestore.Transaction, storeDocRef *firestore.DocumentRef) (int64, error) {
+	storeDoc, err := tx.Get(storeDocRef)
+	if err != nil {
+		return 0, err
+	}
+	storeEntry := &StoreEntry{}
+	if err := storeDoc.DataTo(storeEntry); err != nil {
+		return 0, err
 	}
 
-	log.Printf("Writing upload to database: %v", uploadContent)
+	newUploadId := storeEntry.LatestUploadId + 1
+	storeEntry.LatestUploadId = newUploadId
+
+	err = tx.Set(storeDocRef, storeEntry)
+	if err != nil {
+		return 0, err
+	}
+
+	return newUploadId, nil
+}
+
+func createStoreUploadDoc(tx *firestore.Transaction, storeDocRef *firestore.DocumentRef, newUploadId int64, uploadContent StoreUploadEntry) error {
+	uploadDocRef := storeDocRef.Collection(storeUploadsCollectionName).Doc(fmt.Sprint(newUploadId))
+
+	err := tx.Create(uploadDocRef, uploadContent)
+	return err
+}
+
+func createStoreFileHashDoc(tx *firestore.Transaction, storeDocRef *firestore.DocumentRef, fileId string, hashId string, content StoreFileHashEntry) error {
+	storeFileHashDocRef := storeDocRef.Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileHashesCollectionName).Doc(hashId)
+
+	err := tx.Set(storeFileHashDocRef, content)
+	return err
+}
+
+func createStoreFileHashUploadDoc(tx *firestore.Transaction, storeDocRef *firestore.DocumentRef, fileId string, hashId string, uploadId int64, content StoreFileHashUploadEntry) error {
+	storeFileHashUploadDocRef := storeDocRef.Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileHashesCollectionName).Doc(hashId).Collection(storeFileHashUploadsCollectionName).Doc(fmt.Sprint(uploadId))
+
+	err := tx.Set(storeFileHashUploadDocRef, content)
+	return err
+}
+
+func logUpload(ctx context.Context, storeId string, upload StoreUploadEntry) (string, error) {
+
+	log.Printf("Writing upload to database: %v", upload)
 
 	firestoreClient, err := firestoreClient(ctx)
 	if err != nil {
@@ -154,28 +196,31 @@ func logUpload(ctx context.Context, storeId string, uploadStatus string, descrip
 	newUploadId := int64(0)
 
 	err = firestoreClient.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
-		storeDoc, err := tx.Get(storeDocRef)
-		if err != nil {
-			return err
-		}
-		storeEntry := &StoreEntry{}
-		if err := storeDoc.DataTo(storeEntry); err != nil {
-			return err
-		}
 
-		newUploadId = storeEntry.LatestUploadId + 1
-		storeEntry.LatestUploadId = newUploadId
-
-		err = tx.Set(storeDocRef, storeEntry)
+		newUploadId, err := incrementStoreUploadId(tx, storeDocRef)
 		if err != nil {
 			return err
 		}
 
-		uploadDocRef := storeDocRef.Collection(storeUploadsCollectionName).Doc(fmt.Sprint(newUploadId))
+		err = createStoreUploadDoc(tx, storeDocRef, newUploadId, upload)
+		if err != nil {
+			return err
+		}
 
-		err = tx.Create(uploadDocRef, uploadContent)
+		for _, file := range upload.Files {
 
-		return err
+			err = createStoreFileHashDoc(tx, storeDocRef, file.FileName, file.Hash, StoreFileHashEntry{})
+			if err != nil {
+				return err
+			}
+
+			err = createStoreFileHashUploadDoc(tx, storeDocRef, file.FileName, file.Hash, newUploadId, StoreFileHashUploadEntry{})
+			if err != nil {
+				return err
+			}
+		}
+
+		return nil
 	})
 	if err != nil {
 		// Handle any errors appropriately in this section.

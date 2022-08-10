@@ -12,8 +12,11 @@ import (
 )
 
 const (
-	storesCollectionName       = "stores"
-	storeUploadsCollectionName = "uploads"
+	storesCollectionName               = "stores"
+	storeUploadsCollectionName         = "uploads"
+	storeFilesCollectionName           = "files"
+	storeFileHashesCollectionName      = "hashes"
+	storeFileHashUploadsCollectionName = "uploads"
 )
 
 func getStoresConfig(context context.Context) ([]string, error) {
@@ -126,42 +129,167 @@ func getStoreUploadDoc(context context.Context, storeId string, uploadId string)
 	return uploadDoc, nil
 }
 
-// Reference: https://firebase.google.com/docs/firestore/manage-data/delete-data#collections
-func deleteAllDocumentsInCollection(ctx context.Context, client *firestore.Client, ref *firestore.CollectionRef, batchSize int) error {
+type DeleteDocumentsRecursiveState struct {
+	Ctx             *context.Context
+	Client          *firestore.Client
+	Recurse         bool
+	Batch           *firestore.WriteBatch
+	NumItemsInBatch int
+}
 
-	log.Printf("Deleting all documents in collection %v", ref.ID)
+const DeleteDocumentsRecursiveState_MaxItemsInBatch = 100
 
-	for {
-		// Get a batch of documents
-		iter := ref.Limit(batchSize).Documents(ctx)
-		numDeleted := 0
+func commitStateBatch(state *DeleteDocumentsRecursiveState) error {
 
-		// Iterate through the documents, adding
-		// a delete operation for each one to a
-		// WriteBatch.
-		batch := client.Batch()
-		for {
-			doc, err := iter.Next()
-			if err == iterator.Done {
-				break
-			}
-			if err != nil {
-				return err
-			}
+	if state.Batch != nil {
+		_, err := state.Batch.Commit(*state.Ctx)
+		state.Batch = nil
+		state.NumItemsInBatch = 0
+		return err
+	} else {
+		return nil
+	}
+}
 
-			batch.Delete(doc.Ref)
-			numDeleted++
-		}
+func addItemToStateBatch(state *DeleteDocumentsRecursiveState, documentRef *firestore.DocumentRef) error {
+	if state.Batch == nil {
+		state.Batch = state.Client.Batch()
+	}
 
-		// If there are no documents to delete,
-		// the process is over.
-		if numDeleted == 0 {
-			return nil
-		}
+	log.Printf("Adding item %v for batch deletion", documentRef.Path)
+	state.Batch.Delete(documentRef)
+	state.NumItemsInBatch++
 
-		_, err := batch.Commit(ctx)
+	if state.NumItemsInBatch >= DeleteDocumentsRecursiveState_MaxItemsInBatch {
+		err := commitStateBatch(state)
 		if err != nil {
 			return err
 		}
 	}
+
+	return nil
+}
+
+func deleteAllDocumentsInCollectionRecurse(state *DeleteDocumentsRecursiveState, collectionRef *firestore.CollectionRef) error {
+
+	// Get all documents in collection
+	documentRefIter := collectionRef.DocumentRefs(*state.Ctx)
+
+	for {
+		documentRef, err := documentRefIter.Next()
+		if err == iterator.Done {
+			break
+		}
+
+		_, err = documentRef.Get(*state.Ctx)
+		if err == nil {
+			err = addItemToStateBatch(state, documentRef)
+			if err != nil {
+				return err
+			}
+
+		} else if status.Code(err) != codes.NotFound {
+			return err
+		}
+
+		if state.Recurse {
+
+			err = deleteAllCollectionsInDocumentRecurse(state, documentRef)
+			if err != nil {
+				return err
+			}
+
+			subCollectionRefIter := documentRef.Collections(*state.Ctx)
+
+			for {
+				subCollectionRef, err := subCollectionRefIter.Next()
+				if err == iterator.Done {
+					break
+				} else if err != nil {
+					return err
+				}
+
+				err = deleteAllDocumentsInCollectionRecurse(state, subCollectionRef)
+				if err != nil {
+					return err
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func deleteAllCollectionsInDocumentRecurse(state *DeleteDocumentsRecursiveState, documentRef *firestore.DocumentRef) error {
+
+	collectionRefIter := documentRef.Collections(*state.Ctx)
+
+	for {
+		collectionRef, err := collectionRefIter.Next()
+		if err == iterator.Done {
+			break
+		} else if err != nil {
+			return err
+		}
+
+		err = deleteAllDocumentsInCollectionRecurse(state, collectionRef)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// Delete all documents from a Firestore collection
+// If recurse == true, also delete any documents within sub-collections to arbitrary depth
+// This will find and delete orphaned subcollection documents as well
+func deleteAllDocumentsInCollection(ctx context.Context, client *firestore.Client, ref *firestore.CollectionRef, recurse bool) error {
+
+	state := &DeleteDocumentsRecursiveState{
+		Ctx:             &ctx,
+		Client:          client,
+		Recurse:         recurse,
+		Batch:           nil,
+		NumItemsInBatch: 0,
+	}
+
+	err := deleteAllDocumentsInCollectionRecurse(state, ref)
+	if err != nil {
+		return err
+	}
+	err = commitStateBatch(state)
+	return err
+}
+
+// Delete a document from a Firestore database
+// If recurse == true, also delete any documents within sub-collections to arbitrary depth
+// This will find and delete orphaned subcollection documents as well
+func deleteDocument(ctx context.Context, client *firestore.Client, ref *firestore.DocumentRef, recurse bool) error {
+
+	log.Printf("Deleting document %v; recurse: %v", ref.ID, recurse)
+
+	state := &DeleteDocumentsRecursiveState{
+		Ctx:             &ctx,
+		Client:          client,
+		Recurse:         recurse,
+		Batch:           nil,
+		NumItemsInBatch: 0,
+	}
+
+	err := addItemToStateBatch(state, ref)
+	if err != nil {
+		return err
+	}
+
+	if recurse {
+		err := deleteAllCollectionsInDocumentRecurse(state, ref)
+		if err != nil {
+			return err
+		}
+	}
+
+	err = commitStateBatch(state)
+	return err
 }
