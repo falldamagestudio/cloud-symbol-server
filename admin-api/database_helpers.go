@@ -64,30 +64,6 @@ func getStoresConfig(context context.Context) ([]string, error) {
 	return stores, nil
 }
 
-func getStoreDoc(context context.Context, storeId string) (*firestore.DocumentSnapshot, error) {
-
-	log.Printf("Fetching store document for %v", storeId)
-
-	firestoreClient, err := firestoreClient(context)
-	if err != nil {
-		log.Printf("Unable to talk to database: %v", err)
-		return nil, err
-	}
-
-	storeDoc, err := firestoreClient.Collection(storesCollectionName).Doc(storeId).Get(context)
-
-	if err != nil {
-		if status.Code(err) == codes.NotFound {
-			return nil, nil
-		} else {
-			log.Printf("Unable to fetch store document for %v, err = %v", storeId, err)
-			return nil, err
-		}
-	}
-
-	return storeDoc, nil
-}
-
 func getStoreUploadIds(context context.Context, storeId string) ([]string, error) {
 
 	log.Printf("Fetching all upload document IDs for %v", storeId)
@@ -110,45 +86,6 @@ func getStoreUploadIds(context context.Context, storeId string) ([]string, error
 		uploadIds[uploadDocIndex] = uploadDoc.Ref.ID
 	}
 	return uploadIds, nil
-}
-
-func getStoreUploadRef(context context.Context, storeId string, uploadId string) (*firestore.DocumentRef, error) {
-
-	log.Printf("Creating upload ref for %v/%v", storeId, uploadId)
-
-	firestoreClient, err := firestoreClient(context)
-	if err != nil {
-		log.Printf("Unable to talk to database: %v", err)
-		return nil, err
-	}
-
-	uploadRef := firestoreClient.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Doc(uploadId)
-
-	return uploadRef, nil
-}
-
-func getStoreUploadDoc(context context.Context, storeId string, uploadId string) (*firestore.DocumentSnapshot, error) {
-
-	log.Printf("Fetching upload document for %v/%v", storeId, uploadId)
-
-	firestoreClient, err := firestoreClient(context)
-	if err != nil {
-		log.Printf("Unable to talk to database: %v", err)
-		return nil, err
-	}
-
-	uploadDoc, err := firestoreClient.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Doc(uploadId).Get(context)
-
-	if err != nil {
-		if status.Code(err) == codes.NotFound {
-			return nil, nil
-		} else {
-			log.Printf("Unable to fetch upload document for %v/%v, err = %v", storeId, uploadId, err)
-			return nil, err
-		}
-	}
-
-	return uploadDoc, nil
 }
 
 func getStoreEntry(client *firestore.Client, tx *firestore.Transaction, storeId string) (*StoreEntry, error) {

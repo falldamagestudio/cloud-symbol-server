@@ -33,16 +33,6 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: fmt.Sprintf("Unable to determine symbol store bucket name")}), err
 	}
 
-	storeDoc, err := getStoreDoc(context, storeId)
-	if err != nil {
-		log.Printf("Unable to fetch store document for %v, err = %v", storeId, err)
-		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: fmt.Sprintf("Unable to fetch store document for %v", storeId)}), err
-	}
-	if storeDoc == nil {
-		log.Printf("Store %v does not exist", storeId)
-		return openapi.Response(http.StatusNotFound, &openapi.MessageResponse{Message: fmt.Sprintf("Store %v does not exist", storeId)}), err
-	}
-
 	// Legacy API users (those who do not use the progress API) expect the response to filter
 	//  out any files that already are present; those that do use the progress API
 	//  expect to have all files listed in the response, even if they should not be uploaded
