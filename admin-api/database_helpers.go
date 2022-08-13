@@ -2,6 +2,7 @@ package admin_api
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"cloud.google.com/go/firestore"
@@ -18,6 +19,27 @@ const (
 	storeFileHashesCollectionName      = "hashes"
 	storeFileHashUploadsCollectionName = "uploads"
 )
+
+func runDBTransaction(ctx context.Context, f func(context.Context, *firestore.Client, *firestore.Transaction) error) error {
+
+	firestoreClient, err := firestoreClient(ctx)
+	if err != nil {
+		log.Printf("Unable to talk to database: %v", err)
+		return err
+	}
+
+	wrappedF := func(ctx context.Context, tx *firestore.Transaction) error {
+		return f(ctx, firestoreClient, tx)
+	}
+
+	err = firestoreClient.RunTransaction(ctx, wrappedF)
+	if err != nil {
+		log.Printf("Transaction failed: %v", err)
+		return err
+	}
+
+	return nil
+}
 
 func getStoresConfig(context context.Context) ([]string, error) {
 
@@ -127,6 +149,79 @@ func getStoreUploadDoc(context context.Context, storeId string, uploadId string)
 	}
 
 	return uploadDoc, nil
+}
+
+func getStoreEntry(client *firestore.Client, tx *firestore.Transaction, storeId string) (*StoreEntry, error) {
+	storeDocRef := client.Collection(storesCollectionName).Doc(storeId)
+	storeDoc, err := tx.Get(storeDocRef)
+	if err != nil {
+		log.Printf("Unable to fetch store document for %v, err = %v", storeId, err)
+		return nil, err
+	}
+
+	log.Printf("Extracting store doc data")
+	var storeEntry StoreEntry
+	if err = storeDoc.DataTo(&storeEntry); err != nil {
+		log.Printf("Extracting store doc data failed")
+		return nil, err
+	}
+
+	return &storeEntry, nil
+}
+
+func updateStoreEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, storeEntry *StoreEntry) error {
+	storeUploadDocRef := client.Collection(storesCollectionName).Doc(storeId)
+	err := tx.Set(storeUploadDocRef, storeEntry)
+	return err
+}
+
+func createStoreUploadEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, uploadId int64, uploadContent *StoreUploadEntry) error {
+	storeUploadDocRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Doc(fmt.Sprint(uploadId))
+	err := tx.Create(storeUploadDocRef, uploadContent)
+	return err
+}
+
+func getStoreUploadEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, uploadId string) (*StoreUploadEntry, error) {
+
+	storeUploadRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Doc(uploadId)
+	storeUploadDoc, err := tx.Get(storeUploadRef)
+	if err != nil {
+		log.Printf("Unable to fetch upload document for %v/%v, err = %v", storeId, uploadId, err)
+		return nil, err
+	}
+
+	log.Printf("Extracting upload doc data")
+	var storeUploadEntry StoreUploadEntry
+	if err = storeUploadDoc.DataTo(&storeUploadEntry); err != nil {
+		log.Printf("Extracting upload doc data failed")
+		return nil, err
+	}
+
+	return &storeUploadEntry, nil
+}
+
+func updateStoreUploadEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, uploadId string, storeUploadEntry *StoreUploadEntry) error {
+
+	storeUploadRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Doc(uploadId)
+	err := tx.Set(storeUploadRef, storeUploadEntry)
+	if err != nil {
+		log.Printf("Unable to update store upload entry for %v/%v, err = %v", storeId, uploadId, err)
+		return err
+	}
+
+	return nil
+}
+
+func updateStoreFileHashEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string, hashId string, content *StoreFileHashEntry) error {
+	storeFileHashDocRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileHashesCollectionName).Doc(hashId)
+	err := tx.Set(storeFileHashDocRef, content)
+	return err
+}
+
+func createStoreFileHashUploadEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string, hashId string, uploadId int64, content *StoreFileHashUploadEntry) error {
+	storeFileHashUploadDocRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileHashesCollectionName).Doc(hashId).Collection(storeFileHashUploadsCollectionName).Doc(fmt.Sprint(uploadId))
+	err := tx.Create(storeFileHashUploadDocRef, content)
+	return err
 }
 
 type DeleteDocumentsRecursiveState struct {
