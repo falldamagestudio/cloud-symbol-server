@@ -117,7 +117,6 @@ func runDBTransaction(ctx context.Context, f func(context.Context, *firestore.Cl
 
 	firestoreClient, err := firestoreClient(ctx)
 	if err != nil {
-		log.Printf("Unable to talk to database: %v", err)
 		return &ErrFirestore{Inner: err}
 	}
 
@@ -127,7 +126,6 @@ func runDBTransaction(ctx context.Context, f func(context.Context, *firestore.Cl
 
 	err = firestoreClient.RunTransaction(ctx, wrappedF)
 	if err != nil {
-		log.Printf("Transaction failed: %v", err)
 		return err
 	}
 
@@ -185,7 +183,6 @@ func getStoreEntry(client *firestore.Client, tx *firestore.Transaction, storeId 
 	storeDocRef := client.Collection(storesCollectionName).Doc(storeId)
 	storeDoc, err := tx.Get(storeDocRef)
 	if err != nil {
-		log.Printf("Unable to fetch store document for %v, err = %v", storeId, err)
 		if status.Code(err) == codes.NotFound {
 			return nil, &ErrEntryNotFound{EntryRef: &ErrStoreRef{StoreId: storeId}, Inner: err}
 		} else {
@@ -193,10 +190,8 @@ func getStoreEntry(client *firestore.Client, tx *firestore.Transaction, storeId 
 		}
 	}
 
-	log.Printf("Extracting store doc data")
 	var storeEntry StoreEntry
 	if err = storeDoc.DataTo(&storeEntry); err != nil {
-		log.Printf("Extracting store doc data failed")
 		if status.Code(err) == codes.NotFound {
 			return nil, &ErrDocToStructFailed{EntryRef: &ErrStoreRef{StoreId: storeId}, Inner: err}
 		} else {
@@ -230,7 +225,6 @@ func getStoreUploadEntry(client *firestore.Client, tx *firestore.Transaction, st
 	storeUploadRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Doc(uploadId)
 	storeUploadDoc, err := tx.Get(storeUploadRef)
 	if err != nil {
-		log.Printf("Unable to fetch upload document for %v/%v, err = %v", storeId, uploadId, err)
 		if status.Code(err) == codes.NotFound {
 			return nil, &ErrEntryNotFound{EntryRef: &ErrStoreUploadRef{StoreId: storeId, UploadId: uploadId}, Inner: err}
 		} else {
@@ -238,10 +232,8 @@ func getStoreUploadEntry(client *firestore.Client, tx *firestore.Transaction, st
 		}
 	}
 
-	log.Printf("Extracting upload doc data")
 	var storeUploadEntry StoreUploadEntry
 	if err = storeUploadDoc.DataTo(&storeUploadEntry); err != nil {
-		log.Printf("Extracting upload doc data failed, err = %v", err)
 		if status.Code(err) == codes.NotFound {
 			return nil, &ErrEntryNotFound{EntryRef: &ErrStoreUploadRef{StoreId: storeId, UploadId: uploadId}, Inner: err}
 		} else {
@@ -257,7 +249,6 @@ func updateStoreUploadEntry(client *firestore.Client, tx *firestore.Transaction,
 	storeUploadRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Doc(uploadId)
 	err := tx.Set(storeUploadRef, storeUploadEntry)
 	if err != nil {
-		log.Printf("Unable to update store upload entry for %v/%v, err = %v", storeId, uploadId, err)
 		if status.Code(err) == codes.NotFound {
 			return &ErrEntryNotFound{EntryRef: &ErrStoreUploadRef{StoreId: storeId, UploadId: uploadId}, Inner: err}
 		} else {
