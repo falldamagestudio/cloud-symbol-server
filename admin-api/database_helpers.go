@@ -75,6 +75,13 @@ func (err ErrDocToStructFailed) Unwrap() error {
 	return err.Inner
 }
 
+type ErrStoresRef struct {
+}
+
+func (ref ErrStoresRef) Path() string {
+	return fmt.Sprintf("Stores")
+}
+
 type ErrStoreRef struct {
 	StoreId string
 }
@@ -132,18 +139,30 @@ func runDBTransaction(ctx context.Context, f func(context.Context, *firestore.Cl
 	return nil
 }
 
-func getStoresConfig(context context.Context) ([]string, error) {
+func runDBOperation(ctx context.Context, f func(context.Context, *firestore.Client) error) error {
 
-	firestoreClient, err := firestoreClient(context)
+	firestoreClient, err := firestoreClient(ctx)
 	if err != nil {
-		log.Printf("Unable to talk to database: %v", err)
-		return nil, &ErrFirestore{Inner: err}
+		return &ErrFirestore{Inner: err}
 	}
 
-	storesDocSnapshots, err := firestoreClient.Collection(storesCollectionName).Documents(context).GetAll()
+	wrappedF := func(ctx context.Context) error {
+		return f(ctx, firestoreClient)
+	}
+
+	err = wrappedF(ctx)
 	if err != nil {
-		log.Printf("Error when fetching stores, err = %v", err)
-		return nil, err
+		return err
+	}
+
+	return nil
+}
+
+func getStoreIds(ctx context.Context, client *firestore.Client) ([]string, error) {
+
+	storesDocSnapshots, err := client.Collection(storesCollectionName).Documents(ctx).GetAll()
+	if err != nil {
+		return nil, &ErrUnknown{EntryRef: &ErrStoresRef{}, Inner: err}
 	}
 
 	stores := make([]string, len(storesDocSnapshots))
