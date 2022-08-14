@@ -174,21 +174,12 @@ func getStoreIds(ctx context.Context, client *firestore.Client) ([]string, error
 	return stores, nil
 }
 
-func getStoreUploadIds(context context.Context, storeId string) ([]string, error) {
+func getStoreUploadIds(context context.Context, client *firestore.Client, storeId string) ([]string, error) {
 
-	log.Printf("Fetching all upload document IDs for %v", storeId)
-
-	firestoreClient, err := firestoreClient(context)
-	if err != nil {
-		log.Printf("Unable to talk to database: %v", err)
-		return nil, &ErrFirestore{Inner: err}
-	}
-
-	uploadDocsIterator := firestoreClient.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Documents(context)
+	uploadDocsIterator := client.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Documents(context)
 	uploadDocs, err := uploadDocsIterator.GetAll()
 	if err != nil {
-		log.Printf("Error while fetching documents in %v: %v", storeId, err)
-		return nil, err
+		return nil, &ErrUnknown{EntryRef: &ErrStoreRef{StoreId: storeId}, Inner: err}
 	}
 
 	uploadIds := make([]string, len(uploadDocs))
