@@ -2,6 +2,8 @@ package admin_api
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -21,8 +23,12 @@ func (s *ApiService) GetStoreUpload(ctx context.Context, uploadId string, storeI
 		return err
 	})
 	if err != nil {
-		// TOOD: Smarter error handling
-		return openapi.Response(http.StatusBadRequest, nil), err
+		var errEntryNotFound *ErrEntryNotFound
+		if errors.As(err, &errEntryNotFound) {
+			return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("%v not found", errEntryNotFound.EntryRef.Path())}), err
+		} else {
+			return openapi.Response(http.StatusInternalServerError, nil), err
+		}
 	}
 
 	getStoreUploadResponse := openapi.GetStoreUploadResponse{}
