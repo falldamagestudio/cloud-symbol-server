@@ -11,6 +11,8 @@ import (
 	"cloud.google.com/go/firestore"
 	"cloud.google.com/go/storage"
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func uploadFileRequestToPath(storeId string, uploadFileRequest openapi.UploadFileRequest) string {
@@ -119,7 +121,11 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 
 	uploadId, err := logUpload(context, storeId, uploadContent)
 	if err != nil {
-		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Internal error while logging upload to DB"}), errors.New("Internal error while logging upload to DB")
+		if status.Code(err) == codes.NotFound {
+			return openapi.Response(http.StatusNotFound, &openapi.MessageResponse{Message: fmt.Sprintf("Store %v not found", storeId)}), nil
+		} else {
+			return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Internal error while logging upload to DB"}), nil
+		}
 	}
 
 	createStoreUploadResponse.Id = uploadId
