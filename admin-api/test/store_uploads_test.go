@@ -25,6 +25,40 @@ func TestGetStoreUploadWithInvalidCredentialsFails(t *testing.T) {
 	}
 }
 
+func TestGetStoreUploadIdsForStoreThatDoesNotExistFails(t *testing.T) {
+
+	email, pat := getTestEmailAndPat()
+
+	authContext, apiClient := getAPIClient(email, pat)
+
+	invalidStoreId := "invalidstoreid"
+
+	_, r, err := apiClient.DefaultApi.GetStoreUploadIds(authContext, invalidStoreId).Execute()
+	desiredStatusCode := http.StatusNotFound
+	if err == nil || desiredStatusCode != r.StatusCode {
+		t.Fatalf("GetStoreUploadIds with invalid store ID is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
+	}
+}
+
+func TestGetStoreUploadIdsForStoreExistsSucceeds(t *testing.T) {
+
+	email, pat := getTestEmailAndPat()
+
+	authContext, apiClient := getAPIClient(email, pat)
+
+	storeId := "example"
+
+	if err := ensureTestStoreExists(apiClient, authContext, storeId); err != nil {
+		t.Fatalf("ensureTestStoreExists failed: %v", err)
+	}
+
+	_, r, err := apiClient.DefaultApi.GetStoreUploadIds(authContext, storeId).Execute()
+	desiredStatusCode := http.StatusOK
+	if err != nil || desiredStatusCode != r.StatusCode {
+		t.Fatalf("GetStoreUploadIds with valid store ID is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
+	}
+}
+
 func TestGetStoreUploadThatDoesNotExistFails(t *testing.T) {
 
 	email, pat := getTestEmailAndPat()
