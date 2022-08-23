@@ -2,13 +2,14 @@ package admin_api
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"log"
 	"net/http"
 
 	"cloud.google.com/go/firestore"
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func (s *ApiService) DeleteStore(ctx context.Context, storeId string) (openapi.ImplResponse, error) {
@@ -38,10 +39,9 @@ func (s *ApiService) DeleteStore(ctx context.Context, storeId string) (openapi.I
 		_, err = getStoreEntry(client, tx, storeId)
 		return err
 	}); err != nil {
-		var errEntryNotFound *ErrEntryNotFound
-		if errors.As(err, &errEntryNotFound) {
-			log.Printf("%v not found; err = %v", err)
-			return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("%v not found", errEntryNotFound.EntryRef.Path())}), err
+		if status.Code(err) == codes.NotFound {
+			log.Printf("Store %v not found; err = %v", storeId, err)
+			return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Store %v not found", storeId)}), err
 		} else {
 			return openapi.Response(http.StatusInternalServerError, nil), err
 		}

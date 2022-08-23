@@ -2,32 +2,33 @@ package admin_api
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 
+	"cloud.google.com/go/firestore"
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
-func (s *ApiService) CreateStore(context context.Context, storeId string) (openapi.ImplResponse, error) {
+func (s *ApiService) CreateStore(ctx context.Context, storeId string) (openapi.ImplResponse, error) {
 
-	firestoreClient, err := firestoreClient(context)
-	if err != nil {
-		log.Printf("Unable to talk to database: %v", err)
-		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Unable to talk to database"}), err
-	}
+	log.Printf("Creating store")
 
-	_, err = firestoreClient.Collection(storesCollectionName).Doc(storeId).Create(context, &StoreEntry{LatestUploadId: -1})
-	if err != nil {
+	if err := runDBTransaction(ctx, func(ctx context.Context, client *firestore.Client, tx *firestore.Transaction) error {
+		err := createStoreEntry(client, tx, storeId, &StoreEntry{LatestUploadId: -1})
+		return err
+
+	}); err != nil {
 		if status.Code(err) == codes.AlreadyExists {
-			log.Printf("Store already exists, err = %v", err)
-			return openapi.Response(http.StatusConflict, &openapi.MessageResponse{Message: "Store already exists"}), err
+			log.Printf("Store %v already exists; err = %v", storeId, err)
+			return openapi.Response(http.StatusConflict, openapi.MessageResponse{Message: fmt.Sprintf("Store %v already exists", storeId)}), err
 		} else {
-			log.Printf("Unable to create store, err = %v", err)
-			return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Unable to create store"}), err
+			log.Printf("CreateStore err = %v", err)
+			return openapi.Response(http.StatusInternalServerError, nil), err
 		}
 	}
 
-	return openapi.Response(http.StatusOK, nil), err
+	return openapi.Response(http.StatusOK, nil), nil
 }

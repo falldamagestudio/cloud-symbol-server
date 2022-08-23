@@ -2,13 +2,14 @@ package admin_api
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"log"
 	"net/http"
 
 	"cloud.google.com/go/firestore"
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func (s *ApiService) GetStoreUpload(ctx context.Context, uploadId string, storeId string) (openapi.ImplResponse, error) {
@@ -23,9 +24,8 @@ func (s *ApiService) GetStoreUpload(ctx context.Context, uploadId string, storeI
 		return err
 	})
 	if err != nil {
-		var errEntryNotFound *ErrEntryNotFound
-		if errors.As(err, &errEntryNotFound) {
-			return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("%v not found", errEntryNotFound.EntryRef.Path())}), err
+		if status.Code(err) == codes.NotFound {
+			return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Upload %v / %v not found", storeId, uploadId)}), err
 		} else {
 			return openapi.Response(http.StatusInternalServerError, nil), err
 		}
