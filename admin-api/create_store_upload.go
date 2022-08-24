@@ -11,6 +11,8 @@ import (
 	"cloud.google.com/go/firestore"
 	"cloud.google.com/go/storage"
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func uploadFileRequestToPath(storeId string, uploadFileRequest openapi.UploadFileRequest) string {
@@ -31,16 +33,6 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 	if err != nil {
 		log.Printf("Unable to determine symbol store bucket name: %v", err)
 		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: fmt.Sprintf("Unable to determine symbol store bucket name")}), err
-	}
-
-	storeDoc, err := getStoreDoc(context, storeId)
-	if err != nil {
-		log.Printf("Unable to fetch store document for %v, err = %v", storeId, err)
-		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: fmt.Sprintf("Unable to fetch store document for %v", storeId)}), err
-	}
-	if storeDoc == nil {
-		log.Printf("Store %v does not exist", storeId)
-		return openapi.Response(http.StatusNotFound, &openapi.MessageResponse{Message: fmt.Sprintf("Store %v does not exist", storeId)}), err
 	}
 
 	// Legacy API users (those who do not use the progress API) expect the response to filter
@@ -129,7 +121,11 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 
 	uploadId, err := logUpload(context, storeId, uploadContent)
 	if err != nil {
-		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Internal error while logging upload to DB"}), errors.New("Internal error while logging upload to DB")
+		if status.Code(err) == codes.NotFound {
+			return openapi.Response(http.StatusNotFound, &openapi.MessageResponse{Message: fmt.Sprintf("Store %v not found", storeId)}), nil
+		} else {
+			return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Internal error while logging upload to DB"}), nil
+		}
 	}
 
 	createStoreUploadResponse.Id = uploadId
@@ -139,82 +135,43 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 	return openapi.Response(http.StatusOK, createStoreUploadResponse), nil
 }
 
-func incrementStoreUploadId(tx *firestore.Transaction, storeDocRef *firestore.DocumentRef) (int64, error) {
-	storeDoc, err := tx.Get(storeDocRef)
-	if err != nil {
-		return 0, err
-	}
-	storeEntry := &StoreEntry{}
-	if err := storeDoc.DataTo(storeEntry); err != nil {
-		return 0, err
-	}
+func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUploadEntry) (string, error) {
 
-	newUploadId := storeEntry.LatestUploadId + 1
-	storeEntry.LatestUploadId = newUploadId
+	log.Printf("Writing upload to database: %v", storeUploadEntry)
 
-	err = tx.Set(storeDocRef, storeEntry)
-	if err != nil {
-		return 0, err
-	}
+	uploadId := int64(0)
 
-	return newUploadId, nil
-}
+	err := runDBTransaction(ctx, func(ctx context.Context, client *firestore.Client, tx *firestore.Transaction) error {
 
-func createStoreUploadDoc(tx *firestore.Transaction, storeDocRef *firestore.DocumentRef, newUploadId int64, uploadContent StoreUploadEntry) error {
-	uploadDocRef := storeDocRef.Collection(storeUploadsCollectionName).Doc(fmt.Sprint(newUploadId))
-
-	err := tx.Create(uploadDocRef, uploadContent)
-	return err
-}
-
-func createStoreFileHashDoc(tx *firestore.Transaction, storeDocRef *firestore.DocumentRef, fileId string, hashId string, content StoreFileHashEntry) error {
-	storeFileHashDocRef := storeDocRef.Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileHashesCollectionName).Doc(hashId)
-
-	err := tx.Set(storeFileHashDocRef, content)
-	return err
-}
-
-func createStoreFileHashUploadDoc(tx *firestore.Transaction, storeDocRef *firestore.DocumentRef, fileId string, hashId string, uploadId int64, content StoreFileHashUploadEntry) error {
-	storeFileHashUploadDocRef := storeDocRef.Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileHashesCollectionName).Doc(hashId).Collection(storeFileHashUploadsCollectionName).Doc(fmt.Sprint(uploadId))
-
-	err := tx.Set(storeFileHashUploadDocRef, content)
-	return err
-}
-
-func logUpload(ctx context.Context, storeId string, upload StoreUploadEntry) (string, error) {
-
-	log.Printf("Writing upload to database: %v", upload)
-
-	firestoreClient, err := firestoreClient(ctx)
-	if err != nil {
-		log.Printf("Unable to talk to database: %v", err)
-		return "", err
-	}
-
-	storeDocRef := firestoreClient.Collection(storesCollectionName).Doc(storeId)
-
-	newUploadId := int64(0)
-
-	err = firestoreClient.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
-
-		newUploadId, err := incrementStoreUploadId(tx, storeDocRef)
+		storeEntry, err := getStoreEntry(client, tx, storeId)
 		if err != nil {
 			return err
 		}
 
-		err = createStoreUploadDoc(tx, storeDocRef, newUploadId, upload)
+		uploadId = storeEntry.LatestUploadId + 1
+
+		newStoreEntry := StoreEntry{
+			LatestUploadId: uploadId,
+		}
+
+		err = updateStoreEntry(client, tx, storeId, &newStoreEntry)
 		if err != nil {
 			return err
 		}
 
-		for _, file := range upload.Files {
+		err = createStoreUploadEntry(client, tx, storeId, uploadId, &storeUploadEntry)
+		if err != nil {
+			return err
+		}
 
-			err = createStoreFileHashDoc(tx, storeDocRef, file.FileName, file.Hash, StoreFileHashEntry{})
+		for _, file := range storeUploadEntry.Files {
+
+			err = updateStoreFileHashEntry(client, tx, storeId, file.FileName, file.Hash, &StoreFileHashEntry{})
 			if err != nil {
 				return err
 			}
 
-			err = createStoreFileHashUploadDoc(tx, storeDocRef, file.FileName, file.Hash, newUploadId, StoreFileHashUploadEntry{})
+			err = createStoreFileHashUploadEntry(client, tx, storeId, file.FileName, file.Hash, uploadId, &StoreFileHashUploadEntry{})
 			if err != nil {
 				return err
 			}
@@ -232,7 +189,7 @@ func logUpload(ctx context.Context, storeId string, upload StoreUploadEntry) (st
 		return "", err
 	}
 
-	log.Printf("Upload is given ID %v", newUploadId)
+	log.Printf("Upload is given ID %v", uploadId)
 
-	return fmt.Sprint(newUploadId), nil
+	return fmt.Sprint(uploadId), nil
 }

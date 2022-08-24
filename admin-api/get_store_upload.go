@@ -6,37 +6,29 @@ import (
 	"log"
 	"net/http"
 
+	"cloud.google.com/go/firestore"
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
-func (s *ApiService) GetStoreUpload(context context.Context, uploadId string, storeId string) (openapi.ImplResponse, error) {
-
-	storeDoc, err := getStoreDoc(context, storeId)
-	if err != nil {
-		log.Printf("Unable to fetch store document for %v, err = %v", storeId, err)
-		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: fmt.Sprintf("Unable to fetch store document for %v", storeId)}), err
-	}
-	if storeDoc == nil {
-		log.Printf("Store %v does not exist", storeId)
-		return openapi.Response(http.StatusNotFound, &openapi.MessageResponse{Message: fmt.Sprintf("Store %v does not exist", storeId)}), err
-	}
+func (s *ApiService) GetStoreUpload(ctx context.Context, uploadId string, storeId string) (openapi.ImplResponse, error) {
 
 	log.Printf("Getting store upload doc")
-	storeUploadDoc, err := getStoreUploadDoc(context, storeId, uploadId)
-	if err != nil {
-		log.Printf("Unable to fetch upload document for %v/%v, err = %v", storeId, uploadId, err)
-		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: fmt.Sprintf("Unable to fetch upload document for %v/%v", storeId, uploadId)}), err
-	}
-	if storeUploadDoc == nil {
-		log.Printf("Upload doc %v/%v does not exist", storeId, uploadId)
-		return openapi.Response(http.StatusNotFound, &openapi.MessageResponse{Message: fmt.Sprintf("Upload %v/%v does not exist", storeId, uploadId)}), err
-	}
 
-	log.Printf("Extracting upload doc data")
-	var storeUploadEntry StoreUploadEntry
-	if err = storeUploadDoc.DataTo(&storeUploadEntry); err != nil {
-		log.Printf("Extracting upload doc data failed")
-		return openapi.Response(http.StatusOK, &openapi.MessageResponse{Message: "Error while extracting contents of doc"}), err
+	var storeUploadEntry *StoreUploadEntry = nil
+
+	err := runDBTransaction(ctx, func(ctx context.Context, client *firestore.Client, tx *firestore.Transaction) error {
+		var err error = nil
+		storeUploadEntry, err = getStoreUploadEntry(client, tx, storeId, uploadId)
+		return err
+	})
+	if err != nil {
+		if status.Code(err) == codes.NotFound {
+			return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Upload %v / %v not found", storeId, uploadId)}), err
+		} else {
+			return openapi.Response(http.StatusInternalServerError, nil), err
+		}
 	}
 
 	getStoreUploadResponse := openapi.GetStoreUploadResponse{}

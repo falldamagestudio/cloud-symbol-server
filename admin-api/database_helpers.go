@@ -2,6 +2,7 @@ package admin_api
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"cloud.google.com/go/firestore"
@@ -19,17 +20,60 @@ const (
 	storeFileHashUploadsCollectionName = "uploads"
 )
 
-func getStoresConfig(context context.Context) ([]string, error) {
+type ErrFirestore struct {
+	Inner error
+}
 
-	firestoreClient, err := firestoreClient(context)
+func (err ErrFirestore) Error() string {
+	return fmt.Sprintf("Firestore error; err = %v", err.Inner)
+}
+
+func (err ErrFirestore) Unwrap() error {
+	return err.Inner
+}
+
+func runDBTransaction(ctx context.Context, f func(context.Context, *firestore.Client, *firestore.Transaction) error) error {
+
+	firestoreClient, err := firestoreClient(ctx)
 	if err != nil {
-		log.Printf("Unable to talk to database: %v", err)
-		return nil, err
+		return &ErrFirestore{Inner: err}
 	}
 
-	storesDocSnapshots, err := firestoreClient.Collection(storesCollectionName).Documents(context).GetAll()
+	wrappedF := func(ctx context.Context, tx *firestore.Transaction) error {
+		return f(ctx, firestoreClient, tx)
+	}
+
+	err = firestoreClient.RunTransaction(ctx, wrappedF)
 	if err != nil {
-		log.Printf("Error when fetching stores, err = %v", err)
+		return err
+	}
+
+	return nil
+}
+
+func runDBOperation(ctx context.Context, f func(context.Context, *firestore.Client) error) error {
+
+	firestoreClient, err := firestoreClient(ctx)
+	if err != nil {
+		return &ErrFirestore{Inner: err}
+	}
+
+	wrappedF := func(ctx context.Context) error {
+		return f(ctx, firestoreClient)
+	}
+
+	err = wrappedF(ctx)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func getStoreIds(ctx context.Context, client *firestore.Client) ([]string, error) {
+
+	storesDocSnapshots, err := client.Collection(storesCollectionName).Documents(ctx).GetAll()
+	if err != nil {
 		return nil, err
 	}
 
@@ -42,44 +86,11 @@ func getStoresConfig(context context.Context) ([]string, error) {
 	return stores, nil
 }
 
-func getStoreDoc(context context.Context, storeId string) (*firestore.DocumentSnapshot, error) {
+func getStoreUploadIds(context context.Context, client *firestore.Client, storeId string) ([]string, error) {
 
-	log.Printf("Fetching store document for %v", storeId)
-
-	firestoreClient, err := firestoreClient(context)
-	if err != nil {
-		log.Printf("Unable to talk to database: %v", err)
-		return nil, err
-	}
-
-	storeDoc, err := firestoreClient.Collection(storesCollectionName).Doc(storeId).Get(context)
-
-	if err != nil {
-		if status.Code(err) == codes.NotFound {
-			return nil, nil
-		} else {
-			log.Printf("Unable to fetch store document for %v, err = %v", storeId, err)
-			return nil, err
-		}
-	}
-
-	return storeDoc, nil
-}
-
-func getStoreUploadIds(context context.Context, storeId string) ([]string, error) {
-
-	log.Printf("Fetching all upload document IDs for %v", storeId)
-
-	firestoreClient, err := firestoreClient(context)
-	if err != nil {
-		log.Printf("Unable to talk to database: %v", err)
-		return nil, err
-	}
-
-	uploadDocsIterator := firestoreClient.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Documents(context)
+	uploadDocsIterator := client.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Documents(context)
 	uploadDocs, err := uploadDocsIterator.GetAll()
 	if err != nil {
-		log.Printf("Error while fetching documents in %v: %v", storeId, err)
 		return nil, err
 	}
 
@@ -90,43 +101,72 @@ func getStoreUploadIds(context context.Context, storeId string) ([]string, error
 	return uploadIds, nil
 }
 
-func getStoreUploadRef(context context.Context, storeId string, uploadId string) (*firestore.DocumentRef, error) {
-
-	log.Printf("Creating upload ref for %v/%v", storeId, uploadId)
-
-	firestoreClient, err := firestoreClient(context)
+func getStoreEntry(client *firestore.Client, tx *firestore.Transaction, storeId string) (*StoreEntry, error) {
+	storeDocRef := client.Collection(storesCollectionName).Doc(storeId)
+	storeDoc, err := tx.Get(storeDocRef)
 	if err != nil {
-		log.Printf("Unable to talk to database: %v", err)
 		return nil, err
 	}
 
-	uploadRef := firestoreClient.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Doc(uploadId)
+	var storeEntry StoreEntry
+	if err = storeDoc.DataTo(&storeEntry); err != nil {
+		return nil, err
+	}
 
-	return uploadRef, nil
+	return &storeEntry, nil
 }
 
-func getStoreUploadDoc(context context.Context, storeId string, uploadId string) (*firestore.DocumentSnapshot, error) {
+func createStoreEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, storeEntry *StoreEntry) error {
+	storeUploadDocRef := client.Collection(storesCollectionName).Doc(storeId)
+	err := tx.Create(storeUploadDocRef, storeEntry)
+	return err
+}
 
-	log.Printf("Fetching upload document for %v/%v", storeId, uploadId)
+func updateStoreEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, storeEntry *StoreEntry) error {
+	storeUploadDocRef := client.Collection(storesCollectionName).Doc(storeId)
+	err := tx.Set(storeUploadDocRef, storeEntry)
+	return err
+}
 
-	firestoreClient, err := firestoreClient(context)
+func createStoreUploadEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, uploadId int64, uploadContent *StoreUploadEntry) error {
+	storeUploadDocRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Doc(fmt.Sprint(uploadId))
+	err := tx.Create(storeUploadDocRef, uploadContent)
+	return err
+}
+
+func getStoreUploadEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, uploadId string) (*StoreUploadEntry, error) {
+
+	storeUploadRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Doc(uploadId)
+	storeUploadDoc, err := tx.Get(storeUploadRef)
 	if err != nil {
-		log.Printf("Unable to talk to database: %v", err)
 		return nil, err
 	}
 
-	uploadDoc, err := firestoreClient.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Doc(uploadId).Get(context)
-
-	if err != nil {
-		if status.Code(err) == codes.NotFound {
-			return nil, nil
-		} else {
-			log.Printf("Unable to fetch upload document for %v/%v, err = %v", storeId, uploadId, err)
-			return nil, err
-		}
+	var storeUploadEntry StoreUploadEntry
+	if err = storeUploadDoc.DataTo(&storeUploadEntry); err != nil {
+		return nil, err
 	}
 
-	return uploadDoc, nil
+	return &storeUploadEntry, nil
+}
+
+func updateStoreUploadEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, uploadId string, storeUploadEntry *StoreUploadEntry) error {
+
+	storeUploadRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Doc(uploadId)
+	err := tx.Set(storeUploadRef, storeUploadEntry)
+	return err
+}
+
+func updateStoreFileHashEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string, hashId string, content *StoreFileHashEntry) error {
+	storeFileHashDocRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileHashesCollectionName).Doc(hashId)
+	err := tx.Set(storeFileHashDocRef, content)
+	return err
+}
+
+func createStoreFileHashUploadEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string, hashId string, uploadId int64, content *StoreFileHashUploadEntry) error {
+	storeFileHashUploadDocRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileHashesCollectionName).Doc(hashId).Collection(storeFileHashUploadsCollectionName).Doc(fmt.Sprint(uploadId))
+	err := tx.Create(storeFileHashUploadDocRef, content)
+	return err
 }
 
 type DeleteDocumentsRecursiveState struct {
