@@ -1,9 +1,11 @@
 package admin_api
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 
@@ -124,4 +126,108 @@ func ensureTestStoreDoesNotExist(apiClient *openapi_client.APIClient, authContex
 	}
 
 	return nil
+}
+
+type TestUpload struct {
+	BuildId     string
+	Description string
+	Files       []TestUploadFile
+}
+
+type TestUploadFile struct {
+	FileName string
+	Hash     string
+	Content  string
+}
+
+var (
+	exampleUpload1 = TestUpload{
+		BuildId:     "example upload Build ID 1",
+		Description: "example upload description 1",
+		Files: []TestUploadFile{
+			{
+				FileName: "file1",
+				Hash:     "hash1",
+				Content:  "content1",
+			},
+			{
+				FileName: "file2",
+				Hash:     "hash2",
+				Content:  "content2",
+			},
+		},
+	}
+)
+
+func upload(apiClient *openapi_client.APIClient, authContext context.Context, storeId string, testUpload *TestUpload) (string, error) {
+
+	files := make([]openapi_client.UploadFileRequest, len(testUpload.Files))
+
+	useProgressApi := true
+	createStoreUploadRequest := &openapi_client.CreateStoreUploadRequest{
+		BuildId:        &testUpload.BuildId,
+		Description:    &testUpload.Description,
+		Files:          &files,
+		UseProgressApi: &useProgressApi,
+	}
+
+	for fileIndex := range testUpload.Files {
+		sourceFile := &testUpload.Files[fileIndex]
+		targetFile := &(*(*createStoreUploadRequest).Files)[fileIndex]
+
+		targetFile.FileName = &sourceFile.FileName
+		targetFile.Hash = &sourceFile.Hash
+	}
+
+	createStoreUploadResponse, _, err := apiClient.DefaultApi.CreateStoreUpload(authContext, storeId).CreateStoreUploadRequest(*createStoreUploadRequest).Execute()
+	if err != nil {
+		return "", err
+	}
+
+	// Upload individual files, and mark them as uploaded
+
+	storeUploadId := *createStoreUploadResponse.Id
+
+	for fileIndex := range *createStoreUploadRequest.Files {
+
+		uploadUrl := *(*createStoreUploadResponse.Files)[fileIndex].Url
+		content := []byte(testUpload.Files[fileIndex].Content)
+
+		// Upload file to GCS using server-supplied upload URL
+
+		uploadRequest, err := http.NewRequest(http.MethodPut, uploadUrl, bytes.NewReader(content))
+		if err != nil {
+			return "", err
+		}
+
+		client := http.Client{}
+		uploadResponse, err := client.Do(uploadRequest)
+		if err != nil {
+			return "", err
+		}
+
+		defer uploadResponse.Body.Close()
+		_, err = io.ReadAll(uploadResponse.Body)
+		if err != nil {
+			return "", err
+		}
+
+		// Mark file as uploaded
+
+		_, err = apiClient.DefaultApi.MarkStoreUploadFileUploaded(authContext, storeUploadId, storeId, int32(fileIndex)).Execute()
+		if err != nil {
+			return "", err
+		}
+	}
+
+	// Complete upload
+
+	{
+		_, err = apiClient.DefaultApi.MarkStoreUploadCompleted(authContext, storeUploadId, storeId).Execute()
+		if err != nil {
+			return "", err
+		}
+	}
+
+	return storeUploadId, nil
 }

@@ -163,10 +163,38 @@ func updateStoreFileHashEntry(client *firestore.Client, tx *firestore.Transactio
 	return err
 }
 
+func deleteStoreFileHashEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string, hashId string) error {
+	storeFileHashDocRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileHashesCollectionName).Doc(hashId)
+	err := tx.Delete(storeFileHashDocRef)
+	return err
+}
+
 func createStoreFileHashUploadEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string, hashId string, uploadId int64, content *StoreFileHashUploadEntry) error {
 	storeFileHashUploadDocRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileHashesCollectionName).Doc(hashId).Collection(storeFileHashUploadsCollectionName).Doc(fmt.Sprint(uploadId))
 	err := tx.Create(storeFileHashUploadDocRef, content)
 	return err
+}
+
+func deleteStoreFileHashUploadEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string, hashId string, uploadId string) error {
+	storeFileHashUploadDocRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileHashesCollectionName).Doc(hashId).Collection(storeFileHashUploadsCollectionName).Doc(uploadId)
+	err := tx.Delete(storeFileHashUploadDocRef)
+	return err
+}
+
+func getStoreFileHashUploadIds(ctx context.Context, client *firestore.Client, storeId string, fileId string, hashId string) ([]string, error) {
+
+	storeFileHashUploadDocSnapshots, err := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileHashesCollectionName).Doc(hashId).Collection(storeFileHashUploadsCollectionName).Documents(ctx).GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	uploadIds := make([]string, len(storeFileHashUploadDocSnapshots))
+
+	for uploadIndex, storeFileHashUploadDocSnapshot := range storeFileHashUploadDocSnapshots {
+		uploadIds[uploadIndex] = storeFileHashUploadDocSnapshot.Ref.ID
+	}
+
+	return uploadIds, nil
 }
 
 type DeleteDocumentsRecursiveState struct {

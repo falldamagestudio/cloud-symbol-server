@@ -26,12 +26,6 @@ func (s *ApiService) DeleteStore(ctx context.Context, storeId string) (openapi.I
 		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Unable to create storage client"}), err
 	}
 
-	symbolStoreBucketName, err := getSymbolStoreBucketName()
-	if err != nil {
-		log.Printf("Unable to determine symbol store bucket name: %v", err)
-		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Unable to determine symbol store bucket name"}), err
-	}
-
 	// Validate that store exists
 
 	if err = runDBTransaction(ctx, func(ctx context.Context, client *firestore.Client, tx *firestore.Transaction) error {
@@ -49,7 +43,7 @@ func (s *ApiService) DeleteStore(ctx context.Context, storeId string) (openapi.I
 
 	// Delete all related files in Cloud Storage
 
-	if err = deleteAllObjectsInStore(ctx, storageClient, symbolStoreBucketName, storeId); err != nil {
+	if err = deleteAllObjectsInStore(ctx, storageClient, storeId); err != nil {
 		if err != nil {
 			log.Printf("Unable to delete all documents in collection, err = %v", err)
 			return openapi.Response(http.StatusInternalServerError, nil), err

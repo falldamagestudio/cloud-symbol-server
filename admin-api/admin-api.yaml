@@ -234,6 +234,38 @@ paths:
               schema:
                 $ref: '#/components/schemas/messageResponse'
 
+  /stores/{storeId}/uploads/{uploadId}/expire:
+    post:
+      summary: Expire store upload and consider files for GC
+      operationId: expireStoreUpload
+      parameters:
+        - in: path
+          name: uploadId
+          schema:
+            type: string
+          required: true
+          description: ID of the upload to fetch
+        - in: path
+          name: storeId
+          schema:
+            type: string
+          required: true
+          description: ID of the store containing the upload
+
+      responses:
+        200:
+          description: Success
+
+        401:
+          $ref: '#/components/responses/401'
+
+        404:
+          description: No such store/upload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+
   /stores/{storeId}/uploads/{uploadId}/files/{fileId}/uploaded:
     post:
       summary: Mark a file within an upload as uploaded

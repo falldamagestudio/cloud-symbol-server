@@ -2,9 +2,7 @@ package admin_api
 
 import (
 	"context"
-	"errors"
 	"fmt"
-	"log"
 	"os"
 
 	"cloud.google.com/go/storage"
@@ -12,14 +10,32 @@ import (
 	"google.golang.org/api/option"
 )
 
+type ErrStorageClient struct {
+	Inner error
+}
+
+func (err ErrStorageClient) Error() string {
+	return fmt.Sprintf("Unable to create storage client; err = %v", err.Inner)
+}
+
+func (err ErrStorageClient) Unwrap() error {
+	return err.Inner
+}
+
+type ErrStoreBucketName struct {
+}
+
+func (err ErrStoreBucketName) Error() string {
+	return "No store bucket name configured"
+}
+
 func getStorageClient(context context.Context) (*storage.Client, error) {
 
 	storageClientOpts := []option.ClientOption{}
 
 	storageClient, err := storage.NewClient(context, storageClientOpts...)
 	if err != nil {
-		log.Printf("Unable to create storageClient: %v", err)
-		return nil, err
+		return nil, &ErrStorageClient{Inner: err}
 	}
 
 	return storageClient, nil
@@ -29,14 +45,19 @@ func getSymbolStoreBucketName() (string, error) {
 
 	symbolStoreBucketName := os.Getenv("SYMBOL_STORE_BUCKET_NAME")
 	if symbolStoreBucketName == "" {
-		log.Print("No storage bucket configured")
-		return "", errors.New("No storage bucket configured")
+		return "", &ErrStoreBucketName{}
 	}
 
 	return symbolStoreBucketName, nil
 }
 
-func deleteAllObjectsInStore(context context.Context, storageClient *storage.Client, bucketName string, storeId string) error {
+func deleteAllObjectsInStore(context context.Context, storageClient *storage.Client, storeId string) error {
+
+	bucketName, err := getSymbolStoreBucketName()
+	if err != nil {
+		return err
+	}
+
 	query := &storage.Query{
 		Prefix: fmt.Sprintf("stores/%v/", storeId),
 	}
@@ -57,4 +78,20 @@ func deleteAllObjectsInStore(context context.Context, storageClient *storage.Cli
 	}
 
 	return nil
+}
+
+func storefileNameHashToPath(storeId string, fileName string, hash string) string {
+	return fmt.Sprintf("stores/%s/%s/%s/%s", storeId, fileName, hash, fileName)
+}
+
+func deleteObjectInStore(context context.Context, storageClient *storage.Client, storeId string, fileName string, hash string) error {
+
+	bucketName, err := getSymbolStoreBucketName()
+	if err != nil {
+		return err
+	}
+
+	path := storefileNameHashToPath(storeId, fileName, hash)
+	err = storageClient.Bucket(bucketName).Object(path).Delete(context)
+	return err
 }

@@ -259,6 +259,42 @@ paths:
                 $ref: '#/components/schemas/messageResponse'
           description: No such store/upload
       summary: Mark an upload as aborted
+  /stores/{storeId}/uploads/{uploadId}/expire:
+    post:
+      operationId: expireStoreUpload
+      parameters:
+      - description: ID of the upload to fetch
+        explode: false
+        in: path
+        name: uploadId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of the store containing the upload
+        explode: false
+        in: path
+        name: storeId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Success
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Not authorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: No such store/upload
+      summary: Expire store upload and consider files for GC
   /stores/{storeId}/uploads/{uploadId}/files/{fileId}/uploaded:
     post:
       operationId: markStoreUploadFileUploaded

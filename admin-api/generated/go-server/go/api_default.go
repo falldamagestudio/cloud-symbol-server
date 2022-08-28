@@ -69,6 +69,12 @@ func (c *DefaultApiController) Routes() Routes {
 			c.DeleteStore,
 		},
 		{
+			"ExpireStoreUpload",
+			strings.ToUpper("Post"),
+			"/stores/{storeId}/uploads/{uploadId}/expire",
+			c.ExpireStoreUpload,
+		},
+		{
 			"GetStoreUpload",
 			strings.ToUpper("Get"),
 			"/stores/{storeId}/uploads/{uploadId}",
@@ -156,6 +162,24 @@ func (c *DefaultApiController) DeleteStore(w http.ResponseWriter, r *http.Reques
 	storeIdParam := params["storeId"]
 	
 	result, err := c.service.DeleteStore(r.Context(), storeIdParam)
+	// If an error occurred, encode the error with the status code
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
+	// If no error, encode the body and the result code
+	EncodeJSONResponse(result.Body, &result.Code, w)
+
+}
+
+// ExpireStoreUpload - Expire store upload and consider files for GC
+func (c *DefaultApiController) ExpireStoreUpload(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	uploadIdParam := params["uploadId"]
+	
+	storeIdParam := params["storeId"]
+	
+	result, err := c.service.ExpireStoreUpload(r.Context(), uploadIdParam, storeIdParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)

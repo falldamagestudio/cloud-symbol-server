@@ -7,6 +7,7 @@ Method | HTTP request | Description
 [**CreateStore**](DefaultApi.md#createstore) | **POST** /stores/{storeId} | Create a new store
 [**CreateStoreUpload**](DefaultApi.md#createstoreupload) | **POST** /stores/{storeId}/uploads | Start a new upload
 [**DeleteStore**](DefaultApi.md#deletestore) | **DELETE** /stores/{storeId} | Delete an existing store
+[**ExpireStoreUpload**](DefaultApi.md#expirestoreupload) | **POST** /stores/{storeId}/uploads/{uploadId}/expire | Expire store upload and consider files for GC
 [**GetStoreUpload**](DefaultApi.md#getstoreupload) | **GET** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
 [**GetStoreUploadIds**](DefaultApi.md#getstoreuploadids) | **GET** /stores/{storeId}/uploads | Fetch a list of all uploads in store
 [**GetStores**](DefaultApi.md#getstores) | **GET** /stores | Fetch a list of all stores
@@ -236,6 +237,82 @@ void (empty response body)
 | **200** | Success |  -  |
 | **401** | Not authorized |  -  |
 | **404** | Store does not exist |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="expirestoreupload"></a>
+# **ExpireStoreUpload**
+> void ExpireStoreUpload (string uploadId, string storeId)
+
+Expire store upload and consider files for GC
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using BackendAPI.Api;
+using BackendAPI.Client;
+using BackendAPI.Model;
+
+namespace Example
+{
+    public class ExpireStoreUploadExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure HTTP basic authorization: emailAndPat
+            config.Username = "YOUR_USERNAME";
+            config.Password = "YOUR_PASSWORD";
+
+            var apiInstance = new DefaultApi(config);
+            var uploadId = uploadId_example;  // string | ID of the upload to fetch
+            var storeId = storeId_example;  // string | ID of the store containing the upload
+
+            try
+            {
+                // Expire store upload and consider files for GC
+                apiInstance.ExpireStoreUpload(uploadId, storeId);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling DefaultApi.ExpireStoreUpload: " + e.Message );
+                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **uploadId** | **string**| ID of the upload to fetch | 
+ **storeId** | **string**| ID of the store containing the upload | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[emailAndPat](../README.md#emailAndPat)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **401** | Not authorized |  -  |
+| **404** | No such store/upload |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -81,6 +81,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**CreateStore**](docs/DefaultApi.md#createstore) | **Post** /stores/{storeId} | Create a new store
 *DefaultApi* | [**CreateStoreUpload**](docs/DefaultApi.md#createstoreupload) | **Post** /stores/{storeId}/uploads | Start a new upload
 *DefaultApi* | [**DeleteStore**](docs/DefaultApi.md#deletestore) | **Delete** /stores/{storeId} | Delete an existing store
+*DefaultApi* | [**ExpireStoreUpload**](docs/DefaultApi.md#expirestoreupload) | **Post** /stores/{storeId}/uploads/{uploadId}/expire | Expire store upload and consider files for GC
 *DefaultApi* | [**GetStoreUpload**](docs/DefaultApi.md#getstoreupload) | **Get** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
 *DefaultApi* | [**GetStoreUploadIds**](docs/DefaultApi.md#getstoreuploadids) | **Get** /stores/{storeId}/uploads | Fetch a list of all uploads in store
 *DefaultApi* | [**GetStores**](docs/DefaultApi.md#getstores) | **Get** /stores | Fetch a list of all stores
