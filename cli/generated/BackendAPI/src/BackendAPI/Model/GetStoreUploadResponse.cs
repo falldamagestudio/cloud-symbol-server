@@ -59,7 +59,13 @@ namespace BackendAPI.Model
             /// Enum Aborted for value: aborted
             /// </summary>
             [EnumMember(Value = "aborted")]
-            Aborted = 4
+            Aborted = 4,
+
+            /// <summary>
+            /// Enum Expired for value: expired
+            /// </summary>
+            [EnumMember(Value = "expired")]
+            Expired = 5
 
         }
 

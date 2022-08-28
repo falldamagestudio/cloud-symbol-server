@@ -417,6 +417,7 @@ components:
             - in_progress
             - completed
             - aborted
+            - expired
 
     getFileResponse:
       type: object
@@ -436,6 +437,7 @@ components:
             - pending
             - uploaded
             - aborted
+            - expired
 
   securitySchemes:
     emailAndPat:

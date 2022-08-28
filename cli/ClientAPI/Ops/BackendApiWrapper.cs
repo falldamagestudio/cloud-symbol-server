@@ -101,6 +101,26 @@ namespace ClientAPI
             }
         }
 
+        public class ExpireStoreUploadException : ClientAPIException
+        {
+            public ExpireStoreUploadException(string message) : base(message) { }
+        }
+
+        public async Task ExpireStoreUploadAsync(string store, string uploadId) {
+
+            try {
+                BackendAPI.Client.ApiResponse<object> response = await backendApi.ExpireStoreUploadWithHttpInfoAsync(uploadId, store);
+                if (response.ErrorText != null)
+                    throw new ApiException(response.ErrorText);
+                return;
+            } catch (BackendAPI.Client.ApiException apiException) {
+                if (apiException.ErrorCode == (int)HttpStatusCode.NotFound)
+                    throw new ExpireStoreUploadException($"Upload {uploadId} does not exist in store {store}");
+                else
+                    throw;
+            }
+        }
+
         public class GetStoreUploadIdsException : ClientAPIException
         {
             public GetStoreUploadIdsException(string message) : base(message) { }

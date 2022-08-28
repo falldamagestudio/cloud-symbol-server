@@ -463,6 +463,7 @@ components:
           - in_progress
           - completed
           - aborted
+          - expired
           example: completed
           type: string
       type: object
@@ -485,6 +486,7 @@ components:
           - pending
           - uploaded
           - aborted
+          - expired
           example: uploaded
           type: string
       type: object
