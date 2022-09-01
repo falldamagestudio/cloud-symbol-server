@@ -8,6 +8,7 @@ Method | HTTP request | Description
 [**CreateStoreUpload**](DefaultApi.md#createstoreupload) | **POST** /stores/{storeId}/uploads | Start a new upload
 [**DeleteStore**](DefaultApi.md#deletestore) | **DELETE** /stores/{storeId} | Delete an existing store
 [**ExpireStoreUpload**](DefaultApi.md#expirestoreupload) | **POST** /stores/{storeId}/uploads/{uploadId}/expire | Expire store upload and consider files for GC
+[**GetStoreFileIds**](DefaultApi.md#getstorefileids) | **GET** /stores/{storeId}/files | Fetch a list of all files in store
 [**GetStoreUpload**](DefaultApi.md#getstoreupload) | **GET** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
 [**GetStoreUploadIds**](DefaultApi.md#getstoreuploadids) | **GET** /stores/{storeId}/uploads | Fetch a list of all uploads in store
 [**GetStores**](DefaultApi.md#getstores) | **GET** /stores | Fetch a list of all stores
@@ -313,6 +314,81 @@ void (empty response body)
 | **200** | Success |  -  |
 | **401** | Not authorized |  -  |
 | **404** | No such store/upload |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="getstorefileids"></a>
+# **GetStoreFileIds**
+> GetStoreFileIdsResponse GetStoreFileIds (string storeId)
+
+Fetch a list of all files in store
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using BackendAPI.Api;
+using BackendAPI.Client;
+using BackendAPI.Model;
+
+namespace Example
+{
+    public class GetStoreFileIdsExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure HTTP basic authorization: emailAndPat
+            config.Username = "YOUR_USERNAME";
+            config.Password = "YOUR_PASSWORD";
+
+            var apiInstance = new DefaultApi(config);
+            var storeId = storeId_example;  // string | ID of the store containing the files
+
+            try
+            {
+                // Fetch a list of all files in store
+                GetStoreFileIdsResponse result = apiInstance.GetStoreFileIds(storeId);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling DefaultApi.GetStoreFileIds: " + e.Message );
+                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **storeId** | **string**| ID of the store containing the files | 
+
+### Return type
+
+[**GetStoreFileIdsResponse**](GetStoreFileIdsResponse.md)
+
+### Authorization
+
+[emailAndPat](../README.md#emailAndPat)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **401** | Not authorized |  -  |
+| **404** | No such store |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

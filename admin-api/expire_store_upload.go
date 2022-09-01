@@ -35,22 +35,74 @@ func (s *ApiService) ExpireStoreUpload(ctx context.Context, uploadId string, sto
 			return err
 		}
 
-		// Determine which files are only referenced by this file ID
-		// and which should therefore be deleted
+		// Fetch all existing store file & file-hash entries and decrease their ref counts accordingly
 
-		filesToDelete := make([]bool, 0)
+		type FileHashKey struct {
+			FileName string
+			Hash     string
+		}
 
-		for _, file := range storeUploadEntry.Files {
+		storeFileEntries := make(map[string]StoreFileEntry)
+		storeFileHashEntries := make(map[FileHashKey]StoreFileHashEntry)
+		filesToDelete := make([]bool, len(storeUploadEntry.Files))
 
-			uploadIds, err := getStoreFileHashUploadIds(ctx, client, storeId, file.FileName, file.Hash)
-			if err != nil {
-				return err
+		for fileIndex, file := range storeUploadEntry.Files {
+
+			storeFileEntry, ok := storeFileEntries[file.FileName]
+			if !ok {
+				storeFileEntryDB, err := getStoreFileEntry(client, tx, storeId, file.FileName)
+				if err != nil {
+					return err
+				} else {
+					storeFileEntry = *storeFileEntryDB
+				}
 			}
+			storeFileEntry.RefCount--
+			storeFileEntries[file.FileName] = storeFileEntry
 
-			if len(uploadIds) == 1 && uploadIds[0] == uploadId {
-				filesToDelete = append(filesToDelete, true)
+			fileHashKey := FileHashKey{FileName: file.FileName, Hash: file.Hash}
+			storeFileHashEntry, ok := storeFileHashEntries[fileHashKey]
+			if !ok {
+				storeFileHashEntryDB, err := getStoreFileHashEntry(client, tx, storeId, file.FileName, file.Hash)
+				if err != nil {
+					return err
+				} else {
+					storeFileHashEntry = *storeFileHashEntryDB
+				}
+			}
+			storeFileHashEntry.RefCount--
+			storeFileHashEntries[fileHashKey] = storeFileHashEntry
+
+			if storeFileHashEntry.RefCount == 0 {
+				filesToDelete[fileIndex] = true
+			}
+		}
+
+		// Write back results
+
+		for k, v := range storeFileEntries {
+
+			if v.RefCount > 0 {
+				if err := updateStoreFileEntry(client, tx, storeId, k, &v); err != nil {
+					return err
+				}
 			} else {
-				filesToDelete = append(filesToDelete, false)
+				if err := deleteStoreFileEntry(client, tx, storeId, k); err != nil {
+					return err
+				}
+			}
+		}
+
+		for k, v := range storeFileHashEntries {
+
+			if v.RefCount > 0 {
+				if err := updateStoreFileHashEntry(client, tx, storeId, k.FileName, k.Hash, &v); err != nil {
+					return err
+				}
+			} else {
+				if err := deleteStoreFileHashEntry(client, tx, storeId, k.FileName, k.Hash); err != nil {
+					return err
+				}
 			}
 		}
 

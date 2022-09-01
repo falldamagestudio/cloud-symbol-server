@@ -84,6 +84,38 @@ paths:
                 $ref: '#/components/schemas/messageResponse'
           description: Store already exists
       summary: Create a new store
+  /stores/{storeId}/files:
+    get:
+      operationId: getStoreFileIds
+      parameters:
+      - description: ID of the store containing the files
+        explode: false
+        in: path
+        name: storeId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getStoreFileIdsResponse'
+          description: Success
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Not authorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: No such store
+      summary: Fetch a list of all files in store
   /stores/{storeId}/uploads:
     get:
       operationId: getStoreUploadIds
@@ -389,6 +421,11 @@ components:
           type: string
       type: object
     getStoreUploadIdsResponse:
+      items:
+        example: '["1","2","3"]'
+        type: string
+      type: array
+    getStoreFileIdsResponse:
       items:
         example: '["1","2","3"]'
         type: string

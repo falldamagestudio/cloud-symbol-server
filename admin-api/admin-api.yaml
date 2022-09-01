@@ -76,6 +76,36 @@ paths:
               schema:
                 $ref: '#/components/schemas/messageResponse'
 
+  /stores/{storeId}/files:
+    get:
+      summary: Fetch a list of all files in store
+      operationId: getStoreFileIds
+      parameters:
+        - in: path
+          name: storeId
+          schema:
+            type: string
+          required: true
+          description: ID of the store containing the files
+
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getStoreFileIdsResponse'
+
+        401:
+          $ref: '#/components/responses/401'
+
+        404:
+          description: No such store
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+
   /stores/{storeId}/uploads:
     get:
       summary: Fetch a list of all uploads in store
@@ -360,6 +390,15 @@ components:
           example: 7F416863ABF34C3E894BAD1739BAA5571
 
     getStoreUploadIdsResponse:
+      type: array
+      items:
+        type: string
+        example: 
+          - "1"
+          - "2"
+          - "3"
+
+    getStoreFileIdsResponse:
       type: array
       items:
         type: string

@@ -157,6 +157,23 @@ var (
 			},
 		},
 	}
+
+	exampleUpload2 = TestUpload{
+		BuildId:     "example upload Build ID 2",
+		Description: "example upload description 2",
+		Files: []TestUploadFile{
+			{
+				FileName: "file1",
+				Hash:     "hash1",
+				Content:  "content1",
+			},
+			{
+				FileName: "file3",
+				Hash:     "hash3",
+				Content:  "content3",
+			},
+		},
+	}
 )
 
 func upload(apiClient *openapi_client.APIClient, authContext context.Context, storeId string, testUpload *TestUpload) (string, error) {
@@ -190,33 +207,39 @@ func upload(apiClient *openapi_client.APIClient, authContext context.Context, st
 
 	for fileIndex := range *createStoreUploadRequest.Files {
 
-		uploadUrl := *(*createStoreUploadResponse.Files)[fileIndex].Url
-		content := []byte(testUpload.Files[fileIndex].Content)
+		uploadUrlPtr := (*createStoreUploadResponse.Files)[fileIndex].Url
+		if uploadUrlPtr != nil {
 
-		// Upload file to GCS using server-supplied upload URL
+			// File did not already exist; server has supplied an upload URL
 
-		uploadRequest, err := http.NewRequest(http.MethodPut, uploadUrl, bytes.NewReader(content))
-		if err != nil {
-			return "", err
-		}
+			uploadUrl := *uploadUrlPtr
+			content := []byte(testUpload.Files[fileIndex].Content)
 
-		client := http.Client{}
-		uploadResponse, err := client.Do(uploadRequest)
-		if err != nil {
-			return "", err
-		}
+			// Upload file to GCS using server-supplied upload URL
 
-		defer uploadResponse.Body.Close()
-		_, err = io.ReadAll(uploadResponse.Body)
-		if err != nil {
-			return "", err
-		}
+			uploadRequest, err := http.NewRequest(http.MethodPut, uploadUrl, bytes.NewReader(content))
+			if err != nil {
+				return "", err
+			}
 
-		// Mark file as uploaded
+			client := http.Client{}
+			uploadResponse, err := client.Do(uploadRequest)
+			if err != nil {
+				return "", err
+			}
 
-		_, err = apiClient.DefaultApi.MarkStoreUploadFileUploaded(authContext, storeUploadId, storeId, int32(fileIndex)).Execute()
-		if err != nil {
-			return "", err
+			defer uploadResponse.Body.Close()
+			_, err = io.ReadAll(uploadResponse.Body)
+			if err != nil {
+				return "", err
+			}
+
+			// Mark file as uploaded
+
+			_, err = apiClient.DefaultApi.MarkStoreUploadFileUploaded(authContext, storeUploadId, storeId, int32(fileIndex)).Execute()
+			if err != nil {
+				return "", err
+			}
 		}
 	}
 

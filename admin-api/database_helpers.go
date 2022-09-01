@@ -86,6 +86,21 @@ func getStoreIds(ctx context.Context, client *firestore.Client) ([]string, error
 	return stores, nil
 }
 
+func getStoreFileIds(context context.Context, client *firestore.Client, storeId string) ([]string, error) {
+
+	fileDocsIterator := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Documents(context)
+	fileDocs, err := fileDocsIterator.GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	fileIds := make([]string, len(fileDocs))
+	for fileDocIndex, fileDoc := range fileDocs {
+		fileIds[fileDocIndex] = fileDoc.Ref.ID
+	}
+	return fileIds, nil
+}
+
 func getStoreUploadIds(context context.Context, client *firestore.Client, storeId string) ([]string, error) {
 
 	uploadDocsIterator := client.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Documents(context)
@@ -155,6 +170,50 @@ func updateStoreUploadEntry(client *firestore.Client, tx *firestore.Transaction,
 	storeUploadRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Doc(uploadId)
 	err := tx.Set(storeUploadRef, storeUploadEntry)
 	return err
+}
+
+func getStoreFileEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string) (*StoreFileEntry, error) {
+
+	storeFileRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId)
+	storeFileDoc, err := tx.Get(storeFileRef)
+	if err != nil {
+		return nil, err
+	}
+
+	var storeFileEntry StoreFileEntry
+	if err = storeFileDoc.DataTo(&storeFileEntry); err != nil {
+		return nil, err
+	}
+
+	return &storeFileEntry, nil
+}
+
+func updateStoreFileEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string, content *StoreFileEntry) error {
+	storeFileDocRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId)
+	err := tx.Set(storeFileDocRef, content)
+	return err
+}
+
+func deleteStoreFileEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string) error {
+	storeFileDocRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId)
+	err := tx.Delete(storeFileDocRef)
+	return err
+}
+
+func getStoreFileHashEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string, hashId string) (*StoreFileHashEntry, error) {
+
+	storeFileHashRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileHashesCollectionName).Doc(hashId)
+	storeFileHashDoc, err := tx.Get(storeFileHashRef)
+	if err != nil {
+		return nil, err
+	}
+
+	var storeFileHashEntry StoreFileHashEntry
+	if err = storeFileHashDoc.DataTo(&storeFileHashEntry); err != nil {
+		return nil, err
+	}
+
+	return &storeFileHashEntry, nil
 }
 
 func updateStoreFileHashEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string, hashId string, content *StoreFileHashEntry) error {

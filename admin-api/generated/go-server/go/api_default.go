@@ -75,6 +75,12 @@ func (c *DefaultApiController) Routes() Routes {
 			c.ExpireStoreUpload,
 		},
 		{
+			"GetStoreFileIds",
+			strings.ToUpper("Get"),
+			"/stores/{storeId}/files",
+			c.GetStoreFileIds,
+		},
+		{
 			"GetStoreUpload",
 			strings.ToUpper("Get"),
 			"/stores/{storeId}/uploads/{uploadId}",
@@ -180,6 +186,22 @@ func (c *DefaultApiController) ExpireStoreUpload(w http.ResponseWriter, r *http.
 	storeIdParam := params["storeId"]
 	
 	result, err := c.service.ExpireStoreUpload(r.Context(), uploadIdParam, storeIdParam)
+	// If an error occurred, encode the error with the status code
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
+	// If no error, encode the body and the result code
+	EncodeJSONResponse(result.Body, &result.Code, w)
+
+}
+
+// GetStoreFileIds - Fetch a list of all files in store
+func (c *DefaultApiController) GetStoreFileIds(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	storeIdParam := params["storeId"]
+	
+	result, err := c.service.GetStoreFileIds(r.Context(), storeIdParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)
