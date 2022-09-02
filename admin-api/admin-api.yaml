@@ -76,6 +76,36 @@ paths:
               schema:
                 $ref: '#/components/schemas/messageResponse'
 
+  /stores/{storeId}/files:
+    get:
+      summary: Fetch a list of all files in store
+      operationId: getStoreFileIds
+      parameters:
+        - in: path
+          name: storeId
+          schema:
+            type: string
+          required: true
+          description: ID of the store containing the files
+
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getStoreFileIdsResponse'
+
+        401:
+          $ref: '#/components/responses/401'
+
+        404:
+          description: No such store
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+
   /stores/{storeId}/uploads:
     get:
       summary: Fetch a list of all uploads in store
@@ -234,6 +264,38 @@ paths:
               schema:
                 $ref: '#/components/schemas/messageResponse'
 
+  /stores/{storeId}/uploads/{uploadId}/expire:
+    post:
+      summary: Expire store upload and consider files for GC
+      operationId: expireStoreUpload
+      parameters:
+        - in: path
+          name: uploadId
+          schema:
+            type: string
+          required: true
+          description: ID of the upload to fetch
+        - in: path
+          name: storeId
+          schema:
+            type: string
+          required: true
+          description: ID of the store containing the upload
+
+      responses:
+        200:
+          description: Success
+
+        401:
+          $ref: '#/components/responses/401'
+
+        404:
+          description: No such store/upload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+
   /stores/{storeId}/uploads/{uploadId}/files/{fileId}/uploaded:
     post:
       summary: Mark a file within an upload as uploaded
@@ -336,6 +398,15 @@ components:
           - "2"
           - "3"
 
+    getStoreFileIdsResponse:
+      type: array
+      items:
+        type: string
+        example: 
+          - "1"
+          - "2"
+          - "3"
+
     createStoreUploadResponse:
       type: object
       properties:
@@ -385,6 +456,7 @@ components:
             - in_progress
             - completed
             - aborted
+            - expired
 
     getFileResponse:
       type: object
@@ -404,6 +476,7 @@ components:
             - pending
             - uploaded
             - aborted
+            - expired
 
   securitySchemes:
     emailAndPat:

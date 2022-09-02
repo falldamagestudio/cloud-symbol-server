@@ -12,11 +12,11 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (s *ApiService) GetStoreUploadIds(ctx context.Context, storeId string) (openapi.ImplResponse, error) {
+func (s *ApiService) GetStoreFileIds(ctx context.Context, storeId string) (openapi.ImplResponse, error) {
 
-	log.Printf("Getting store upload IDs")
+	log.Printf("Getting store file IDs")
 
-	var storeUploadIds []string = nil
+	var storeFileIds []string = nil
 
 	err := runDBTransaction(ctx, func(ctx context.Context, client *firestore.Client, tx *firestore.Transaction) error {
 		var err error = nil
@@ -25,7 +25,7 @@ func (s *ApiService) GetStoreUploadIds(ctx context.Context, storeId string) (ope
 			return err
 		}
 
-		storeUploadIds, err = getStoreUploadIds(ctx, client, storeId)
+		storeFileIds, err = getStoreFileIds(ctx, client, storeId)
 		return err
 	})
 	if err != nil {
@@ -33,12 +33,12 @@ func (s *ApiService) GetStoreUploadIds(ctx context.Context, storeId string) (ope
 			log.Printf("Store %v not found: %v", storeId, err)
 			return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Store %v not found", storeId)}), err
 		} else {
-			log.Printf("Error while fetching upload IDs for store %v: %v", storeId, err)
+			log.Printf("Error while fetching file IDs for store %v: %v", storeId, err)
 			return openapi.Response(http.StatusInternalServerError, nil), err
 		}
 	}
 
-	log.Printf("Response: %v", storeUploadIds)
+	log.Printf("Response: %v", storeFileIds)
 
-	return openapi.Response(http.StatusOK, storeUploadIds), nil
+	return openapi.Response(http.StatusOK, storeFileIds), nil
 }

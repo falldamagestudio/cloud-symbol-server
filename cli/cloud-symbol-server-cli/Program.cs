@@ -55,6 +55,13 @@ namespace CLI
             createUploadCommand.Handler = CommandHandler.Create(async (GlobalOptions globalOptions, string description, string buildId, string store, string[] patterns)
                 => { return await CLI.Upload.DoUpload(globalOptions, description, buildId, store, patterns); });
 
+            Command expireUploadCommand = new Command("expire", "expire an upload and its files") {
+                new Argument<string>("store", "Name of store containing upload"),
+                new Argument<string>("upload-id", "upload ID to expire"),
+            };
+            expireUploadCommand.Handler = CommandHandler.Create(async (GlobalOptions globalOptions, string store, string uploadId)
+                => { return await CLI.ExpireStoreUpload.DoExpireStoreUpload(globalOptions, store, uploadId); });
+
             Command listUploadsCommand = new Command("list", "List existing uploads within a store") {
                 new Argument<string>("store", "Name of store to list uploads in"),
             };
@@ -63,6 +70,7 @@ namespace CLI
 
             Command uploadsCommand = new Command("uploads", "Upload files, and manage uploaded files within a store") {
                 createUploadCommand,
+                expireUploadCommand,
                 listUploadsCommand,
             };
             uploadsCommand.Handler = CommandHandler.Create(() => uploadsCommand.Invoke("--help"));

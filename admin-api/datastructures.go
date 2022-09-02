@@ -6,6 +6,7 @@ const (
 	FileDBEntry_Status_Pending        = "pending"
 	FileDBEntry_Status_Uploaded       = "uploaded"
 	FileDBEntry_Status_Aborted        = "aborted"
+	FileDBEntry_Status_Expired        = "expired"
 )
 
 type FileDBEntry struct {
@@ -19,6 +20,7 @@ const (
 	StoreUploadEntry_Status_InProgress = "in_progress"
 	StoreUploadEntry_Status_Completed  = "completed"
 	StoreUploadEntry_Status_Aborted    = "aborted"
+	StoreUploadEntry_Status_Expired    = "expired"
 )
 
 type StoreUploadEntry struct {
@@ -33,7 +35,12 @@ type StoreEntry struct {
 	LatestUploadId int64 `firestore:"latestUploadId"`
 }
 
+type StoreFileEntry struct {
+	RefCount int64
+}
+
 type StoreFileHashEntry struct {
+	RefCount int64
 }
 
 type StoreFileHashUploadEntry struct {

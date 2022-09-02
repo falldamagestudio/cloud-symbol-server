@@ -148,11 +148,62 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 			return err
 		}
 
+		// Fetch all existing store file & file-hash entries and increase their ref counts accordingly
+
+		type FileHashKey struct {
+			FileName string
+			Hash     string
+		}
+
+		storeFileEntries := make(map[string]StoreFileEntry)
+		storeFileHashEntries := make(map[FileHashKey]StoreFileHashEntry)
+
+		for _, file := range storeUploadEntry.Files {
+			log.Printf("processing file %v", file.FileName)
+
+			storeFileEntry, ok := storeFileEntries[file.FileName]
+			if !ok {
+				storeFileEntryDB, err := getStoreFileEntry(client, tx, storeId, file.FileName)
+				if err != nil {
+					if status.Code(err) == codes.NotFound {
+						storeFileEntry = StoreFileEntry{}
+					} else {
+						return err
+					}
+				} else {
+					storeFileEntry = *storeFileEntryDB
+				}
+			}
+			storeFileEntry.RefCount++
+			storeFileEntries[file.FileName] = storeFileEntry
+
+			fileHashKey := FileHashKey{FileName: file.FileName, Hash: file.Hash}
+			storeFileHashEntry, ok := storeFileHashEntries[fileHashKey]
+			if !ok {
+				storeFileHashEntryDB, err := getStoreFileHashEntry(client, tx, storeId, file.FileName, file.Hash)
+				if err != nil {
+					if status.Code(err) == codes.NotFound {
+						storeFileHashEntry = StoreFileHashEntry{}
+					} else {
+						return err
+					}
+				} else {
+					storeFileHashEntry = *storeFileHashEntryDB
+				}
+			}
+			storeFileHashEntry.RefCount++
+			storeFileHashEntries[fileHashKey] = storeFileHashEntry
+		}
+
+		// Increase upload ID
+
 		uploadId = storeEntry.LatestUploadId + 1
 
 		newStoreEntry := StoreEntry{
 			LatestUploadId: uploadId,
 		}
+
+		// Write back results
 
 		err = updateStoreEntry(client, tx, storeId, &newStoreEntry)
 		if err != nil {
@@ -164,12 +215,23 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 			return err
 		}
 
-		for _, file := range storeUploadEntry.Files {
+		for k, v := range storeFileEntries {
 
-			err = updateStoreFileHashEntry(client, tx, storeId, file.FileName, file.Hash, &StoreFileHashEntry{})
+			err = updateStoreFileEntry(client, tx, storeId, k, &v)
 			if err != nil {
 				return err
 			}
+		}
+
+		for k, v := range storeFileHashEntries {
+
+			err = updateStoreFileHashEntry(client, tx, storeId, k.FileName, k.Hash, &v)
+			if err != nil {
+				return err
+			}
+		}
+
+		for _, file := range storeUploadEntry.Files {
 
 			err = createStoreFileHashUploadEntry(client, tx, storeId, file.FileName, file.Hash, uploadId, &StoreFileHashUploadEntry{})
 			if err != nil {

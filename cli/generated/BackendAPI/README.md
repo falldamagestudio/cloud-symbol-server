@@ -107,6 +107,8 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**CreateStore**](docs/DefaultApi.md#createstore) | **POST** /stores/{storeId} | Create a new store
 *DefaultApi* | [**CreateStoreUpload**](docs/DefaultApi.md#createstoreupload) | **POST** /stores/{storeId}/uploads | Start a new upload
 *DefaultApi* | [**DeleteStore**](docs/DefaultApi.md#deletestore) | **DELETE** /stores/{storeId} | Delete an existing store
+*DefaultApi* | [**ExpireStoreUpload**](docs/DefaultApi.md#expirestoreupload) | **POST** /stores/{storeId}/uploads/{uploadId}/expire | Expire store upload and consider files for GC
+*DefaultApi* | [**GetStoreFileIds**](docs/DefaultApi.md#getstorefileids) | **GET** /stores/{storeId}/files | Fetch a list of all files in store
 *DefaultApi* | [**GetStoreUpload**](docs/DefaultApi.md#getstoreupload) | **GET** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
 *DefaultApi* | [**GetStoreUploadIds**](docs/DefaultApi.md#getstoreuploadids) | **GET** /stores/{storeId}/uploads | Fetch a list of all uploads in store
 *DefaultApi* | [**GetStores**](docs/DefaultApi.md#getstores) | **GET** /stores | Fetch a list of all stores
@@ -121,6 +123,7 @@ Class | Method | HTTP request | Description
  - [Model.CreateStoreUploadRequest](docs/CreateStoreUploadRequest.md)
  - [Model.CreateStoreUploadResponse](docs/CreateStoreUploadResponse.md)
  - [Model.GetFileResponse](docs/GetFileResponse.md)
+ - [Model.GetStoreFileIdsResponse](docs/GetStoreFileIdsResponse.md)
  - [Model.GetStoreUploadIdsResponse](docs/GetStoreUploadIdsResponse.md)
  - [Model.GetStoreUploadResponse](docs/GetStoreUploadResponse.md)
  - [Model.GetStoresResponse](docs/GetStoresResponse.md)
