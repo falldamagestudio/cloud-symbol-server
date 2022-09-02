@@ -30,7 +30,7 @@ func (s *ApiService) GetStoreUploadIds(ctx context.Context, storeId string) (ope
 	})
 	if err != nil {
 		if status.Code(err) == codes.NotFound {
-			log.Printf("Store %v not found: %v", err)
+			log.Printf("Store %v not found: %v", storeId, err)
 			return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Store %v not found", storeId)}), err
 		} else {
 			log.Printf("Error while fetching upload IDs for store %v: %v", storeId, err)
