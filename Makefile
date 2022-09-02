@@ -68,19 +68,19 @@ destroy:
 	cd $(ENV)/core && terraform destroy
 
 test-download-api:
-	cd download-api \
+	cd download-api/test \
 	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < $(ENV)/config.json)" \
 		DOWNLOAD_API_ENDPOINT="$(shell jq -r ".downloadAPIEndpoint" < $(ENV)/config.json)" \
 		TEST_EMAIL="$(shell jq -r ".email" < $(ENV)/test-credentials.json)" \
 		TEST_PAT="$(shell jq -r ".pat" < $(ENV)/test-credentials.json)" \
-		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/download-api -count=1
+		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/download-api/test -count=1
 
 test-admin-api:
-	cd admin-api \
+	cd admin-api/test \
 	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < $(ENV)/config.json)" \
 		TEST_EMAIL="$(shell jq -r ".email" < $(ENV)/test-credentials.json)" \
 		TEST_PAT="$(shell jq -r ".pat" < $(ENV)/test-credentials.json)" \
-		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/admin-api -count=1
+		go test -timeout 60s github.com/falldamagestudio/cloud-symbol-server/admin-api/test -count=1
 
 test-cli:
 	cd cli \
