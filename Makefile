@@ -1,4 +1,4 @@
-.PHONY: deploy deploy-core deploy-download-api deploy-admin-api deploy-firebase-and-frontend
+.PHONY: deploy deploy-core deploy-direct-db-access deploy-db-migrations deploy-download-api deploy-admin-api deploy-firebase-and-frontend
 .PHONY: destroy
 .PHONY: test test-download-api test-admin-api test-cli
 
@@ -40,6 +40,12 @@ endif
 deploy-core:
 	cd $(ENV)/core && terraform init && terraform apply -auto-approve
 
+deploy-db-migrations:
+	cd $(ENV)/db-migrations && migrate -source . -database postgres://localhost:5432/db up
+
+deploy-direct-db-access:
+	cd $(ENV)/direct_db_access && terraform init && terraform apply -auto-approve
+
 deploy-download-api:
 	cd $(ENV)/download_api && terraform init && terraform apply -auto-approve
 
@@ -62,7 +68,7 @@ deploy-firebase-and-frontend: build-cli inject-cli-binaries-into-frontend
 			npm run build
 	cd firebase && firebase deploy --project="$(shell jq -r ".gcpProjectId" < $(ENV)/firebase/config.json)"
 
-deploy: deploy-core deploy-download-api deploy-admin-api deploy-firebase-and-frontend
+deploy: deploy-core deploy-direct-db-access deploy-db-migrations deploy-download-api deploy-admin-api deploy-firebase-and-frontend
 
 destroy:
 	cd $(ENV)/core && terraform destroy
