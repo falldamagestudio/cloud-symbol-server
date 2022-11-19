@@ -21,3 +21,11 @@ variable "function_region" {
 variable "symbol_store_bucket_name" {
   type = string
 }
+
+variable "database_name" {
+  type = string
+}
+
+variable "serverless_vpc_connector_name" {
+  type = string
+}

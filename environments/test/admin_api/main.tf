@@ -10,4 +10,8 @@ module "download_api" {
     function_region = var.function_region
 
     symbol_store_bucket_name = data.terraform_remote_state.core.outputs.symbol_store_bucket_name
+
+    database_name = data.terraform_remote_state.core.outputs.database_name
+
+    serverless_vpc_connector_name = data.terraform_remote_state.core.outputs.serverless_vpc_connector_name
 }

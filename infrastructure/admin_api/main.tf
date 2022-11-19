@@ -42,6 +42,8 @@ resource "google_cloudfunctions_function" "function" {
     GCP_PROJECT_ID           = var.project_id
     SYMBOL_STORE_BUCKET_NAME = var.symbol_store_bucket_name
   }
+
+  vpc_connector = var.serverless_vpc_connector_name
 }
 
 # Create a service account. The cloud function will run in the context of this service account
@@ -87,4 +89,26 @@ resource "google_cloudfunctions_function_iam_member" "allow_unauthenticated_invo
 
   role   = "roles/cloudfunctions.invoker"
   member = "allUsers"
+}
+
+# Create an SQL IAM account for the function's service account
+# Reference: https://binx.io/2021/05/19/how-to-connect-to-a-cloudsql-with-iam-authentication/
+resource "google_sql_user" "function_db_user" {
+  name     = google_service_account.function_service_account.email
+  instance = var.database_name
+  type     = "CLOUD_IAM_SERVICE_ACCOUNT"
+}
+
+# Grant the cloud function's service account access to the database
+resource "google_project_iam_member" "function_db_user_cloudsql_client" {
+  project = var.project_id
+  role    = "roles/cloudsql.client"
+  member  = "serviceAccount:${google_sql_user.function_db_user.name}"
+}
+
+# Grant the cloud function's service account access to the database
+resource "google_project_iam_member" "function_db_user_cloudsql_instance_user" {
+  project = var.project_id
+  role    = "roles/cloudsql.instanceUser"
+  member  = "serviceAccount:${google_sql_user.function_db_user.name}"
 }
