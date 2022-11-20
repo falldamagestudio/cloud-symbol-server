@@ -1,1 +1,1 @@
-DROP TABLE files;
+DROP TABLE cloud_symbol_server.files;

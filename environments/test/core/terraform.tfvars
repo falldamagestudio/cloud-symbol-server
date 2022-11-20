@@ -11,7 +11,7 @@ symbol_store_bucket_location = "europe-west1"
 #  europe-west is a multi-region location, comprised of europe-west1 + europe-west4, with automatic replication
 firestore_location = "europe-west"
 
-database_name = "db"
+database_instance_name = "db"
 database_region = "europe-west1"
 database_tier = "db-g1-small"
 database_disk_size_gb = 10

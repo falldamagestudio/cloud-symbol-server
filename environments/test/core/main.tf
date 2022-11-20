@@ -13,7 +13,7 @@ module "core" {
 
     firestore_location = var.firestore_location
 
-    database_name = var.database_name
+    database_instance_name = var.database_instance_name
     database_region = var.database_region
     database_tier = var.database_tier
     database_disk_size_gb = var.database_disk_size_gb

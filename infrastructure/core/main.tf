@@ -30,12 +30,12 @@ module "firestore" {
 
 }
 
-module "database" {
+module "database_instance" {
   depends_on = [ module.google_apis, module.network ]
 
-  source = "./database"
+  source = "./database_instance"
 
-  name = var.database_name
+  name = var.database_instance_name
   region = var.database_region
   tier = var.database_tier
   disk_size_gb = var.database_disk_size_gb

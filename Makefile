@@ -1,4 +1,4 @@
-.PHONY: deploy deploy-core deploy-direct-db-access deploy-db-migrations deploy-download-api deploy-admin-api deploy-firebase-and-frontend
+.PHONY: deploy deploy-core deploy-database deploy-db-migrations deploy-download-api deploy-admin-api deploy-firebase-and-frontend
 .PHONY: destroy
 .PHONY: test test-download-api test-admin-api test-cli
 
@@ -41,10 +41,18 @@ deploy-core:
 	cd $(ENV)/core && terraform init && terraform apply -auto-approve
 
 deploy-db-migrations:
-	cd $(ENV)/db-migrations && migrate -source . -database postgres://localhost:5432/db up
+	# Run Cloud SQL proxy in the background
+	# We don't know whether or not the user already has a proxy running
+	# If this is a first-time deploy via the 'deploy' Makefile target, the user has not been able to start a proxy
+	# Because of this, we run a short-lived proxy just for this command
+	./binaries/cloud_sql_proxy -instances "$(shell jq -r ".cloudSQLProxyEndpoint" < $(ENV)/config.json)" -fd_rlimit 1024 -enable_iam_login -credential_file=$(ENV)/database/google_application_credentials.json & echo "$$!" > db_migration_proxy.pid
+	# We are not sure how long it takes for the proxy to start; we guess that 2 seconds should be enough
+	sleep 2
+	# Both fail and success paths from migration result in killing the proxy as well
+	migrate -source "file://./db-migrations" -database "$(shell jq -r ".dbMigrationEndpoint" < $(ENV)/config.json)" -verbose up || (cat db_migration_proxy.pid | xargs kill && exit 1) && (cat db_migration_proxy.pid | xargs kill && exit 0)
 
-deploy-direct-db-access:
-	cd $(ENV)/direct_db_access && terraform init && terraform apply -auto-approve
+deploy-database:
+	cd $(ENV)/database && terraform init && terraform apply -auto-approve
 
 deploy-download-api:
 	cd $(ENV)/download_api && terraform init && terraform apply -auto-approve
@@ -68,7 +76,7 @@ deploy-firebase-and-frontend: build-cli inject-cli-binaries-into-frontend
 			npm run build
 	cd firebase && firebase deploy --project="$(shell jq -r ".gcpProjectId" < $(ENV)/firebase/config.json)"
 
-deploy: deploy-core deploy-direct-db-access deploy-db-migrations deploy-download-api deploy-admin-api deploy-firebase-and-frontend
+deploy: deploy-core deploy-database deploy-db-migrations deploy-download-api deploy-admin-api deploy-firebase-and-frontend
 
 destroy:
 	cd $(ENV)/core && terraform destroy

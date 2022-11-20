@@ -26,7 +26,7 @@ variable "firestore_location" {
   type = string
 }
 
-variable "database_name" {
+variable "database_instance_name" {
   type = string
 }
 
