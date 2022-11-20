@@ -172,6 +172,8 @@ test-local: test-local-download-api test-local-admin-api test-local-cli
 #########################################################
 
 generate-db-models:
+	# This will connect to the SQL db
+	# The user should have the SQL Auth proxy running (via `make run-local-sql-auth-proxy`) first
 	sqlboiler psql --output admin-api/generated/sql-db-models --wipe
 
 #########################################################
