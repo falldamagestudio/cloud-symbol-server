@@ -49,7 +49,7 @@ deploy-db-migrations:
 	# We are not sure how long it takes for the proxy to start; we guess that 2 seconds should be enough
 	sleep 2
 	# Both fail and success paths from migration result in killing the proxy as well
-	migrate -source "file://./db-migrations" -database "$(shell jq -r ".dbMigrationEndpoint" < $(ENV)/config.json)" -verbose up || (cat db_migration_proxy.pid | xargs kill && exit 1) && (cat db_migration_proxy.pid | xargs kill && exit 0)
+	migrate -source "file://./db-migrations" -database "$(shell jq -r ".dbMigrationEndpoint" < $(ENV)/config.json)" -verbose up || (cat db_migration_proxy.pid | xargs kill && rm db_migration_proxy.pid && exit 1) && (cat db_migration_proxy.pid | xargs kill && rm db_migration_proxy.pid && exit 0)
 
 deploy-database:
 	cd $(ENV)/database && terraform init && terraform apply -auto-approve
