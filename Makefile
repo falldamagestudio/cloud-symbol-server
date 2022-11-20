@@ -6,6 +6,7 @@
 .PHONY: run-local-download-api run-local-admin-api
 .PHONY: test-local test-local-download-api test-local-admin-api test-local-cli
 
+.PHONY: generate-db-models
 .PHONY: generate-apis generate-go-server-api generate-go-client-api generate-csharp-client-api
 
 .PHONY: build-cli
@@ -45,7 +46,7 @@ deploy-db-migrations:
 	# We don't know whether or not the user already has a proxy running
 	# If this is a first-time deploy via the 'deploy' Makefile target, the user has not been able to start a proxy
 	# Because of this, we run a short-lived proxy just for this command
-	./binaries/cloud_sql_proxy -instances "$(shell jq -r ".cloudSQLProxyEndpoint" < $(ENV)/config.json)" -fd_rlimit 1024 -enable_iam_login -credential_file=$(ENV)/database/google_application_credentials.json & echo "$$!" > db_migration_proxy.pid
+	./binaries/cloud_sql_proxy -instances "$(shell jq -r ".cloudSQLProxyEndpoint" < $(ENV)/config.json)=tcp:5430" -fd_rlimit 1024 -enable_iam_login -credential_file=$(ENV)/database/google_application_credentials.json & echo "$$!" > db_migration_proxy.pid
 	# We are not sure how long it takes for the proxy to start; we guess that 2 seconds should be enough
 	sleep 2
 	# Both fail and success paths from migration result in killing the proxy as well
@@ -110,6 +111,12 @@ test: test-download-api test-admin-api test-cli
 # Local (emulator) commands
 #########################################################
 
+run-local-sql-auth-proxy:
+	./binaries/cloud_sql_proxy -instances "$(shell jq -r ".cloudSQLProxyEndpoint" < $(ENV)/config.json)=tcp:5432" -fd_rlimit 1024 -enable_iam_login -credential_file=$(ENV)/database/google_application_credentials.json
+
+run-local-psql:
+	psql "host=127.0.0.1 sslmode=disable dbname=cloud_symbol_server user=$(shell jq -r ".psqlUser" < $(ENV)/config.json)"
+
 run-local-download-api:
 	cd download-api/cmd \
 	&&	GCP_PROJECT_ID=test-cloud-symbol-server \
@@ -159,6 +166,13 @@ test-local-cli:
 		dotnet test
 
 test-local: test-local-download-api test-local-admin-api test-local-cli
+
+#########################################################
+# DB model regeneration commands
+#########################################################
+
+generate-db-models:
+	sqlboiler psql --output admin-api/generated/sql-db-models --wipe
 
 #########################################################
 # API regeneration commands
