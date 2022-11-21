@@ -52,6 +52,17 @@ deploy-db-migrations:
 	# Both fail and success paths from migration result in killing the proxy as well
 	migrate -source "file://./db-migrations" -database "$(shell jq -r ".dbMigrationEndpoint" < $(ENV)/config.json)" -verbose up || (cat db_migration_proxy.pid | xargs kill && rm db_migration_proxy.pid && exit 1) && (cat db_migration_proxy.pid | xargs kill && rm db_migration_proxy.pid && exit 0)
 
+drop-db:
+	# Run Cloud SQL proxy in the background
+	# We don't know whether or not the user already has a proxy running
+	# If this is a first-time deploy via the 'deploy' Makefile target, the user has not been able to start a proxy
+	# Because of this, we run a short-lived proxy just for this command
+	./binaries/cloud_sql_proxy -instances "$(shell jq -r ".cloudSQLProxyEndpoint" < $(ENV)/config.json)=tcp:5430" -fd_rlimit 1024 -enable_iam_login -credential_file=$(ENV)/database/google_application_credentials.json & echo "$$!" > db_migration_proxy.pid
+	# We are not sure how long it takes for the proxy to start; we guess that 2 seconds should be enough
+	sleep 2
+	# Both fail and success paths from migration result in killing the proxy as well
+	migrate -source "file://./db-migrations" -database "$(shell jq -r ".dbMigrationEndpoint" < $(ENV)/config.json)" -verbose drop -f || (cat db_migration_proxy.pid | xargs kill && rm db_migration_proxy.pid && exit 1) && (cat db_migration_proxy.pid | xargs kill && rm db_migration_proxy.pid && exit 0)
+
 deploy-database:
 	cd $(ENV)/database && terraform init && terraform apply -auto-approve
 
