@@ -1,0 +1,10 @@
+no-tests = true
+add-enum-models = true
+
+[psql]
+dbname = "cloud_symbol_server"
+schema = "cloud_symbol_server"
+host = "localhost"
+user = "iam-admin@test-cloud-symbol-server.iam"
+sslmode = "disable"
+blacklist = [ "schema_migrations" ]

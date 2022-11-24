@@ -19,6 +19,9 @@ var router *mux.Router
 var apiService openapi.DefaultApiServicer
 
 func init() {
+
+	initSQL()
+
 	apiService = &ApiService{}
 	DefaultApiController := openapi.NewDefaultApiController(apiService)
 
