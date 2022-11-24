@@ -28,8 +28,8 @@ resource "google_cloudfunctions_function" "function" {
   depends_on = [google_storage_bucket_iam_member.function_symbol_store_access]
 
   name                  = "AdminAPI"
-  description           = "Upload API"
-  runtime               = "go113"
+  description           = "Admin API"
+  runtime               = "go116"
   region                = var.function_region
   service_account_email = google_service_account.function_service_account.email
 
@@ -91,24 +91,42 @@ resource "google_cloudfunctions_function_iam_member" "allow_unauthenticated_invo
   member = "allUsers"
 }
 
+locals {
+  # Cloud SQL IAM requires DB usernames to be max 63 characters in length
+  # Service account email addresses are often longer than this; therefore, Cloud SQL
+  #   want usernames that are truncated, like:
+  #   name@project.iam.gserviceaccount.com => name@project.iam
+  function_db_username = trimsuffix(google_service_account.function_service_account.email, ".gserviceaccount.com")
+}
+
 # Create an SQL IAM account for the function's service account
 # Reference: https://binx.io/2021/05/19/how-to-connect-to-a-cloudsql-with-iam-authentication/
 resource "google_sql_user" "function_db_user" {
-  name     = google_service_account.function_service_account.email
-  instance = var.database_name
+  name     = local.function_db_username
+  instance = var.database_instance_name
   type     = "CLOUD_IAM_SERVICE_ACCOUNT"
 }
 
-# Grant the cloud function's service account access to the database
+# Grant the cloud function's service account permission to connect to the database instance via Cloud SQL Auth proxy
 resource "google_project_iam_member" "function_db_user_cloudsql_client" {
   project = var.project_id
   role    = "roles/cloudsql.client"
-  member  = "serviceAccount:${google_sql_user.function_db_user.name}"
+  member  = "serviceAccount:${google_service_account.function_service_account.email}"
 }
 
-# Grant the cloud function's service account access to the database
+# Grant the cloud function's service account permission to log in to the database instance
 resource "google_project_iam_member" "function_db_user_cloudsql_instance_user" {
   project = var.project_id
   role    = "roles/cloudsql.instanceUser"
-  member  = "serviceAccount:${google_sql_user.function_db_user.name}"
+  member  = "serviceAccount:${google_service_account.function_service_account.email}"
+}
+
+# Allow the admin DB access's service account to create & use objects within schema
+# Reference: https://registry.terraform.io/providers/cyrilgdn/postgresql/latest/docs/resources/postgresql_grant#examples
+# Reference: https://www.postgresql.org/docs/current/ddl-priv.html
+# Reference: https://dba.stackexchange.com/questions/117109/how-to-manage-default-privileges-for-users-on-a-database-vs-schema
+resource "postgresql_grant_role" "function_db_user_allow_readwrite" {
+  role        = google_sql_user.function_db_user.name
+  # TODO: source role name from state
+  grant_role  = "cloud_symbol_server_readwrite"
 }

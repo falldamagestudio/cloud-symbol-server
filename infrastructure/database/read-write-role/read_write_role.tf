@@ -29,3 +29,29 @@ resource "postgresql_grant" "read_write_role_allow_schema_usage" {
   object_type = "schema"
   privileges  = [ "USAGE" ]
 }
+
+# Allow default role to read/write contents of tables
+# Reference: https://registry.terraform.io/providers/cyrilgdn/postgresql/latest/docs/resources/postgresql_grant#examples
+# Reference: https://www.postgresql.org/docs/current/ddl-priv.html
+# Reference: https://tableplus.com/blog/2018/04/postgresql-how-to-grant-access-to-users.html
+resource "postgresql_grant" "read_write_role_allow_table_readwrite" {
+  depends_on = [ postgresql_role.read_write_role ]
+  database    = var.database_name
+  role        = postgresql_role.read_write_role.name
+  schema      = var.schema_name
+  object_type = "table"
+  privileges  = [ "SELECT", "INSERT", "UPDATE", "DELETE" ]
+}
+
+# Allow default role to use sequences
+# Reference: https://registry.terraform.io/providers/cyrilgdn/postgresql/latest/docs/resources/postgresql_grant#examples
+# Reference: https://www.postgresql.org/docs/current/ddl-priv.html
+# Reference: https://tableplus.com/blog/2018/04/postgresql-how-to-grant-access-to-users.html
+resource "postgresql_grant" "read_write_role_allow_sequence_use" {
+  depends_on = [ postgresql_role.read_write_role ]
+  database    = var.database_name
+  role        = postgresql_role.read_write_role.name
+  schema      = var.schema_name
+  object_type = "sequence"
+  privileges  = [ "SELECT", "UPDATE", "USAGE" ]
+}
