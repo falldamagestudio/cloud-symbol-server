@@ -38,7 +38,7 @@ func (s *ApiService) MarkStoreUploadAborted(ctx context.Context, uploadId string
 	}
 
 	// Mark files in upload that are unknown/pending as aborted
-	_, err = models.Files(qm.Where("upload_id = ?, uploadId"), qm.AndIn("status in ?", FileDBEntry_Status_Unknown, FileDBEntry_Status_Pending)).UpdateAll(ctx, tx, models.M{"status": FileDBEntry_Status_Aborted})
+	_, err = models.Files(qm.Where("upload_id = ?", uploadId), qm.AndIn("status in ?", FileDBEntry_Status_Unknown, FileDBEntry_Status_Pending)).UpdateAll(ctx, tx, models.M{"status": FileDBEntry_Status_Aborted})
 	if err != nil {
 		log.Printf("error while accessing files in upload %v / %v: %v", storeId, uploadId, err)
 		tx.Rollback()
