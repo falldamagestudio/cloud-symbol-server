@@ -39,6 +39,10 @@ func initSQL() {
 	log.Printf("connection up!")
 }
 
+func GetDB() *sql.DB {
+	return db
+}
+
 func sqlCreateStore(ctx context.Context, storeId string) error {
 	var store = models.Store{
 		Name: storeId,

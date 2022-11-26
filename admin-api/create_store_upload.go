@@ -2,17 +2,21 @@ package admin_api
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"fmt"
 	"log"
 	"net/http"
 	"time"
 
-	"cloud.google.com/go/firestore"
 	"cloud.google.com/go/storage"
+
+	"github.com/volatiletech/null/v8"
+	"github.com/volatiletech/sqlboiler/v4/boil"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
+
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	models "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/sql-db-models"
 )
 
 func uploadFileRequestToPath(storeId string, uploadFileRequest openapi.UploadFileRequest) string {
@@ -121,7 +125,7 @@ func (s *ApiService) CreateStoreUpload(context context.Context, storeId string, 
 
 	uploadId, err := logUpload(context, storeId, uploadContent)
 	if err != nil {
-		if status.Code(err) == codes.NotFound {
+		if err == sql.ErrNoRows {
 			return openapi.Response(http.StatusNotFound, &openapi.MessageResponse{Message: fmt.Sprintf("Store %v not found", storeId)}), nil
 		} else {
 			return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Internal error while logging upload to DB"}), nil
@@ -139,119 +143,64 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 
 	log.Printf("Writing upload to database: %v", storeUploadEntry)
 
-	uploadId := int64(0)
-
-	err := runDBTransaction(ctx, func(ctx context.Context, client *firestore.Client, tx *firestore.Transaction) error {
-
-		storeEntry, err := getStoreEntry(client, tx, storeId)
-		if err != nil {
-			return err
-		}
-
-		// Fetch all existing store file & file-hash entries and increase their ref counts accordingly
-
-		type FileHashKey struct {
-			FileName string
-			Hash     string
-		}
-
-		storeFileEntries := make(map[string]StoreFileEntry)
-		storeFileHashEntries := make(map[FileHashKey]StoreFileHashEntry)
-
-		for _, file := range storeUploadEntry.Files {
-			log.Printf("processing file %v", file.FileName)
-
-			storeFileEntry, ok := storeFileEntries[file.FileName]
-			if !ok {
-				storeFileEntryDB, err := getStoreFileEntry(client, tx, storeId, file.FileName)
-				if err != nil {
-					if status.Code(err) == codes.NotFound {
-						storeFileEntry = StoreFileEntry{}
-					} else {
-						return err
-					}
-				} else {
-					storeFileEntry = *storeFileEntryDB
-				}
-			}
-			storeFileEntry.RefCount++
-			storeFileEntries[file.FileName] = storeFileEntry
-
-			fileHashKey := FileHashKey{FileName: file.FileName, Hash: file.Hash}
-			storeFileHashEntry, ok := storeFileHashEntries[fileHashKey]
-			if !ok {
-				storeFileHashEntryDB, err := getStoreFileHashEntry(client, tx, storeId, file.FileName, file.Hash)
-				if err != nil {
-					if status.Code(err) == codes.NotFound {
-						storeFileHashEntry = StoreFileHashEntry{}
-					} else {
-						return err
-					}
-				} else {
-					storeFileHashEntry = *storeFileHashEntryDB
-				}
-			}
-			storeFileHashEntry.RefCount++
-			storeFileHashEntries[fileHashKey] = storeFileHashEntry
-		}
-
-		// Increase upload ID
-
-		uploadId = storeEntry.LatestUploadId + 1
-
-		newStoreEntry := StoreEntry{
-			LatestUploadId: uploadId,
-		}
-
-		// Write back results
-
-		err = updateStoreEntry(client, tx, storeId, &newStoreEntry)
-		if err != nil {
-			return err
-		}
-
-		err = createStoreUploadEntry(client, tx, storeId, uploadId, &storeUploadEntry)
-		if err != nil {
-			return err
-		}
-
-		for k, v := range storeFileEntries {
-
-			err = updateStoreFileEntry(client, tx, storeId, k, &v)
-			if err != nil {
-				return err
-			}
-		}
-
-		for k, v := range storeFileHashEntries {
-
-			err = updateStoreFileHashEntry(client, tx, storeId, k.FileName, k.Hash, &v)
-			if err != nil {
-				return err
-			}
-		}
-
-		for _, file := range storeUploadEntry.Files {
-
-			err = createStoreFileHashUploadEntry(client, tx, storeId, file.FileName, file.Hash, uploadId, &StoreFileHashUploadEntry{})
-			if err != nil {
-				return err
-			}
-		}
-
-		return nil
-	})
-	if err != nil {
-		// Handle any errors appropriately in this section.
-		log.Printf("An error has occurred: %s", err)
+	db := GetDB()
+	if db == nil {
+		return "", errors.New("no DB")
 	}
 
+	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
-		log.Printf("Error when logging upload, err = %v", err)
 		return "", err
 	}
 
-	log.Printf("Upload is given ID %v", uploadId)
+	// Locate store in DB, and ensure store remains throughout entire txn
+	store, err := models.Stores(qm.Where("name = ?", storeId), qm.For("share")).One(ctx, tx)
+	if err != nil {
+		log.Printf("error while accessing store: %v", err)
+		tx.Rollback()
+		return "", err
+	}
 
-	return fmt.Sprint(uploadId), nil
+	// Add upload entry to DB
+	var upload = models.Upload{
+		StoreID:     null.IntFrom(store.StoreID),
+		Description: storeUploadEntry.Description,
+		Build:       storeUploadEntry.BuildId,
+		// TODO: source timestamp from StoreUploadEntry, don't override it with time.Now() Here
+		Timestamp: time.Now(),
+		Status:    storeUploadEntry.Status,
+	}
+	err = upload.Insert(ctx, tx, boil.Infer())
+	if err != nil {
+		log.Printf("unable to insert upload: %v", err)
+		tx.Rollback()
+		return "", err
+	}
+
+	// Add entries for each upload-file in DB
+	for _, file := range storeUploadEntry.Files {
+
+		var file = models.File{
+			UploadID: null.IntFrom(upload.UploadID),
+			FileName: file.FileName,
+			Hash:     file.Hash,
+			Status:   file.Status,
+		}
+		err = file.Insert(ctx, tx, boil.Infer())
+		if err != nil {
+			log.Printf("unable to insert file: %v", err)
+			tx.Rollback()
+			return "", err
+		}
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		log.Printf("unable to commit transaction: %v", err)
+		return "", err
+	}
+
+	log.Printf("Upload is given ID %v", upload.UploadID)
+
+	return fmt.Sprint(upload.UploadID), nil
 }
