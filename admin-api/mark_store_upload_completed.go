@@ -2,37 +2,31 @@ package admin_api
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
 
-	"cloud.google.com/go/firestore"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
+
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	models "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/sql-db-models"
 )
 
 func (s *ApiService) MarkStoreUploadCompleted(ctx context.Context, uploadId string, storeId string) (openapi.ImplResponse, error) {
 
-	err := runDBTransaction(ctx, func(ctx context.Context, client *firestore.Client, tx *firestore.Transaction) error {
-		storeUploadEntry, err := getStoreUploadEntry(client, tx, storeId, uploadId)
-		if err != nil {
-			return err
-		}
+	db := GetDB()
+	if db == nil {
+		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
+	}
 
-		storeUploadEntry.Status = StoreUploadEntry_Status_Completed
-
-		err = updateStoreUploadEntry(client, tx, storeId, uploadId, storeUploadEntry)
-		if err != nil {
-			return err
-		}
-
-		return nil
-	})
-	if err != nil {
-		if status.Code(err) == codes.NotFound {
-			return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Upload %v / %v not found", storeId, uploadId)}), err
-		}
+	// Mark upload as completed
+	numRowsAffected, err := models.Uploads(qm.Where("upload_id = ?", uploadId)).UpdateAll(ctx, db, models.M{"status": StoreUploadEntry_Status_Completed})
+	if (err == nil) && (numRowsAffected == 0) {
+		log.Printf("Upload %v / %v not found", storeId, uploadId)
+		return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Upload %v / %v not found", storeId, uploadId)}), err
+	} else if (err != nil) || (numRowsAffected != 1) {
+		log.Printf("error while accessing upload: %v - numRowsAffected: %v", err, numRowsAffected)
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 

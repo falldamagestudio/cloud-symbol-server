@@ -2,44 +2,52 @@ package admin_api
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
 
-	"cloud.google.com/go/firestore"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
+
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	models "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/sql-db-models"
 )
 
 func (s *ApiService) MarkStoreUploadAborted(ctx context.Context, uploadId string, storeId string) (openapi.ImplResponse, error) {
 
-	err := runDBTransaction(ctx, func(ctx context.Context, client *firestore.Client, tx *firestore.Transaction) error {
-		storeUploadEntry, err := getStoreUploadEntry(client, tx, storeId, uploadId)
-		if err != nil {
-			return err
-		}
+	db := GetDB()
+	if db == nil {
+		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
+	}
 
-		storeUploadEntry.Status = StoreUploadEntry_Status_Aborted
-
-		for fileIndex := range storeUploadEntry.Files {
-			file := &storeUploadEntry.Files[fileIndex]
-			if (file.Status == FileDBEntry_Status_Unknown) || (file.Status == FileDBEntry_Status_Pending) {
-				file.Status = FileDBEntry_Status_Aborted
-			}
-		}
-
-		err = updateStoreUploadEntry(client, tx, storeId, uploadId, storeUploadEntry)
-		if err != nil {
-			return err
-		}
-
-		return nil
-	})
+	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
-		if status.Code(err) == codes.NotFound {
-			return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Upload %v / %v not found", storeId, uploadId)}), err
-		}
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+
+	// Mark upload as aborted
+	numRowsAffected, err := models.Uploads(qm.Where("upload_id = ?", uploadId)).UpdateAll(ctx, tx, models.M{"status": StoreUploadEntry_Status_Aborted})
+	if (err == nil) && (numRowsAffected == 0) {
+		log.Printf("Upload %v / %v not found", storeId, uploadId)
+		tx.Rollback()
+		return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Upload %v / %v not found", storeId, uploadId)}), err
+	} else if (err != nil) || (numRowsAffected != 1) {
+		log.Printf("error while accessing upload: %v - numRowsAffected: %v", err, numRowsAffected)
+		tx.Rollback()
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+
+	// Mark files in upload that are unknown/pending as aborted
+	_, err = models.Files(qm.Where("upload_id = ?, uploadId"), qm.AndIn("status in ?", FileDBEntry_Status_Unknown, FileDBEntry_Status_Pending)).UpdateAll(ctx, tx, models.M{"status": FileDBEntry_Status_Aborted})
+	if err != nil {
+		log.Printf("error while accessing files in upload %v / %v: %v", storeId, uploadId, err)
+		tx.Rollback()
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		log.Printf("error while committing txn: %v", err)
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 

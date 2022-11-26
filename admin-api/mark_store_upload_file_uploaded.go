@@ -2,37 +2,31 @@ package admin_api
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
 
-	"cloud.google.com/go/firestore"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
+
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	models "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/sql-db-models"
 )
 
 func (s *ApiService) MarkStoreUploadFileUploaded(ctx context.Context, uploadId string, storeId string, fileId int32) (openapi.ImplResponse, error) {
 
-	err := runDBTransaction(ctx, func(ctx context.Context, client *firestore.Client, tx *firestore.Transaction) error {
-		storeUploadEntry, err := getStoreUploadEntry(client, tx, storeId, uploadId)
-		if err != nil {
-			return err
-		}
+	db := GetDB()
+	if db == nil {
+		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
+	}
 
-		storeUploadEntry.Files[fileId].Status = FileDBEntry_Status_Uploaded
-
-		err = updateStoreUploadEntry(client, tx, storeId, uploadId, storeUploadEntry)
-		if err != nil {
-			return err
-		}
-
-		return nil
-	})
-	if err != nil {
-		if status.Code(err) == codes.NotFound {
-			return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Upload %v / %v not found", storeId, uploadId)}), err
-		}
+	// Mark file as uploaded
+	numRowsAffected, err := models.Files(qm.Where("upload_id = ? AND upload_file_index = ?", uploadId, fileId)).UpdateAll(ctx, db, models.M{"status": FileDBEntry_Status_Uploaded})
+	if (err == nil) && (numRowsAffected == 0) {
+		log.Printf("File %v / %v / %v not found", storeId, uploadId, fileId)
+		return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("File %v / %v / %v not found", storeId, uploadId, fileId)}), err
+	} else if (err != nil) || (numRowsAffected != 1) {
+		log.Printf("error while accessing file: %v - numRowsAffected: %v", err, numRowsAffected)
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 

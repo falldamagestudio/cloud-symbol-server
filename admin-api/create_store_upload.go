@@ -177,14 +177,17 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 		return "", err
 	}
 
+	var uploadFileIndex = 0
+
 	// Add entries for each upload-file in DB
 	for _, file := range storeUploadEntry.Files {
 
 		var file = models.File{
-			UploadID: null.IntFrom(upload.UploadID),
-			FileName: file.FileName,
-			Hash:     file.Hash,
-			Status:   file.Status,
+			UploadID:        null.IntFrom(upload.UploadID),
+			FileName:        file.FileName,
+			Hash:            file.Hash,
+			Status:          file.Status,
+			UploadFileIndex: uploadFileIndex,
 		}
 		err = file.Insert(ctx, tx, boil.Infer())
 		if err != nil {
@@ -192,6 +195,8 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 			tx.Rollback()
 			return "", err
 		}
+
+		uploadFileIndex++
 	}
 
 	err = tx.Commit()

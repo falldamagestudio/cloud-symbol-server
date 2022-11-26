@@ -35,5 +35,6 @@ CREATE TABLE cloud_symbol_server.files (
   upload_id integer REFERENCES cloud_symbol_server.uploads,
   file_name varchar NOT NULL,
   hash varchar NOT NULL,
+  upload_file_index integer NOT NULL,
   status cloud_symbol_server.file_status NOT NULL
 );

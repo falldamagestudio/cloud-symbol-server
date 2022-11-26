@@ -24,42 +24,47 @@ import (
 
 // File is an object representing the database table.
 type File struct {
-	FileID   int      `boil:"file_id" json:"file_id" toml:"file_id" yaml:"file_id"`
-	UploadID null.Int `boil:"upload_id" json:"upload_id,omitempty" toml:"upload_id" yaml:"upload_id,omitempty"`
-	FileName string   `boil:"file_name" json:"file_name" toml:"file_name" yaml:"file_name"`
-	Hash     string   `boil:"hash" json:"hash" toml:"hash" yaml:"hash"`
-	Status   string   `boil:"status" json:"status" toml:"status" yaml:"status"`
+	FileID          int      `boil:"file_id" json:"file_id" toml:"file_id" yaml:"file_id"`
+	UploadID        null.Int `boil:"upload_id" json:"upload_id,omitempty" toml:"upload_id" yaml:"upload_id,omitempty"`
+	FileName        string   `boil:"file_name" json:"file_name" toml:"file_name" yaml:"file_name"`
+	Hash            string   `boil:"hash" json:"hash" toml:"hash" yaml:"hash"`
+	UploadFileIndex int      `boil:"upload_file_index" json:"upload_file_index" toml:"upload_file_index" yaml:"upload_file_index"`
+	Status          string   `boil:"status" json:"status" toml:"status" yaml:"status"`
 
 	R *fileR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L fileL  `boil:"-" json:"-" toml:"-" yaml:"-"`
 }
 
 var FileColumns = struct {
-	FileID   string
-	UploadID string
-	FileName string
-	Hash     string
-	Status   string
+	FileID          string
+	UploadID        string
+	FileName        string
+	Hash            string
+	UploadFileIndex string
+	Status          string
 }{
-	FileID:   "file_id",
-	UploadID: "upload_id",
-	FileName: "file_name",
-	Hash:     "hash",
-	Status:   "status",
+	FileID:          "file_id",
+	UploadID:        "upload_id",
+	FileName:        "file_name",
+	Hash:            "hash",
+	UploadFileIndex: "upload_file_index",
+	Status:          "status",
 }
 
 var FileTableColumns = struct {
-	FileID   string
-	UploadID string
-	FileName string
-	Hash     string
-	Status   string
+	FileID          string
+	UploadID        string
+	FileName        string
+	Hash            string
+	UploadFileIndex string
+	Status          string
 }{
-	FileID:   "files.file_id",
-	UploadID: "files.upload_id",
-	FileName: "files.file_name",
-	Hash:     "files.hash",
-	Status:   "files.status",
+	FileID:          "files.file_id",
+	UploadID:        "files.upload_id",
+	FileName:        "files.file_name",
+	Hash:            "files.hash",
+	UploadFileIndex: "files.upload_file_index",
+	Status:          "files.status",
 }
 
 // Generated where
@@ -149,17 +154,19 @@ func (w whereHelperstring) NIN(slice []string) qm.QueryMod {
 }
 
 var FileWhere = struct {
-	FileID   whereHelperint
-	UploadID whereHelpernull_Int
-	FileName whereHelperstring
-	Hash     whereHelperstring
-	Status   whereHelperstring
+	FileID          whereHelperint
+	UploadID        whereHelpernull_Int
+	FileName        whereHelperstring
+	Hash            whereHelperstring
+	UploadFileIndex whereHelperint
+	Status          whereHelperstring
 }{
-	FileID:   whereHelperint{field: "\"cloud_symbol_server\".\"files\".\"file_id\""},
-	UploadID: whereHelpernull_Int{field: "\"cloud_symbol_server\".\"files\".\"upload_id\""},
-	FileName: whereHelperstring{field: "\"cloud_symbol_server\".\"files\".\"file_name\""},
-	Hash:     whereHelperstring{field: "\"cloud_symbol_server\".\"files\".\"hash\""},
-	Status:   whereHelperstring{field: "\"cloud_symbol_server\".\"files\".\"status\""},
+	FileID:          whereHelperint{field: "\"cloud_symbol_server\".\"files\".\"file_id\""},
+	UploadID:        whereHelpernull_Int{field: "\"cloud_symbol_server\".\"files\".\"upload_id\""},
+	FileName:        whereHelperstring{field: "\"cloud_symbol_server\".\"files\".\"file_name\""},
+	Hash:            whereHelperstring{field: "\"cloud_symbol_server\".\"files\".\"hash\""},
+	UploadFileIndex: whereHelperint{field: "\"cloud_symbol_server\".\"files\".\"upload_file_index\""},
+	Status:          whereHelperstring{field: "\"cloud_symbol_server\".\"files\".\"status\""},
 }
 
 // FileRels is where relationship names are stored.
@@ -190,8 +197,8 @@ func (r *fileR) GetUpload() *Upload {
 type fileL struct{}
 
 var (
-	fileAllColumns            = []string{"file_id", "upload_id", "file_name", "hash", "status"}
-	fileColumnsWithoutDefault = []string{"file_name", "hash", "status"}
+	fileAllColumns            = []string{"file_id", "upload_id", "file_name", "hash", "upload_file_index", "status"}
+	fileColumnsWithoutDefault = []string{"file_name", "hash", "upload_file_index", "status"}
 	fileColumnsWithDefault    = []string{"file_id", "upload_id"}
 	filePrimaryKeyColumns     = []string{"file_id"}
 	fileGeneratedColumns      = []string{"file_id"}
