@@ -2,14 +2,16 @@ package admin_api
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
 
-	"cloud.google.com/go/firestore"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
+
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	models "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/sql-db-models"
 )
 
 func (s *ApiService) ExpireStoreUpload(ctx context.Context, uploadId string, storeId string) (openapi.ImplResponse, error) {
@@ -29,127 +31,83 @@ func (s *ApiService) ExpireStoreUpload(ctx context.Context, uploadId string, sto
 
 	objectsToDelete := make([]ObjectToDelete, 0)
 
-	err = runDBTransaction(ctx, func(ctx context.Context, client *firestore.Client, tx *firestore.Transaction) error {
-		storeUploadEntry, err := getStoreUploadEntry(client, tx, storeId, uploadId)
-		if err != nil {
-			return err
-		}
+	db := GetDB()
+	if db == nil {
+		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
+	}
 
-		// Fetch all existing store file & file-hash entries and decrease their ref counts accordingly
-
-		type FileHashKey struct {
-			FileName string
-			Hash     string
-		}
-
-		storeFileEntries := make(map[string]StoreFileEntry)
-		storeFileHashEntries := make(map[FileHashKey]StoreFileHashEntry)
-		filesToDelete := make([]bool, len(storeUploadEntry.Files))
-
-		for fileIndex, file := range storeUploadEntry.Files {
-
-			storeFileEntry, ok := storeFileEntries[file.FileName]
-			if !ok {
-				storeFileEntryDB, err := getStoreFileEntry(client, tx, storeId, file.FileName)
-				if err != nil {
-					return err
-				} else {
-					storeFileEntry = *storeFileEntryDB
-				}
-			}
-			storeFileEntry.RefCount--
-			storeFileEntries[file.FileName] = storeFileEntry
-
-			fileHashKey := FileHashKey{FileName: file.FileName, Hash: file.Hash}
-			storeFileHashEntry, ok := storeFileHashEntries[fileHashKey]
-			if !ok {
-				storeFileHashEntryDB, err := getStoreFileHashEntry(client, tx, storeId, file.FileName, file.Hash)
-				if err != nil {
-					return err
-				} else {
-					storeFileHashEntry = *storeFileHashEntryDB
-				}
-			}
-			storeFileHashEntry.RefCount--
-			storeFileHashEntries[fileHashKey] = storeFileHashEntry
-
-			if storeFileHashEntry.RefCount == 0 {
-				filesToDelete[fileIndex] = true
-			}
-		}
-
-		// Write back results
-
-		for k, v := range storeFileEntries {
-
-			if v.RefCount > 0 {
-				if err := updateStoreFileEntry(client, tx, storeId, k, &v); err != nil {
-					return err
-				}
-			} else {
-				if err := deleteStoreFileEntry(client, tx, storeId, k); err != nil {
-					return err
-				}
-			}
-		}
-
-		for k, v := range storeFileHashEntries {
-
-			if v.RefCount > 0 {
-				if err := updateStoreFileHashEntry(client, tx, storeId, k.FileName, k.Hash, &v); err != nil {
-					return err
-				}
-			} else {
-				if err := deleteStoreFileHashEntry(client, tx, storeId, k.FileName, k.Hash); err != nil {
-					return err
-				}
-			}
-		}
-
-		for fileIndex, file := range storeUploadEntry.Files {
-
-			// Remove reference from upload to file-hash
-			err = deleteStoreFileHashUploadEntry(client, tx, storeId, file.FileName, file.Hash, uploadId)
-			if err != nil {
-				return err
-			}
-
-			if filesToDelete[fileIndex] {
-
-				// This was the last reference to the file-hash; delete file-hash
-
-				err = deleteStoreFileHashEntry(client, tx, storeId, file.FileName, file.Hash)
-				if err != nil {
-					return err
-				}
-
-				objectToDelete := ObjectToDelete{
-					FileName: file.FileName,
-					Hash:     file.Hash,
-				}
-				objectsToDelete = append(objectsToDelete, objectToDelete)
-			}
-
-			storeUploadEntry.Files[fileIndex].Status = FileDBEntry_Status_Expired
-		}
-
-		storeUploadEntry.Status = StoreUploadEntry_Status_Expired
-
-		err = updateStoreUploadEntry(client, tx, storeId, uploadId, storeUploadEntry)
-		if err != nil {
-			return err
-		}
-
-		return nil
-	})
+	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
-		if status.Code(err) == codes.NotFound {
-			log.Printf("Upload %v/%v not found", storeId, uploadId)
-			return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Upload %v / %v not found", storeId, uploadId)}), nil
-		} else {
-			log.Printf("Error while performing transaction for expiration; err = %v", err)
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+
+	// Locate store in DB, and ensure store remains throughout entire txn
+	_, err = models.Stores(qm.Where("name = ?", storeId), qm.For("share")).One(ctx, tx)
+	if err != nil {
+		log.Printf("error while accessing store: %v", err)
+		tx.Rollback()
+		return openapi.Response(http.StatusInternalServerError, fmt.Sprintf("error while accessing store: %v", err)), err
+	}
+
+	// Locate upload in DB, and ensure upload remains throughout entire txn
+	_, err = models.Uploads(qm.Where("upload_id = ?", uploadId), qm.For("share")).One(ctx, tx)
+	if err == sql.ErrNoRows {
+		log.Printf("Upload %v / %v not found", storeId, uploadId)
+		tx.Rollback()
+		return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Upload %v / %v not found", storeId, uploadId)}), err
+	} else if err != nil {
+		log.Printf("Error while accessing upload %v / %v: %v", storeId, uploadId, err)
+		tx.Rollback()
+		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing upload %v / %v: %v", storeId, uploadId, err)}), err
+	}
+
+	// Mark upload as expired
+	numRowsAffected, err := models.Uploads(qm.Where("upload_id = ?", uploadId)).UpdateAll(ctx, tx, models.M{"status": StoreUploadEntry_Status_Expired})
+	if (err == nil) && (numRowsAffected == 0) {
+		log.Printf("Upload %v / %v not found", storeId, uploadId)
+		tx.Rollback()
+		return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Upload %v / %v not found", storeId, uploadId)}), err
+	} else if (err != nil) || (numRowsAffected != 1) {
+		log.Printf("error while accessing upload: %v - numRowsAffected: %v", err, numRowsAffected)
+		tx.Rollback()
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+
+	// Mark all files in upload as expired
+	_, err = models.Files(qm.Where("upload_id = ?", uploadId)).UpdateAll(ctx, tx, models.M{"status": FileDBEntry_Status_Expired})
+	if err != nil {
+		log.Printf("error while accessing files in upload %v / %v: %v", storeId, uploadId, err)
+		tx.Rollback()
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+
+	// Fetch all files in upload
+	files, err := models.Files(qm.Where("upload_id = ?", uploadId), qm.OrderBy("upload_file_index")).All(ctx, tx)
+	if err != nil {
+		log.Printf("error while finding files in upload %v / %v: %v", storeId, uploadId, err)
+		tx.Rollback()
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+
+	for _, file := range files {
+
+		// TODO: only count files within current store. The solution below will count refs to a file across all stores
+		numNotExpiredFileRefs, err := models.Files(qm.Where("file_name = ? AND hash = ? AND status != ?", file.FileName, file.Hash, FileDBEntry_Status_Expired)).Count(ctx, tx)
+		if err != nil {
+			log.Printf("error while accessing file/hash %v / %v: %v", file.FileName, file.Hash, err)
+			tx.Rollback()
 			return openapi.Response(http.StatusInternalServerError, nil), err
 		}
+
+		if numNotExpiredFileRefs == 0 {
+			objectsToDelete = append(objectsToDelete, ObjectToDelete{FileName: file.FileName, Hash: file.Hash})
+		}
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		log.Printf("error while committing txn: %v", err)
+		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 
 	log.Printf("Status for %v/%v set to %v", storeId, uploadId, StoreUploadEntry_Status_Expired)
