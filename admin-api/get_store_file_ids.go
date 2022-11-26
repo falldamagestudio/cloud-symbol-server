@@ -2,40 +2,58 @@ package admin_api
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
-	"cloud.google.com/go/firestore"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
+
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	models "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/sql-db-models"
 )
 
 func (s *ApiService) GetStoreFileIds(ctx context.Context, storeId string) (openapi.ImplResponse, error) {
 
 	log.Printf("Getting store file IDs")
 
-	var storeFileIds []string = nil
+	db := GetDB()
+	if db == nil {
+		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
+	}
 
-	err := runDBTransaction(ctx, func(ctx context.Context, client *firestore.Client, tx *firestore.Transaction) error {
-		var err error = nil
-		_, err = getStoreEntry(client, tx, storeId)
-		if err != nil {
-			return err
-		}
-
-		storeFileIds, err = getStoreFileIds(ctx, client, storeId)
-		return err
-	})
+	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
-		if status.Code(err) == codes.NotFound {
-			log.Printf("Store %v not found: %v", storeId, err)
-			return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Store %v not found", storeId)}), err
-		} else {
-			log.Printf("Error while fetching file IDs for store %v: %v", storeId, err)
-			return openapi.Response(http.StatusInternalServerError, nil), err
-		}
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+
+	// Locate store in DB, and ensure store remains throughout entire txn
+	store, err := models.Stores(qm.Where("name = ?", storeId), qm.For("share")).One(ctx, tx)
+	if err != nil {
+		log.Printf("error while accessing store: %v", err)
+		tx.Rollback()
+		return openapi.Response(http.StatusInternalServerError, fmt.Sprintf("error while accessing store: %v", err)), err
+	}
+
+	// Fetch IDs of all files within store; remove duplicates based on name
+	files, err := models.Files(qm.Select("file_id"), qm.Where("store_id = ?", store.StoreID), qm.Distinct("name"), qm.OrderBy("file_id")).All(ctx, tx)
+	if err != nil {
+		log.Printf("Error while accessing files in store %v : %v", storeId, err)
+		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing files in store %v : %v", storeId, err)}), err
+	}
+
+	// Convert DB query result to a plain array of strings
+	var storeFileIds = make([]string, len(files))
+
+	for index, file := range files {
+		storeFileIds[index] = strconv.Itoa(file.FileID)
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		log.Printf("unable to commit transaction: %v", err)
+		return openapi.Response(http.StatusInternalServerError, fmt.Sprintf("unable to commit transaction: %v", err)), err
 	}
 
 	log.Printf("Response: %v", storeFileIds)
