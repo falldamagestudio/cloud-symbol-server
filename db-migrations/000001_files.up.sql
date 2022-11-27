@@ -4,7 +4,7 @@ CREATE TABLE cloud_symbol_server.stores (
   name varchar NOT NULL UNIQUE
 );
 
-CREATE TYPE cloud_symbol_server.upload_status AS ENUM (
+CREATE TYPE cloud_symbol_server.store_upload_status AS ENUM (
   'unknown',
   'in_progress',
   'completed',
@@ -12,16 +12,16 @@ CREATE TYPE cloud_symbol_server.upload_status AS ENUM (
   'expired'
 );
 
-CREATE TABLE cloud_symbol_server.uploads (
+CREATE TABLE cloud_symbol_server.store_uploads (
   upload_id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   store_id integer REFERENCES cloud_symbol_server.stores,
   description varchar NOT NULL,
   build varchar NOT NULL,
   timestamp timestamp NOT NULL,
-  status cloud_symbol_server.upload_status NOT NULL
+  status cloud_symbol_server.store_upload_status NOT NULL
 );
 
-CREATE TYPE cloud_symbol_server.file_status AS ENUM (
+CREATE TYPE cloud_symbol_server.store_upload_file_status AS ENUM (
   'unknown',
   'already_present',
   'pending',
@@ -30,11 +30,11 @@ CREATE TYPE cloud_symbol_server.file_status AS ENUM (
   'expired'
 );
 
-CREATE TABLE cloud_symbol_server.files (
+CREATE TABLE cloud_symbol_server.store_upload_files (
   file_id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  upload_id integer REFERENCES cloud_symbol_server.uploads,
+  upload_id integer REFERENCES cloud_symbol_server.store_uploads,
   file_name varchar NOT NULL,
   hash varchar NOT NULL,
   upload_file_index integer NOT NULL,
-  status cloud_symbol_server.file_status NOT NULL
+  status cloud_symbol_server.store_upload_file_status NOT NULL
 );

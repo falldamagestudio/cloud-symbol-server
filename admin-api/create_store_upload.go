@@ -154,7 +154,7 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 	}
 
 	// Locate store in DB, and ensure store remains throughout entire txn
-	store, err := models.Stores(qm.Where("name = ?", storeId), qm.For("share")).One(ctx, tx)
+	store, err := models.Stores(qm.Where(models.StoreColumns.Name+" = ?", storeId), qm.For("share")).One(ctx, tx)
 	if err != nil {
 		log.Printf("error while accessing store: %v", err)
 		tx.Rollback()
@@ -162,7 +162,7 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 	}
 
 	// Add upload entry to DB
-	var upload = models.Upload{
+	var upload = models.StoreUpload{
 		StoreID:     null.IntFrom(store.StoreID),
 		Description: storeUploadEntry.Description,
 		Build:       storeUploadEntry.BuildId,
@@ -182,7 +182,7 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 	// Add entries for each upload-file in DB
 	for _, file := range storeUploadEntry.Files {
 
-		var file = models.File{
+		var file = models.StoreUploadFile{
 			UploadID:        null.IntFrom(upload.UploadID),
 			FileName:        file.FileName,
 			Hash:            file.Hash,

@@ -29,7 +29,7 @@ func (s *ApiService) GetStoreFileIds(ctx context.Context, storeId string) (opena
 	}
 
 	// Locate store in DB, and ensure store remains throughout entire txn
-	store, err := models.Stores(qm.Where("name = ?", storeId), qm.For("share")).One(ctx, tx)
+	store, err := models.Stores(qm.Where(models.StoreColumns.Name+" = ?", storeId), qm.For("share")).One(ctx, tx)
 	if err != nil {
 		log.Printf("error while accessing store: %v", err)
 		tx.Rollback()
@@ -37,7 +37,7 @@ func (s *ApiService) GetStoreFileIds(ctx context.Context, storeId string) (opena
 	}
 
 	// Fetch IDs of all files within store; remove duplicates based on name
-	files, err := models.Files(qm.Select("file_id"), qm.Where("store_id = ?", store.StoreID), qm.Distinct("file_name"), qm.OrderBy("file_id")).All(ctx, tx)
+	files, err := models.StoreUploadFiles(qm.Select(models.StoreUploadFileColumns.FileID), qm.Where(models.StoreUploadColumns.StoreID+" = ?", store.StoreID), qm.Distinct(models.StoreUploadFileColumns.FileName), qm.OrderBy(models.StoreUploadFileColumns.FileID)).All(ctx, tx)
 	if err != nil {
 		log.Printf("Error while accessing files in store %v : %v", storeId, err)
 		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing files in store %v : %v", storeId, err)}), err

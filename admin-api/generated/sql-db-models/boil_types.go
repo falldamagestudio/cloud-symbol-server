@@ -51,42 +51,42 @@ func makeCacheKey(cols boil.Columns, nzDefaults []string) string {
 	return str
 }
 
-// Enum values for FileStatus
+// Enum values for StoreUploadFileStatus
 const (
-	FileStatusUnknown        string = "unknown"
-	FileStatusAlreadyPresent string = "already_present"
-	FileStatusPending        string = "pending"
-	FileStatusUploaded       string = "uploaded"
-	FileStatusAborted        string = "aborted"
-	FileStatusExpired        string = "expired"
+	StoreUploadFileStatusUnknown        string = "unknown"
+	StoreUploadFileStatusAlreadyPresent string = "already_present"
+	StoreUploadFileStatusPending        string = "pending"
+	StoreUploadFileStatusUploaded       string = "uploaded"
+	StoreUploadFileStatusAborted        string = "aborted"
+	StoreUploadFileStatusExpired        string = "expired"
 )
 
-func AllFileStatus() []string {
+func AllStoreUploadFileStatus() []string {
 	return []string{
-		FileStatusUnknown,
-		FileStatusAlreadyPresent,
-		FileStatusPending,
-		FileStatusUploaded,
-		FileStatusAborted,
-		FileStatusExpired,
+		StoreUploadFileStatusUnknown,
+		StoreUploadFileStatusAlreadyPresent,
+		StoreUploadFileStatusPending,
+		StoreUploadFileStatusUploaded,
+		StoreUploadFileStatusAborted,
+		StoreUploadFileStatusExpired,
 	}
 }
 
-// Enum values for UploadStatus
+// Enum values for StoreUploadStatus
 const (
-	UploadStatusUnknown    string = "unknown"
-	UploadStatusInProgress string = "in_progress"
-	UploadStatusCompleted  string = "completed"
-	UploadStatusAborted    string = "aborted"
-	UploadStatusExpired    string = "expired"
+	StoreUploadStatusUnknown    string = "unknown"
+	StoreUploadStatusInProgress string = "in_progress"
+	StoreUploadStatusCompleted  string = "completed"
+	StoreUploadStatusAborted    string = "aborted"
+	StoreUploadStatusExpired    string = "expired"
 )
 
-func AllUploadStatus() []string {
+func AllStoreUploadStatus() []string {
 	return []string{
-		UploadStatusUnknown,
-		UploadStatusInProgress,
-		UploadStatusCompleted,
-		UploadStatusAborted,
-		UploadStatusExpired,
+		StoreUploadStatusUnknown,
+		StoreUploadStatusInProgress,
+		StoreUploadStatusCompleted,
+		StoreUploadStatusAborted,
+		StoreUploadStatusExpired,
 	}
 }

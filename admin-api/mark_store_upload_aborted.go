@@ -26,7 +26,7 @@ func (s *ApiService) MarkStoreUploadAborted(ctx context.Context, uploadId string
 	}
 
 	// Mark upload as aborted
-	numRowsAffected, err := models.Uploads(qm.Where("upload_id = ?", uploadId)).UpdateAll(ctx, tx, models.M{"status": StoreUploadEntry_Status_Aborted})
+	numRowsAffected, err := models.StoreUploads(qm.Where(models.StoreUploadColumns.UploadID+" = ?", uploadId)).UpdateAll(ctx, tx, models.M{models.StoreUploadColumns.Status: StoreUploadEntry_Status_Aborted})
 	if (err == nil) && (numRowsAffected == 0) {
 		log.Printf("Upload %v / %v not found", storeId, uploadId)
 		tx.Rollback()
@@ -38,7 +38,7 @@ func (s *ApiService) MarkStoreUploadAborted(ctx context.Context, uploadId string
 	}
 
 	// Mark files in upload that are unknown/pending as aborted
-	_, err = models.Files(qm.Where("upload_id = ?", uploadId), qm.AndIn("status in ?", FileDBEntry_Status_Unknown, FileDBEntry_Status_Pending)).UpdateAll(ctx, tx, models.M{"status": FileDBEntry_Status_Aborted})
+	_, err = models.StoreUploadFiles(qm.Where("? = ?", models.StoreUploadFileColumns.UploadID, uploadId), qm.AndIn(models.StoreUploadFileColumns.Status+" in ?", FileDBEntry_Status_Unknown, FileDBEntry_Status_Pending)).UpdateAll(ctx, tx, models.M{models.StoreUploadFileColumns.Status: FileDBEntry_Status_Aborted})
 	if err != nil {
 		log.Printf("error while accessing files in upload %v / %v: %v", storeId, uploadId, err)
 		tx.Rollback()

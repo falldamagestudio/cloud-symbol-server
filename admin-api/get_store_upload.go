@@ -24,7 +24,7 @@ func (s *ApiService) GetStoreUpload(ctx context.Context, uploadId string, storeI
 		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
 	}
 
-	upload, err := models.Uploads(qm.Where("upload_id = ?", uploadId)).One(ctx, db)
+	upload, err := models.StoreUploads(qm.Where(models.StoreUploadColumns.UploadID+" = ?", uploadId)).One(ctx, db)
 	if err == sql.ErrNoRows {
 		log.Printf("Upload %v / %v not found", storeId, uploadId)
 		return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Upload %v / %v not found", storeId, uploadId)}), err
@@ -33,7 +33,7 @@ func (s *ApiService) GetStoreUpload(ctx context.Context, uploadId string, storeI
 		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing upload %v / %v: %v", storeId, uploadId, err)}), err
 	}
 
-	files, err := models.Files(qm.Where("upload_id = ?", uploadId), qm.OrderBy("upload_file_index")).All(ctx, db)
+	files, err := models.StoreUploadFiles(qm.Where(models.StoreUploadFileColumns.UploadID+" = ?", uploadId), qm.OrderBy(models.StoreUploadFileColumns.UploadFileIndex)).All(ctx, db)
 	if err != nil {
 		log.Printf("Error while accessing files of upload %v / %v: %v", storeId, uploadId, err)
 		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing files of upload %v / %v: %v", storeId, uploadId, err)}), err

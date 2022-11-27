@@ -21,7 +21,7 @@ func (s *ApiService) MarkStoreUploadCompleted(ctx context.Context, uploadId stri
 	}
 
 	// Mark upload as completed
-	numRowsAffected, err := models.Uploads(qm.Where("upload_id = ?", uploadId)).UpdateAll(ctx, db, models.M{"status": StoreUploadEntry_Status_Completed})
+	numRowsAffected, err := models.StoreUploads(qm.Where(models.StoreUploadColumns.UploadID+" = ?", uploadId)).UpdateAll(ctx, db, models.M{models.StoreUploadColumns.Status: StoreUploadEntry_Status_Completed})
 	if (err == nil) && (numRowsAffected == 0) {
 		log.Printf("Upload %v / %v not found", storeId, uploadId)
 		return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Upload %v / %v not found", storeId, uploadId)}), err

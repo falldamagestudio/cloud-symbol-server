@@ -21,7 +21,7 @@ func (s *ApiService) MarkStoreUploadFileUploaded(ctx context.Context, uploadId s
 	}
 
 	// Mark file as uploaded
-	numRowsAffected, err := models.Files(qm.Where("upload_id = ? AND upload_file_index = ?", uploadId, fileId)).UpdateAll(ctx, db, models.M{"status": FileDBEntry_Status_Uploaded})
+	numRowsAffected, err := models.StoreUploadFiles(qm.Where(models.StoreUploadFileColumns.UploadID+" = ? AND "+models.StoreUploadFileColumns.UploadFileIndex+" = ?", uploadId, fileId)).UpdateAll(ctx, db, models.M{models.StoreUploadFileColumns.Status: FileDBEntry_Status_Uploaded})
 	if (err == nil) && (numRowsAffected == 0) {
 		log.Printf("File %v / %v / %v not found", storeId, uploadId, fileId)
 		return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("File %v / %v / %v not found", storeId, uploadId, fileId)}), err

@@ -58,14 +58,14 @@ var StoreWhere = struct {
 
 // StoreRels is where relationship names are stored.
 var StoreRels = struct {
-	Uploads string
+	StoreUploads string
 }{
-	Uploads: "Uploads",
+	StoreUploads: "StoreUploads",
 }
 
 // storeR is where relationships are stored.
 type storeR struct {
-	Uploads UploadSlice `boil:"Uploads" json:"Uploads" toml:"Uploads" yaml:"Uploads"`
+	StoreUploads StoreUploadSlice `boil:"StoreUploads" json:"StoreUploads" toml:"StoreUploads" yaml:"StoreUploads"`
 }
 
 // NewStruct creates a new relationship struct
@@ -73,11 +73,11 @@ func (*storeR) NewStruct() *storeR {
 	return &storeR{}
 }
 
-func (r *storeR) GetUploads() UploadSlice {
+func (r *storeR) GetStoreUploads() StoreUploadSlice {
 	if r == nil {
 		return nil
 	}
-	return r.Uploads
+	return r.StoreUploads
 }
 
 // storeL is where Load methods for each relationship are stored.
@@ -369,23 +369,23 @@ func (q storeQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (bool
 	return count > 0, nil
 }
 
-// Uploads retrieves all the upload's Uploads with an executor.
-func (o *Store) Uploads(mods ...qm.QueryMod) uploadQuery {
+// StoreUploads retrieves all the store_upload's StoreUploads with an executor.
+func (o *Store) StoreUploads(mods ...qm.QueryMod) storeUploadQuery {
 	var queryMods []qm.QueryMod
 	if len(mods) != 0 {
 		queryMods = append(queryMods, mods...)
 	}
 
 	queryMods = append(queryMods,
-		qm.Where("\"cloud_symbol_server\".\"uploads\".\"store_id\"=?", o.StoreID),
+		qm.Where("\"cloud_symbol_server\".\"store_uploads\".\"store_id\"=?", o.StoreID),
 	)
 
-	return Uploads(queryMods...)
+	return StoreUploads(queryMods...)
 }
 
-// LoadUploads allows an eager lookup of values, cached into the
+// LoadStoreUploads allows an eager lookup of values, cached into the
 // loaded structs of the objects. This is for a 1-M or N-M relationship.
-func (storeL) LoadUploads(ctx context.Context, e boil.ContextExecutor, singular bool, maybeStore interface{}, mods queries.Applicator) error {
+func (storeL) LoadStoreUploads(ctx context.Context, e boil.ContextExecutor, singular bool, maybeStore interface{}, mods queries.Applicator) error {
 	var slice []*Store
 	var object *Store
 
@@ -439,8 +439,8 @@ func (storeL) LoadUploads(ctx context.Context, e boil.ContextExecutor, singular 
 	}
 
 	query := NewQuery(
-		qm.From(`cloud_symbol_server.uploads`),
-		qm.WhereIn(`cloud_symbol_server.uploads.store_id in ?`, args...),
+		qm.From(`cloud_symbol_server.store_uploads`),
+		qm.WhereIn(`cloud_symbol_server.store_uploads.store_id in ?`, args...),
 	)
 	if mods != nil {
 		mods.Apply(query)
@@ -448,22 +448,22 @@ func (storeL) LoadUploads(ctx context.Context, e boil.ContextExecutor, singular 
 
 	results, err := query.QueryContext(ctx, e)
 	if err != nil {
-		return errors.Wrap(err, "failed to eager load uploads")
+		return errors.Wrap(err, "failed to eager load store_uploads")
 	}
 
-	var resultSlice []*Upload
+	var resultSlice []*StoreUpload
 	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice uploads")
+		return errors.Wrap(err, "failed to bind eager loaded slice store_uploads")
 	}
 
 	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results in eager load on uploads")
+		return errors.Wrap(err, "failed to close results in eager load on store_uploads")
 	}
 	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for uploads")
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for store_uploads")
 	}
 
-	if len(uploadAfterSelectHooks) != 0 {
+	if len(storeUploadAfterSelectHooks) != 0 {
 		for _, obj := range resultSlice {
 			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
 				return err
@@ -471,10 +471,10 @@ func (storeL) LoadUploads(ctx context.Context, e boil.ContextExecutor, singular 
 		}
 	}
 	if singular {
-		object.R.Uploads = resultSlice
+		object.R.StoreUploads = resultSlice
 		for _, foreign := range resultSlice {
 			if foreign.R == nil {
-				foreign.R = &uploadR{}
+				foreign.R = &storeUploadR{}
 			}
 			foreign.R.Store = object
 		}
@@ -484,9 +484,9 @@ func (storeL) LoadUploads(ctx context.Context, e boil.ContextExecutor, singular 
 	for _, foreign := range resultSlice {
 		for _, local := range slice {
 			if queries.Equal(local.StoreID, foreign.StoreID) {
-				local.R.Uploads = append(local.R.Uploads, foreign)
+				local.R.StoreUploads = append(local.R.StoreUploads, foreign)
 				if foreign.R == nil {
-					foreign.R = &uploadR{}
+					foreign.R = &storeUploadR{}
 				}
 				foreign.R.Store = local
 				break
@@ -497,11 +497,11 @@ func (storeL) LoadUploads(ctx context.Context, e boil.ContextExecutor, singular 
 	return nil
 }
 
-// AddUploads adds the given related objects to the existing relationships
+// AddStoreUploads adds the given related objects to the existing relationships
 // of the store, optionally inserting them as new records.
-// Appends related to o.R.Uploads.
+// Appends related to o.R.StoreUploads.
 // Sets related.R.Store appropriately.
-func (o *Store) AddUploads(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*Upload) error {
+func (o *Store) AddStoreUploads(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*StoreUpload) error {
 	var err error
 	for _, rel := range related {
 		if insert {
@@ -511,9 +511,9 @@ func (o *Store) AddUploads(ctx context.Context, exec boil.ContextExecutor, inser
 			}
 		} else {
 			updateQuery := fmt.Sprintf(
-				"UPDATE \"cloud_symbol_server\".\"uploads\" SET %s WHERE %s",
+				"UPDATE \"cloud_symbol_server\".\"store_uploads\" SET %s WHERE %s",
 				strmangle.SetParamNames("\"", "\"", 1, []string{"store_id"}),
-				strmangle.WhereClause("\"", "\"", 2, uploadPrimaryKeyColumns),
+				strmangle.WhereClause("\"", "\"", 2, storeUploadPrimaryKeyColumns),
 			)
 			values := []interface{}{o.StoreID, rel.UploadID}
 
@@ -532,15 +532,15 @@ func (o *Store) AddUploads(ctx context.Context, exec boil.ContextExecutor, inser
 
 	if o.R == nil {
 		o.R = &storeR{
-			Uploads: related,
+			StoreUploads: related,
 		}
 	} else {
-		o.R.Uploads = append(o.R.Uploads, related...)
+		o.R.StoreUploads = append(o.R.StoreUploads, related...)
 	}
 
 	for _, rel := range related {
 		if rel.R == nil {
-			rel.R = &uploadR{
+			rel.R = &storeUploadR{
 				Store: o,
 			}
 		} else {
@@ -550,14 +550,14 @@ func (o *Store) AddUploads(ctx context.Context, exec boil.ContextExecutor, inser
 	return nil
 }
 
-// SetUploads removes all previously related items of the
+// SetStoreUploads removes all previously related items of the
 // store replacing them completely with the passed
 // in related items, optionally inserting them as new records.
-// Sets o.R.Store's Uploads accordingly.
-// Replaces o.R.Uploads with related.
-// Sets related.R.Store's Uploads accordingly.
-func (o *Store) SetUploads(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*Upload) error {
-	query := "update \"cloud_symbol_server\".\"uploads\" set \"store_id\" = null where \"store_id\" = $1"
+// Sets o.R.Store's StoreUploads accordingly.
+// Replaces o.R.StoreUploads with related.
+// Sets related.R.Store's StoreUploads accordingly.
+func (o *Store) SetStoreUploads(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*StoreUpload) error {
+	query := "update \"cloud_symbol_server\".\"store_uploads\" set \"store_id\" = null where \"store_id\" = $1"
 	values := []interface{}{o.StoreID}
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -570,7 +570,7 @@ func (o *Store) SetUploads(ctx context.Context, exec boil.ContextExecutor, inser
 	}
 
 	if o.R != nil {
-		for _, rel := range o.R.Uploads {
+		for _, rel := range o.R.StoreUploads {
 			queries.SetScanner(&rel.StoreID, nil)
 			if rel.R == nil {
 				continue
@@ -578,16 +578,16 @@ func (o *Store) SetUploads(ctx context.Context, exec boil.ContextExecutor, inser
 
 			rel.R.Store = nil
 		}
-		o.R.Uploads = nil
+		o.R.StoreUploads = nil
 	}
 
-	return o.AddUploads(ctx, exec, insert, related...)
+	return o.AddStoreUploads(ctx, exec, insert, related...)
 }
 
-// RemoveUploads relationships from objects passed in.
-// Removes related items from R.Uploads (uses pointer comparison, removal does not keep order)
+// RemoveStoreUploads relationships from objects passed in.
+// Removes related items from R.StoreUploads (uses pointer comparison, removal does not keep order)
 // Sets related.R.Store.
-func (o *Store) RemoveUploads(ctx context.Context, exec boil.ContextExecutor, related ...*Upload) error {
+func (o *Store) RemoveStoreUploads(ctx context.Context, exec boil.ContextExecutor, related ...*StoreUpload) error {
 	if len(related) == 0 {
 		return nil
 	}
@@ -607,16 +607,16 @@ func (o *Store) RemoveUploads(ctx context.Context, exec boil.ContextExecutor, re
 	}
 
 	for _, rel := range related {
-		for i, ri := range o.R.Uploads {
+		for i, ri := range o.R.StoreUploads {
 			if rel != ri {
 				continue
 			}
 
-			ln := len(o.R.Uploads)
+			ln := len(o.R.StoreUploads)
 			if ln > 1 && i < ln-1 {
-				o.R.Uploads[i] = o.R.Uploads[ln-1]
+				o.R.StoreUploads[i] = o.R.StoreUploads[ln-1]
 			}
-			o.R.Uploads = o.R.Uploads[:ln-1]
+			o.R.StoreUploads = o.R.StoreUploads[:ln-1]
 			break
 		}
 	}

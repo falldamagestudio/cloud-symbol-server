@@ -22,8 +22,8 @@ import (
 	"github.com/volatiletech/strmangle"
 )
 
-// File is an object representing the database table.
-type File struct {
+// StoreUploadFile is an object representing the database table.
+type StoreUploadFile struct {
 	FileID          int      `boil:"file_id" json:"file_id" toml:"file_id" yaml:"file_id"`
 	UploadID        null.Int `boil:"upload_id" json:"upload_id,omitempty" toml:"upload_id" yaml:"upload_id,omitempty"`
 	FileName        string   `boil:"file_name" json:"file_name" toml:"file_name" yaml:"file_name"`
@@ -31,11 +31,11 @@ type File struct {
 	UploadFileIndex int      `boil:"upload_file_index" json:"upload_file_index" toml:"upload_file_index" yaml:"upload_file_index"`
 	Status          string   `boil:"status" json:"status" toml:"status" yaml:"status"`
 
-	R *fileR `boil:"-" json:"-" toml:"-" yaml:"-"`
-	L fileL  `boil:"-" json:"-" toml:"-" yaml:"-"`
+	R *storeUploadFileR `boil:"-" json:"-" toml:"-" yaml:"-"`
+	L storeUploadFileL  `boil:"-" json:"-" toml:"-" yaml:"-"`
 }
 
-var FileColumns = struct {
+var StoreUploadFileColumns = struct {
 	FileID          string
 	UploadID        string
 	FileName        string
@@ -51,7 +51,7 @@ var FileColumns = struct {
 	Status:          "status",
 }
 
-var FileTableColumns = struct {
+var StoreUploadFileTableColumns = struct {
 	FileID          string
 	UploadID        string
 	FileName        string
@@ -59,12 +59,12 @@ var FileTableColumns = struct {
 	UploadFileIndex string
 	Status          string
 }{
-	FileID:          "files.file_id",
-	UploadID:        "files.upload_id",
-	FileName:        "files.file_name",
-	Hash:            "files.hash",
-	UploadFileIndex: "files.upload_file_index",
-	Status:          "files.status",
+	FileID:          "store_upload_files.file_id",
+	UploadID:        "store_upload_files.upload_id",
+	FileName:        "store_upload_files.file_name",
+	Hash:            "store_upload_files.hash",
+	UploadFileIndex: "store_upload_files.upload_file_index",
+	Status:          "store_upload_files.status",
 }
 
 // Generated where
@@ -153,7 +153,7 @@ func (w whereHelperstring) NIN(slice []string) qm.QueryMod {
 	return qm.WhereNotIn(fmt.Sprintf("%s NOT IN ?", w.field), values...)
 }
 
-var FileWhere = struct {
+var StoreUploadFileWhere = struct {
 	FileID          whereHelperint
 	UploadID        whereHelpernull_Int
 	FileName        whereHelperstring
@@ -161,72 +161,72 @@ var FileWhere = struct {
 	UploadFileIndex whereHelperint
 	Status          whereHelperstring
 }{
-	FileID:          whereHelperint{field: "\"cloud_symbol_server\".\"files\".\"file_id\""},
-	UploadID:        whereHelpernull_Int{field: "\"cloud_symbol_server\".\"files\".\"upload_id\""},
-	FileName:        whereHelperstring{field: "\"cloud_symbol_server\".\"files\".\"file_name\""},
-	Hash:            whereHelperstring{field: "\"cloud_symbol_server\".\"files\".\"hash\""},
-	UploadFileIndex: whereHelperint{field: "\"cloud_symbol_server\".\"files\".\"upload_file_index\""},
-	Status:          whereHelperstring{field: "\"cloud_symbol_server\".\"files\".\"status\""},
+	FileID:          whereHelperint{field: "\"cloud_symbol_server\".\"store_upload_files\".\"file_id\""},
+	UploadID:        whereHelpernull_Int{field: "\"cloud_symbol_server\".\"store_upload_files\".\"upload_id\""},
+	FileName:        whereHelperstring{field: "\"cloud_symbol_server\".\"store_upload_files\".\"file_name\""},
+	Hash:            whereHelperstring{field: "\"cloud_symbol_server\".\"store_upload_files\".\"hash\""},
+	UploadFileIndex: whereHelperint{field: "\"cloud_symbol_server\".\"store_upload_files\".\"upload_file_index\""},
+	Status:          whereHelperstring{field: "\"cloud_symbol_server\".\"store_upload_files\".\"status\""},
 }
 
-// FileRels is where relationship names are stored.
-var FileRels = struct {
+// StoreUploadFileRels is where relationship names are stored.
+var StoreUploadFileRels = struct {
 	Upload string
 }{
 	Upload: "Upload",
 }
 
-// fileR is where relationships are stored.
-type fileR struct {
-	Upload *Upload `boil:"Upload" json:"Upload" toml:"Upload" yaml:"Upload"`
+// storeUploadFileR is where relationships are stored.
+type storeUploadFileR struct {
+	Upload *StoreUpload `boil:"Upload" json:"Upload" toml:"Upload" yaml:"Upload"`
 }
 
 // NewStruct creates a new relationship struct
-func (*fileR) NewStruct() *fileR {
-	return &fileR{}
+func (*storeUploadFileR) NewStruct() *storeUploadFileR {
+	return &storeUploadFileR{}
 }
 
-func (r *fileR) GetUpload() *Upload {
+func (r *storeUploadFileR) GetUpload() *StoreUpload {
 	if r == nil {
 		return nil
 	}
 	return r.Upload
 }
 
-// fileL is where Load methods for each relationship are stored.
-type fileL struct{}
+// storeUploadFileL is where Load methods for each relationship are stored.
+type storeUploadFileL struct{}
 
 var (
-	fileAllColumns            = []string{"file_id", "upload_id", "file_name", "hash", "upload_file_index", "status"}
-	fileColumnsWithoutDefault = []string{"file_name", "hash", "upload_file_index", "status"}
-	fileColumnsWithDefault    = []string{"file_id", "upload_id"}
-	filePrimaryKeyColumns     = []string{"file_id"}
-	fileGeneratedColumns      = []string{"file_id"}
+	storeUploadFileAllColumns            = []string{"file_id", "upload_id", "file_name", "hash", "upload_file_index", "status"}
+	storeUploadFileColumnsWithoutDefault = []string{"file_name", "hash", "upload_file_index", "status"}
+	storeUploadFileColumnsWithDefault    = []string{"file_id", "upload_id"}
+	storeUploadFilePrimaryKeyColumns     = []string{"file_id"}
+	storeUploadFileGeneratedColumns      = []string{"file_id"}
 )
 
 type (
-	// FileSlice is an alias for a slice of pointers to File.
-	// This should almost always be used instead of []File.
-	FileSlice []*File
-	// FileHook is the signature for custom File hook methods
-	FileHook func(context.Context, boil.ContextExecutor, *File) error
+	// StoreUploadFileSlice is an alias for a slice of pointers to StoreUploadFile.
+	// This should almost always be used instead of []StoreUploadFile.
+	StoreUploadFileSlice []*StoreUploadFile
+	// StoreUploadFileHook is the signature for custom StoreUploadFile hook methods
+	StoreUploadFileHook func(context.Context, boil.ContextExecutor, *StoreUploadFile) error
 
-	fileQuery struct {
+	storeUploadFileQuery struct {
 		*queries.Query
 	}
 )
 
 // Cache for insert, update and upsert
 var (
-	fileType                 = reflect.TypeOf(&File{})
-	fileMapping              = queries.MakeStructMapping(fileType)
-	filePrimaryKeyMapping, _ = queries.BindMapping(fileType, fileMapping, filePrimaryKeyColumns)
-	fileInsertCacheMut       sync.RWMutex
-	fileInsertCache          = make(map[string]insertCache)
-	fileUpdateCacheMut       sync.RWMutex
-	fileUpdateCache          = make(map[string]updateCache)
-	fileUpsertCacheMut       sync.RWMutex
-	fileUpsertCache          = make(map[string]insertCache)
+	storeUploadFileType                 = reflect.TypeOf(&StoreUploadFile{})
+	storeUploadFileMapping              = queries.MakeStructMapping(storeUploadFileType)
+	storeUploadFilePrimaryKeyMapping, _ = queries.BindMapping(storeUploadFileType, storeUploadFileMapping, storeUploadFilePrimaryKeyColumns)
+	storeUploadFileInsertCacheMut       sync.RWMutex
+	storeUploadFileInsertCache          = make(map[string]insertCache)
+	storeUploadFileUpdateCacheMut       sync.RWMutex
+	storeUploadFileUpdateCache          = make(map[string]updateCache)
+	storeUploadFileUpsertCacheMut       sync.RWMutex
+	storeUploadFileUpsertCache          = make(map[string]insertCache)
 )
 
 var (
@@ -237,27 +237,27 @@ var (
 	_ = qmhelper.Where
 )
 
-var fileAfterSelectHooks []FileHook
+var storeUploadFileAfterSelectHooks []StoreUploadFileHook
 
-var fileBeforeInsertHooks []FileHook
-var fileAfterInsertHooks []FileHook
+var storeUploadFileBeforeInsertHooks []StoreUploadFileHook
+var storeUploadFileAfterInsertHooks []StoreUploadFileHook
 
-var fileBeforeUpdateHooks []FileHook
-var fileAfterUpdateHooks []FileHook
+var storeUploadFileBeforeUpdateHooks []StoreUploadFileHook
+var storeUploadFileAfterUpdateHooks []StoreUploadFileHook
 
-var fileBeforeDeleteHooks []FileHook
-var fileAfterDeleteHooks []FileHook
+var storeUploadFileBeforeDeleteHooks []StoreUploadFileHook
+var storeUploadFileAfterDeleteHooks []StoreUploadFileHook
 
-var fileBeforeUpsertHooks []FileHook
-var fileAfterUpsertHooks []FileHook
+var storeUploadFileBeforeUpsertHooks []StoreUploadFileHook
+var storeUploadFileAfterUpsertHooks []StoreUploadFileHook
 
 // doAfterSelectHooks executes all "after Select" hooks.
-func (o *File) doAfterSelectHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *StoreUploadFile) doAfterSelectHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range fileAfterSelectHooks {
+	for _, hook := range storeUploadFileAfterSelectHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -267,12 +267,12 @@ func (o *File) doAfterSelectHooks(ctx context.Context, exec boil.ContextExecutor
 }
 
 // doBeforeInsertHooks executes all "before insert" hooks.
-func (o *File) doBeforeInsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *StoreUploadFile) doBeforeInsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range fileBeforeInsertHooks {
+	for _, hook := range storeUploadFileBeforeInsertHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -282,12 +282,12 @@ func (o *File) doBeforeInsertHooks(ctx context.Context, exec boil.ContextExecuto
 }
 
 // doAfterInsertHooks executes all "after Insert" hooks.
-func (o *File) doAfterInsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *StoreUploadFile) doAfterInsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range fileAfterInsertHooks {
+	for _, hook := range storeUploadFileAfterInsertHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -297,12 +297,12 @@ func (o *File) doAfterInsertHooks(ctx context.Context, exec boil.ContextExecutor
 }
 
 // doBeforeUpdateHooks executes all "before Update" hooks.
-func (o *File) doBeforeUpdateHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *StoreUploadFile) doBeforeUpdateHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range fileBeforeUpdateHooks {
+	for _, hook := range storeUploadFileBeforeUpdateHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -312,12 +312,12 @@ func (o *File) doBeforeUpdateHooks(ctx context.Context, exec boil.ContextExecuto
 }
 
 // doAfterUpdateHooks executes all "after Update" hooks.
-func (o *File) doAfterUpdateHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *StoreUploadFile) doAfterUpdateHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range fileAfterUpdateHooks {
+	for _, hook := range storeUploadFileAfterUpdateHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -327,12 +327,12 @@ func (o *File) doAfterUpdateHooks(ctx context.Context, exec boil.ContextExecutor
 }
 
 // doBeforeDeleteHooks executes all "before Delete" hooks.
-func (o *File) doBeforeDeleteHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *StoreUploadFile) doBeforeDeleteHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range fileBeforeDeleteHooks {
+	for _, hook := range storeUploadFileBeforeDeleteHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -342,12 +342,12 @@ func (o *File) doBeforeDeleteHooks(ctx context.Context, exec boil.ContextExecuto
 }
 
 // doAfterDeleteHooks executes all "after Delete" hooks.
-func (o *File) doAfterDeleteHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *StoreUploadFile) doAfterDeleteHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range fileAfterDeleteHooks {
+	for _, hook := range storeUploadFileAfterDeleteHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -357,12 +357,12 @@ func (o *File) doAfterDeleteHooks(ctx context.Context, exec boil.ContextExecutor
 }
 
 // doBeforeUpsertHooks executes all "before Upsert" hooks.
-func (o *File) doBeforeUpsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *StoreUploadFile) doBeforeUpsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range fileBeforeUpsertHooks {
+	for _, hook := range storeUploadFileBeforeUpsertHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -372,12 +372,12 @@ func (o *File) doBeforeUpsertHooks(ctx context.Context, exec boil.ContextExecuto
 }
 
 // doAfterUpsertHooks executes all "after Upsert" hooks.
-func (o *File) doAfterUpsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *StoreUploadFile) doAfterUpsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range fileAfterUpsertHooks {
+	for _, hook := range storeUploadFileAfterUpsertHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -386,33 +386,33 @@ func (o *File) doAfterUpsertHooks(ctx context.Context, exec boil.ContextExecutor
 	return nil
 }
 
-// AddFileHook registers your hook function for all future operations.
-func AddFileHook(hookPoint boil.HookPoint, fileHook FileHook) {
+// AddStoreUploadFileHook registers your hook function for all future operations.
+func AddStoreUploadFileHook(hookPoint boil.HookPoint, storeUploadFileHook StoreUploadFileHook) {
 	switch hookPoint {
 	case boil.AfterSelectHook:
-		fileAfterSelectHooks = append(fileAfterSelectHooks, fileHook)
+		storeUploadFileAfterSelectHooks = append(storeUploadFileAfterSelectHooks, storeUploadFileHook)
 	case boil.BeforeInsertHook:
-		fileBeforeInsertHooks = append(fileBeforeInsertHooks, fileHook)
+		storeUploadFileBeforeInsertHooks = append(storeUploadFileBeforeInsertHooks, storeUploadFileHook)
 	case boil.AfterInsertHook:
-		fileAfterInsertHooks = append(fileAfterInsertHooks, fileHook)
+		storeUploadFileAfterInsertHooks = append(storeUploadFileAfterInsertHooks, storeUploadFileHook)
 	case boil.BeforeUpdateHook:
-		fileBeforeUpdateHooks = append(fileBeforeUpdateHooks, fileHook)
+		storeUploadFileBeforeUpdateHooks = append(storeUploadFileBeforeUpdateHooks, storeUploadFileHook)
 	case boil.AfterUpdateHook:
-		fileAfterUpdateHooks = append(fileAfterUpdateHooks, fileHook)
+		storeUploadFileAfterUpdateHooks = append(storeUploadFileAfterUpdateHooks, storeUploadFileHook)
 	case boil.BeforeDeleteHook:
-		fileBeforeDeleteHooks = append(fileBeforeDeleteHooks, fileHook)
+		storeUploadFileBeforeDeleteHooks = append(storeUploadFileBeforeDeleteHooks, storeUploadFileHook)
 	case boil.AfterDeleteHook:
-		fileAfterDeleteHooks = append(fileAfterDeleteHooks, fileHook)
+		storeUploadFileAfterDeleteHooks = append(storeUploadFileAfterDeleteHooks, storeUploadFileHook)
 	case boil.BeforeUpsertHook:
-		fileBeforeUpsertHooks = append(fileBeforeUpsertHooks, fileHook)
+		storeUploadFileBeforeUpsertHooks = append(storeUploadFileBeforeUpsertHooks, storeUploadFileHook)
 	case boil.AfterUpsertHook:
-		fileAfterUpsertHooks = append(fileAfterUpsertHooks, fileHook)
+		storeUploadFileAfterUpsertHooks = append(storeUploadFileAfterUpsertHooks, storeUploadFileHook)
 	}
 }
 
-// One returns a single file record from the query.
-func (q fileQuery) One(ctx context.Context, exec boil.ContextExecutor) (*File, error) {
-	o := &File{}
+// One returns a single storeUploadFile record from the query.
+func (q storeUploadFileQuery) One(ctx context.Context, exec boil.ContextExecutor) (*StoreUploadFile, error) {
+	o := &StoreUploadFile{}
 
 	queries.SetLimit(q.Query, 1)
 
@@ -421,7 +421,7 @@ func (q fileQuery) One(ctx context.Context, exec boil.ContextExecutor) (*File, e
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, sql.ErrNoRows
 		}
-		return nil, errors.Wrap(err, "models: failed to execute a one query for files")
+		return nil, errors.Wrap(err, "models: failed to execute a one query for store_upload_files")
 	}
 
 	if err := o.doAfterSelectHooks(ctx, exec); err != nil {
@@ -431,16 +431,16 @@ func (q fileQuery) One(ctx context.Context, exec boil.ContextExecutor) (*File, e
 	return o, nil
 }
 
-// All returns all File records from the query.
-func (q fileQuery) All(ctx context.Context, exec boil.ContextExecutor) (FileSlice, error) {
-	var o []*File
+// All returns all StoreUploadFile records from the query.
+func (q storeUploadFileQuery) All(ctx context.Context, exec boil.ContextExecutor) (StoreUploadFileSlice, error) {
+	var o []*StoreUploadFile
 
 	err := q.Bind(ctx, exec, &o)
 	if err != nil {
-		return nil, errors.Wrap(err, "models: failed to assign all query results to File slice")
+		return nil, errors.Wrap(err, "models: failed to assign all query results to StoreUploadFile slice")
 	}
 
-	if len(fileAfterSelectHooks) != 0 {
+	if len(storeUploadFileAfterSelectHooks) != 0 {
 		for _, obj := range o {
 			if err := obj.doAfterSelectHooks(ctx, exec); err != nil {
 				return o, err
@@ -451,8 +451,8 @@ func (q fileQuery) All(ctx context.Context, exec boil.ContextExecutor) (FileSlic
 	return o, nil
 }
 
-// Count returns the count of all File records in the query.
-func (q fileQuery) Count(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
+// Count returns the count of all StoreUploadFile records in the query.
+func (q storeUploadFileQuery) Count(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
 	var count int64
 
 	queries.SetSelect(q.Query, nil)
@@ -460,14 +460,14 @@ func (q fileQuery) Count(ctx context.Context, exec boil.ContextExecutor) (int64,
 
 	err := q.Query.QueryRowContext(ctx, exec).Scan(&count)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to count files rows")
+		return 0, errors.Wrap(err, "models: failed to count store_upload_files rows")
 	}
 
 	return count, nil
 }
 
 // Exists checks if the row exists in the table.
-func (q fileQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (bool, error) {
+func (q storeUploadFileQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (bool, error) {
 	var count int64
 
 	queries.SetSelect(q.Query, nil)
@@ -476,47 +476,47 @@ func (q fileQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (bool,
 
 	err := q.Query.QueryRowContext(ctx, exec).Scan(&count)
 	if err != nil {
-		return false, errors.Wrap(err, "models: failed to check if files exists")
+		return false, errors.Wrap(err, "models: failed to check if store_upload_files exists")
 	}
 
 	return count > 0, nil
 }
 
 // Upload pointed to by the foreign key.
-func (o *File) Upload(mods ...qm.QueryMod) uploadQuery {
+func (o *StoreUploadFile) Upload(mods ...qm.QueryMod) storeUploadQuery {
 	queryMods := []qm.QueryMod{
 		qm.Where("\"upload_id\" = ?", o.UploadID),
 	}
 
 	queryMods = append(queryMods, mods...)
 
-	return Uploads(queryMods...)
+	return StoreUploads(queryMods...)
 }
 
 // LoadUpload allows an eager lookup of values, cached into the
 // loaded structs of the objects. This is for an N-1 relationship.
-func (fileL) LoadUpload(ctx context.Context, e boil.ContextExecutor, singular bool, maybeFile interface{}, mods queries.Applicator) error {
-	var slice []*File
-	var object *File
+func (storeUploadFileL) LoadUpload(ctx context.Context, e boil.ContextExecutor, singular bool, maybeStoreUploadFile interface{}, mods queries.Applicator) error {
+	var slice []*StoreUploadFile
+	var object *StoreUploadFile
 
 	if singular {
 		var ok bool
-		object, ok = maybeFile.(*File)
+		object, ok = maybeStoreUploadFile.(*StoreUploadFile)
 		if !ok {
-			object = new(File)
-			ok = queries.SetFromEmbeddedStruct(&object, &maybeFile)
+			object = new(StoreUploadFile)
+			ok = queries.SetFromEmbeddedStruct(&object, &maybeStoreUploadFile)
 			if !ok {
-				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybeFile))
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybeStoreUploadFile))
 			}
 		}
 	} else {
-		s, ok := maybeFile.(*[]*File)
+		s, ok := maybeStoreUploadFile.(*[]*StoreUploadFile)
 		if ok {
 			slice = *s
 		} else {
-			ok = queries.SetFromEmbeddedStruct(&slice, maybeFile)
+			ok = queries.SetFromEmbeddedStruct(&slice, maybeStoreUploadFile)
 			if !ok {
-				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybeFile))
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybeStoreUploadFile))
 			}
 		}
 	}
@@ -524,7 +524,7 @@ func (fileL) LoadUpload(ctx context.Context, e boil.ContextExecutor, singular bo
 	args := make([]interface{}, 0, 1)
 	if singular {
 		if object.R == nil {
-			object.R = &fileR{}
+			object.R = &storeUploadFileR{}
 		}
 		if !queries.IsNil(object.UploadID) {
 			args = append(args, object.UploadID)
@@ -534,7 +534,7 @@ func (fileL) LoadUpload(ctx context.Context, e boil.ContextExecutor, singular bo
 	Outer:
 		for _, obj := range slice {
 			if obj.R == nil {
-				obj.R = &fileR{}
+				obj.R = &storeUploadFileR{}
 			}
 
 			for _, a := range args {
@@ -555,8 +555,8 @@ func (fileL) LoadUpload(ctx context.Context, e boil.ContextExecutor, singular bo
 	}
 
 	query := NewQuery(
-		qm.From(`cloud_symbol_server.uploads`),
-		qm.WhereIn(`cloud_symbol_server.uploads.upload_id in ?`, args...),
+		qm.From(`cloud_symbol_server.store_uploads`),
+		qm.WhereIn(`cloud_symbol_server.store_uploads.upload_id in ?`, args...),
 	)
 	if mods != nil {
 		mods.Apply(query)
@@ -564,22 +564,22 @@ func (fileL) LoadUpload(ctx context.Context, e boil.ContextExecutor, singular bo
 
 	results, err := query.QueryContext(ctx, e)
 	if err != nil {
-		return errors.Wrap(err, "failed to eager load Upload")
+		return errors.Wrap(err, "failed to eager load StoreUpload")
 	}
 
-	var resultSlice []*Upload
+	var resultSlice []*StoreUpload
 	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice Upload")
+		return errors.Wrap(err, "failed to bind eager loaded slice StoreUpload")
 	}
 
 	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results of eager load for uploads")
+		return errors.Wrap(err, "failed to close results of eager load for store_uploads")
 	}
 	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for uploads")
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for store_uploads")
 	}
 
-	if len(fileAfterSelectHooks) != 0 {
+	if len(storeUploadFileAfterSelectHooks) != 0 {
 		for _, obj := range resultSlice {
 			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
 				return err
@@ -595,9 +595,9 @@ func (fileL) LoadUpload(ctx context.Context, e boil.ContextExecutor, singular bo
 		foreign := resultSlice[0]
 		object.R.Upload = foreign
 		if foreign.R == nil {
-			foreign.R = &uploadR{}
+			foreign.R = &storeUploadR{}
 		}
-		foreign.R.Files = append(foreign.R.Files, object)
+		foreign.R.UploadStoreUploadFiles = append(foreign.R.UploadStoreUploadFiles, object)
 		return nil
 	}
 
@@ -606,9 +606,9 @@ func (fileL) LoadUpload(ctx context.Context, e boil.ContextExecutor, singular bo
 			if queries.Equal(local.UploadID, foreign.UploadID) {
 				local.R.Upload = foreign
 				if foreign.R == nil {
-					foreign.R = &uploadR{}
+					foreign.R = &storeUploadR{}
 				}
-				foreign.R.Files = append(foreign.R.Files, local)
+				foreign.R.UploadStoreUploadFiles = append(foreign.R.UploadStoreUploadFiles, local)
 				break
 			}
 		}
@@ -617,10 +617,10 @@ func (fileL) LoadUpload(ctx context.Context, e boil.ContextExecutor, singular bo
 	return nil
 }
 
-// SetUpload of the file to the related item.
+// SetUpload of the storeUploadFile to the related item.
 // Sets o.R.Upload to related.
-// Adds o to related.R.Files.
-func (o *File) SetUpload(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Upload) error {
+// Adds o to related.R.UploadStoreUploadFiles.
+func (o *StoreUploadFile) SetUpload(ctx context.Context, exec boil.ContextExecutor, insert bool, related *StoreUpload) error {
 	var err error
 	if insert {
 		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
@@ -629,9 +629,9 @@ func (o *File) SetUpload(ctx context.Context, exec boil.ContextExecutor, insert 
 	}
 
 	updateQuery := fmt.Sprintf(
-		"UPDATE \"cloud_symbol_server\".\"files\" SET %s WHERE %s",
+		"UPDATE \"cloud_symbol_server\".\"store_upload_files\" SET %s WHERE %s",
 		strmangle.SetParamNames("\"", "\"", 1, []string{"upload_id"}),
-		strmangle.WhereClause("\"", "\"", 2, filePrimaryKeyColumns),
+		strmangle.WhereClause("\"", "\"", 2, storeUploadFilePrimaryKeyColumns),
 	)
 	values := []interface{}{related.UploadID, o.FileID}
 
@@ -646,7 +646,7 @@ func (o *File) SetUpload(ctx context.Context, exec boil.ContextExecutor, insert 
 
 	queries.Assign(&o.UploadID, related.UploadID)
 	if o.R == nil {
-		o.R = &fileR{
+		o.R = &storeUploadFileR{
 			Upload: related,
 		}
 	} else {
@@ -654,11 +654,11 @@ func (o *File) SetUpload(ctx context.Context, exec boil.ContextExecutor, insert 
 	}
 
 	if related.R == nil {
-		related.R = &uploadR{
-			Files: FileSlice{o},
+		related.R = &storeUploadR{
+			UploadStoreUploadFiles: StoreUploadFileSlice{o},
 		}
 	} else {
-		related.R.Files = append(related.R.Files, o)
+		related.R.UploadStoreUploadFiles = append(related.R.UploadStoreUploadFiles, o)
 	}
 
 	return nil
@@ -667,7 +667,7 @@ func (o *File) SetUpload(ctx context.Context, exec boil.ContextExecutor, insert 
 // RemoveUpload relationship.
 // Sets o.R.Upload to nil.
 // Removes o from all passed in related items' relationships struct.
-func (o *File) RemoveUpload(ctx context.Context, exec boil.ContextExecutor, related *Upload) error {
+func (o *StoreUploadFile) RemoveUpload(ctx context.Context, exec boil.ContextExecutor, related *StoreUpload) error {
 	var err error
 
 	queries.SetScanner(&o.UploadID, nil)
@@ -682,67 +682,67 @@ func (o *File) RemoveUpload(ctx context.Context, exec boil.ContextExecutor, rela
 		return nil
 	}
 
-	for i, ri := range related.R.Files {
+	for i, ri := range related.R.UploadStoreUploadFiles {
 		if queries.Equal(o.UploadID, ri.UploadID) {
 			continue
 		}
 
-		ln := len(related.R.Files)
+		ln := len(related.R.UploadStoreUploadFiles)
 		if ln > 1 && i < ln-1 {
-			related.R.Files[i] = related.R.Files[ln-1]
+			related.R.UploadStoreUploadFiles[i] = related.R.UploadStoreUploadFiles[ln-1]
 		}
-		related.R.Files = related.R.Files[:ln-1]
+		related.R.UploadStoreUploadFiles = related.R.UploadStoreUploadFiles[:ln-1]
 		break
 	}
 	return nil
 }
 
-// Files retrieves all the records using an executor.
-func Files(mods ...qm.QueryMod) fileQuery {
-	mods = append(mods, qm.From("\"cloud_symbol_server\".\"files\""))
+// StoreUploadFiles retrieves all the records using an executor.
+func StoreUploadFiles(mods ...qm.QueryMod) storeUploadFileQuery {
+	mods = append(mods, qm.From("\"cloud_symbol_server\".\"store_upload_files\""))
 	q := NewQuery(mods...)
 	if len(queries.GetSelect(q)) == 0 {
-		queries.SetSelect(q, []string{"\"cloud_symbol_server\".\"files\".*"})
+		queries.SetSelect(q, []string{"\"cloud_symbol_server\".\"store_upload_files\".*"})
 	}
 
-	return fileQuery{q}
+	return storeUploadFileQuery{q}
 }
 
-// FindFile retrieves a single record by ID with an executor.
+// FindStoreUploadFile retrieves a single record by ID with an executor.
 // If selectCols is empty Find will return all columns.
-func FindFile(ctx context.Context, exec boil.ContextExecutor, fileID int, selectCols ...string) (*File, error) {
-	fileObj := &File{}
+func FindStoreUploadFile(ctx context.Context, exec boil.ContextExecutor, fileID int, selectCols ...string) (*StoreUploadFile, error) {
+	storeUploadFileObj := &StoreUploadFile{}
 
 	sel := "*"
 	if len(selectCols) > 0 {
 		sel = strings.Join(strmangle.IdentQuoteSlice(dialect.LQ, dialect.RQ, selectCols), ",")
 	}
 	query := fmt.Sprintf(
-		"select %s from \"cloud_symbol_server\".\"files\" where \"file_id\"=$1", sel,
+		"select %s from \"cloud_symbol_server\".\"store_upload_files\" where \"file_id\"=$1", sel,
 	)
 
 	q := queries.Raw(query, fileID)
 
-	err := q.Bind(ctx, exec, fileObj)
+	err := q.Bind(ctx, exec, storeUploadFileObj)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, sql.ErrNoRows
 		}
-		return nil, errors.Wrap(err, "models: unable to select from files")
+		return nil, errors.Wrap(err, "models: unable to select from store_upload_files")
 	}
 
-	if err = fileObj.doAfterSelectHooks(ctx, exec); err != nil {
-		return fileObj, err
+	if err = storeUploadFileObj.doAfterSelectHooks(ctx, exec); err != nil {
+		return storeUploadFileObj, err
 	}
 
-	return fileObj, nil
+	return storeUploadFileObj, nil
 }
 
 // Insert a single record using an executor.
 // See boil.Columns.InsertColumnSet documentation to understand column list inference for inserts.
-func (o *File) Insert(ctx context.Context, exec boil.ContextExecutor, columns boil.Columns) error {
+func (o *StoreUploadFile) Insert(ctx context.Context, exec boil.ContextExecutor, columns boil.Columns) error {
 	if o == nil {
-		return errors.New("models: no files provided for insertion")
+		return errors.New("models: no store_upload_files provided for insertion")
 	}
 
 	var err error
@@ -751,34 +751,34 @@ func (o *File) Insert(ctx context.Context, exec boil.ContextExecutor, columns bo
 		return err
 	}
 
-	nzDefaults := queries.NonZeroDefaultSet(fileColumnsWithDefault, o)
+	nzDefaults := queries.NonZeroDefaultSet(storeUploadFileColumnsWithDefault, o)
 
 	key := makeCacheKey(columns, nzDefaults)
-	fileInsertCacheMut.RLock()
-	cache, cached := fileInsertCache[key]
-	fileInsertCacheMut.RUnlock()
+	storeUploadFileInsertCacheMut.RLock()
+	cache, cached := storeUploadFileInsertCache[key]
+	storeUploadFileInsertCacheMut.RUnlock()
 
 	if !cached {
 		wl, returnColumns := columns.InsertColumnSet(
-			fileAllColumns,
-			fileColumnsWithDefault,
-			fileColumnsWithoutDefault,
+			storeUploadFileAllColumns,
+			storeUploadFileColumnsWithDefault,
+			storeUploadFileColumnsWithoutDefault,
 			nzDefaults,
 		)
-		wl = strmangle.SetComplement(wl, fileGeneratedColumns)
+		wl = strmangle.SetComplement(wl, storeUploadFileGeneratedColumns)
 
-		cache.valueMapping, err = queries.BindMapping(fileType, fileMapping, wl)
+		cache.valueMapping, err = queries.BindMapping(storeUploadFileType, storeUploadFileMapping, wl)
 		if err != nil {
 			return err
 		}
-		cache.retMapping, err = queries.BindMapping(fileType, fileMapping, returnColumns)
+		cache.retMapping, err = queries.BindMapping(storeUploadFileType, storeUploadFileMapping, returnColumns)
 		if err != nil {
 			return err
 		}
 		if len(wl) != 0 {
-			cache.query = fmt.Sprintf("INSERT INTO \"cloud_symbol_server\".\"files\" (\"%s\") %%sVALUES (%s)%%s", strings.Join(wl, "\",\""), strmangle.Placeholders(dialect.UseIndexPlaceholders, len(wl), 1, 1))
+			cache.query = fmt.Sprintf("INSERT INTO \"cloud_symbol_server\".\"store_upload_files\" (\"%s\") %%sVALUES (%s)%%s", strings.Join(wl, "\",\""), strmangle.Placeholders(dialect.UseIndexPlaceholders, len(wl), 1, 1))
 		} else {
-			cache.query = "INSERT INTO \"cloud_symbol_server\".\"files\" %sDEFAULT VALUES%s"
+			cache.query = "INSERT INTO \"cloud_symbol_server\".\"store_upload_files\" %sDEFAULT VALUES%s"
 		}
 
 		var queryOutput, queryReturning string
@@ -806,50 +806,50 @@ func (o *File) Insert(ctx context.Context, exec boil.ContextExecutor, columns bo
 	}
 
 	if err != nil {
-		return errors.Wrap(err, "models: unable to insert into files")
+		return errors.Wrap(err, "models: unable to insert into store_upload_files")
 	}
 
 	if !cached {
-		fileInsertCacheMut.Lock()
-		fileInsertCache[key] = cache
-		fileInsertCacheMut.Unlock()
+		storeUploadFileInsertCacheMut.Lock()
+		storeUploadFileInsertCache[key] = cache
+		storeUploadFileInsertCacheMut.Unlock()
 	}
 
 	return o.doAfterInsertHooks(ctx, exec)
 }
 
-// Update uses an executor to update the File.
+// Update uses an executor to update the StoreUploadFile.
 // See boil.Columns.UpdateColumnSet documentation to understand column list inference for updates.
 // Update does not automatically update the record in case of default values. Use .Reload() to refresh the records.
-func (o *File) Update(ctx context.Context, exec boil.ContextExecutor, columns boil.Columns) (int64, error) {
+func (o *StoreUploadFile) Update(ctx context.Context, exec boil.ContextExecutor, columns boil.Columns) (int64, error) {
 	var err error
 	if err = o.doBeforeUpdateHooks(ctx, exec); err != nil {
 		return 0, err
 	}
 	key := makeCacheKey(columns, nil)
-	fileUpdateCacheMut.RLock()
-	cache, cached := fileUpdateCache[key]
-	fileUpdateCacheMut.RUnlock()
+	storeUploadFileUpdateCacheMut.RLock()
+	cache, cached := storeUploadFileUpdateCache[key]
+	storeUploadFileUpdateCacheMut.RUnlock()
 
 	if !cached {
 		wl := columns.UpdateColumnSet(
-			fileAllColumns,
-			filePrimaryKeyColumns,
+			storeUploadFileAllColumns,
+			storeUploadFilePrimaryKeyColumns,
 		)
-		wl = strmangle.SetComplement(wl, fileGeneratedColumns)
+		wl = strmangle.SetComplement(wl, storeUploadFileGeneratedColumns)
 
 		if !columns.IsWhitelist() {
 			wl = strmangle.SetComplement(wl, []string{"created_at"})
 		}
 		if len(wl) == 0 {
-			return 0, errors.New("models: unable to update files, could not build whitelist")
+			return 0, errors.New("models: unable to update store_upload_files, could not build whitelist")
 		}
 
-		cache.query = fmt.Sprintf("UPDATE \"cloud_symbol_server\".\"files\" SET %s WHERE %s",
+		cache.query = fmt.Sprintf("UPDATE \"cloud_symbol_server\".\"store_upload_files\" SET %s WHERE %s",
 			strmangle.SetParamNames("\"", "\"", 1, wl),
-			strmangle.WhereClause("\"", "\"", len(wl)+1, filePrimaryKeyColumns),
+			strmangle.WhereClause("\"", "\"", len(wl)+1, storeUploadFilePrimaryKeyColumns),
 		)
-		cache.valueMapping, err = queries.BindMapping(fileType, fileMapping, append(wl, filePrimaryKeyColumns...))
+		cache.valueMapping, err = queries.BindMapping(storeUploadFileType, storeUploadFileMapping, append(wl, storeUploadFilePrimaryKeyColumns...))
 		if err != nil {
 			return 0, err
 		}
@@ -865,42 +865,42 @@ func (o *File) Update(ctx context.Context, exec boil.ContextExecutor, columns bo
 	var result sql.Result
 	result, err = exec.ExecContext(ctx, cache.query, values...)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to update files row")
+		return 0, errors.Wrap(err, "models: unable to update store_upload_files row")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to get rows affected by update for files")
+		return 0, errors.Wrap(err, "models: failed to get rows affected by update for store_upload_files")
 	}
 
 	if !cached {
-		fileUpdateCacheMut.Lock()
-		fileUpdateCache[key] = cache
-		fileUpdateCacheMut.Unlock()
+		storeUploadFileUpdateCacheMut.Lock()
+		storeUploadFileUpdateCache[key] = cache
+		storeUploadFileUpdateCacheMut.Unlock()
 	}
 
 	return rowsAff, o.doAfterUpdateHooks(ctx, exec)
 }
 
 // UpdateAll updates all rows with the specified column values.
-func (q fileQuery) UpdateAll(ctx context.Context, exec boil.ContextExecutor, cols M) (int64, error) {
+func (q storeUploadFileQuery) UpdateAll(ctx context.Context, exec boil.ContextExecutor, cols M) (int64, error) {
 	queries.SetUpdate(q.Query, cols)
 
 	result, err := q.Query.ExecContext(ctx, exec)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to update all for files")
+		return 0, errors.Wrap(err, "models: unable to update all for store_upload_files")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to retrieve rows affected for files")
+		return 0, errors.Wrap(err, "models: unable to retrieve rows affected for store_upload_files")
 	}
 
 	return rowsAff, nil
 }
 
 // UpdateAll updates all rows with the specified column values, using an executor.
-func (o FileSlice) UpdateAll(ctx context.Context, exec boil.ContextExecutor, cols M) (int64, error) {
+func (o StoreUploadFileSlice) UpdateAll(ctx context.Context, exec boil.ContextExecutor, cols M) (int64, error) {
 	ln := int64(len(o))
 	if ln == 0 {
 		return 0, nil
@@ -922,13 +922,13 @@ func (o FileSlice) UpdateAll(ctx context.Context, exec boil.ContextExecutor, col
 
 	// Append all of the primary key values for each column
 	for _, obj := range o {
-		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), filePrimaryKeyMapping)
+		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), storeUploadFilePrimaryKeyMapping)
 		args = append(args, pkeyArgs...)
 	}
 
-	sql := fmt.Sprintf("UPDATE \"cloud_symbol_server\".\"files\" SET %s WHERE %s",
+	sql := fmt.Sprintf("UPDATE \"cloud_symbol_server\".\"store_upload_files\" SET %s WHERE %s",
 		strmangle.SetParamNames("\"", "\"", 1, colNames),
-		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), len(colNames)+1, filePrimaryKeyColumns, len(o)))
+		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), len(colNames)+1, storeUploadFilePrimaryKeyColumns, len(o)))
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -937,28 +937,28 @@ func (o FileSlice) UpdateAll(ctx context.Context, exec boil.ContextExecutor, col
 	}
 	result, err := exec.ExecContext(ctx, sql, args...)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to update all in file slice")
+		return 0, errors.Wrap(err, "models: unable to update all in storeUploadFile slice")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to retrieve rows affected all in update all file")
+		return 0, errors.Wrap(err, "models: unable to retrieve rows affected all in update all storeUploadFile")
 	}
 	return rowsAff, nil
 }
 
 // Upsert attempts an insert using an executor, and does an update or ignore on conflict.
 // See boil.Columns documentation for how to properly use updateColumns and insertColumns.
-func (o *File) Upsert(ctx context.Context, exec boil.ContextExecutor, updateOnConflict bool, conflictColumns []string, updateColumns, insertColumns boil.Columns) error {
+func (o *StoreUploadFile) Upsert(ctx context.Context, exec boil.ContextExecutor, updateOnConflict bool, conflictColumns []string, updateColumns, insertColumns boil.Columns) error {
 	if o == nil {
-		return errors.New("models: no files provided for upsert")
+		return errors.New("models: no store_upload_files provided for upsert")
 	}
 
 	if err := o.doBeforeUpsertHooks(ctx, exec); err != nil {
 		return err
 	}
 
-	nzDefaults := queries.NonZeroDefaultSet(fileColumnsWithDefault, o)
+	nzDefaults := queries.NonZeroDefaultSet(storeUploadFileColumnsWithDefault, o)
 
 	// Build cache key in-line uglily - mysql vs psql problems
 	buf := strmangle.GetBuffer()
@@ -988,45 +988,45 @@ func (o *File) Upsert(ctx context.Context, exec boil.ContextExecutor, updateOnCo
 	key := buf.String()
 	strmangle.PutBuffer(buf)
 
-	fileUpsertCacheMut.RLock()
-	cache, cached := fileUpsertCache[key]
-	fileUpsertCacheMut.RUnlock()
+	storeUploadFileUpsertCacheMut.RLock()
+	cache, cached := storeUploadFileUpsertCache[key]
+	storeUploadFileUpsertCacheMut.RUnlock()
 
 	var err error
 
 	if !cached {
 		insert, ret := insertColumns.InsertColumnSet(
-			fileAllColumns,
-			fileColumnsWithDefault,
-			fileColumnsWithoutDefault,
+			storeUploadFileAllColumns,
+			storeUploadFileColumnsWithDefault,
+			storeUploadFileColumnsWithoutDefault,
 			nzDefaults,
 		)
 
 		update := updateColumns.UpdateColumnSet(
-			fileAllColumns,
-			filePrimaryKeyColumns,
+			storeUploadFileAllColumns,
+			storeUploadFilePrimaryKeyColumns,
 		)
 
-		insert = strmangle.SetComplement(insert, fileGeneratedColumns)
-		update = strmangle.SetComplement(update, fileGeneratedColumns)
+		insert = strmangle.SetComplement(insert, storeUploadFileGeneratedColumns)
+		update = strmangle.SetComplement(update, storeUploadFileGeneratedColumns)
 
 		if updateOnConflict && len(update) == 0 {
-			return errors.New("models: unable to upsert files, could not build update column list")
+			return errors.New("models: unable to upsert store_upload_files, could not build update column list")
 		}
 
 		conflict := conflictColumns
 		if len(conflict) == 0 {
-			conflict = make([]string, len(filePrimaryKeyColumns))
-			copy(conflict, filePrimaryKeyColumns)
+			conflict = make([]string, len(storeUploadFilePrimaryKeyColumns))
+			copy(conflict, storeUploadFilePrimaryKeyColumns)
 		}
-		cache.query = buildUpsertQueryPostgres(dialect, "\"cloud_symbol_server\".\"files\"", updateOnConflict, ret, update, conflict, insert)
+		cache.query = buildUpsertQueryPostgres(dialect, "\"cloud_symbol_server\".\"store_upload_files\"", updateOnConflict, ret, update, conflict, insert)
 
-		cache.valueMapping, err = queries.BindMapping(fileType, fileMapping, insert)
+		cache.valueMapping, err = queries.BindMapping(storeUploadFileType, storeUploadFileMapping, insert)
 		if err != nil {
 			return err
 		}
 		if len(ret) != 0 {
-			cache.retMapping, err = queries.BindMapping(fileType, fileMapping, ret)
+			cache.retMapping, err = queries.BindMapping(storeUploadFileType, storeUploadFileMapping, ret)
 			if err != nil {
 				return err
 			}
@@ -1054,31 +1054,31 @@ func (o *File) Upsert(ctx context.Context, exec boil.ContextExecutor, updateOnCo
 		_, err = exec.ExecContext(ctx, cache.query, vals...)
 	}
 	if err != nil {
-		return errors.Wrap(err, "models: unable to upsert files")
+		return errors.Wrap(err, "models: unable to upsert store_upload_files")
 	}
 
 	if !cached {
-		fileUpsertCacheMut.Lock()
-		fileUpsertCache[key] = cache
-		fileUpsertCacheMut.Unlock()
+		storeUploadFileUpsertCacheMut.Lock()
+		storeUploadFileUpsertCache[key] = cache
+		storeUploadFileUpsertCacheMut.Unlock()
 	}
 
 	return o.doAfterUpsertHooks(ctx, exec)
 }
 
-// Delete deletes a single File record with an executor.
+// Delete deletes a single StoreUploadFile record with an executor.
 // Delete will match against the primary key column to find the record to delete.
-func (o *File) Delete(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
+func (o *StoreUploadFile) Delete(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
 	if o == nil {
-		return 0, errors.New("models: no File provided for delete")
+		return 0, errors.New("models: no StoreUploadFile provided for delete")
 	}
 
 	if err := o.doBeforeDeleteHooks(ctx, exec); err != nil {
 		return 0, err
 	}
 
-	args := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(o)), filePrimaryKeyMapping)
-	sql := "DELETE FROM \"cloud_symbol_server\".\"files\" WHERE \"file_id\"=$1"
+	args := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(o)), storeUploadFilePrimaryKeyMapping)
+	sql := "DELETE FROM \"cloud_symbol_server\".\"store_upload_files\" WHERE \"file_id\"=$1"
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -1087,12 +1087,12 @@ func (o *File) Delete(ctx context.Context, exec boil.ContextExecutor) (int64, er
 	}
 	result, err := exec.ExecContext(ctx, sql, args...)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to delete from files")
+		return 0, errors.Wrap(err, "models: unable to delete from store_upload_files")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to get rows affected by delete for files")
+		return 0, errors.Wrap(err, "models: failed to get rows affected by delete for store_upload_files")
 	}
 
 	if err := o.doAfterDeleteHooks(ctx, exec); err != nil {
@@ -1103,33 +1103,33 @@ func (o *File) Delete(ctx context.Context, exec boil.ContextExecutor) (int64, er
 }
 
 // DeleteAll deletes all matching rows.
-func (q fileQuery) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
+func (q storeUploadFileQuery) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
 	if q.Query == nil {
-		return 0, errors.New("models: no fileQuery provided for delete all")
+		return 0, errors.New("models: no storeUploadFileQuery provided for delete all")
 	}
 
 	queries.SetDelete(q.Query)
 
 	result, err := q.Query.ExecContext(ctx, exec)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to delete all from files")
+		return 0, errors.Wrap(err, "models: unable to delete all from store_upload_files")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to get rows affected by deleteall for files")
+		return 0, errors.Wrap(err, "models: failed to get rows affected by deleteall for store_upload_files")
 	}
 
 	return rowsAff, nil
 }
 
 // DeleteAll deletes all rows in the slice, using an executor.
-func (o FileSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
+func (o StoreUploadFileSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
 	if len(o) == 0 {
 		return 0, nil
 	}
 
-	if len(fileBeforeDeleteHooks) != 0 {
+	if len(storeUploadFileBeforeDeleteHooks) != 0 {
 		for _, obj := range o {
 			if err := obj.doBeforeDeleteHooks(ctx, exec); err != nil {
 				return 0, err
@@ -1139,12 +1139,12 @@ func (o FileSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (in
 
 	var args []interface{}
 	for _, obj := range o {
-		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), filePrimaryKeyMapping)
+		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), storeUploadFilePrimaryKeyMapping)
 		args = append(args, pkeyArgs...)
 	}
 
-	sql := "DELETE FROM \"cloud_symbol_server\".\"files\" WHERE " +
-		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 1, filePrimaryKeyColumns, len(o))
+	sql := "DELETE FROM \"cloud_symbol_server\".\"store_upload_files\" WHERE " +
+		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 1, storeUploadFilePrimaryKeyColumns, len(o))
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -1153,15 +1153,15 @@ func (o FileSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (in
 	}
 	result, err := exec.ExecContext(ctx, sql, args...)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to delete all from file slice")
+		return 0, errors.Wrap(err, "models: unable to delete all from storeUploadFile slice")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: failed to get rows affected by deleteall for files")
+		return 0, errors.Wrap(err, "models: failed to get rows affected by deleteall for store_upload_files")
 	}
 
-	if len(fileAfterDeleteHooks) != 0 {
+	if len(storeUploadFileAfterDeleteHooks) != 0 {
 		for _, obj := range o {
 			if err := obj.doAfterDeleteHooks(ctx, exec); err != nil {
 				return 0, err
@@ -1174,8 +1174,8 @@ func (o FileSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (in
 
 // Reload refetches the object from the database
 // using the primary keys with an executor.
-func (o *File) Reload(ctx context.Context, exec boil.ContextExecutor) error {
-	ret, err := FindFile(ctx, exec, o.FileID)
+func (o *StoreUploadFile) Reload(ctx context.Context, exec boil.ContextExecutor) error {
+	ret, err := FindStoreUploadFile(ctx, exec, o.FileID)
 	if err != nil {
 		return err
 	}
@@ -1186,26 +1186,26 @@ func (o *File) Reload(ctx context.Context, exec boil.ContextExecutor) error {
 
 // ReloadAll refetches every row with matching primary key column values
 // and overwrites the original object slice with the newly updated slice.
-func (o *FileSlice) ReloadAll(ctx context.Context, exec boil.ContextExecutor) error {
+func (o *StoreUploadFileSlice) ReloadAll(ctx context.Context, exec boil.ContextExecutor) error {
 	if o == nil || len(*o) == 0 {
 		return nil
 	}
 
-	slice := FileSlice{}
+	slice := StoreUploadFileSlice{}
 	var args []interface{}
 	for _, obj := range *o {
-		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), filePrimaryKeyMapping)
+		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), storeUploadFilePrimaryKeyMapping)
 		args = append(args, pkeyArgs...)
 	}
 
-	sql := "SELECT \"cloud_symbol_server\".\"files\".* FROM \"cloud_symbol_server\".\"files\" WHERE " +
-		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 1, filePrimaryKeyColumns, len(*o))
+	sql := "SELECT \"cloud_symbol_server\".\"store_upload_files\".* FROM \"cloud_symbol_server\".\"store_upload_files\" WHERE " +
+		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 1, storeUploadFilePrimaryKeyColumns, len(*o))
 
 	q := queries.Raw(sql, args...)
 
 	err := q.Bind(ctx, exec, &slice)
 	if err != nil {
-		return errors.Wrap(err, "models: unable to reload all in FileSlice")
+		return errors.Wrap(err, "models: unable to reload all in StoreUploadFileSlice")
 	}
 
 	*o = slice
@@ -1213,10 +1213,10 @@ func (o *FileSlice) ReloadAll(ctx context.Context, exec boil.ContextExecutor) er
 	return nil
 }
 
-// FileExists checks if the File row exists.
-func FileExists(ctx context.Context, exec boil.ContextExecutor, fileID int) (bool, error) {
+// StoreUploadFileExists checks if the StoreUploadFile row exists.
+func StoreUploadFileExists(ctx context.Context, exec boil.ContextExecutor, fileID int) (bool, error) {
 	var exists bool
-	sql := "select exists(select 1 from \"cloud_symbol_server\".\"files\" where \"file_id\"=$1 limit 1)"
+	sql := "select exists(select 1 from \"cloud_symbol_server\".\"store_upload_files\" where \"file_id\"=$1 limit 1)"
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -1227,7 +1227,7 @@ func FileExists(ctx context.Context, exec boil.ContextExecutor, fileID int) (boo
 
 	err := row.Scan(&exists)
 	if err != nil {
-		return false, errors.Wrap(err, "models: unable to check if files exists")
+		return false, errors.Wrap(err, "models: unable to check if store_upload_files exists")
 	}
 
 	return exists, nil

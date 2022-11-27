@@ -4,11 +4,11 @@
 package models
 
 var TableNames = struct {
-	Files   string
-	Stores  string
-	Uploads string
+	StoreUploadFiles string
+	StoreUploads     string
+	Stores           string
 }{
-	Files:   "files",
-	Stores:  "stores",
-	Uploads: "uploads",
+	StoreUploadFiles: "store_upload_files",
+	StoreUploads:     "store_uploads",
+	Stores:           "stores",
 }

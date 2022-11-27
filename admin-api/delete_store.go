@@ -33,7 +33,7 @@ func (s *ApiService) DeleteStore(ctx context.Context, storeId string) (openapi.I
 	}
 
 	// Locate store in DB, and ensure store remains throughout entire txn
-	store, err := models.Stores(qm.Where("name = ?", storeId), qm.For("update")).One(ctx, tx)
+	store, err := models.Stores(qm.Where(models.StoreColumns.Name+" = ?", storeId), qm.For("update")).One(ctx, tx)
 	if err == sql.ErrNoRows {
 		log.Printf("Store %v not found; err = %v", storeId, err)
 		tx.Rollback()
@@ -45,7 +45,7 @@ func (s *ApiService) DeleteStore(ctx context.Context, storeId string) (openapi.I
 	}
 
 	// Delete all files in store
-	files, err := models.Files(qm.Where("uploads.store_id = ?", store.StoreID), qm.InnerJoin("cloud_symbol_server.uploads as uploads on uploads.upload_id = files.upload_id"), qm.For("update")).All(ctx, tx)
+	files, err := models.StoreUploadFiles(qm.Where(models.StoreUploadTableColumns.StoreID+" = ?", store.StoreID), qm.InnerJoin("cloud_symbol_server."+models.TableNames.StoreUploads+" as "+models.TableNames.StoreUploads+" on "+models.StoreUploadTableColumns.UploadID+" = "+models.StoreUploadFileTableColumns.UploadID), qm.For("update")).All(ctx, tx)
 	if err != nil {
 		log.Printf("error while deleting all files in store: %v", err)
 		tx.Rollback()
@@ -59,7 +59,7 @@ func (s *ApiService) DeleteStore(ctx context.Context, storeId string) (openapi.I
 	}
 
 	// Delete all uploads in store
-	_, err = store.Uploads().DeleteAll(ctx, tx)
+	_, err = store.StoreUploads().DeleteAll(ctx, tx)
 	if err != nil {
 		log.Printf("error while deleting all uploads in store: %v", err)
 		tx.Rollback()
