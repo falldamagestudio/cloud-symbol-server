@@ -2,6 +2,7 @@ package admin_api
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"fmt"
 	"log"
@@ -30,7 +31,11 @@ func (s *ApiService) GetStoreUploadIds(ctx context.Context, storeId string) (ope
 
 	// Locate store in DB, and ensure store remains throughout entire txn
 	store, err := models.Stores(qm.Where("name = ?", storeId), qm.For("share")).One(ctx, tx)
-	if err != nil {
+	if err == sql.ErrNoRows {
+		log.Printf("Store %v not found; err = %v", storeId, err)
+		tx.Rollback()
+		return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Store %v not found", storeId)}), err
+	} else if err != nil {
 		log.Printf("error while accessing store: %v", err)
 		tx.Rollback()
 		return openapi.Response(http.StatusInternalServerError, fmt.Sprintf("error while accessing store: %v", err)), err
