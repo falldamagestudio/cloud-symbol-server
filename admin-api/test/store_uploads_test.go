@@ -16,7 +16,7 @@ func TestGetStoreUploadWithInvalidCredentialsFails(t *testing.T) {
 	authContext, apiClient := getAPIClient(email, pat)
 
 	storeId := "example"
-	uploadId := "invaliduploadid"
+	uploadId := "999999999"
 
 	_, r, err := apiClient.DefaultApi.GetStoreUpload(authContext, uploadId, storeId).Execute()
 	desiredStatusCode := http.StatusUnauthorized
@@ -66,7 +66,7 @@ func TestGetStoreUploadThatDoesNotExistFails(t *testing.T) {
 	authContext, apiClient := getAPIClient(email, pat)
 
 	storeId := "example"
-	uploadId := "invaliduploadid"
+	uploadId := "999999999"
 
 	if err := ensureTestStoreExists(apiClient, authContext, storeId); err != nil {
 		t.Fatalf("ensureTestStoreExists failed: %v", err)
