@@ -37,7 +37,7 @@ func (s *ApiService) GetStoreFileIds(ctx context.Context, storeId string) (opena
 	}
 
 	// Fetch IDs of all files within store; remove duplicates based on name
-	files, err := models.Files(qm.Select("file_id"), qm.Where("store_id = ?", store.StoreID), qm.Distinct("name"), qm.OrderBy("file_id")).All(ctx, tx)
+	files, err := models.Files(qm.Select("file_id"), qm.Where("store_id = ?", store.StoreID), qm.Distinct("file_name"), qm.OrderBy("file_id")).All(ctx, tx)
 	if err != nil {
 		log.Printf("Error while accessing files in store %v : %v", storeId, err)
 		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing files in store %v : %v", storeId, err)}), err
