@@ -9,15 +9,25 @@ import (
 
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgerrcode"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
+	models "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/sql-db-models"
 )
 
 func (s *ApiService) CreateStore(ctx context.Context, storeId string) (openapi.ImplResponse, error) {
 
 	log.Printf("Creating store")
 
-	if err := sqlCreateStore(ctx, storeId); err != nil {
+	db := GetDB()
+	if db == nil {
+		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
+	}
+
+	var store = models.Store{
+		Name: storeId,
+	}
+	if err := store.Insert(ctx, db, boil.Infer()); err != nil {
 
 		var pgError *pgconn.PgError
 		if errors.As(err, &pgError) {
