@@ -2,11 +2,16 @@ package admin_api
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
+
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
+	models "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/sql-db-models"
 )
 
 func (s *ApiService) DeleteStore(ctx context.Context, storeId string) (openapi.ImplResponse, error) {
@@ -17,26 +22,63 @@ func (s *ApiService) DeleteStore(ctx context.Context, storeId string) (openapi.I
 		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Unable to create storage client"}), err
 	}
 
-	// Validate that store exists
-
-	store, err := sqlGetStore(ctx, storeId)
-	if err != nil || store == nil {
-		log.Printf("Store %v not found; err = %v", storeId, err)
-		return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Store %v not found", storeId)}), err
+	db := GetDB()
+	if db == nil {
+		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
 	}
 
-	// if err = runDBTransaction(ctx, func(ctx context.Context, client *firestore.Client, tx *firestore.Transaction) error {
-	// 	var err error = nil
-	// 	_, err = getStoreEntry(client, tx, storeId)
-	// 	return err
-	// }); err != nil {
-	// 	if status.Code(err) == codes.NotFound {
-	// 		log.Printf("Store %v not found; err = %v", storeId, err)
-	// 		return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Store %v not found", storeId)}), err
-	// 	} else {
-	// 		return openapi.Response(http.StatusInternalServerError, nil), err
-	// 	}
-	// }
+	tx, err := db.BeginTx(ctx, nil)
+	if err != nil {
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+
+	// Locate store in DB, and ensure store remains throughout entire txn
+	store, err := models.Stores(qm.Where("name = ?", storeId), qm.For("update")).One(ctx, tx)
+	if err == sql.ErrNoRows {
+		log.Printf("Store %v not found; err = %v", storeId, err)
+		tx.Rollback()
+		return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Store %v not found", storeId)}), err
+	} else if err != nil {
+		log.Printf("error while accessing store: %v", err)
+		tx.Rollback()
+		return openapi.Response(http.StatusInternalServerError, fmt.Sprintf("error while accessing store: %v", err)), err
+	}
+
+	// Delete all files in store
+	files, err := models.Files(qm.Where("uploads.store_id = ?", store.StoreID), qm.InnerJoin("cloud_symbol_server.uploads as uploads on uploads.upload_id = files.upload_id"), qm.For("update")).All(ctx, tx)
+	if err != nil {
+		log.Printf("error while deleting all files in store: %v", err)
+		tx.Rollback()
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+	_, err = files.DeleteAll(ctx, tx)
+	if err != nil {
+		log.Printf("error while deleting all files in store: %v", err)
+		tx.Rollback()
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+
+	// Delete all uploads in store
+	_, err = store.Uploads().DeleteAll(ctx, tx)
+	if err != nil {
+		log.Printf("error while deleting all uploads in store: %v", err)
+		tx.Rollback()
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+
+	// Delete store
+	_, err = store.Delete(ctx, tx)
+	if err != nil {
+		log.Printf("error while deleting store entry: %v", err)
+		tx.Rollback()
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		log.Printf("error while committing txn: %v", err)
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
 
 	// Delete all related files in Cloud Storage
 
@@ -46,20 +88,6 @@ func (s *ApiService) DeleteStore(ctx context.Context, storeId string) (openapi.I
 			return openapi.Response(http.StatusInternalServerError, nil), err
 		}
 	}
-
-	// Delete all related documents in Firestore
-
-	if err = sqlDeleteStore(ctx, storeId); err != nil {
-		log.Printf("Unable to delete store, err = %v", err)
-		return openapi.Response(http.StatusInternalServerError, nil), err
-	}
-
-	// if err = deleteDocument(ctx, firestoreClient, firestoreClient.Collection(storesCollectionName).Doc(storeId), true); err != nil {
-	// 	if err != nil {
-	// 		log.Printf("Unable to delete document + child documents, err = %v", err)
-	// 		return openapi.Response(http.StatusInternalServerError, nil), err
-	// 	}
-	// }
 
 	return openapi.Response(http.StatusOK, nil), err
 }
