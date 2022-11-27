@@ -24,47 +24,52 @@ import (
 
 // StoreUpload is an object representing the database table.
 type StoreUpload struct {
-	UploadID    int       `boil:"upload_id" json:"upload_id" toml:"upload_id" yaml:"upload_id"`
-	StoreID     null.Int  `boil:"store_id" json:"store_id,omitempty" toml:"store_id" yaml:"store_id,omitempty"`
-	Description string    `boil:"description" json:"description" toml:"description" yaml:"description"`
-	Build       string    `boil:"build" json:"build" toml:"build" yaml:"build"`
-	Timestamp   time.Time `boil:"timestamp" json:"timestamp" toml:"timestamp" yaml:"timestamp"`
-	Status      string    `boil:"status" json:"status" toml:"status" yaml:"status"`
+	UploadID         int       `boil:"upload_id" json:"upload_id" toml:"upload_id" yaml:"upload_id"`
+	StoreID          null.Int  `boil:"store_id" json:"store_id,omitempty" toml:"store_id" yaml:"store_id,omitempty"`
+	StoreUploadIndex int       `boil:"store_upload_index" json:"store_upload_index" toml:"store_upload_index" yaml:"store_upload_index"`
+	Description      string    `boil:"description" json:"description" toml:"description" yaml:"description"`
+	Build            string    `boil:"build" json:"build" toml:"build" yaml:"build"`
+	Timestamp        time.Time `boil:"timestamp" json:"timestamp" toml:"timestamp" yaml:"timestamp"`
+	Status           string    `boil:"status" json:"status" toml:"status" yaml:"status"`
 
 	R *storeUploadR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L storeUploadL  `boil:"-" json:"-" toml:"-" yaml:"-"`
 }
 
 var StoreUploadColumns = struct {
-	UploadID    string
-	StoreID     string
-	Description string
-	Build       string
-	Timestamp   string
-	Status      string
+	UploadID         string
+	StoreID          string
+	StoreUploadIndex string
+	Description      string
+	Build            string
+	Timestamp        string
+	Status           string
 }{
-	UploadID:    "upload_id",
-	StoreID:     "store_id",
-	Description: "description",
-	Build:       "build",
-	Timestamp:   "timestamp",
-	Status:      "status",
+	UploadID:         "upload_id",
+	StoreID:          "store_id",
+	StoreUploadIndex: "store_upload_index",
+	Description:      "description",
+	Build:            "build",
+	Timestamp:        "timestamp",
+	Status:           "status",
 }
 
 var StoreUploadTableColumns = struct {
-	UploadID    string
-	StoreID     string
-	Description string
-	Build       string
-	Timestamp   string
-	Status      string
+	UploadID         string
+	StoreID          string
+	StoreUploadIndex string
+	Description      string
+	Build            string
+	Timestamp        string
+	Status           string
 }{
-	UploadID:    "store_uploads.upload_id",
-	StoreID:     "store_uploads.store_id",
-	Description: "store_uploads.description",
-	Build:       "store_uploads.build",
-	Timestamp:   "store_uploads.timestamp",
-	Status:      "store_uploads.status",
+	UploadID:         "store_uploads.upload_id",
+	StoreID:          "store_uploads.store_id",
+	StoreUploadIndex: "store_uploads.store_upload_index",
+	Description:      "store_uploads.description",
+	Build:            "store_uploads.build",
+	Timestamp:        "store_uploads.timestamp",
+	Status:           "store_uploads.status",
 }
 
 // Generated where
@@ -91,19 +96,21 @@ func (w whereHelpertime_Time) GTE(x time.Time) qm.QueryMod {
 }
 
 var StoreUploadWhere = struct {
-	UploadID    whereHelperint
-	StoreID     whereHelpernull_Int
-	Description whereHelperstring
-	Build       whereHelperstring
-	Timestamp   whereHelpertime_Time
-	Status      whereHelperstring
+	UploadID         whereHelperint
+	StoreID          whereHelpernull_Int
+	StoreUploadIndex whereHelperint
+	Description      whereHelperstring
+	Build            whereHelperstring
+	Timestamp        whereHelpertime_Time
+	Status           whereHelperstring
 }{
-	UploadID:    whereHelperint{field: "\"cloud_symbol_server\".\"store_uploads\".\"upload_id\""},
-	StoreID:     whereHelpernull_Int{field: "\"cloud_symbol_server\".\"store_uploads\".\"store_id\""},
-	Description: whereHelperstring{field: "\"cloud_symbol_server\".\"store_uploads\".\"description\""},
-	Build:       whereHelperstring{field: "\"cloud_symbol_server\".\"store_uploads\".\"build\""},
-	Timestamp:   whereHelpertime_Time{field: "\"cloud_symbol_server\".\"store_uploads\".\"timestamp\""},
-	Status:      whereHelperstring{field: "\"cloud_symbol_server\".\"store_uploads\".\"status\""},
+	UploadID:         whereHelperint{field: "\"cloud_symbol_server\".\"store_uploads\".\"upload_id\""},
+	StoreID:          whereHelpernull_Int{field: "\"cloud_symbol_server\".\"store_uploads\".\"store_id\""},
+	StoreUploadIndex: whereHelperint{field: "\"cloud_symbol_server\".\"store_uploads\".\"store_upload_index\""},
+	Description:      whereHelperstring{field: "\"cloud_symbol_server\".\"store_uploads\".\"description\""},
+	Build:            whereHelperstring{field: "\"cloud_symbol_server\".\"store_uploads\".\"build\""},
+	Timestamp:        whereHelpertime_Time{field: "\"cloud_symbol_server\".\"store_uploads\".\"timestamp\""},
+	Status:           whereHelperstring{field: "\"cloud_symbol_server\".\"store_uploads\".\"status\""},
 }
 
 // StoreUploadRels is where relationship names are stored.
@@ -144,8 +151,8 @@ func (r *storeUploadR) GetUploadStoreUploadFiles() StoreUploadFileSlice {
 type storeUploadL struct{}
 
 var (
-	storeUploadAllColumns            = []string{"upload_id", "store_id", "description", "build", "timestamp", "status"}
-	storeUploadColumnsWithoutDefault = []string{"description", "build", "timestamp", "status"}
+	storeUploadAllColumns            = []string{"upload_id", "store_id", "store_upload_index", "description", "build", "timestamp", "status"}
+	storeUploadColumnsWithoutDefault = []string{"store_upload_index", "description", "build", "timestamp", "status"}
 	storeUploadColumnsWithDefault    = []string{"upload_id", "store_id"}
 	storeUploadPrimaryKeyColumns     = []string{"upload_id"}
 	storeUploadGeneratedColumns      = []string{"upload_id"}

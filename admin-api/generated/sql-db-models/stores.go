@@ -23,37 +23,44 @@ import (
 
 // Store is an object representing the database table.
 type Store struct {
-	StoreID int    `boil:"store_id" json:"store_id" toml:"store_id" yaml:"store_id"`
-	Name    string `boil:"name" json:"name" toml:"name" yaml:"name"`
+	StoreID              int    `boil:"store_id" json:"store_id" toml:"store_id" yaml:"store_id"`
+	Name                 string `boil:"name" json:"name" toml:"name" yaml:"name"`
+	NextStoreUploadIndex int    `boil:"next_store_upload_index" json:"next_store_upload_index" toml:"next_store_upload_index" yaml:"next_store_upload_index"`
 
 	R *storeR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L storeL  `boil:"-" json:"-" toml:"-" yaml:"-"`
 }
 
 var StoreColumns = struct {
-	StoreID string
-	Name    string
+	StoreID              string
+	Name                 string
+	NextStoreUploadIndex string
 }{
-	StoreID: "store_id",
-	Name:    "name",
+	StoreID:              "store_id",
+	Name:                 "name",
+	NextStoreUploadIndex: "next_store_upload_index",
 }
 
 var StoreTableColumns = struct {
-	StoreID string
-	Name    string
+	StoreID              string
+	Name                 string
+	NextStoreUploadIndex string
 }{
-	StoreID: "stores.store_id",
-	Name:    "stores.name",
+	StoreID:              "stores.store_id",
+	Name:                 "stores.name",
+	NextStoreUploadIndex: "stores.next_store_upload_index",
 }
 
 // Generated where
 
 var StoreWhere = struct {
-	StoreID whereHelperint
-	Name    whereHelperstring
+	StoreID              whereHelperint
+	Name                 whereHelperstring
+	NextStoreUploadIndex whereHelperint
 }{
-	StoreID: whereHelperint{field: "\"cloud_symbol_server\".\"stores\".\"store_id\""},
-	Name:    whereHelperstring{field: "\"cloud_symbol_server\".\"stores\".\"name\""},
+	StoreID:              whereHelperint{field: "\"cloud_symbol_server\".\"stores\".\"store_id\""},
+	Name:                 whereHelperstring{field: "\"cloud_symbol_server\".\"stores\".\"name\""},
+	NextStoreUploadIndex: whereHelperint{field: "\"cloud_symbol_server\".\"stores\".\"next_store_upload_index\""},
 }
 
 // StoreRels is where relationship names are stored.
@@ -84,8 +91,8 @@ func (r *storeR) GetStoreUploads() StoreUploadSlice {
 type storeL struct{}
 
 var (
-	storeAllColumns            = []string{"store_id", "name"}
-	storeColumnsWithoutDefault = []string{"name"}
+	storeAllColumns            = []string{"store_id", "name", "next_store_upload_index"}
+	storeColumnsWithoutDefault = []string{"name", "next_store_upload_index"}
 	storeColumnsWithDefault    = []string{"store_id"}
 	storePrimaryKeyColumns     = []string{"store_id"}
 	storeGeneratedColumns      = []string{"store_id"}

@@ -42,7 +42,7 @@ func (s *ApiService) GetStoreUploadIds(ctx context.Context, storeId string) (ope
 	}
 
 	// Fetch IDs of all uploads within store
-	uploads, err := models.StoreUploads(qm.Select(models.StoreUploadColumns.UploadID), qm.Where(models.StoreUploadColumns.StoreID+" = ?", store.StoreID), qm.OrderBy(models.StoreUploadColumns.UploadID)).All(ctx, tx)
+	uploads, err := models.StoreUploads(qm.Select(models.StoreUploadColumns.StoreUploadIndex), qm.Where(models.StoreUploadColumns.StoreID+" = ?", store.StoreID), qm.OrderBy(models.StoreUploadColumns.StoreUploadIndex)).All(ctx, tx)
 	if err != nil {
 		log.Printf("Error while accessing uploads of store %v : %v", storeId, err)
 		tx.Rollback()

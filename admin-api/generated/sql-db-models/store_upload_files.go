@@ -26,9 +26,9 @@ import (
 type StoreUploadFile struct {
 	FileID          int      `boil:"file_id" json:"file_id" toml:"file_id" yaml:"file_id"`
 	UploadID        null.Int `boil:"upload_id" json:"upload_id,omitempty" toml:"upload_id" yaml:"upload_id,omitempty"`
+	UploadFileIndex int      `boil:"upload_file_index" json:"upload_file_index" toml:"upload_file_index" yaml:"upload_file_index"`
 	FileName        string   `boil:"file_name" json:"file_name" toml:"file_name" yaml:"file_name"`
 	Hash            string   `boil:"hash" json:"hash" toml:"hash" yaml:"hash"`
-	UploadFileIndex int      `boil:"upload_file_index" json:"upload_file_index" toml:"upload_file_index" yaml:"upload_file_index"`
 	Status          string   `boil:"status" json:"status" toml:"status" yaml:"status"`
 
 	R *storeUploadFileR `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -38,32 +38,32 @@ type StoreUploadFile struct {
 var StoreUploadFileColumns = struct {
 	FileID          string
 	UploadID        string
+	UploadFileIndex string
 	FileName        string
 	Hash            string
-	UploadFileIndex string
 	Status          string
 }{
 	FileID:          "file_id",
 	UploadID:        "upload_id",
+	UploadFileIndex: "upload_file_index",
 	FileName:        "file_name",
 	Hash:            "hash",
-	UploadFileIndex: "upload_file_index",
 	Status:          "status",
 }
 
 var StoreUploadFileTableColumns = struct {
 	FileID          string
 	UploadID        string
+	UploadFileIndex string
 	FileName        string
 	Hash            string
-	UploadFileIndex string
 	Status          string
 }{
 	FileID:          "store_upload_files.file_id",
 	UploadID:        "store_upload_files.upload_id",
+	UploadFileIndex: "store_upload_files.upload_file_index",
 	FileName:        "store_upload_files.file_name",
 	Hash:            "store_upload_files.hash",
-	UploadFileIndex: "store_upload_files.upload_file_index",
 	Status:          "store_upload_files.status",
 }
 
@@ -156,16 +156,16 @@ func (w whereHelperstring) NIN(slice []string) qm.QueryMod {
 var StoreUploadFileWhere = struct {
 	FileID          whereHelperint
 	UploadID        whereHelpernull_Int
+	UploadFileIndex whereHelperint
 	FileName        whereHelperstring
 	Hash            whereHelperstring
-	UploadFileIndex whereHelperint
 	Status          whereHelperstring
 }{
 	FileID:          whereHelperint{field: "\"cloud_symbol_server\".\"store_upload_files\".\"file_id\""},
 	UploadID:        whereHelpernull_Int{field: "\"cloud_symbol_server\".\"store_upload_files\".\"upload_id\""},
+	UploadFileIndex: whereHelperint{field: "\"cloud_symbol_server\".\"store_upload_files\".\"upload_file_index\""},
 	FileName:        whereHelperstring{field: "\"cloud_symbol_server\".\"store_upload_files\".\"file_name\""},
 	Hash:            whereHelperstring{field: "\"cloud_symbol_server\".\"store_upload_files\".\"hash\""},
-	UploadFileIndex: whereHelperint{field: "\"cloud_symbol_server\".\"store_upload_files\".\"upload_file_index\""},
 	Status:          whereHelperstring{field: "\"cloud_symbol_server\".\"store_upload_files\".\"status\""},
 }
 
@@ -197,8 +197,8 @@ func (r *storeUploadFileR) GetUpload() *StoreUpload {
 type storeUploadFileL struct{}
 
 var (
-	storeUploadFileAllColumns            = []string{"file_id", "upload_id", "file_name", "hash", "upload_file_index", "status"}
-	storeUploadFileColumnsWithoutDefault = []string{"file_name", "hash", "upload_file_index", "status"}
+	storeUploadFileAllColumns            = []string{"file_id", "upload_id", "upload_file_index", "file_name", "hash", "status"}
+	storeUploadFileColumnsWithoutDefault = []string{"upload_file_index", "file_name", "hash", "status"}
 	storeUploadFileColumnsWithDefault    = []string{"file_id", "upload_id"}
 	storeUploadFilePrimaryKeyColumns     = []string{"file_id"}
 	storeUploadFileGeneratedColumns      = []string{"file_id"}

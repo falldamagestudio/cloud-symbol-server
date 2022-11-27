@@ -24,19 +24,47 @@ func (s *ApiService) GetStoreUpload(ctx context.Context, uploadId string, storeI
 		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
 	}
 
-	upload, err := models.StoreUploads(qm.Where(models.StoreUploadColumns.UploadID+" = ?", uploadId)).One(ctx, db)
+	tx, err := db.BeginTx(ctx, nil)
+	if err != nil {
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+
+	// Locate store in DB, and ensure store remains throughout entire txn
+	store, err := models.Stores(qm.Where(models.StoreColumns.Name+" = ?", storeId), qm.For("share")).One(ctx, tx)
+	if err == sql.ErrNoRows {
+		log.Printf("Store %v not found; err = %v", storeId, err)
+		tx.Rollback()
+		return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Store %v not found", storeId)}), err
+	} else if err != nil {
+		log.Printf("Error while accessing store %v: %v", storeId, err)
+		tx.Rollback()
+		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing store %v: %v", storeId, err)}), err
+	}
+
+	// Locate upload in DB, and ensure upload remains throughout entire txn
+	upload, err := models.StoreUploads(qm.Where(models.StoreUploadColumns.StoreID+" = ? and "+models.StoreUploadColumns.StoreUploadIndex+" = ?", store.StoreID, uploadId)).One(ctx, tx)
 	if err == sql.ErrNoRows {
 		log.Printf("Upload %v / %v not found", storeId, uploadId)
+		tx.Rollback()
 		return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Upload %v / %v not found", storeId, uploadId)}), err
 	} else if err != nil {
 		log.Printf("Error while accessing upload %v / %v: %v", storeId, uploadId, err)
+		tx.Rollback()
 		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing upload %v / %v: %v", storeId, uploadId, err)}), err
 	}
 
-	files, err := models.StoreUploadFiles(qm.Where(models.StoreUploadFileColumns.UploadID+" = ?", uploadId), qm.OrderBy(models.StoreUploadFileColumns.UploadFileIndex)).All(ctx, db)
+	// Locate upload-files in DB
+	files, err := models.StoreUploadFiles(qm.Where(models.StoreUploadFileColumns.UploadID+" = ?", upload.UploadID), qm.OrderBy(models.StoreUploadFileColumns.UploadFileIndex)).All(ctx, tx)
 	if err != nil {
 		log.Printf("Error while accessing files of upload %v / %v: %v", storeId, uploadId, err)
+		tx.Rollback()
 		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing files of upload %v / %v: %v", storeId, uploadId, err)}), err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		log.Printf("error while committing txn: %v", err)
+		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 
 	getStoreUploadResponse := openapi.GetStoreUploadResponse{}

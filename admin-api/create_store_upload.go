@@ -154,18 +154,31 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 	}
 
 	// Locate store in DB, and ensure store remains throughout entire txn
-	store, err := models.Stores(qm.Where(models.StoreColumns.Name+" = ?", storeId), qm.For("share")).One(ctx, tx)
+	store, err := models.Stores(qm.Where(models.StoreColumns.Name+" = ?", storeId), qm.For("update")).One(ctx, tx)
 	if err != nil {
 		log.Printf("error while accessing store: %v", err)
 		tx.Rollback()
 		return "", err
 	}
 
+	var storeUploadIndex = store.NextStoreUploadIndex
+
+	store.NextStoreUploadIndex++
+
+	// Increase next store upload index in store
+	_, err = store.Update(ctx, tx, boil.Infer())
+	if err != nil {
+		log.Printf("error while updating store: %v", err)
+		tx.Rollback()
+		return "", err
+	}
+
 	// Add upload entry to DB
 	var upload = models.StoreUpload{
-		StoreID:     null.IntFrom(store.StoreID),
-		Description: storeUploadEntry.Description,
-		Build:       storeUploadEntry.BuildId,
+		StoreID:          null.IntFrom(store.StoreID),
+		StoreUploadIndex: storeUploadIndex,
+		Description:      storeUploadEntry.Description,
+		Build:            storeUploadEntry.BuildId,
 		// TODO: source timestamp from StoreUploadEntry, don't override it with time.Now() Here
 		Timestamp: time.Now(),
 		Status:    storeUploadEntry.Status,
@@ -205,7 +218,7 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 		return "", err
 	}
 
-	log.Printf("Upload is given ID %v", upload.UploadID)
+	log.Printf("Upload is given ID %v", storeUploadIndex)
 
-	return fmt.Sprint(upload.UploadID), nil
+	return fmt.Sprint(storeUploadIndex), nil
 }
