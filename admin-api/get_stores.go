@@ -23,7 +23,9 @@ func (s *ApiService) GetStores(ctx context.Context) (openapi.ImplResponse, error
 	}
 
 	// Fetch names of all stores
-	stores, err := models.Stores(qm.Select(models.StoreColumns.Name), qm.OrderBy(models.StoreColumns.StoreID)).All(ctx, db)
+	stores, err := models.Stores(
+		qm.Select(models.StoreColumns.Name), qm.OrderBy(models.StoreColumns.StoreID),
+	).All(ctx, db)
 	if err != nil {
 		log.Printf("Error while accessing stores: %v", err)
 		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing stores: %v", err)}), err

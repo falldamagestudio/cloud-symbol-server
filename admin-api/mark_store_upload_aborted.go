@@ -23,7 +23,9 @@ func (s *ApiService) MarkStoreUploadAborted(ctx context.Context, uploadId string
 	}
 
 	// Locate store in DB, and ensure store remains throughout entire txn
-	store, err := models.Stores(qm.Where(models.StoreColumns.Name+" = ?", storeId), qm.For("share")).One(ctx, tx)
+	store, err := models.Stores(
+		qm.Where(models.StoreColumns.Name+" = ?", storeId), qm.For("share"),
+	).One(ctx, tx)
 	if err == sql.ErrNoRows {
 		log.Printf("Store %v not found; err = %v", storeId, err)
 		tx.Rollback()
@@ -35,7 +37,9 @@ func (s *ApiService) MarkStoreUploadAborted(ctx context.Context, uploadId string
 	}
 
 	// Locate upload in DB, and ensure upload remains throughout entire txn
-	upload, err := models.StoreUploads(qm.Where(models.StoreUploadColumns.StoreID+" = ? and "+models.StoreUploadColumns.StoreUploadIndex+" = ?", store.StoreID, uploadId)).One(ctx, tx)
+	upload, err := models.StoreUploads(
+		qm.Where(models.StoreUploadColumns.StoreID+" = ? and "+models.StoreUploadColumns.StoreUploadIndex+" = ?", store.StoreID, uploadId),
+	).One(ctx, tx)
 	if err == sql.ErrNoRows {
 		log.Printf("Upload %v / %v not found", storeId, uploadId)
 		tx.Rollback()
@@ -47,7 +51,9 @@ func (s *ApiService) MarkStoreUploadAborted(ctx context.Context, uploadId string
 	}
 
 	// Mark upload as aborted
-	numRowsAffected, err := models.StoreUploads(qm.Where(models.StoreUploadColumns.UploadID+" = ?", upload.UploadID)).UpdateAll(ctx, tx, models.M{models.StoreUploadColumns.Status: StoreUploadEntry_Status_Aborted})
+	numRowsAffected, err := models.StoreUploads(
+		qm.Where(models.StoreUploadColumns.UploadID+" = ?", upload.UploadID),
+	).UpdateAll(ctx, tx, models.M{models.StoreUploadColumns.Status: models.StoreUploadFileStatusAborted})
 	if (err == nil) && (numRowsAffected == 0) {
 		log.Printf("Upload %v / %v not found", storeId, uploadId)
 		tx.Rollback()
@@ -101,7 +107,7 @@ func (s *ApiService) MarkStoreUploadAborted(ctx context.Context, uploadId string
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 
-	log.Printf("Status for %v/%v set to %v", storeId, uploadId, StoreUploadEntry_Status_Aborted)
+	log.Printf("Status for %v/%v set to %v", storeId, uploadId, models.StoreUploadFileStatusAborted)
 
 	return openapi.Response(http.StatusOK, nil), nil
 }

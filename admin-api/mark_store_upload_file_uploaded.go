@@ -23,7 +23,9 @@ func (s *ApiService) MarkStoreUploadFileUploaded(ctx context.Context, uploadId s
 	}
 
 	// Locate store in DB, and ensure store remains throughout entire txn
-	store, err := models.Stores(qm.Where(models.StoreColumns.Name+" = ?", storeId), qm.For("share")).One(ctx, tx)
+	store, err := models.Stores(
+		qm.Where(models.StoreColumns.Name+" = ?", storeId), qm.For("share"),
+	).One(ctx, tx)
 	if err == sql.ErrNoRows {
 		log.Printf("Store %v not found; err = %v", storeId, err)
 		tx.Rollback()

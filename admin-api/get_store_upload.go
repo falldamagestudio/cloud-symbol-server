@@ -25,7 +25,10 @@ func (s *ApiService) GetStoreUpload(ctx context.Context, uploadId string, storeI
 	}
 
 	// Locate store in DB, and ensure store remains throughout entire txn
-	store, err := models.Stores(qm.Where(models.StoreColumns.Name+" = ?", storeId), qm.For("share")).One(ctx, tx)
+	store, err := models.Stores(
+		qm.Where(models.StoreColumns.Name+" = ?", storeId),
+		qm.For("share"),
+	).One(ctx, tx)
 	if err == sql.ErrNoRows {
 		log.Printf("Store %v not found; err = %v", storeId, err)
 		tx.Rollback()
@@ -37,7 +40,9 @@ func (s *ApiService) GetStoreUpload(ctx context.Context, uploadId string, storeI
 	}
 
 	// Locate upload in DB, and ensure upload remains throughout entire txn
-	upload, err := models.StoreUploads(qm.Where(models.StoreUploadColumns.StoreID+" = ? and "+models.StoreUploadColumns.StoreUploadIndex+" = ?", store.StoreID, uploadId)).One(ctx, tx)
+	upload, err := models.StoreUploads(
+		qm.Where(models.StoreUploadColumns.StoreID+" = ? and "+models.StoreUploadColumns.StoreUploadIndex+" = ?", store.StoreID, uploadId),
+	).One(ctx, tx)
 	if err == sql.ErrNoRows {
 		log.Printf("Upload %v / %v not found", storeId, uploadId)
 		tx.Rollback()
@@ -49,7 +54,10 @@ func (s *ApiService) GetStoreUpload(ctx context.Context, uploadId string, storeI
 	}
 
 	// Locate upload-files in DB
-	uploadFiles, err := models.StoreUploadFiles(qm.Where(models.StoreUploadFileColumns.UploadID+" = ?", upload.UploadID), qm.OrderBy(models.StoreUploadFileColumns.UploadFileIndex)).All(ctx, tx)
+	uploadFiles, err := models.StoreUploadFiles(
+		qm.Where(models.StoreUploadFileColumns.UploadID+" = ?", upload.UploadID),
+		qm.OrderBy(models.StoreUploadFileColumns.UploadFileIndex),
+	).All(ctx, tx)
 	if err != nil {
 		log.Printf("Error while accessing files of upload %v / %v: %v", storeId, uploadId, err)
 		tx.Rollback()

@@ -25,7 +25,10 @@ func (s *ApiService) GetStoreUploadIds(ctx context.Context, storeId string) (ope
 	}
 
 	// Locate store in DB, and ensure store remains throughout entire txn
-	store, err := models.Stores(qm.Where(models.StoreColumns.Name+" = ?", storeId), qm.For("share")).One(ctx, tx)
+	store, err := models.Stores(
+		qm.Where(models.StoreColumns.Name+" = ?", storeId),
+		qm.For("share"),
+	).One(ctx, tx)
 	if err == sql.ErrNoRows {
 		log.Printf("Store %v not found; err = %v", storeId, err)
 		tx.Rollback()
@@ -37,7 +40,11 @@ func (s *ApiService) GetStoreUploadIds(ctx context.Context, storeId string) (ope
 	}
 
 	// Fetch IDs of all uploads within store
-	uploads, err := models.StoreUploads(qm.Select(models.StoreUploadColumns.StoreUploadIndex), qm.Where(models.StoreUploadColumns.StoreID+" = ?", store.StoreID), qm.OrderBy(models.StoreUploadColumns.StoreUploadIndex)).All(ctx, tx)
+	uploads, err := models.StoreUploads(
+		qm.Select(models.StoreUploadColumns.StoreUploadIndex),
+		qm.Where(models.StoreUploadColumns.StoreID+" = ?", store.StoreID),
+		qm.OrderBy(models.StoreUploadColumns.StoreUploadIndex),
+	).All(ctx, tx)
 	if err != nil {
 		log.Printf("Error while accessing uploads of store %v : %v", storeId, err)
 		tx.Rollback()

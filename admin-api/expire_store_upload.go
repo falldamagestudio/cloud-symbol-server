@@ -37,7 +37,10 @@ func (s *ApiService) ExpireStoreUpload(ctx context.Context, uploadId string, sto
 	}
 
 	// Locate store in DB, and ensure store remains throughout entire txn
-	store, err := models.Stores(qm.Where(models.StoreColumns.Name+" = ?", storeId), qm.For("share")).One(ctx, tx)
+	store, err := models.Stores(
+		qm.Where(models.StoreColumns.Name+" = ?", storeId),
+		qm.For("share"),
+	).One(ctx, tx)
 	if err == sql.ErrNoRows {
 		log.Printf("Store %v not found; err = %v", storeId, err)
 		tx.Rollback()
@@ -49,7 +52,10 @@ func (s *ApiService) ExpireStoreUpload(ctx context.Context, uploadId string, sto
 	}
 
 	// Locate upload in DB, and ensure upload remains throughout entire txn
-	upload, err := models.StoreUploads(qm.Where(models.StoreUploadColumns.StoreID+" = ? and "+models.StoreUploadColumns.StoreUploadIndex+" = ?", store.StoreID, uploadId), qm.For("share")).One(ctx, tx)
+	upload, err := models.StoreUploads(
+		qm.Where(models.StoreUploadColumns.StoreID+" = ? and "+models.StoreUploadColumns.StoreUploadIndex+" = ?", store.StoreID, uploadId),
+		qm.For("share"),
+	).One(ctx, tx)
 	if err == sql.ErrNoRows {
 		log.Printf("Upload %v / %v not found", storeId, uploadId)
 		tx.Rollback()
@@ -61,7 +67,9 @@ func (s *ApiService) ExpireStoreUpload(ctx context.Context, uploadId string, sto
 	}
 
 	// Mark upload as expired
-	numRowsAffected, err := models.StoreUploads(qm.Where(models.StoreUploadColumns.UploadID+" = ?", upload.UploadID)).UpdateAll(ctx, tx, models.M{models.StoreUploadColumns.Status: StoreUploadEntry_Status_Expired})
+	numRowsAffected, err := models.StoreUploads(
+		qm.Where(models.StoreUploadColumns.UploadID+" = ?", upload.UploadID),
+	).UpdateAll(ctx, tx, models.M{models.StoreUploadColumns.Status: models.StoreUploadStatusExpired})
 	if (err == nil) && (numRowsAffected == 0) {
 		log.Printf("Upload %v / %v not found", storeId, uploadId)
 		tx.Rollback()
@@ -73,7 +81,9 @@ func (s *ApiService) ExpireStoreUpload(ctx context.Context, uploadId string, sto
 	}
 
 	// Mark all files in upload as expired
-	_, err = models.StoreUploadFiles(qm.Where(models.StoreUploadFileColumns.UploadID+" = ?", upload.UploadID)).UpdateAll(ctx, tx, models.M{models.StoreUploadFileColumns.Status: FileDBEntry_Status_Expired})
+	_, err = models.StoreUploadFiles(
+		qm.Where(models.StoreUploadFileColumns.UploadID+" = ?", upload.UploadID),
+	).UpdateAll(ctx, tx, models.M{models.StoreUploadFileColumns.Status: models.StoreUploadFileStatusExpired})
 	if err != nil {
 		log.Printf("error while accessing files in upload %v / %v: %v", storeId, uploadId, err)
 		tx.Rollback()
@@ -81,7 +91,10 @@ func (s *ApiService) ExpireStoreUpload(ctx context.Context, uploadId string, sto
 	}
 
 	// Fetch all files in upload
-	_, err = models.StoreUploadFiles(qm.Where(models.StoreUploadFileColumns.UploadID+" = ?", upload.UploadID), qm.OrderBy(models.StoreUploadFileColumns.UploadFileIndex)).All(ctx, tx)
+	_, err = models.StoreUploadFiles(
+		qm.Where(models.StoreUploadFileColumns.UploadID+" = ?", upload.UploadID),
+		qm.OrderBy(models.StoreUploadFileColumns.UploadFileIndex),
+	).All(ctx, tx)
 	if err != nil {
 		log.Printf("error while finding files in upload %v / %v: %v", storeId, uploadId, err)
 		tx.Rollback()
@@ -110,7 +123,7 @@ func (s *ApiService) ExpireStoreUpload(ctx context.Context, uploadId string, sto
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 
-	log.Printf("Status for %v/%v set to %v", storeId, uploadId, StoreUploadEntry_Status_Expired)
+	log.Printf("Status for %v/%v set to %v", storeId, uploadId, models.StoreUploadStatusExpired)
 
 	for _, objectToDelete := range objectsToDelete {
 		err = deleteObjectInStore(ctx, storageClient, storeId, objectToDelete.FileName, objectToDelete.Hash)

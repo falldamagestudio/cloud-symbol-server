@@ -24,7 +24,10 @@ func (s *ApiService) GetStoreFileIds(ctx context.Context, storeId string) (opena
 	}
 
 	// Locate store in DB, and ensure store remains throughout entire txn
-	store, err := models.Stores(qm.Where(models.StoreColumns.Name+" = ?", storeId), qm.For("share")).One(ctx, tx)
+	store, err := models.Stores(
+		qm.Where(models.StoreColumns.Name+" = ?", storeId),
+		qm.For("share"),
+	).One(ctx, tx)
 	if err != nil {
 		log.Printf("error while accessing store: %v", err)
 		tx.Rollback()
