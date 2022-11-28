@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
@@ -37,10 +36,12 @@ func (s *ApiService) GetStoreFileIds(ctx context.Context, storeId string) (opena
 		return openapi.Response(http.StatusInternalServerError, fmt.Sprintf("error while accessing store: %v", err)), err
 	}
 
-	boil.DebugMode = true
-
-	// Fetch IDs of all files within store; remove duplicates based on name
-	files, err := models.StoreUploadFiles(qm.Select(models.StoreUploadFileColumns.FileID), qm.Where(models.StoreUploadTableColumns.StoreID+" = ?", store.StoreID), qm.InnerJoin("cloud_symbol_server."+models.TableNames.StoreUploads+" as "+models.TableNames.StoreUploads+" on "+models.StoreUploadTableColumns.UploadID+" = "+models.StoreUploadFileTableColumns.UploadID), qm.Distinct(models.StoreUploadFileColumns.FileName+", MAX("+models.StoreUploadFileColumns.FileID+")"), qm.GroupBy(models.StoreUploadFileColumns.FileName), qm.OrderBy("MAX("+models.StoreUploadFileColumns.FileID+") ASC, "+models.StoreUploadFileColumns.FileName)).All(ctx, tx)
+	// Fetch IDs of all files within store
+	files, err := models.StoreFiles(
+		qm.Select(models.StoreFileColumns.FileID),
+		qm.Where(models.StoreFileTableColumns.StoreID+" = ?", store.StoreID),
+		qm.OrderBy(models.StoreFileColumns.FileID),
+	).All(ctx, tx)
 	if err != nil {
 		log.Printf("Error while accessing files in store %v : %v", storeId, err)
 		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing files in store %v : %v", storeId, err)}), err

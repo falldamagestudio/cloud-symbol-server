@@ -44,16 +44,20 @@ func (s *ApiService) DeleteStore(ctx context.Context, storeId string) (openapi.I
 		return openapi.Response(http.StatusInternalServerError, fmt.Sprintf("error while accessing store: %v", err)), err
 	}
 
-	// Delete all files in store
-	files, err := models.StoreUploadFiles(qm.Where(models.StoreUploadTableColumns.StoreID+" = ?", store.StoreID), qm.InnerJoin("cloud_symbol_server."+models.TableNames.StoreUploads+" as "+models.TableNames.StoreUploads+" on "+models.StoreUploadTableColumns.UploadID+" = "+models.StoreUploadFileTableColumns.UploadID), qm.For("update")).All(ctx, tx)
+	// Delete all upload-files in store
+	uploadFiles, err := models.StoreUploadFiles(
+		qm.InnerJoin("cloud_symbol_server."+models.TableNames.StoreUploads+" on "+models.StoreUploadTableColumns.UploadID+" = "+models.StoreUploadFileTableColumns.UploadID),
+		qm.Where(models.StoreUploadTableColumns.StoreID+" = ?", store.StoreID),
+		qm.For("update"),
+	).All(ctx, tx)
 	if err != nil {
-		log.Printf("error while deleting all files in store: %v", err)
+		log.Printf("error while deleting all upload-files in store: %v", err)
 		tx.Rollback()
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
-	_, err = files.DeleteAll(ctx, tx)
+	_, err = uploadFiles.DeleteAll(ctx, tx)
 	if err != nil {
-		log.Printf("error while deleting all files in store: %v", err)
+		log.Printf("error while deleting all upload-files in store: %v", err)
 		tx.Rollback()
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
@@ -62,6 +66,41 @@ func (s *ApiService) DeleteStore(ctx context.Context, storeId string) (openapi.I
 	_, err = store.StoreUploads().DeleteAll(ctx, tx)
 	if err != nil {
 		log.Printf("error while deleting all uploads in store: %v", err)
+		tx.Rollback()
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+
+	// Delete all store-file-hashes in store
+	storeFileHashes, err := models.StoreFileHashes(
+		qm.InnerJoin("cloud_symbol_server."+models.TableNames.StoreFiles+" on "+models.StoreFileTableColumns.FileID+" = "+models.StoreFileHashTableColumns.FileID),
+		qm.Where(models.StoreFileTableColumns.StoreID+" = ?", store.StoreID),
+		qm.For("update"),
+	).All(ctx, tx)
+	if err != nil {
+		log.Printf("error while deleting all store-file-hashes in store: %v", err)
+		tx.Rollback()
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+	_, err = storeFileHashes.DeleteAll(ctx, tx)
+	if err != nil {
+		log.Printf("error while deleting all store-file-hashes in store: %v", err)
+		tx.Rollback()
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+
+	// Delete all store-files in store
+	storeFiles, err := models.StoreFiles(
+		qm.Where(models.StoreFileTableColumns.StoreID+" = ?", store.StoreID),
+		qm.For("update"),
+	).All(ctx, tx)
+	if err != nil {
+		log.Printf("error while deleting all store-files in store: %v", err)
+		tx.Rollback()
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+	_, err = storeFiles.DeleteAll(ctx, tx)
+	if err != nil {
+		log.Printf("error while deleting all store-files in store: %v", err)
 		tx.Rollback()
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}

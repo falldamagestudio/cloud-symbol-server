@@ -26,10 +26,11 @@ import (
 type StoreUploadFile struct {
 	FileID          int      `boil:"file_id" json:"file_id" toml:"file_id" yaml:"file_id"`
 	UploadID        null.Int `boil:"upload_id" json:"upload_id,omitempty" toml:"upload_id" yaml:"upload_id,omitempty"`
+	HashID          null.Int `boil:"hash_id" json:"hash_id,omitempty" toml:"hash_id" yaml:"hash_id,omitempty"`
 	UploadFileIndex int      `boil:"upload_file_index" json:"upload_file_index" toml:"upload_file_index" yaml:"upload_file_index"`
-	FileName        string   `boil:"file_name" json:"file_name" toml:"file_name" yaml:"file_name"`
-	Hash            string   `boil:"hash" json:"hash" toml:"hash" yaml:"hash"`
 	Status          string   `boil:"status" json:"status" toml:"status" yaml:"status"`
+	FileName        string   `boil:"file_name" json:"file_name" toml:"file_name" yaml:"file_name"`
+	FileHash        string   `boil:"file_hash" json:"file_hash" toml:"file_hash" yaml:"file_hash"`
 
 	R *storeUploadFileR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L storeUploadFileL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -38,152 +39,84 @@ type StoreUploadFile struct {
 var StoreUploadFileColumns = struct {
 	FileID          string
 	UploadID        string
+	HashID          string
 	UploadFileIndex string
-	FileName        string
-	Hash            string
 	Status          string
+	FileName        string
+	FileHash        string
 }{
 	FileID:          "file_id",
 	UploadID:        "upload_id",
+	HashID:          "hash_id",
 	UploadFileIndex: "upload_file_index",
-	FileName:        "file_name",
-	Hash:            "hash",
 	Status:          "status",
+	FileName:        "file_name",
+	FileHash:        "file_hash",
 }
 
 var StoreUploadFileTableColumns = struct {
 	FileID          string
 	UploadID        string
+	HashID          string
 	UploadFileIndex string
-	FileName        string
-	Hash            string
 	Status          string
+	FileName        string
+	FileHash        string
 }{
 	FileID:          "store_upload_files.file_id",
 	UploadID:        "store_upload_files.upload_id",
+	HashID:          "store_upload_files.hash_id",
 	UploadFileIndex: "store_upload_files.upload_file_index",
-	FileName:        "store_upload_files.file_name",
-	Hash:            "store_upload_files.hash",
 	Status:          "store_upload_files.status",
+	FileName:        "store_upload_files.file_name",
+	FileHash:        "store_upload_files.file_hash",
 }
 
 // Generated where
 
-type whereHelperint struct{ field string }
-
-func (w whereHelperint) EQ(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.EQ, x) }
-func (w whereHelperint) NEQ(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.NEQ, x) }
-func (w whereHelperint) LT(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.LT, x) }
-func (w whereHelperint) LTE(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.LTE, x) }
-func (w whereHelperint) GT(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.GT, x) }
-func (w whereHelperint) GTE(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.GTE, x) }
-func (w whereHelperint) IN(slice []int) qm.QueryMod {
-	values := make([]interface{}, 0, len(slice))
-	for _, value := range slice {
-		values = append(values, value)
-	}
-	return qm.WhereIn(fmt.Sprintf("%s IN ?", w.field), values...)
-}
-func (w whereHelperint) NIN(slice []int) qm.QueryMod {
-	values := make([]interface{}, 0, len(slice))
-	for _, value := range slice {
-		values = append(values, value)
-	}
-	return qm.WhereNotIn(fmt.Sprintf("%s NOT IN ?", w.field), values...)
-}
-
-type whereHelpernull_Int struct{ field string }
-
-func (w whereHelpernull_Int) EQ(x null.Int) qm.QueryMod {
-	return qmhelper.WhereNullEQ(w.field, false, x)
-}
-func (w whereHelpernull_Int) NEQ(x null.Int) qm.QueryMod {
-	return qmhelper.WhereNullEQ(w.field, true, x)
-}
-func (w whereHelpernull_Int) LT(x null.Int) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LT, x)
-}
-func (w whereHelpernull_Int) LTE(x null.Int) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LTE, x)
-}
-func (w whereHelpernull_Int) GT(x null.Int) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GT, x)
-}
-func (w whereHelpernull_Int) GTE(x null.Int) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GTE, x)
-}
-func (w whereHelpernull_Int) IN(slice []int) qm.QueryMod {
-	values := make([]interface{}, 0, len(slice))
-	for _, value := range slice {
-		values = append(values, value)
-	}
-	return qm.WhereIn(fmt.Sprintf("%s IN ?", w.field), values...)
-}
-func (w whereHelpernull_Int) NIN(slice []int) qm.QueryMod {
-	values := make([]interface{}, 0, len(slice))
-	for _, value := range slice {
-		values = append(values, value)
-	}
-	return qm.WhereNotIn(fmt.Sprintf("%s NOT IN ?", w.field), values...)
-}
-
-func (w whereHelpernull_Int) IsNull() qm.QueryMod    { return qmhelper.WhereIsNull(w.field) }
-func (w whereHelpernull_Int) IsNotNull() qm.QueryMod { return qmhelper.WhereIsNotNull(w.field) }
-
-type whereHelperstring struct{ field string }
-
-func (w whereHelperstring) EQ(x string) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.EQ, x) }
-func (w whereHelperstring) NEQ(x string) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.NEQ, x) }
-func (w whereHelperstring) LT(x string) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.LT, x) }
-func (w whereHelperstring) LTE(x string) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.LTE, x) }
-func (w whereHelperstring) GT(x string) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.GT, x) }
-func (w whereHelperstring) GTE(x string) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.GTE, x) }
-func (w whereHelperstring) IN(slice []string) qm.QueryMod {
-	values := make([]interface{}, 0, len(slice))
-	for _, value := range slice {
-		values = append(values, value)
-	}
-	return qm.WhereIn(fmt.Sprintf("%s IN ?", w.field), values...)
-}
-func (w whereHelperstring) NIN(slice []string) qm.QueryMod {
-	values := make([]interface{}, 0, len(slice))
-	for _, value := range slice {
-		values = append(values, value)
-	}
-	return qm.WhereNotIn(fmt.Sprintf("%s NOT IN ?", w.field), values...)
-}
-
 var StoreUploadFileWhere = struct {
 	FileID          whereHelperint
 	UploadID        whereHelpernull_Int
+	HashID          whereHelpernull_Int
 	UploadFileIndex whereHelperint
-	FileName        whereHelperstring
-	Hash            whereHelperstring
 	Status          whereHelperstring
+	FileName        whereHelperstring
+	FileHash        whereHelperstring
 }{
 	FileID:          whereHelperint{field: "\"cloud_symbol_server\".\"store_upload_files\".\"file_id\""},
 	UploadID:        whereHelpernull_Int{field: "\"cloud_symbol_server\".\"store_upload_files\".\"upload_id\""},
+	HashID:          whereHelpernull_Int{field: "\"cloud_symbol_server\".\"store_upload_files\".\"hash_id\""},
 	UploadFileIndex: whereHelperint{field: "\"cloud_symbol_server\".\"store_upload_files\".\"upload_file_index\""},
-	FileName:        whereHelperstring{field: "\"cloud_symbol_server\".\"store_upload_files\".\"file_name\""},
-	Hash:            whereHelperstring{field: "\"cloud_symbol_server\".\"store_upload_files\".\"hash\""},
 	Status:          whereHelperstring{field: "\"cloud_symbol_server\".\"store_upload_files\".\"status\""},
+	FileName:        whereHelperstring{field: "\"cloud_symbol_server\".\"store_upload_files\".\"file_name\""},
+	FileHash:        whereHelperstring{field: "\"cloud_symbol_server\".\"store_upload_files\".\"file_hash\""},
 }
 
 // StoreUploadFileRels is where relationship names are stored.
 var StoreUploadFileRels = struct {
+	Hash   string
 	Upload string
 }{
+	Hash:   "Hash",
 	Upload: "Upload",
 }
 
 // storeUploadFileR is where relationships are stored.
 type storeUploadFileR struct {
-	Upload *StoreUpload `boil:"Upload" json:"Upload" toml:"Upload" yaml:"Upload"`
+	Hash   *StoreFileHash `boil:"Hash" json:"Hash" toml:"Hash" yaml:"Hash"`
+	Upload *StoreUpload   `boil:"Upload" json:"Upload" toml:"Upload" yaml:"Upload"`
 }
 
 // NewStruct creates a new relationship struct
 func (*storeUploadFileR) NewStruct() *storeUploadFileR {
 	return &storeUploadFileR{}
+}
+
+func (r *storeUploadFileR) GetHash() *StoreFileHash {
+	if r == nil {
+		return nil
+	}
+	return r.Hash
 }
 
 func (r *storeUploadFileR) GetUpload() *StoreUpload {
@@ -197,9 +130,9 @@ func (r *storeUploadFileR) GetUpload() *StoreUpload {
 type storeUploadFileL struct{}
 
 var (
-	storeUploadFileAllColumns            = []string{"file_id", "upload_id", "upload_file_index", "file_name", "hash", "status"}
-	storeUploadFileColumnsWithoutDefault = []string{"upload_file_index", "file_name", "hash", "status"}
-	storeUploadFileColumnsWithDefault    = []string{"file_id", "upload_id"}
+	storeUploadFileAllColumns            = []string{"file_id", "upload_id", "hash_id", "upload_file_index", "status", "file_name", "file_hash"}
+	storeUploadFileColumnsWithoutDefault = []string{"upload_file_index", "status", "file_name", "file_hash"}
+	storeUploadFileColumnsWithDefault    = []string{"file_id", "upload_id", "hash_id"}
 	storeUploadFilePrimaryKeyColumns     = []string{"file_id"}
 	storeUploadFileGeneratedColumns      = []string{"file_id"}
 )
@@ -482,6 +415,17 @@ func (q storeUploadFileQuery) Exists(ctx context.Context, exec boil.ContextExecu
 	return count > 0, nil
 }
 
+// Hash pointed to by the foreign key.
+func (o *StoreUploadFile) Hash(mods ...qm.QueryMod) storeFileHashQuery {
+	queryMods := []qm.QueryMod{
+		qm.Where("\"hash_id\" = ?", o.HashID),
+	}
+
+	queryMods = append(queryMods, mods...)
+
+	return StoreFileHashes(queryMods...)
+}
+
 // Upload pointed to by the foreign key.
 func (o *StoreUploadFile) Upload(mods ...qm.QueryMod) storeUploadQuery {
 	queryMods := []qm.QueryMod{
@@ -491,6 +435,130 @@ func (o *StoreUploadFile) Upload(mods ...qm.QueryMod) storeUploadQuery {
 	queryMods = append(queryMods, mods...)
 
 	return StoreUploads(queryMods...)
+}
+
+// LoadHash allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for an N-1 relationship.
+func (storeUploadFileL) LoadHash(ctx context.Context, e boil.ContextExecutor, singular bool, maybeStoreUploadFile interface{}, mods queries.Applicator) error {
+	var slice []*StoreUploadFile
+	var object *StoreUploadFile
+
+	if singular {
+		var ok bool
+		object, ok = maybeStoreUploadFile.(*StoreUploadFile)
+		if !ok {
+			object = new(StoreUploadFile)
+			ok = queries.SetFromEmbeddedStruct(&object, &maybeStoreUploadFile)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybeStoreUploadFile))
+			}
+		}
+	} else {
+		s, ok := maybeStoreUploadFile.(*[]*StoreUploadFile)
+		if ok {
+			slice = *s
+		} else {
+			ok = queries.SetFromEmbeddedStruct(&slice, maybeStoreUploadFile)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybeStoreUploadFile))
+			}
+		}
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &storeUploadFileR{}
+		}
+		if !queries.IsNil(object.HashID) {
+			args = append(args, object.HashID)
+		}
+
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &storeUploadFileR{}
+			}
+
+			for _, a := range args {
+				if queries.Equal(a, obj.HashID) {
+					continue Outer
+				}
+			}
+
+			if !queries.IsNil(obj.HashID) {
+				args = append(args, obj.HashID)
+			}
+
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(
+		qm.From(`cloud_symbol_server.store_file_hashes`),
+		qm.WhereIn(`cloud_symbol_server.store_file_hashes.hash_id in ?`, args...),
+	)
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load StoreFileHash")
+	}
+
+	var resultSlice []*StoreFileHash
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice StoreFileHash")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results of eager load for store_file_hashes")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for store_file_hashes")
+	}
+
+	if len(storeUploadFileAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+
+	if len(resultSlice) == 0 {
+		return nil
+	}
+
+	if singular {
+		foreign := resultSlice[0]
+		object.R.Hash = foreign
+		if foreign.R == nil {
+			foreign.R = &storeFileHashR{}
+		}
+		foreign.R.HashStoreUploadFiles = append(foreign.R.HashStoreUploadFiles, object)
+		return nil
+	}
+
+	for _, local := range slice {
+		for _, foreign := range resultSlice {
+			if queries.Equal(local.HashID, foreign.HashID) {
+				local.R.Hash = foreign
+				if foreign.R == nil {
+					foreign.R = &storeFileHashR{}
+				}
+				foreign.R.HashStoreUploadFiles = append(foreign.R.HashStoreUploadFiles, local)
+				break
+			}
+		}
+	}
+
+	return nil
 }
 
 // LoadUpload allows an eager lookup of values, cached into the
@@ -614,6 +682,86 @@ func (storeUploadFileL) LoadUpload(ctx context.Context, e boil.ContextExecutor, 
 		}
 	}
 
+	return nil
+}
+
+// SetHash of the storeUploadFile to the related item.
+// Sets o.R.Hash to related.
+// Adds o to related.R.HashStoreUploadFiles.
+func (o *StoreUploadFile) SetHash(ctx context.Context, exec boil.ContextExecutor, insert bool, related *StoreFileHash) error {
+	var err error
+	if insert {
+		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
+			return errors.Wrap(err, "failed to insert into foreign table")
+		}
+	}
+
+	updateQuery := fmt.Sprintf(
+		"UPDATE \"cloud_symbol_server\".\"store_upload_files\" SET %s WHERE %s",
+		strmangle.SetParamNames("\"", "\"", 1, []string{"hash_id"}),
+		strmangle.WhereClause("\"", "\"", 2, storeUploadFilePrimaryKeyColumns),
+	)
+	values := []interface{}{related.HashID, o.FileID}
+
+	if boil.IsDebug(ctx) {
+		writer := boil.DebugWriterFrom(ctx)
+		fmt.Fprintln(writer, updateQuery)
+		fmt.Fprintln(writer, values)
+	}
+	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	queries.Assign(&o.HashID, related.HashID)
+	if o.R == nil {
+		o.R = &storeUploadFileR{
+			Hash: related,
+		}
+	} else {
+		o.R.Hash = related
+	}
+
+	if related.R == nil {
+		related.R = &storeFileHashR{
+			HashStoreUploadFiles: StoreUploadFileSlice{o},
+		}
+	} else {
+		related.R.HashStoreUploadFiles = append(related.R.HashStoreUploadFiles, o)
+	}
+
+	return nil
+}
+
+// RemoveHash relationship.
+// Sets o.R.Hash to nil.
+// Removes o from all passed in related items' relationships struct.
+func (o *StoreUploadFile) RemoveHash(ctx context.Context, exec boil.ContextExecutor, related *StoreFileHash) error {
+	var err error
+
+	queries.SetScanner(&o.HashID, nil)
+	if _, err = o.Update(ctx, exec, boil.Whitelist("hash_id")); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	if o.R != nil {
+		o.R.Hash = nil
+	}
+	if related == nil || related.R == nil {
+		return nil
+	}
+
+	for i, ri := range related.R.HashStoreUploadFiles {
+		if queries.Equal(o.HashID, ri.HashID) {
+			continue
+		}
+
+		ln := len(related.R.HashStoreUploadFiles)
+		if ln > 1 && i < ln-1 {
+			related.R.HashStoreUploadFiles[i] = related.R.HashStoreUploadFiles[ln-1]
+		}
+		related.R.HashStoreUploadFiles = related.R.HashStoreUploadFiles[:ln-1]
+		break
+	}
 	return nil
 }
 

@@ -195,16 +195,60 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 	// Add entries for each upload-file in DB
 	for _, file := range storeUploadEntry.Files {
 
-		var file = models.StoreUploadFile{
-			UploadID:        null.IntFrom(upload.UploadID),
-			FileName:        file.FileName,
-			Hash:            file.Hash,
-			Status:          file.Status,
-			UploadFileIndex: uploadFileIndex,
+		storeFile, err := models.StoreFiles(
+			qm.Where(models.StoreFileColumns.StoreID+" = ? AND "+models.StoreFileColumns.FileName+" = ?", store.StoreID, file.FileName),
+		).One(ctx, db)
+		if err == sql.ErrNoRows {
+			storeFile = &models.StoreFile{
+				StoreID:  null.IntFrom(store.StoreID),
+				FileName: file.FileName,
+			}
+			err = storeFile.Insert(ctx, tx, boil.Infer())
+			if err != nil {
+				log.Printf("unable to insert file: %v", err)
+				tx.Rollback()
+				return "", err
+			}
+		} else if err != nil {
+			log.Printf("error while locating store-file: %v", err)
+			tx.Rollback()
+			return "", err
 		}
-		err = file.Insert(ctx, tx, boil.Infer())
+
+		storeFileHash, err := models.StoreFileHashes(
+			qm.Where(models.StoreFileHashColumns.FileID+" = ?", storeFile.FileID),
+		).One(ctx, db)
+		if err == sql.ErrNoRows {
+			storeFileHash = &models.StoreFileHash{
+				FileID: null.IntFrom(storeFile.FileID),
+				Hash:   file.Hash,
+				// TODO: translate file.Status to something more accurate
+				// For example, an AlreadyPresent status should be translated to Uploaded instead
+				Status: file.Status,
+			}
+			err = storeFileHash.Insert(ctx, tx, boil.Infer())
+			if err != nil {
+				log.Printf("unable to insert file-hash: %v", err)
+				tx.Rollback()
+				return "", err
+			}
+		} else if err != nil {
+			log.Printf("error while locating file-hash: %v", err)
+			tx.Rollback()
+			return "", err
+		}
+
+		var uploadFile = models.StoreUploadFile{
+			UploadID:        null.IntFrom(upload.UploadID),
+			HashID:          null.IntFrom(storeFileHash.HashID),
+			UploadFileIndex: uploadFileIndex,
+			Status:          file.Status,
+			FileName:        file.FileName,
+			FileHash:        file.Hash,
+		}
+		err = uploadFile.Insert(ctx, tx, boil.Infer())
 		if err != nil {
-			log.Printf("unable to insert file: %v", err)
+			log.Printf("unable to insert upload-file: %v", err)
 			tx.Rollback()
 			return "", err
 		}

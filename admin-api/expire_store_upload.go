@@ -86,27 +86,28 @@ func (s *ApiService) ExpireStoreUpload(ctx context.Context, uploadId string, sto
 	}
 
 	// Fetch all files in upload
-	files, err := models.StoreUploadFiles(qm.Where(models.StoreUploadFileColumns.UploadID+" = ?", upload.UploadID), qm.OrderBy(models.StoreUploadFileColumns.UploadFileIndex)).All(ctx, tx)
+	_, err = models.StoreUploadFiles(qm.Where(models.StoreUploadFileColumns.UploadID+" = ?", upload.UploadID), qm.OrderBy(models.StoreUploadFileColumns.UploadFileIndex)).All(ctx, tx)
 	if err != nil {
 		log.Printf("error while finding files in upload %v / %v: %v", storeId, uploadId, err)
 		tx.Rollback()
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 
-	for _, file := range files {
+	// TODO: reimplement
+	// for _, uploadFile := range uploadFiles {
 
-		// TODO: look at files within the current store only
-		numNotExpiredFileRefs, err := models.StoreUploadFiles(qm.Where(models.StoreUploadFileColumns.FileName+" = ? AND "+models.StoreUploadFileColumns.Hash+" = ? AND "+models.StoreUploadFileColumns.Status+" != ?", file.FileName, file.Hash, FileDBEntry_Status_Expired)).Count(ctx, tx)
-		if err != nil {
-			log.Printf("error while accessing file/hash %v / %v: %v", file.FileName, file.Hash, err)
-			tx.Rollback()
-			return openapi.Response(http.StatusInternalServerError, nil), err
-		}
+	// 	// TODO: look at files within the current store only
+	// 	numNotExpiredFileRefs, err := models.StoreUploadFiles(qm.Where(models.StoreUploadFileColumns.FileName+" = ? AND "+models.StoreUploadFileColumns.Hash+" = ? AND "+models.StoreUploadFileColumns.Status+" != ?", file.FileName, file.Hash, FileDBEntry_Status_Expired)).Count(ctx, tx)
+	// 	if err != nil {
+	// 		log.Printf("error while accessing file/hash %v / %v: %v", file.FileName, file.Hash, err)
+	// 		tx.Rollback()
+	// 		return openapi.Response(http.StatusInternalServerError, nil), err
+	// 	}
 
-		if numNotExpiredFileRefs == 0 {
-			objectsToDelete = append(objectsToDelete, ObjectToDelete{FileName: file.FileName, Hash: file.Hash})
-		}
-	}
+	// 	if numNotExpiredFileRefs == 0 {
+	// 		objectsToDelete = append(objectsToDelete, ObjectToDelete{FileName: file.FileName, Hash: file.Hash})
+	// 	}
+	// }
 
 	err = tx.Commit()
 	if err != nil {

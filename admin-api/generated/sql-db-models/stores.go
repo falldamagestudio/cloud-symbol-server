@@ -65,19 +65,29 @@ var StoreWhere = struct {
 
 // StoreRels is where relationship names are stored.
 var StoreRels = struct {
+	StoreFiles   string
 	StoreUploads string
 }{
+	StoreFiles:   "StoreFiles",
 	StoreUploads: "StoreUploads",
 }
 
 // storeR is where relationships are stored.
 type storeR struct {
+	StoreFiles   StoreFileSlice   `boil:"StoreFiles" json:"StoreFiles" toml:"StoreFiles" yaml:"StoreFiles"`
 	StoreUploads StoreUploadSlice `boil:"StoreUploads" json:"StoreUploads" toml:"StoreUploads" yaml:"StoreUploads"`
 }
 
 // NewStruct creates a new relationship struct
 func (*storeR) NewStruct() *storeR {
 	return &storeR{}
+}
+
+func (r *storeR) GetStoreFiles() StoreFileSlice {
+	if r == nil {
+		return nil
+	}
+	return r.StoreFiles
 }
 
 func (r *storeR) GetStoreUploads() StoreUploadSlice {
@@ -376,6 +386,20 @@ func (q storeQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (bool
 	return count > 0, nil
 }
 
+// StoreFiles retrieves all the store_file's StoreFiles with an executor.
+func (o *Store) StoreFiles(mods ...qm.QueryMod) storeFileQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("\"cloud_symbol_server\".\"store_files\".\"store_id\"=?", o.StoreID),
+	)
+
+	return StoreFiles(queryMods...)
+}
+
 // StoreUploads retrieves all the store_upload's StoreUploads with an executor.
 func (o *Store) StoreUploads(mods ...qm.QueryMod) storeUploadQuery {
 	var queryMods []qm.QueryMod
@@ -388,6 +412,120 @@ func (o *Store) StoreUploads(mods ...qm.QueryMod) storeUploadQuery {
 	)
 
 	return StoreUploads(queryMods...)
+}
+
+// LoadStoreFiles allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (storeL) LoadStoreFiles(ctx context.Context, e boil.ContextExecutor, singular bool, maybeStore interface{}, mods queries.Applicator) error {
+	var slice []*Store
+	var object *Store
+
+	if singular {
+		var ok bool
+		object, ok = maybeStore.(*Store)
+		if !ok {
+			object = new(Store)
+			ok = queries.SetFromEmbeddedStruct(&object, &maybeStore)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybeStore))
+			}
+		}
+	} else {
+		s, ok := maybeStore.(*[]*Store)
+		if ok {
+			slice = *s
+		} else {
+			ok = queries.SetFromEmbeddedStruct(&slice, maybeStore)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybeStore))
+			}
+		}
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &storeR{}
+		}
+		args = append(args, object.StoreID)
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &storeR{}
+			}
+
+			for _, a := range args {
+				if queries.Equal(a, obj.StoreID) {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.StoreID)
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(
+		qm.From(`cloud_symbol_server.store_files`),
+		qm.WhereIn(`cloud_symbol_server.store_files.store_id in ?`, args...),
+	)
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load store_files")
+	}
+
+	var resultSlice []*StoreFile
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice store_files")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on store_files")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for store_files")
+	}
+
+	if len(storeFileAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+	if singular {
+		object.R.StoreFiles = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &storeFileR{}
+			}
+			foreign.R.Store = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if queries.Equal(local.StoreID, foreign.StoreID) {
+				local.R.StoreFiles = append(local.R.StoreFiles, foreign)
+				if foreign.R == nil {
+					foreign.R = &storeFileR{}
+				}
+				foreign.R.Store = local
+				break
+			}
+		}
+	}
+
+	return nil
 }
 
 // LoadStoreUploads allows an eager lookup of values, cached into the
@@ -498,6 +636,133 @@ func (storeL) LoadStoreUploads(ctx context.Context, e boil.ContextExecutor, sing
 				foreign.R.Store = local
 				break
 			}
+		}
+	}
+
+	return nil
+}
+
+// AddStoreFiles adds the given related objects to the existing relationships
+// of the store, optionally inserting them as new records.
+// Appends related to o.R.StoreFiles.
+// Sets related.R.Store appropriately.
+func (o *Store) AddStoreFiles(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*StoreFile) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			queries.Assign(&rel.StoreID, o.StoreID)
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE \"cloud_symbol_server\".\"store_files\" SET %s WHERE %s",
+				strmangle.SetParamNames("\"", "\"", 1, []string{"store_id"}),
+				strmangle.WhereClause("\"", "\"", 2, storeFilePrimaryKeyColumns),
+			)
+			values := []interface{}{o.StoreID, rel.FileID}
+
+			if boil.IsDebug(ctx) {
+				writer := boil.DebugWriterFrom(ctx)
+				fmt.Fprintln(writer, updateQuery)
+				fmt.Fprintln(writer, values)
+			}
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			queries.Assign(&rel.StoreID, o.StoreID)
+		}
+	}
+
+	if o.R == nil {
+		o.R = &storeR{
+			StoreFiles: related,
+		}
+	} else {
+		o.R.StoreFiles = append(o.R.StoreFiles, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &storeFileR{
+				Store: o,
+			}
+		} else {
+			rel.R.Store = o
+		}
+	}
+	return nil
+}
+
+// SetStoreFiles removes all previously related items of the
+// store replacing them completely with the passed
+// in related items, optionally inserting them as new records.
+// Sets o.R.Store's StoreFiles accordingly.
+// Replaces o.R.StoreFiles with related.
+// Sets related.R.Store's StoreFiles accordingly.
+func (o *Store) SetStoreFiles(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*StoreFile) error {
+	query := "update \"cloud_symbol_server\".\"store_files\" set \"store_id\" = null where \"store_id\" = $1"
+	values := []interface{}{o.StoreID}
+	if boil.IsDebug(ctx) {
+		writer := boil.DebugWriterFrom(ctx)
+		fmt.Fprintln(writer, query)
+		fmt.Fprintln(writer, values)
+	}
+	_, err := exec.ExecContext(ctx, query, values...)
+	if err != nil {
+		return errors.Wrap(err, "failed to remove relationships before set")
+	}
+
+	if o.R != nil {
+		for _, rel := range o.R.StoreFiles {
+			queries.SetScanner(&rel.StoreID, nil)
+			if rel.R == nil {
+				continue
+			}
+
+			rel.R.Store = nil
+		}
+		o.R.StoreFiles = nil
+	}
+
+	return o.AddStoreFiles(ctx, exec, insert, related...)
+}
+
+// RemoveStoreFiles relationships from objects passed in.
+// Removes related items from R.StoreFiles (uses pointer comparison, removal does not keep order)
+// Sets related.R.Store.
+func (o *Store) RemoveStoreFiles(ctx context.Context, exec boil.ContextExecutor, related ...*StoreFile) error {
+	if len(related) == 0 {
+		return nil
+	}
+
+	var err error
+	for _, rel := range related {
+		queries.SetScanner(&rel.StoreID, nil)
+		if rel.R != nil {
+			rel.R.Store = nil
+		}
+		if _, err = rel.Update(ctx, exec, boil.Whitelist("store_id")); err != nil {
+			return err
+		}
+	}
+	if o.R == nil {
+		return nil
+	}
+
+	for _, rel := range related {
+		for i, ri := range o.R.StoreFiles {
+			if rel != ri {
+				continue
+			}
+
+			ln := len(o.R.StoreFiles)
+			if ln > 1 && i < ln-1 {
+				o.R.StoreFiles[i] = o.R.StoreFiles[ln-1]
+			}
+			o.R.StoreFiles = o.R.StoreFiles[:ln-1]
+			break
 		}
 	}
 

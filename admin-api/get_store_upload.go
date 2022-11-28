@@ -54,7 +54,7 @@ func (s *ApiService) GetStoreUpload(ctx context.Context, uploadId string, storeI
 	}
 
 	// Locate upload-files in DB
-	files, err := models.StoreUploadFiles(qm.Where(models.StoreUploadFileColumns.UploadID+" = ?", upload.UploadID), qm.OrderBy(models.StoreUploadFileColumns.UploadFileIndex)).All(ctx, tx)
+	uploadFiles, err := models.StoreUploadFiles(qm.Where(models.StoreUploadFileColumns.UploadID+" = ?", upload.UploadID), qm.OrderBy(models.StoreUploadFileColumns.UploadFileIndex)).All(ctx, tx)
 	if err != nil {
 		log.Printf("Error while accessing files of upload %v / %v: %v", storeId, uploadId, err)
 		tx.Rollback()
@@ -79,7 +79,7 @@ func (s *ApiService) GetStoreUpload(ctx context.Context, uploadId string, storeI
 		getStoreUploadResponse.Status = StoreUploadEntry_Status_Unknown
 	}
 
-	for _, file := range files {
+	for _, file := range uploadFiles {
 
 		// Uploaded files created before the progress API existed do not have any Status field in the DB
 		// These files should be interpreted as having status "Unknown"
@@ -90,7 +90,7 @@ func (s *ApiService) GetStoreUpload(ctx context.Context, uploadId string, storeI
 
 		getStoreUploadResponse.Files = append(getStoreUploadResponse.Files, openapi.GetFileResponse{
 			FileName: file.FileName,
-			Hash:     file.Hash,
+			Hash:     file.FileHash,
 			Status:   status,
 		})
 	}

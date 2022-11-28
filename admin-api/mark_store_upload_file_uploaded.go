@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
@@ -39,7 +40,9 @@ func (s *ApiService) MarkStoreUploadFileUploaded(ctx context.Context, uploadId s
 	}
 
 	// Locate upload in DB, and ensure upload remains throughout entire txn
-	upload, err := models.StoreUploads(qm.Where(models.StoreUploadColumns.StoreID+" = ? and "+models.StoreUploadColumns.StoreUploadIndex+" = ?", store.StoreID, uploadId)).One(ctx, tx)
+	upload, err := models.StoreUploads(
+		qm.Where(models.StoreUploadColumns.StoreID+" = ? and "+models.StoreUploadColumns.StoreUploadIndex+" = ?", store.StoreID, uploadId),
+	).One(ctx, tx)
 	if err == sql.ErrNoRows {
 		log.Printf("Upload %v / %v not found", storeId, uploadId)
 		tx.Rollback()
@@ -50,8 +53,34 @@ func (s *ApiService) MarkStoreUploadFileUploaded(ctx context.Context, uploadId s
 		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing upload %v / %v: %v", storeId, uploadId, err)}), err
 	}
 
-	// Mark file as uploaded
-	numRowsAffected, err := models.StoreUploadFiles(qm.Where(models.StoreUploadFileColumns.UploadID+" = ? AND "+models.StoreUploadFileColumns.UploadFileIndex+" = ?", upload.UploadID, fileId)).UpdateAll(ctx, db, models.M{models.StoreUploadFileColumns.Status: FileDBEntry_Status_Uploaded})
+	// Mark store-file-hash as uploaded
+	storeFileHash, err := models.StoreFileHashes(
+		qm.InnerJoin("cloud_symbol_server."+models.TableNames.StoreUploadFiles+" on "+models.StoreFileHashTableColumns.HashID+" = "+models.StoreUploadFileTableColumns.HashID),
+		qm.Where(models.StoreUploadFileColumns.UploadID+" = ? AND "+models.StoreUploadFileColumns.UploadFileIndex+" = ?", upload.UploadID, fileId),
+		qm.For("update"),
+	).One(ctx, tx)
+	if err == sql.ErrNoRows {
+		log.Printf("File-hash for %v / %v / %v not found", storeId, uploadId, fileId)
+		tx.Rollback()
+		return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("File %v / %v / %v not found", storeId, uploadId, fileId)}), err
+	} else if err != nil {
+		log.Printf("error while locating file-hash: %v", err)
+		tx.Rollback()
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+
+	storeFileHash.Status = models.StoreFileHashStatusUploaded
+	numRowsAffected, err := storeFileHash.Update(ctx, tx, boil.Whitelist(models.StoreFileHashColumns.Status))
+	if (err != nil) || (numRowsAffected != 1) {
+		log.Printf("error while updating file-hash: %v - numRowsAffected: %v", err, numRowsAffected)
+		tx.Rollback()
+		return openapi.Response(http.StatusInternalServerError, nil), err
+	}
+
+	// Mark upload-file as uploaded
+	numRowsAffected, err = models.StoreUploadFiles(
+		qm.Where(models.StoreUploadFileColumns.UploadID+" = ? AND "+models.StoreUploadFileColumns.UploadFileIndex+" = ?", upload.UploadID, fileId),
+	).UpdateAll(ctx, tx, models.M{models.StoreUploadFileColumns.Status: FileDBEntry_Status_Uploaded})
 	if (err == nil) && (numRowsAffected == 0) {
 		log.Printf("File %v / %v / %v not found", storeId, uploadId, fileId)
 		tx.Rollback()
