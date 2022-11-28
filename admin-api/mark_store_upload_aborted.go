@@ -60,32 +60,40 @@ func (s *ApiService) MarkStoreUploadAborted(ctx context.Context, uploadId string
 
 	boil.DebugMode = true
 
-	// Mark store-file-hashes in upload that are unknown/pending as aborted
-	storeFileHashes, err := models.StoreFileHashes(
-		qm.InnerJoin("cloud_symbol_server."+models.TableNames.StoreUploadFiles+" on "+models.StoreFileHashTableColumns.HashID+" = "+models.StoreUploadFileTableColumns.HashID),
+	// Mark upload-files in upload that are pending as aborted
+	_, err = models.StoreUploadFiles(
 		qm.Where(models.StoreUploadFileColumns.UploadID+" = ?", upload.UploadID),
-		qm.AndIn(models.StoreUploadFileTableColumns.Status+" in ?", models.StoreFileHashStatusUnknown, models.StoreFileHashStatusPending),
-	).All(ctx, tx)
-	if (err != nil) && (err != sql.ErrNoRows) {
-		log.Printf("error while accessing files-hashes in upload %v / %v: %v", storeId, uploadId, err)
-		tx.Rollback()
-		return openapi.Response(http.StatusInternalServerError, nil), err
-	}
-
-	_, err = storeFileHashes.UpdateAll(ctx, tx, models.M{models.StoreFileHashColumns.Status: models.StoreFileHashStatusAborted})
-	if (err != nil) && (err != sql.ErrNoRows) {
-		log.Printf("error while updating files-hashes in upload %v / %v: %v", storeId, uploadId, err)
-		tx.Rollback()
-		return openapi.Response(http.StatusInternalServerError, nil), err
-	}
-
-	// Mark upload-files in upload that are unknown/pending as aborted
-	_, err = models.StoreUploadFiles(qm.Where(models.StoreUploadFileColumns.UploadID+" = ?", upload.UploadID), qm.AndIn(models.StoreUploadFileColumns.Status+" in ?", FileDBEntry_Status_Unknown, FileDBEntry_Status_Pending)).UpdateAll(ctx, tx, models.M{models.StoreUploadFileColumns.Status: FileDBEntry_Status_Aborted})
+		qm.AndIn(models.StoreUploadFileColumns.Status+" = ?", models.StoreUploadFileStatusPending),
+	).UpdateAll(ctx, tx, models.M{models.StoreUploadFileColumns.Status: models.StoreUploadFileStatusAborted})
 	if err != nil {
 		log.Printf("error while accessing files in upload %v / %v: %v", storeId, uploadId, err)
 		tx.Rollback()
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
+
+	// Mark store-file-hashes in upload that are pending as aborted
+	//
+	// TODO: we should not flag store-file-hashes as aborted;
+	//   rather, we should run the same logic as for expiration to remove unnecessary
+	//   file-hash/file entries from DB
+	//
+	// storeFileHashes, err := models.StoreFileHashes(
+	// 	qm.InnerJoin("cloud_symbol_server."+models.TableNames.StoreUploadFiles+" on "+models.StoreFileHashTableColumns.HashID+" = "+models.StoreUploadFileTableColumns.HashID),
+	// 	qm.Where(models.StoreUploadFileColumns.UploadID+" = ?", upload.UploadID),
+	// 	qm.AndIn(models.StoreUploadFileTableColumns.Status+" = ?", models.StoreFileHashStatusPending),
+	// ).All(ctx, tx)
+	// if (err != nil) && (err != sql.ErrNoRows) {
+	// 	log.Printf("error while accessing files-hashes in upload %v / %v: %v", storeId, uploadId, err)
+	// 	tx.Rollback()
+	// 	return openapi.Response(http.StatusInternalServerError, nil), err
+	// }
+
+	// _, err = storeFileHashes.UpdateAll(ctx, tx, models.M{models.StoreFileHashColumns.Status: models.StoreFileHashStatusAborted})
+	// if (err != nil) && (err != sql.ErrNoRows) {
+	// 	log.Printf("error while updating files-hashes in upload %v / %v: %v", storeId, uploadId, err)
+	// 	tx.Rollback()
+	// 	return openapi.Response(http.StatusInternalServerError, nil), err
+	// }
 
 	err = tx.Commit()
 	if err != nil {

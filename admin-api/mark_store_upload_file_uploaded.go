@@ -48,7 +48,7 @@ func (s *ApiService) MarkStoreUploadFileUploaded(ctx context.Context, uploadId s
 		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing upload %v / %v: %v", storeId, uploadId, err)}), err
 	}
 
-	// Mark store-file-hash as uploaded
+	// Mark store-file-hash as present
 	storeFileHash, err := models.StoreFileHashes(
 		qm.InnerJoin("cloud_symbol_server."+models.TableNames.StoreUploadFiles+" on "+models.StoreFileHashTableColumns.HashID+" = "+models.StoreUploadFileTableColumns.HashID),
 		qm.Where(models.StoreUploadFileColumns.UploadID+" = ? AND "+models.StoreUploadFileColumns.UploadFileIndex+" = ?", upload.UploadID, fileId),
@@ -64,7 +64,7 @@ func (s *ApiService) MarkStoreUploadFileUploaded(ctx context.Context, uploadId s
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 
-	storeFileHash.Status = models.StoreFileHashStatusUploaded
+	storeFileHash.Status = models.StoreFileHashStatusPresent
 	numRowsAffected, err := storeFileHash.Update(ctx, tx, boil.Whitelist(models.StoreFileHashColumns.Status))
 	if (err != nil) || (numRowsAffected != 1) {
 		log.Printf("error while updating file-hash: %v - numRowsAffected: %v", err, numRowsAffected)
@@ -72,10 +72,10 @@ func (s *ApiService) MarkStoreUploadFileUploaded(ctx context.Context, uploadId s
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 
-	// Mark upload-file as uploaded
+	// Mark upload-file as completed
 	numRowsAffected, err = models.StoreUploadFiles(
 		qm.Where(models.StoreUploadFileColumns.UploadID+" = ? AND "+models.StoreUploadFileColumns.UploadFileIndex+" = ?", upload.UploadID, fileId),
-	).UpdateAll(ctx, tx, models.M{models.StoreUploadFileColumns.Status: FileDBEntry_Status_Uploaded})
+	).UpdateAll(ctx, tx, models.M{models.StoreUploadFileColumns.Status: models.StoreUploadFileStatusCompleted})
 	if (err == nil) && (numRowsAffected == 0) {
 		log.Printf("File %v / %v / %v not found", storeId, uploadId, fileId)
 		tx.Rollback()
@@ -92,7 +92,7 @@ func (s *ApiService) MarkStoreUploadFileUploaded(ctx context.Context, uploadId s
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 
-	log.Printf("Status for %v/%v/%v set to %v", storeId, uploadId, fileId, FileDBEntry_Status_Uploaded)
+	log.Printf("Status for %v/%v/%v set to %v", storeId, uploadId, fileId, models.StoreUploadFileStatusCompleted)
 
 	return openapi.Response(http.StatusOK, nil), nil
 }

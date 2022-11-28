@@ -53,28 +53,38 @@ func makeCacheKey(cols boil.Columns, nzDefaults []string) string {
 
 // Enum values for StoreFileHashStatus
 const (
-	StoreFileHashStatusUnknown        string = "unknown"
-	StoreFileHashStatusAlreadyPresent string = "already_present"
-	StoreFileHashStatusPending        string = "pending"
-	StoreFileHashStatusUploaded       string = "uploaded"
-	StoreFileHashStatusAborted        string = "aborted"
-	StoreFileHashStatusExpired        string = "expired"
+	StoreFileHashStatusPending string = "pending"
+	StoreFileHashStatusPresent string = "present"
 )
 
 func AllStoreFileHashStatus() []string {
 	return []string{
-		StoreFileHashStatusUnknown,
-		StoreFileHashStatusAlreadyPresent,
 		StoreFileHashStatusPending,
-		StoreFileHashStatusUploaded,
-		StoreFileHashStatusAborted,
-		StoreFileHashStatusExpired,
+		StoreFileHashStatusPresent,
+	}
+}
+
+// Enum values for StoreUploadFileStatus
+const (
+	StoreUploadFileStatusAlreadyPresent string = "already_present"
+	StoreUploadFileStatusPending        string = "pending"
+	StoreUploadFileStatusCompleted      string = "completed"
+	StoreUploadFileStatusAborted        string = "aborted"
+	StoreUploadFileStatusExpired        string = "expired"
+)
+
+func AllStoreUploadFileStatus() []string {
+	return []string{
+		StoreUploadFileStatusAlreadyPresent,
+		StoreUploadFileStatusPending,
+		StoreUploadFileStatusCompleted,
+		StoreUploadFileStatusAborted,
+		StoreUploadFileStatusExpired,
 	}
 }
 
 // Enum values for StoreUploadStatus
 const (
-	StoreUploadStatusUnknown    string = "unknown"
 	StoreUploadStatusInProgress string = "in_progress"
 	StoreUploadStatusCompleted  string = "completed"
 	StoreUploadStatusAborted    string = "aborted"
@@ -83,7 +93,6 @@ const (
 
 func AllStoreUploadStatus() []string {
 	return []string{
-		StoreUploadStatusUnknown,
 		StoreUploadStatusInProgress,
 		StoreUploadStatusCompleted,
 		StoreUploadStatusAborted,

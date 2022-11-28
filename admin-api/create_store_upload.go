@@ -168,6 +168,13 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 		return "", err
 	}
 
+	// Translate "unknown" StoreUploadEntry status to "completed"
+	// We assume that all uploads using non-progression API succeeds
+	uploadStatus := storeUploadEntry.Status
+	if uploadStatus == StoreUploadEntry_Status_Unknown {
+		uploadStatus = models.StoreUploadStatusCompleted
+	}
+
 	// Add upload entry to DB
 	var upload = models.StoreUpload{
 		StoreID:          null.IntFrom(store.StoreID),
@@ -176,7 +183,7 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 		Build:            storeUploadEntry.BuildId,
 		// TODO: source timestamp from StoreUploadEntry, don't override it with time.Now() Here
 		Timestamp: time.Now(),
-		Status:    storeUploadEntry.Status,
+		Status:    uploadStatus,
 	}
 	err = upload.Insert(ctx, tx, boil.Infer())
 	if err != nil {
@@ -190,9 +197,10 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 	// Add entries for each upload-file in DB
 	for _, file := range storeUploadEntry.Files {
 
+		// Create store-file, in case one doesn't exist yet
 		storeFile, err := models.StoreFiles(
 			qm.Where(models.StoreFileColumns.StoreID+" = ? AND "+models.StoreFileColumns.FileName+" = ?", store.StoreID, file.FileName),
-		).One(ctx, db)
+		).One(ctx, tx)
 		if err == sql.ErrNoRows {
 			storeFile = &models.StoreFile{
 				StoreID:  null.IntFrom(store.StoreID),
@@ -210,16 +218,23 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 			return "", err
 		}
 
+		// Create store-file-hash, in case one doesn't exist yet
 		storeFileHash, err := models.StoreFileHashes(
 			qm.Where(models.StoreFileHashColumns.FileID+" = ?", storeFile.FileID),
-		).One(ctx, db)
+		).One(ctx, tx)
 		if err == sql.ErrNoRows {
+
+			// Translate all storefilehash statuses except "pending" to "present"
+			// We assume that all uploads using non-progression API succeeds
+			fileHashStatus := models.StoreFileHashStatusPresent
+			if fileHashStatus == FileDBEntry_Status_Pending {
+				fileHashStatus = models.StoreFileHashStatusPending
+			}
+
 			storeFileHash = &models.StoreFileHash{
 				FileID: null.IntFrom(storeFile.FileID),
 				Hash:   file.Hash,
-				// TODO: translate file.Status to something more accurate
-				// For example, an AlreadyPresent status should be translated to Uploaded instead
-				Status: file.Status,
+				Status: fileHashStatus,
 			}
 			err = storeFileHash.Insert(ctx, tx, boil.Infer())
 			if err != nil {
@@ -233,11 +248,19 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 			return "", err
 		}
 
+		// Translate "unknown" upload-file status to "completed"
+		// We assume that all uploads using non-progression API succeeds
+		uploadFileStatus := file.Status
+		if uploadFileStatus == FileDBEntry_Status_Unknown {
+			uploadFileStatus = models.StoreUploadFileStatusCompleted
+		}
+
+		// Create store-upload-file
 		var uploadFile = models.StoreUploadFile{
 			UploadID:        null.IntFrom(upload.UploadID),
 			HashID:          null.IntFrom(storeFileHash.HashID),
 			UploadFileIndex: uploadFileIndex,
-			Status:          file.Status,
+			Status:          uploadFileStatus,
 			FileName:        file.FileName,
 			FileHash:        file.Hash,
 		}
