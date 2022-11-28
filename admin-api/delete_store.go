@@ -22,14 +22,9 @@ func (s *ApiService) DeleteStore(ctx context.Context, storeId string) (openapi.I
 		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Unable to create storage client"}), err
 	}
 
-	db := GetDB()
-	if db == nil {
-		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
-	}
-
-	tx, err := db.BeginTx(ctx, nil)
+	tx, err := BeginDBTransaction(ctx)
 	if err != nil {
-		return openapi.Response(http.StatusInternalServerError, nil), err
+		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
 	}
 
 	// Locate store in DB, and ensure store remains throughout entire txn

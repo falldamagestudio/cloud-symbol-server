@@ -143,12 +143,7 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 
 	log.Printf("Writing upload to database: %v", storeUploadEntry)
 
-	db := GetDB()
-	if db == nil {
-		return "", errors.New("no DB")
-	}
-
-	tx, err := db.BeginTx(ctx, nil)
+	tx, err := BeginDBTransaction(ctx)
 	if err != nil {
 		return "", err
 	}

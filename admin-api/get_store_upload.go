@@ -19,14 +19,9 @@ func (s *ApiService) GetStoreUpload(ctx context.Context, uploadId string, storeI
 
 	log.Printf("Getting store upload")
 
-	db := GetDB()
-	if db == nil {
-		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
-	}
-
-	tx, err := db.BeginTx(ctx, nil)
+	tx, err := BeginDBTransaction(ctx)
 	if err != nil {
-		return openapi.Response(http.StatusInternalServerError, nil), err
+		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
 	}
 
 	// Locate store in DB, and ensure store remains throughout entire txn

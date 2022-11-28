@@ -16,14 +16,9 @@ import (
 
 func (s *ApiService) MarkStoreUploadCompleted(ctx context.Context, uploadId string, storeId string) (openapi.ImplResponse, error) {
 
-	db := GetDB()
-	if db == nil {
-		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
-	}
-
-	tx, err := db.BeginTx(ctx, nil)
+	tx, err := BeginDBTransaction(ctx)
 	if err != nil {
-		return openapi.Response(http.StatusInternalServerError, nil), err
+		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
 	}
 
 	// Locate store in DB, and ensure store remains throughout entire txn

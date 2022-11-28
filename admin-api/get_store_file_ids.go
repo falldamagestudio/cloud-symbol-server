@@ -18,14 +18,9 @@ func (s *ApiService) GetStoreFileIds(ctx context.Context, storeId string) (opena
 
 	log.Printf("Getting store file IDs")
 
-	db := GetDB()
-	if db == nil {
-		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
-	}
-
-	tx, err := db.BeginTx(ctx, nil)
+	tx, err := BeginDBTransaction(ctx)
 	if err != nil {
-		return openapi.Response(http.StatusInternalServerError, nil), err
+		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
 	}
 
 	// Locate store in DB, and ensure store remains throughout entire txn

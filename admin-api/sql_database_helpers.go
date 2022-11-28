@@ -1,7 +1,9 @@
 package admin_api
 
 import (
+	"context"
 	"database/sql"
+	"errors"
 	"log"
 
 	"cloud.google.com/go/cloudsqlconn"
@@ -35,4 +37,12 @@ func initSQL() {
 
 func GetDB() *sql.DB {
 	return db
+}
+
+func BeginDBTransaction(ctx context.Context) (*sql.Tx, error) {
+	if db == nil {
+		return nil, errors.New("no DB")
+	}
+
+	return db.BeginTx(ctx, nil)
 }
