@@ -149,7 +149,7 @@ func TestCreateStoreUploadWithoutProgressSucceeds(t *testing.T) {
 
 	expectedUploadStatus := "unknown"
 	if *getStoreUploadResponse.Status != expectedUploadStatus {
-		t.Fatalf("GetStoreUpload should return an upload with status %v, but it has status %v", expectedUploadStatus, getStoreUploadResponse.Status)
+		t.Fatalf("GetStoreUpload should return an upload with status %v, but it has status %v", expectedUploadStatus, *getStoreUploadResponse.Status)
 	}
 
 	// Ensure file is in "unknown" status
@@ -270,7 +270,7 @@ func TestCreateStoreUploadWithProgressSucceeds(t *testing.T) {
 
 		// Ensure file has transitioned to "uploaded" status
 
-		expectedUploadFileStatus := "uploaded"
+		expectedUploadFileStatus := "completed"
 		if *(*getStoreUploadResponse.Files)[0].Status != expectedUploadFileStatus {
 			t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, *(*getStoreUploadResponse.Files)[0].Status)
 		}
@@ -302,9 +302,9 @@ func TestCreateStoreUploadWithProgressSucceeds(t *testing.T) {
 			t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadStatus, *getStoreUploadResponse.Status)
 		}
 
-		// Ensure file has transitioned to "uploaded" status
+		// Ensure file has transitioned to "completed" status
 
-		expectedUploadFileStatus := "uploaded"
+		expectedUploadFileStatus := "completed"
 		if *(*getStoreUploadResponse.Files)[0].Status != expectedUploadFileStatus {
 			t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, *(*getStoreUploadResponse.Files)[0].Status)
 		}
@@ -446,7 +446,7 @@ func TestCreateStoreUploadWithProgressAndAbortSucceeds(t *testing.T) {
 
 		// Ensure file has transitioned to "uploaded" status
 
-		expectedUploadFileStatus := "uploaded"
+		expectedUploadFileStatus := "completed"
 		if *(*getStoreUploadResponse.Files)[0].Status != expectedUploadFileStatus {
 			t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, *(*getStoreUploadResponse.Files)[0].Status)
 		}
