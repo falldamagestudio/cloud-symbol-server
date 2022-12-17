@@ -55,7 +55,7 @@ func (s *ApiService) GetStoreUploadIds(ctx context.Context, storeId string) (ope
 	var storeUploadIds = make([]string, len(uploads))
 
 	for index, upload := range uploads {
-		storeUploadIds[index] = strconv.Itoa(upload.UploadID)
+		storeUploadIds[index] = strconv.Itoa(upload.StoreUploadIndex)
 	}
 
 	err = tx.Commit()
