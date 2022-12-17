@@ -56,10 +56,10 @@ namespace BackendAPI.Model
             Pending = 3,
 
             /// <summary>
-            /// Enum Uploaded for value: uploaded
+            /// Enum Completed for value: completed
             /// </summary>
-            [EnumMember(Value = "uploaded")]
-            Uploaded = 4,
+            [EnumMember(Value = "completed")]
+            Completed = 4,
 
             /// <summary>
             /// Enum Aborted for value: aborted

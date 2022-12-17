@@ -473,10 +473,10 @@ components:
         files:
         - fileName: Application.pdb
           hash: 7F416863ABF34C3E894BAD1739BAA5571
-          status: uploaded
+          status: completed
         - fileName: Application.pdb
           hash: 7F416863ABF34C3E894BAD1739BAA5571
-          status: uploaded
+          status: completed
         buildId: Build 432
         timestamp: 2019-10-12T07:20:50.52Z
         status: completed
@@ -508,7 +508,7 @@ components:
       example:
         fileName: Application.pdb
         hash: 7F416863ABF34C3E894BAD1739BAA5571
-        status: uploaded
+        status: completed
       properties:
         fileName:
           example: Application.pdb
@@ -521,10 +521,10 @@ components:
           - unknown
           - already_present
           - pending
-          - uploaded
+          - completed
           - aborted
           - expired
-          example: uploaded
+          example: completed
           type: string
       type: object
   securitySchemes:

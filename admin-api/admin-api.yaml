@@ -469,12 +469,12 @@ components:
           example: 7F416863ABF34C3E894BAD1739BAA5571
         status:
           type: string
-          example: uploaded
+          example: completed
           enum:
             - unknown
             - already_present
             - pending
-            - uploaded
+            - completed
             - aborted
             - expired
 
