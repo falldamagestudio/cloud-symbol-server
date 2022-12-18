@@ -46,7 +46,7 @@ deploy-db-migrations:
 	# We don't know whether or not the user already has a proxy running
 	# If this is a first-time deploy via the 'deploy' Makefile target, the user has not been able to start a proxy
 	# Because of this, we run a short-lived proxy just for this command
-	./binaries/cloud_sql_proxy -instances "$(shell jq -r ".cloudSQLProxyEndpoint" < $(ENV)/config.json)=tcp:5430" -fd_rlimit 1024 -enable_iam_login -credential_file=$(ENV)/database/google_application_credentials.json & echo "$$!" > db_migration_proxy.pid
+	./binaries/cloud_sql_proxy -instances "$(shell jq -r ".cloudSQLInstance" < $(ENV)/config.json)=tcp:5430" -fd_rlimit 1024 -enable_iam_login -credential_file=$(ENV)/database/google_application_credentials.json & echo "$$!" > db_migration_proxy.pid
 	# We are not sure how long it takes for the proxy to start; we guess that 2 seconds should be enough
 	sleep 2
 	# Both fail and success paths from migration result in killing the proxy as well
@@ -57,7 +57,7 @@ drop-db:
 	# We don't know whether or not the user already has a proxy running
 	# If this is a first-time deploy via the 'deploy' Makefile target, the user has not been able to start a proxy
 	# Because of this, we run a short-lived proxy just for this command
-	./binaries/cloud_sql_proxy -instances "$(shell jq -r ".cloudSQLProxyEndpoint" < $(ENV)/config.json)=tcp:5430" -fd_rlimit 1024 -enable_iam_login -credential_file=$(ENV)/database/google_application_credentials.json & echo "$$!" > db_migration_proxy.pid
+	./binaries/cloud_sql_proxy -instances "$(shell jq -r ".cloudSQLInstance" < $(ENV)/config.json)=tcp:5430" -fd_rlimit 1024 -enable_iam_login -credential_file=$(ENV)/database/google_application_credentials.json & echo "$$!" > db_migration_proxy.pid
 	# We are not sure how long it takes for the proxy to start; we guess that 2 seconds should be enough
 	sleep 2
 	# Both fail and success paths from migration result in killing the proxy as well
@@ -123,7 +123,7 @@ test: test-download-api test-admin-api test-cli
 #########################################################
 
 run-local-sql-auth-proxy:
-	./binaries/cloud_sql_proxy -instances "$(shell jq -r ".cloudSQLProxyEndpoint" < $(ENV)/config.json)=tcp:5432" -fd_rlimit 1024 -enable_iam_login -credential_file=$(ENV)/database/google_application_credentials.json
+	./binaries/cloud_sql_proxy -instances "$(shell jq -r ".cloudSQLInstance" < $(ENV)/config.json)=tcp:5432" -fd_rlimit 1024 -enable_iam_login -credential_file=$(ENV)/database/google_application_credentials.json
 
 run-local-psql:
 	psql "host=127.0.0.1 sslmode=disable dbname=cloud_symbol_server user=$(shell jq -r ".psqlUser" < $(ENV)/config.json)"
@@ -140,6 +140,8 @@ run-local-admin-api:
 	cd admin-api/cmd \
 	&&	GCP_PROJECT_ID=test-cloud-symbol-server \
 		SYMBOL_STORE_BUCKET_NAME="$(shell jq -r ".symbol_store_bucket_name" < environments/local/core/config.json)" \
+		CLOUD_SQL_INSTANCE="$(shell jq -r ".cloudSQLInstance" < $(ENV)/config.json)" \
+		CLOUD_SQL_USER="$(shell jq -r ".cloudSQLAdminUser" < $(ENV)/config.json)" \
 		PORT=8084 \
 		GOOGLE_APPLICATION_CREDENTIALS="../../environments/local/admin_api/google_application_credentials.json" \
 		go run main.go

@@ -4,7 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"log"
+	"os"
 
 	"cloud.google.com/go/cloudsqlconn"
 	"cloud.google.com/go/cloudsqlconn/postgres/pgxv4"
@@ -12,21 +14,70 @@ import (
 
 var db *sql.DB
 
+type ErrCloudSQLInstance struct {
+}
+
+func (err ErrCloudSQLInstance) Error() string {
+	return "No cloud SQL instance configured"
+}
+
+func getCloudSQLInstance() (string, error) {
+
+	cloudSQLInstance := os.Getenv("CLOUD_SQL_INSTANCE")
+	if cloudSQLInstance == "" {
+		return "", &ErrCloudSQLInstance{}
+	}
+
+	return cloudSQLInstance, nil
+}
+
+type ErrCloudSQLUser struct {
+}
+
+func (err ErrCloudSQLUser) Error() string {
+	return "No cloud SQL user configured"
+}
+
+func getCloudSQLUser() (string, error) {
+
+	cloudSQLUser := os.Getenv("CLOUD_SQL_USER")
+	if cloudSQLUser == "" {
+		return "", &ErrCloudSQLUser{}
+	}
+
+	return cloudSQLUser, nil
+}
+
 func initSQL() {
 
+	cloudSQLInstance, err := getCloudSQLInstance()
+	if err != nil {
+		log.Printf("Err: %v", err)
+		return
+	}
+
+	cloudSQLUser, err := getCloudSQLUser()
+	if err != nil {
+		log.Printf("Err: %v", err)
+		return
+	}
+
+	dbDriver := "cloudsql-postgres"
+
 	log.Printf("Registering cloudsql-postgres driver")
-	cleanup, err := pgxv4.RegisterDriver("cloudsql-postgres", cloudsqlconn.WithIAMAuthN())
+	cleanup, err := pgxv4.RegisterDriver(dbDriver, cloudsqlconn.WithIAMAuthN())
 	if err != nil {
 		log.Printf("Err: %v", err)
 		return
 	}
 	defer cleanup()
 
+	dbName := "cloud_symbol_server"
+
 	log.Printf("Establishing connection to cloud SQL / DB")
 	db, err = sql.Open(
-		"cloudsql-postgres",
-		// TODO: change hardcoded params to dynamic ones
-		"host=test-cloud-symbol-server:europe-west1:db user=admin-api@test-cloud-symbol-server.iam dbname=cloud_symbol_server sslmode=disable",
+		dbDriver,
+		fmt.Sprintf("host=%v user=%v dbname=%v sslmode=disable", cloudSQLInstance, cloudSQLUser, dbName),
 	)
 	if err != nil {
 		log.Printf("Err: %v", err)

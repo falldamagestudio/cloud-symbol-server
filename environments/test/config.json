@@ -1,7 +1,8 @@
 {
     "downloadAPIEndpoint" : "https://europe-west1-test-cloud-symbol-server.cloudfunctions.net/DownloadAPI",
     "adminAPIEndpoint" : "https://europe-west1-test-cloud-symbol-server.cloudfunctions.net/AdminAPI",
-    "cloudSQLProxyEndpoint" : "test-cloud-symbol-server:europe-west1:db",
+    "cloudSQLInstance" : "test-cloud-symbol-server:europe-west1:db",
+    "cloudSQLAdminUser" : "admin-api@test-cloud-symbol-server.iam",
     "dbMigrationEndpoint" : "postgres://iam-admin@test-cloud-symbol-server.iam@localhost:5430/cloud_symbol_server?sslmode=disable&search_path=cloud_symbol_server",
     "psqlUser" : "iam-admin@test-cloud-symbol-server.iam"
 }
