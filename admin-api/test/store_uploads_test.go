@@ -479,10 +479,10 @@ func TestCreateStoreUploadWithProgressAndAbortSucceeds(t *testing.T) {
 			t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadStatus, *getStoreUploadResponse.Status)
 		}
 
-		// Ensure first file remains in "uploaded" status
+		// Ensure first file has transitioned to "aborted" status
 
 		{
-			expectedUploadFileStatus := "uploaded"
+			expectedUploadFileStatus := "aborted"
 			if *(*getStoreUploadResponse.Files)[0].Status != expectedUploadFileStatus {
 				t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, *(*getStoreUploadResponse.Files)[0].Status)
 			}
