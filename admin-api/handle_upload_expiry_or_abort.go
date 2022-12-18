@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 
+	"cloud.google.com/go/storage"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
@@ -217,12 +218,14 @@ func HandleUploadExpiryOrAbort(ctx context.Context, storeId string, uploadId str
 	for _, objectToDelete := range objectsToDelete {
 		err = deleteObjectInStore(ctx, storageClient, storeId, objectToDelete.FileName, objectToDelete.Hash)
 
-		if err != nil {
+		if err == storage.ErrObjectNotExist {
+			log.Printf("file %s/%s/%s/%s not found in store when it was time to delete it", storeId, objectToDelete.FileName, objectToDelete.Hash, objectToDelete.FileName)
+		} else if err != nil {
 			log.Printf("Error while deleting %s/%s/%s/%s from store; err = %v", storeId, objectToDelete.FileName, objectToDelete.Hash, objectToDelete.FileName, err)
 			return openapi.Response(http.StatusInternalServerError, nil), nil
+		} else {
+			log.Printf("Deleted file %s/%s/%s/%s from store", storeId, objectToDelete.FileName, objectToDelete.Hash, objectToDelete.FileName)
 		}
-
-		log.Printf("Deleted file %s/%s/%s/%s from store", storeId, objectToDelete.FileName, objectToDelete.Hash, objectToDelete.FileName)
 	}
 
 	log.Printf("Upload %s/%s has been expired/aborted", storeId, uploadId)
