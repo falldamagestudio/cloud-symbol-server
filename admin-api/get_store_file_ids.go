@@ -20,6 +20,7 @@ func (s *ApiService) GetStoreFileIds(ctx context.Context, storeId string) (opena
 
 	tx, err := BeginDBTransaction(ctx)
 	if err != nil {
+		log.Printf("Err: %v", err)
 		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
 	}
 

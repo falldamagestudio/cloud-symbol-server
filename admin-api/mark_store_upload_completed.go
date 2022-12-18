@@ -18,6 +18,7 @@ func (s *ApiService) MarkStoreUploadCompleted(ctx context.Context, uploadId stri
 
 	tx, err := BeginDBTransaction(ctx)
 	if err != nil {
+		log.Printf("Err: %v", err)
 		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
 	}
 

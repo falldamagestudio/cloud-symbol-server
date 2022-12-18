@@ -25,6 +25,7 @@ func HandleUploadExpiryOrAbort(ctx context.Context, storeId string, uploadId str
 
 	tx, err := BeginDBTransaction(ctx)
 	if err != nil {
+		log.Printf("Err: %v", err)
 		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
 	}
 

@@ -21,6 +21,7 @@ func (s *ApiService) GetStoreUploadIds(ctx context.Context, storeId string) (ope
 
 	tx, err := BeginDBTransaction(ctx)
 	if err != nil {
+		log.Printf("Err: %v", err)
 		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
 	}
 
