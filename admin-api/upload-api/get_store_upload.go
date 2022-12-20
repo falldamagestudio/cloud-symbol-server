@@ -1,4 +1,4 @@
-package admin_api
+package upload_api
 
 import (
 	"context"
@@ -13,13 +13,14 @@ import (
 
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
 	models "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/sql-db-models"
+	helpers "github.com/falldamagestudio/cloud-symbol-server/admin-api/helpers"
 )
 
-func (s *ApiService) GetStoreUpload(ctx context.Context, uploadId string, storeId string) (openapi.ImplResponse, error) {
+func GetStoreUpload(ctx context.Context, uploadId string, storeId string) (openapi.ImplResponse, error) {
 
 	log.Printf("Getting store upload")
 
-	tx, err := BeginDBTransaction(ctx)
+	tx, err := helpers.BeginDBTransaction(ctx)
 	if err != nil {
 		log.Printf("Err: %v", err)
 		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
@@ -80,14 +81,14 @@ func (s *ApiService) GetStoreUpload(ctx context.Context, uploadId string, storeI
 	if upload.Status != "" {
 		getStoreUploadResponse.Status = upload.Status
 	} else {
-		getStoreUploadResponse.Status = StoreUploadEntry_Status_Unknown
+		getStoreUploadResponse.Status = helpers.StoreUploadEntry_Status_Unknown
 	}
 
 	for _, file := range uploadFiles {
 
 		// Uploaded files created before the progress API existed do not have any Status field in the DB
 		// These files should be interpreted as having status "Unknown"
-		status := FileDBEntry_Status_Unknown
+		status := helpers.FileDBEntry_Status_Unknown
 		if file.Status != "" {
 			status = file.Status
 		}

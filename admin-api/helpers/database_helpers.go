@@ -1,4 +1,4 @@
-package admin_api
+package helpers
 
 import (
 	"context"
@@ -34,7 +34,7 @@ func (err ErrFirestore) Unwrap() error {
 
 func runDBTransaction(ctx context.Context, f func(context.Context, *firestore.Client, *firestore.Transaction) error) error {
 
-	firestoreClient, err := firestoreClient(ctx)
+	firestoreClient, err := FirestoreClient(ctx)
 	if err != nil {
 		return &ErrFirestore{Inner: err}
 	}
@@ -53,7 +53,7 @@ func runDBTransaction(ctx context.Context, f func(context.Context, *firestore.Cl
 
 func runDBOperation(ctx context.Context, f func(context.Context, *firestore.Client) error) error {
 
-	firestoreClient, err := firestoreClient(ctx)
+	firestoreClient, err := FirestoreClient(ctx)
 	if err != nil {
 		return &ErrFirestore{Inner: err}
 	}

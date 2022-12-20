@@ -1,4 +1,4 @@
-package admin_api
+package helpers
 
 import (
 	"context"
@@ -29,7 +29,7 @@ func (err ErrStoreBucketName) Error() string {
 	return "No store bucket name configured"
 }
 
-func getStorageClient(context context.Context) (*storage.Client, error) {
+func GetStorageClient(context context.Context) (*storage.Client, error) {
 
 	storageClientOpts := []option.ClientOption{}
 
@@ -41,7 +41,7 @@ func getStorageClient(context context.Context) (*storage.Client, error) {
 	return storageClient, nil
 }
 
-func getSymbolStoreBucketName() (string, error) {
+func GetSymbolStoreBucketName() (string, error) {
 
 	symbolStoreBucketName := os.Getenv("SYMBOL_STORE_BUCKET_NAME")
 	if symbolStoreBucketName == "" {
@@ -51,9 +51,9 @@ func getSymbolStoreBucketName() (string, error) {
 	return symbolStoreBucketName, nil
 }
 
-func deleteAllObjectsInStore(context context.Context, storageClient *storage.Client, storeId string) error {
+func DeleteAllObjectsInStore(context context.Context, storageClient *storage.Client, storeId string) error {
 
-	bucketName, err := getSymbolStoreBucketName()
+	bucketName, err := GetSymbolStoreBucketName()
 	if err != nil {
 		return err
 	}
@@ -84,9 +84,9 @@ func storefileNameHashToPath(storeId string, fileName string, hash string) strin
 	return fmt.Sprintf("stores/%s/%s/%s/%s", storeId, fileName, hash, fileName)
 }
 
-func deleteObjectInStore(context context.Context, storageClient *storage.Client, storeId string, fileName string, hash string) error {
+func DeleteObjectInStore(context context.Context, storageClient *storage.Client, storeId string, fileName string, hash string) error {
 
-	bucketName, err := getSymbolStoreBucketName()
+	bucketName, err := GetSymbolStoreBucketName()
 	if err != nil {
 		return err
 	}

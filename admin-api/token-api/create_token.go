@@ -1,4 +1,4 @@
-package admin_api
+package token_api
 
 import (
 	"context"
@@ -16,6 +16,7 @@ import (
 
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
 	models "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/sql-db-models"
+	helpers "github.com/falldamagestudio/cloud-symbol-server/admin-api/helpers"
 )
 
 func randomHex(n int) (string, error) {
@@ -26,11 +27,11 @@ func randomHex(n int) (string, error) {
 	return hex.EncodeToString(bytes), nil
 }
 
-func (s *ApiService) CreateToken(ctx context.Context) (openapi.ImplResponse, error) {
+func CreateToken(ctx context.Context) (openapi.ImplResponse, error) {
 
 	log.Printf("Creating PAT")
 
-	db := GetDB()
+	db := helpers.GetDB()
 	if db == nil {
 		log.Printf("No DB")
 		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")

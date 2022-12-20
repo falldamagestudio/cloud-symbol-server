@@ -1,4 +1,4 @@
-package admin_api
+package helpers
 
 const (
 	FileDBEntry_Status_Unknown        = "unknown"

@@ -1,4 +1,4 @@
-package admin_api
+package upload_api
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	models "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/sql-db-models"
 )
 
-func (s *ApiService) MarkStoreUploadAborted(ctx context.Context, uploadId string, storeId string) (openapi.ImplResponse, error) {
+func MarkStoreUploadAborted(ctx context.Context, uploadId string, storeId string) (openapi.ImplResponse, error) {
 
 	log.Printf("Aborting upload %v/%v", storeId, uploadId)
 	response, err := HandleUploadExpiryOrAbort(ctx, storeId, uploadId, models.StoreUploadStatusAborted)

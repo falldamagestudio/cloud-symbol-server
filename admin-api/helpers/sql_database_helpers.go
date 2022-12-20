@@ -1,4 +1,4 @@
-package admin_api
+package helpers
 
 import (
 	"context"
@@ -48,7 +48,7 @@ func getCloudSQLUser() (string, error) {
 	return cloudSQLUser, nil
 }
 
-func initSQL() {
+func InitSQL() {
 
 	cloudSQLInstance, err := getCloudSQLInstance()
 	if err != nil {

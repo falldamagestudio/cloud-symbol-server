@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
+	helpers "github.com/falldamagestudio/cloud-symbol-server/admin-api/helpers"
 )
 
 type patAuthenticationMiddleware struct{}
@@ -44,7 +45,7 @@ func (patAM *patAuthenticationMiddleware) Middleware(next http.Handler) http.Han
 
 		// Validate that email + PAT exists in database
 
-		firestoreClient, err := firestoreClient(r.Context())
+		firestoreClient, err := helpers.FirestoreClient(r.Context())
 		if err != nil {
 			log.Printf("Unable to talk to database: %v", err)
 			_ = writePatHttpError(w, http.StatusInternalServerError, "Unable to talk to database")

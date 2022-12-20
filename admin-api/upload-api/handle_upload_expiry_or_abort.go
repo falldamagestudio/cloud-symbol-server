@@ -1,4 +1,4 @@
-package admin_api
+package upload_api
 
 import (
 	"context"
@@ -13,17 +13,18 @@ import (
 
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
 	models "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/sql-db-models"
+	helpers "github.com/falldamagestudio/cloud-symbol-server/admin-api/helpers"
 )
 
 func HandleUploadExpiryOrAbort(ctx context.Context, storeId string, uploadId string, desiredStatus string) (openapi.ImplResponse, error) {
 
-	storageClient, err := getStorageClient(ctx)
+	storageClient, err := helpers.GetStorageClient(ctx)
 	if err != nil {
 		log.Printf("Unable to create storageClient: %v", err)
 		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Unable to create storage client"}), err
 	}
 
-	tx, err := BeginDBTransaction(ctx)
+	tx, err := helpers.BeginDBTransaction(ctx)
 	if err != nil {
 		log.Printf("Err: %v", err)
 		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
@@ -217,7 +218,7 @@ func HandleUploadExpiryOrAbort(ctx context.Context, storeId string, uploadId str
 	log.Printf("Status for %v/%v set to %v", storeId, uploadId, models.StoreUploadStatusExpired)
 
 	for _, objectToDelete := range objectsToDelete {
-		err = deleteObjectInStore(ctx, storageClient, storeId, objectToDelete.FileName, objectToDelete.Hash)
+		err = helpers.DeleteObjectInStore(ctx, storageClient, storeId, objectToDelete.FileName, objectToDelete.Hash)
 
 		if err == storage.ErrObjectNotExist {
 			log.Printf("file %s/%s/%s/%s not found in store when it was time to delete it", storeId, objectToDelete.FileName, objectToDelete.Hash, objectToDelete.FileName)
