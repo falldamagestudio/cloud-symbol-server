@@ -22,15 +22,20 @@ import (
 type DefaultApiRouter interface { 
 	CreateStore(http.ResponseWriter, *http.Request)
 	CreateStoreUpload(http.ResponseWriter, *http.Request)
+	CreateToken(http.ResponseWriter, *http.Request)
 	DeleteStore(http.ResponseWriter, *http.Request)
+	DeleteToken(http.ResponseWriter, *http.Request)
 	ExpireStoreUpload(http.ResponseWriter, *http.Request)
 	GetStoreFileIds(http.ResponseWriter, *http.Request)
 	GetStoreUpload(http.ResponseWriter, *http.Request)
 	GetStoreUploadIds(http.ResponseWriter, *http.Request)
 	GetStores(http.ResponseWriter, *http.Request)
+	GetToken(http.ResponseWriter, *http.Request)
+	GetTokens(http.ResponseWriter, *http.Request)
 	MarkStoreUploadAborted(http.ResponseWriter, *http.Request)
 	MarkStoreUploadCompleted(http.ResponseWriter, *http.Request)
 	MarkStoreUploadFileUploaded(http.ResponseWriter, *http.Request)
+	UpdateToken(http.ResponseWriter, *http.Request)
 }
 
 
@@ -41,13 +46,18 @@ type DefaultApiRouter interface {
 type DefaultApiServicer interface { 
 	CreateStore(context.Context, string) (ImplResponse, error)
 	CreateStoreUpload(context.Context, string, CreateStoreUploadRequest) (ImplResponse, error)
+	CreateToken(context.Context) (ImplResponse, error)
 	DeleteStore(context.Context, string) (ImplResponse, error)
+	DeleteToken(context.Context, string) (ImplResponse, error)
 	ExpireStoreUpload(context.Context, string, string) (ImplResponse, error)
 	GetStoreFileIds(context.Context, string) (ImplResponse, error)
 	GetStoreUpload(context.Context, string, string) (ImplResponse, error)
 	GetStoreUploadIds(context.Context, string) (ImplResponse, error)
 	GetStores(context.Context) (ImplResponse, error)
+	GetToken(context.Context, string) (ImplResponse, error)
+	GetTokens(context.Context) (ImplResponse, error)
 	MarkStoreUploadAborted(context.Context, string, string) (ImplResponse, error)
 	MarkStoreUploadCompleted(context.Context, string, string) (ImplResponse, error)
 	MarkStoreUploadFileUploaded(context.Context, string, string, int32) (ImplResponse, error)
+	UpdateToken(context.Context, string, UpdateTokenRequest) (ImplResponse, error)
 }

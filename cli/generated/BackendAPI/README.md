@@ -106,15 +106,20 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**CreateStore**](docs/DefaultApi.md#createstore) | **POST** /stores/{storeId} | Create a new store
 *DefaultApi* | [**CreateStoreUpload**](docs/DefaultApi.md#createstoreupload) | **POST** /stores/{storeId}/uploads | Start a new upload
+*DefaultApi* | [**CreateToken**](docs/DefaultApi.md#createtoken) | **POST** /tokens | Create a new token for current user
 *DefaultApi* | [**DeleteStore**](docs/DefaultApi.md#deletestore) | **DELETE** /stores/{storeId} | Delete an existing store
+*DefaultApi* | [**DeleteToken**](docs/DefaultApi.md#deletetoken) | **DELETE** /tokens/{token} | Delete a token for current user
 *DefaultApi* | [**ExpireStoreUpload**](docs/DefaultApi.md#expirestoreupload) | **POST** /stores/{storeId}/uploads/{uploadId}/expire | Expire store upload and consider files for GC
 *DefaultApi* | [**GetStoreFileIds**](docs/DefaultApi.md#getstorefileids) | **GET** /stores/{storeId}/files | Fetch a list of all files in store
 *DefaultApi* | [**GetStoreUpload**](docs/DefaultApi.md#getstoreupload) | **GET** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
 *DefaultApi* | [**GetStoreUploadIds**](docs/DefaultApi.md#getstoreuploadids) | **GET** /stores/{storeId}/uploads | Fetch a list of all uploads in store
 *DefaultApi* | [**GetStores**](docs/DefaultApi.md#getstores) | **GET** /stores | Fetch a list of all stores
+*DefaultApi* | [**GetToken**](docs/DefaultApi.md#gettoken) | **GET** /tokens/{token} | Fetch a token for current user
+*DefaultApi* | [**GetTokens**](docs/DefaultApi.md#gettokens) | **GET** /tokens | Fetch a list of all tokens for current user
 *DefaultApi* | [**MarkStoreUploadAborted**](docs/DefaultApi.md#markstoreuploadaborted) | **POST** /stores/{storeId}/uploads/{uploadId}/aborted | Mark an upload as aborted
 *DefaultApi* | [**MarkStoreUploadCompleted**](docs/DefaultApi.md#markstoreuploadcompleted) | **POST** /stores/{storeId}/uploads/{uploadId}/completed | Mark an upload as completed
 *DefaultApi* | [**MarkStoreUploadFileUploaded**](docs/DefaultApi.md#markstoreuploadfileuploaded) | **POST** /stores/{storeId}/uploads/{uploadId}/files/{fileId}/uploaded | Mark a file within an upload as uploaded
+*DefaultApi* | [**UpdateToken**](docs/DefaultApi.md#updatetoken) | **PUT** /tokens/{token} | Update details of a token for current user
 
 
 <a name="documentation-for-models"></a>
@@ -122,12 +127,16 @@ Class | Method | HTTP request | Description
 
  - [Model.CreateStoreUploadRequest](docs/CreateStoreUploadRequest.md)
  - [Model.CreateStoreUploadResponse](docs/CreateStoreUploadResponse.md)
+ - [Model.CreateTokenResponse](docs/CreateTokenResponse.md)
  - [Model.GetFileResponse](docs/GetFileResponse.md)
  - [Model.GetStoreFileIdsResponse](docs/GetStoreFileIdsResponse.md)
  - [Model.GetStoreUploadIdsResponse](docs/GetStoreUploadIdsResponse.md)
  - [Model.GetStoreUploadResponse](docs/GetStoreUploadResponse.md)
  - [Model.GetStoresResponse](docs/GetStoresResponse.md)
+ - [Model.GetTokenResponse](docs/GetTokenResponse.md)
+ - [Model.GetTokensResponse](docs/GetTokensResponse.md)
  - [Model.MessageResponse](docs/MessageResponse.md)
+ - [Model.UpdateTokenRequest](docs/UpdateTokenRequest.md)
  - [Model.UploadFileRequest](docs/UploadFileRequest.md)
  - [Model.UploadFileResponse](docs/UploadFileResponse.md)
 

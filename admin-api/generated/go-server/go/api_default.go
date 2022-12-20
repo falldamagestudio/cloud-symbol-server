@@ -63,10 +63,22 @@ func (c *DefaultApiController) Routes() Routes {
 			c.CreateStoreUpload,
 		},
 		{
+			"CreateToken",
+			strings.ToUpper("Post"),
+			"/tokens",
+			c.CreateToken,
+		},
+		{
 			"DeleteStore",
 			strings.ToUpper("Delete"),
 			"/stores/{storeId}",
 			c.DeleteStore,
+		},
+		{
+			"DeleteToken",
+			strings.ToUpper("Delete"),
+			"/tokens/{token}",
+			c.DeleteToken,
 		},
 		{
 			"ExpireStoreUpload",
@@ -99,6 +111,18 @@ func (c *DefaultApiController) Routes() Routes {
 			c.GetStores,
 		},
 		{
+			"GetToken",
+			strings.ToUpper("Get"),
+			"/tokens/{token}",
+			c.GetToken,
+		},
+		{
+			"GetTokens",
+			strings.ToUpper("Get"),
+			"/tokens",
+			c.GetTokens,
+		},
+		{
 			"MarkStoreUploadAborted",
 			strings.ToUpper("Post"),
 			"/stores/{storeId}/uploads/{uploadId}/aborted",
@@ -115,6 +139,12 @@ func (c *DefaultApiController) Routes() Routes {
 			strings.ToUpper("Post"),
 			"/stores/{storeId}/uploads/{uploadId}/files/{fileId}/uploaded",
 			c.MarkStoreUploadFileUploaded,
+		},
+		{
+			"UpdateToken",
+			strings.ToUpper("Put"),
+			"/tokens/{token}",
+			c.UpdateToken,
 		},
 	}
 }
@@ -162,12 +192,41 @@ func (c *DefaultApiController) CreateStoreUpload(w http.ResponseWriter, r *http.
 
 }
 
+// CreateToken - Create a new token for current user
+func (c *DefaultApiController) CreateToken(w http.ResponseWriter, r *http.Request) {
+	result, err := c.service.CreateToken(r.Context())
+	// If an error occurred, encode the error with the status code
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
+	// If no error, encode the body and the result code
+	EncodeJSONResponse(result.Body, &result.Code, w)
+
+}
+
 // DeleteStore - Delete an existing store
 func (c *DefaultApiController) DeleteStore(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	storeIdParam := params["storeId"]
 	
 	result, err := c.service.DeleteStore(r.Context(), storeIdParam)
+	// If an error occurred, encode the error with the status code
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
+	// If no error, encode the body and the result code
+	EncodeJSONResponse(result.Body, &result.Code, w)
+
+}
+
+// DeleteToken - Delete a token for current user
+func (c *DefaultApiController) DeleteToken(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	tokenParam := params["token"]
+	
+	result, err := c.service.DeleteToken(r.Context(), tokenParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)
@@ -259,6 +318,35 @@ func (c *DefaultApiController) GetStores(w http.ResponseWriter, r *http.Request)
 
 }
 
+// GetToken - Fetch a token for current user
+func (c *DefaultApiController) GetToken(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	tokenParam := params["token"]
+	
+	result, err := c.service.GetToken(r.Context(), tokenParam)
+	// If an error occurred, encode the error with the status code
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
+	// If no error, encode the body and the result code
+	EncodeJSONResponse(result.Body, &result.Code, w)
+
+}
+
+// GetTokens - Fetch a list of all tokens for current user
+func (c *DefaultApiController) GetTokens(w http.ResponseWriter, r *http.Request) {
+	result, err := c.service.GetTokens(r.Context())
+	// If an error occurred, encode the error with the status code
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
+	// If no error, encode the body and the result code
+	EncodeJSONResponse(result.Body, &result.Code, w)
+
+}
+
 // MarkStoreUploadAborted - Mark an upload as aborted
 func (c *DefaultApiController) MarkStoreUploadAborted(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
@@ -309,6 +397,33 @@ func (c *DefaultApiController) MarkStoreUploadFileUploaded(w http.ResponseWriter
 	}
 
 	result, err := c.service.MarkStoreUploadFileUploaded(r.Context(), uploadIdParam, storeIdParam, fileIdParam)
+	// If an error occurred, encode the error with the status code
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
+	// If no error, encode the body and the result code
+	EncodeJSONResponse(result.Body, &result.Code, w)
+
+}
+
+// UpdateToken - Update details of a token for current user
+func (c *DefaultApiController) UpdateToken(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	tokenParam := params["token"]
+	
+	updateTokenRequestParam := UpdateTokenRequest{}
+	d := json.NewDecoder(r.Body)
+	d.DisallowUnknownFields()
+	if err := d.Decode(&updateTokenRequestParam); err != nil {
+		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		return
+	}
+	if err := AssertUpdateTokenRequestRequired(updateTokenRequestParam); err != nil {
+		c.errorHandler(w, r, err, nil)
+		return
+	}
+	result, err := c.service.UpdateToken(r.Context(), tokenParam, updateTokenRequestParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)

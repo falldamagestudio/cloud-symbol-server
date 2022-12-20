@@ -1,3 +1,24 @@
+CREATE TABLE cloud_symbol_server.personal_access_tokens (
+  pat_id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+  -- Identity of owner
+  -- This is typically an email address
+  owner varchar NOT NULL,
+
+  -- Personal Access Token
+  -- This token can be used for authentication when accessing non-token related APIs
+  --   and is the authentication method used outside in non-web scenarios
+  --   (CLI / other tool integrations)
+  token varchar NOT NULL UNIQUE,
+
+  -- Textual description of token
+  -- Users fill this in to remind themselves the purpose of a token and/or where it is used
+  description varchar NOT NULL,
+
+  -- Creation timestamp, in RFC3339 format
+  -- Example: 1985-04-12T23:20:50.52Z
+  creation_timestamp timestamp NOT NULL
+)
 
 CREATE TABLE cloud_symbol_server.stores (
   store_id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,

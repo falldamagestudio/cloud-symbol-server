@@ -12,6 +12,131 @@ servers:
 security:
 - emailAndPat: []
 paths:
+  /tokens:
+    get:
+      operationId: getTokens
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getTokensResponse'
+          description: Success
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Not authorized
+      summary: Fetch a list of all tokens for current user
+    post:
+      operationId: createToken
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createTokenResponse'
+          description: Success
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Not authorized
+      summary: Create a new token for current user
+  /tokens/{token}:
+    delete:
+      operationId: deleteToken
+      parameters:
+      - description: ID of the token to delete
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Token does not exist
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Not authorized
+      summary: Delete a token for current user
+    get:
+      operationId: getToken
+      parameters:
+      - description: ID of the token to fetch
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getTokenResponse'
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Token does not exist
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Not authorized
+      summary: Fetch a token for current user
+    put:
+      operationId: updateToken
+      parameters:
+      - description: ID of the token to update
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateTokenRequest'
+        required: true
+      responses:
+        "200":
+          description: Success
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Token does not exist
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Not authorized
+      summary: Update details of a token for current user
   /stores:
     get:
       operationId: getStores
@@ -385,6 +510,48 @@ components:
       properties:
         message:
           example: Invalid API invocation
+          type: string
+      type: object
+    getTokensResponse:
+      items:
+        $ref: '#/components/schemas/getTokenResponse'
+      type: array
+    createTokenResponse:
+      example:
+        token: NyXfFDMc3A3KkvVwK5wJcnq9aRqYufgQ
+      properties:
+        token:
+          description: Personal Access Token
+          example: NyXfFDMc3A3KkvVwK5wJcnq9aRqYufgQ
+          type: string
+      type: object
+    getTokenResponse:
+      example:
+        creationTimestamp: 2019-10-12T07:20:50.52Z
+        description: Used for local testing purposes
+        token: NyXfFDMc3A3KkvVwK5wJcnq9aRqYufgQ
+      properties:
+        token:
+          description: Personal Access Token This token can be used for authentication
+            when accessing non-token related APIs
+          example: NyXfFDMc3A3KkvVwK5wJcnq9aRqYufgQ
+          type: string
+        description:
+          description: Textual description of token Users fill this in to remind themselves
+            the purpose of a token and/or where it is used
+          example: Used for local testing purposes
+          type: string
+        creationTimestamp:
+          description: Creation timestamp, in RFC3339 format
+          example: 2019-10-12T07:20:50.52Z
+          type: string
+      type: object
+    updateTokenRequest:
+      properties:
+        description:
+          description: Textual description of token Users fill this in to remind themselves
+            the purpose of a token and/or where it is used
+          example: Used for local testing purposes
           type: string
       type: object
     getStoresResponse:

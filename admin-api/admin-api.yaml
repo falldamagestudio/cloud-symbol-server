@@ -9,6 +9,120 @@ info:
   version: 1.0.0
 
 paths:
+  /tokens:
+    get:
+      summary: Fetch a list of all tokens for current user
+      operationId: getTokens
+
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getTokensResponse'
+
+        401:
+          $ref: '#/components/responses/401'
+
+    post:
+      summary: Create a new token for current user
+      operationId: createToken
+
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createTokenResponse'
+
+        401:
+          $ref: '#/components/responses/401'
+
+  /tokens/{token}:
+    get:
+      summary: Fetch a token for current user
+      operationId: getToken
+      parameters:
+        - in: path
+          name: token
+          schema:
+            type: string
+          required: true
+          description: ID of the token to fetch
+
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getTokenResponse'
+
+        404:
+          description: Token does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+        401:
+          $ref: '#/components/responses/401'
+
+    put:
+      summary: Update details of a token for current user
+      operationId: updateToken
+      parameters:
+        - in: path
+          name: token
+          schema:
+            type: string
+          required: true
+          description: ID of the token to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateTokenRequest'
+
+      responses:
+        200:
+          description: Success
+
+        404:
+          description: Token does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+        401:
+          $ref: '#/components/responses/401'
+
+    delete:
+      summary: Delete a token for current user
+      operationId: deleteToken
+      parameters:
+        - in: path
+          name: token
+          schema:
+            type: string
+          required: true
+          description: ID of the token to delete
+
+      responses:
+        200:
+          description: Success
+
+        404:
+          description: Token does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+        401:
+          $ref: '#/components/responses/401'
+
   /stores:
     get:
       summary: Fetch a list of all stores
@@ -352,6 +466,46 @@ components:
         message:
           type: string
           example: Invalid API invocation
+
+    getTokensResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/getTokenResponse'
+
+    createTokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Personal Access Token
+          example: NyXfFDMc3A3KkvVwK5wJcnq9aRqYufgQ
+
+    getTokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Personal Access Token
+            This token can be used for authentication when accessing non-token related APIs
+          example: NyXfFDMc3A3KkvVwK5wJcnq9aRqYufgQ
+        description:
+          type: string
+          description: Textual description of token
+            Users fill this in to remind themselves the purpose of a token and/or where it is used
+          example: Used for local testing purposes
+        creationTimestamp:
+          type: string
+          description: Creation timestamp, in RFC3339 format
+          example: '2019-10-12T07:20:50.52Z'
+
+    updateTokenRequest:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Textual description of token
+            Users fill this in to remind themselves the purpose of a token and/or where it is used
+          example: Used for local testing purposes
 
     getStoresResponse:
       type: array

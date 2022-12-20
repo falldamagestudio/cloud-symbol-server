@@ -6,15 +6,20 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**CreateStore**](DefaultApi.md#CreateStore) | **Post** /stores/{storeId} | Create a new store
 [**CreateStoreUpload**](DefaultApi.md#CreateStoreUpload) | **Post** /stores/{storeId}/uploads | Start a new upload
+[**CreateToken**](DefaultApi.md#CreateToken) | **Post** /tokens | Create a new token for current user
 [**DeleteStore**](DefaultApi.md#DeleteStore) | **Delete** /stores/{storeId} | Delete an existing store
+[**DeleteToken**](DefaultApi.md#DeleteToken) | **Delete** /tokens/{token} | Delete a token for current user
 [**ExpireStoreUpload**](DefaultApi.md#ExpireStoreUpload) | **Post** /stores/{storeId}/uploads/{uploadId}/expire | Expire store upload and consider files for GC
 [**GetStoreFileIds**](DefaultApi.md#GetStoreFileIds) | **Get** /stores/{storeId}/files | Fetch a list of all files in store
 [**GetStoreUpload**](DefaultApi.md#GetStoreUpload) | **Get** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
 [**GetStoreUploadIds**](DefaultApi.md#GetStoreUploadIds) | **Get** /stores/{storeId}/uploads | Fetch a list of all uploads in store
 [**GetStores**](DefaultApi.md#GetStores) | **Get** /stores | Fetch a list of all stores
+[**GetToken**](DefaultApi.md#GetToken) | **Get** /tokens/{token} | Fetch a token for current user
+[**GetTokens**](DefaultApi.md#GetTokens) | **Get** /tokens | Fetch a list of all tokens for current user
 [**MarkStoreUploadAborted**](DefaultApi.md#MarkStoreUploadAborted) | **Post** /stores/{storeId}/uploads/{uploadId}/aborted | Mark an upload as aborted
 [**MarkStoreUploadCompleted**](DefaultApi.md#MarkStoreUploadCompleted) | **Post** /stores/{storeId}/uploads/{uploadId}/completed | Mark an upload as completed
 [**MarkStoreUploadFileUploaded**](DefaultApi.md#MarkStoreUploadFileUploaded) | **Post** /stores/{storeId}/uploads/{uploadId}/files/{fileId}/uploaded | Mark a file within an upload as uploaded
+[**UpdateToken**](DefaultApi.md#UpdateToken) | **Put** /tokens/{token} | Update details of a token for current user
 
 
 
@@ -154,6 +159,65 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
+## CreateToken
+
+> CreateTokenResponse CreateToken(ctx).Execute()
+
+Create a new token for current user
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.CreateToken(context.Background()).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.CreateToken``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `CreateToken`: CreateTokenResponse
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.CreateToken`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCreateTokenRequest struct via the builder pattern
+
+
+### Return type
+
+[**CreateTokenResponse**](CreateTokenResponse.md)
+
+### Authorization
+
+[emailAndPat](../README.md#emailAndPat)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## DeleteStore
 
 > DeleteStore(ctx, storeId).Execute()
@@ -196,6 +260,72 @@ Name | Type | Description  | Notes
 ### Other Parameters
 
 Other parameters are passed through a pointer to a apiDeleteStoreRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[emailAndPat](../README.md#emailAndPat)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## DeleteToken
+
+> DeleteToken(ctx, token).Execute()
+
+Delete a token for current user
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    token := "token_example" // string | ID of the token to delete
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.DeleteToken(context.Background(), token).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.DeleteToken``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**token** | **string** | ID of the token to delete | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiDeleteTokenRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -555,6 +685,133 @@ Other parameters are passed through a pointer to a apiGetStoresRequest struct vi
 [[Back to README]](../README.md)
 
 
+## GetToken
+
+> GetTokenResponse GetToken(ctx, token).Execute()
+
+Fetch a token for current user
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    token := "token_example" // string | ID of the token to fetch
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.GetToken(context.Background(), token).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetToken``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `GetToken`: GetTokenResponse
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetToken`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**token** | **string** | ID of the token to fetch | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetTokenRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+[**GetTokenResponse**](GetTokenResponse.md)
+
+### Authorization
+
+[emailAndPat](../README.md#emailAndPat)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetTokens
+
+> GetTokensResponse GetTokens(ctx).Execute()
+
+Fetch a list of all tokens for current user
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.GetTokens(context.Background()).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetTokens``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `GetTokens`: GetTokensResponse
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetTokens`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetTokensRequest struct via the builder pattern
+
+
+### Return type
+
+[**GetTokensResponse**](GetTokensResponse.md)
+
+### Authorization
+
+[emailAndPat](../README.md#emailAndPat)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## MarkStoreUploadAborted
 
 > MarkStoreUploadAborted(ctx, uploadId, storeId).Execute()
@@ -758,6 +1015,74 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## UpdateToken
+
+> UpdateToken(ctx, token).UpdateTokenRequest(updateTokenRequest).Execute()
+
+Update details of a token for current user
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    token := "token_example" // string | ID of the token to update
+    updateTokenRequest := *openapiclient.NewUpdateTokenRequest() // UpdateTokenRequest | 
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.DefaultApi.UpdateToken(context.Background(), token).UpdateTokenRequest(updateTokenRequest).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.UpdateToken``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**token** | **string** | ID of the token to update | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiUpdateTokenRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **updateTokenRequest** | [**UpdateTokenRequest**](UpdateTokenRequest.md) |  | 
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[emailAndPat](../README.md#emailAndPat)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
