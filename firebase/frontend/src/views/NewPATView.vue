@@ -37,8 +37,7 @@
 <script lang="ts">
 import Vue from 'vue';
 
-// v9 compat packages are API compatible with v8 code
-import firebase from 'firebase/compat/app'
+import { doc, serverTimestamp, setDoc }  from 'firebase/firestore'
 
 import store from '../store/index'
 import { db } from '../firebase'
@@ -73,17 +72,17 @@ export default Vue.extend({
         return Boolean(description)
     },
 
-    generate() {
+    async generate() {
       const id = generateId(32)
 
       const patFields = {
         description: this.description,
-        creationTimestamp: firebase.firestore.FieldValue.serverTimestamp()
+        creationTimestamp: serverTimestamp()
       }
 
-      db.collection('users').doc(this.email).collection('pats').doc(id).set(patFields).then(() => {
-        this.$router.push({ name: 'pats' })
-      })
+      const patDocRef = doc(db, 'users', this.email, 'pats', id)
+      await setDoc(patDocRef, patFields)
+      this.$router.push({ name: 'pats' })
     },
   },
 

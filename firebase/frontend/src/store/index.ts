@@ -1,9 +1,8 @@
-// v9 compat packages are API compatible with v8 code
-import firebase from 'firebase/compat/app'
-
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
+
+import { User } from 'firebase/auth'
 
 Vue.use(Vuex)
 
@@ -17,7 +16,7 @@ export default new Vuex.Store({
   plugins: [createPersistedState()],
 
   state: {
-    user: null as null | firebase.User,
+    user: null as null | User,
     loginState: LoginState.LoggedOut,
   },
   getters: {
@@ -26,7 +25,7 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    setUser (state, user: null | firebase.User) {
+    setUser (state, user: null | User) {
       state.user = user
       if (state.user) {
         state.loginState = LoginState.LoggedIn

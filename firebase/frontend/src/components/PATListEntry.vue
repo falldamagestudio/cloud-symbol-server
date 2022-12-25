@@ -77,8 +77,7 @@
 
 import Vue from 'vue'
 
-// v9 compat packages are API compatible with v8 code
-import firebase from 'firebase/compat/app'
+import { doc, deleteDoc, Timestamp } from 'firebase/firestore'
 
 import { db } from '../firebase'
 import PATUsageGuide from './PATUsageGuide.vue'
@@ -113,7 +112,7 @@ export default Vue.extend({
       return `${id.slice(0, 4)}...${id.slice(-4)}`;
     },
 
-    timestampToDisplayString: function (timestamp: firebase.firestore.Timestamp): string {
+    timestampToDisplayString: function (timestamp: Timestamp): string {
       return dayjs(timestamp.toDate()).format('YYYY-MM-DD HH:mm');
     }
 
@@ -125,10 +124,10 @@ export default Vue.extend({
       navigator.clipboard.writeText(text)
     },
 
-    revoke() {
-      db.collection('users').doc(this.email).collection('pats').doc(this.pat.id).delete().then(() => {
-        this.$emit('refresh')
-      })
+    async revoke() {
+      const patDocRef = doc(db, 'users', this.email, 'pats', this.pat.id)
+      await deleteDoc(patDocRef)
+      this.$emit('refresh')
     },
 
     patUsageGuideDone() {

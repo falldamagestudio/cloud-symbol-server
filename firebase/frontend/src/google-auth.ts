@@ -1,10 +1,7 @@
-// v9 compat packages are API compatible with v8 code
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/auth'
-import 'firebase/compat/firestore'
+import { GoogleAuthProvider } from 'firebase/auth'
 
-export function googleProvider(): firebase.auth.GoogleAuthProvider {
-  const provider = new firebase.auth.GoogleAuthProvider()
+export function googleProvider(): GoogleAuthProvider {
+  const provider = new GoogleAuthProvider()
 
   // Reference: https://firebase.google.com/docs/reference/js/firebase.auth.GoogleAuthProvider#setcustomparameters
   provider.setCustomParameters({

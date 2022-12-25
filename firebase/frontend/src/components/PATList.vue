@@ -73,14 +73,13 @@
 
 import Vue from 'vue'
 
-// v9 compat packages are API compatible with v8 code
-import type firebase from 'firebase/compat/app'
+import { collection, DocumentData, getDocs, query, QueryDocumentSnapshot } from 'firebase/firestore'
 
 import { db } from '../firebase'
 import PATListEntry from './PATListEntry.vue'
 
 interface Data {
-  pats: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>[]
+  pats: QueryDocumentSnapshot<DocumentData>[]
 }
 
 export default Vue.extend({
@@ -104,12 +103,11 @@ export default Vue.extend({
 
   methods: {
 
-    fetch() {
-      const query = db.collection('users').doc(this.email).collection('pats') as firebase.firestore.Query
-
-      query.get().then((pats) => {
-        this.pats = pats.docs
-      })
+    async fetch() {
+      const patsRef = collection(db, 'users', this.email, 'pats')
+      const patsQuery = query(patsRef)
+      const patsSnapshot = await getDocs(patsQuery)
+      this.pats = patsSnapshot.docs
     },
 
     refresh() {

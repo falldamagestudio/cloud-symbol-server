@@ -1,14 +1,12 @@
-
-// v9 compat packages are API compatible with v8 code
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/auth'
-import 'firebase/compat/firestore'
+import { initializeApp } from 'firebase/app'
+import { getAuth, onAuthStateChanged } from "firebase/auth"
+import { getFirestore } from "firebase/firestore"
 
 import store from './store/index'
 
-import { firebaseConfig, authEmulatorUrl, firestoreEmulator } from './firebaseConfig'
+import { firebaseConfig } from './firebaseConfig'
 
-firebase.initializeApp(firebaseConfig)
+export const firebaseApp = initializeApp(firebaseConfig)
 
 // When the Firebase SDK initializes, it does initally not know whether it
 //  has a user since the previous session (or whether this is the page reload
@@ -20,7 +18,8 @@ firebase.initializeApp(firebaseConfig)
 
 store.commit('setLoginStateUnknown')
 
-firebase.auth().onAuthStateChanged((user) =>{
+export const auth = getAuth(firebaseApp)
+onAuthStateChanged(auth, user => {
     if(user){
         store.commit('setUser', user);
     }else{
@@ -28,14 +27,4 @@ firebase.auth().onAuthStateChanged((user) =>{
     }
 });
 
-export const db = firebase.firestore()
-
-if (firestoreEmulator) {
-    db.useEmulator(firestoreEmulator.host, firestoreEmulator.port)
-}
-
-export const auth = firebase.auth()
-
-if (authEmulatorUrl) {
-    auth.useEmulator(authEmulatorUrl)
-}
+export const db = getFirestore(firebaseApp)

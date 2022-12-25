@@ -56,11 +56,11 @@
 
 <script lang="ts">
 
-// v9 compat packages are API compatible with v8 code
-import firebase from 'firebase/compat/app'
-import "firebase/compat/auth"
-
 import Vue from 'vue';
+
+import { signInWithRedirect, signOut } from 'firebase/auth'
+
+import { auth } from './firebase'
 import store, { LoginState } from './store/index'
 import { googleProvider } from './google-auth'
 import { version } from './appConfig'
@@ -81,11 +81,11 @@ export default Vue.extend({
   methods: {
     login (): void {
       const provider = googleProvider()
-      firebase.auth().signInWithRedirect(provider)
+      signInWithRedirect(auth, provider)
     },
 
     logout (): void {
-      firebase.auth().signOut()
+      signOut(auth)
     },
   },
 
