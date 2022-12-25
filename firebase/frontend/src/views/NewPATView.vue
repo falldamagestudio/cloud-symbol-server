@@ -36,7 +36,10 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import firebase from 'firebase/app'
+
+// v9 compat packages are API compatible with v8 code
+import firebase from 'firebase/compat/app'
+
 import store from '../store/index'
 import { db } from '../firebase'
 
@@ -54,7 +57,7 @@ function dec2hex (dec: number) : string {
 
 // generateId :: Integer -> String
 function generateId (len: number): string {
-  var arr = new Uint8Array((len || 40) / 2)
+  const arr = new Uint8Array((len || 40) / 2)
   window.crypto.getRandomValues(arr)
   return Array.from(arr, dec2hex).join('')
 }

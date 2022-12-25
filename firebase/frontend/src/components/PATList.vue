@@ -72,7 +72,10 @@
 <script lang="ts">
 
 import Vue from 'vue'
-import type firebase from 'firebase'
+
+// v9 compat packages are API compatible with v8 code
+import type firebase from 'firebase/compat/app'
+
 import { db } from '../firebase'
 import PATListEntry from './PATListEntry.vue'
 
@@ -102,7 +105,7 @@ export default Vue.extend({
   methods: {
 
     fetch() {
-      let query = db.collection('users').doc(this.email).collection('pats') as firebase.firestore.Query
+      const query = db.collection('users').doc(this.email).collection('pats') as firebase.firestore.Query
 
       query.get().then((pats) => {
         this.pats = pats.docs

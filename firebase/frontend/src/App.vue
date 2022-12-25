@@ -55,7 +55,11 @@
 </template>
 
 <script lang="ts">
-import firebase from 'firebase/app'
+
+// v9 compat packages are API compatible with v8 code
+import firebase from 'firebase/compat/app'
+import "firebase/compat/auth"
+
 import Vue from 'vue';
 import store, { LoginState } from './store/index'
 import { googleProvider } from './google-auth'

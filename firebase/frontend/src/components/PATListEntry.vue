@@ -76,7 +76,10 @@
 <script lang="ts">
 
 import Vue from 'vue'
-import firebase from 'firebase/app'
+
+// v9 compat packages are API compatible with v8 code
+import firebase from 'firebase/compat/app'
+
 import { db } from '../firebase'
 import PATUsageGuide from './PATUsageGuide.vue'
 

@@ -1,4 +1,6 @@
-import firebase from 'firebase/app'
+// v9 compat packages are API compatible with v8 code
+import firebase from 'firebase/compat/app'
+
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
