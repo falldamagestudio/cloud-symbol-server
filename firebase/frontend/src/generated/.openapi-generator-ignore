@@ -1,0 +1,5 @@
+# Do not generate CI scripts
+git_push.sh
+
+# Do not generate NPM related files
+.npmignore

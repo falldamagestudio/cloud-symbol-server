@@ -7,7 +7,7 @@
 .PHONY: test-local test-local-download-api test-local-admin-api test-local-cli
 
 .PHONY: generate-db-models
-.PHONY: generate-apis generate-go-server-api generate-go-client-api generate-csharp-client-api
+.PHONY: generate-apis generate-go-server-api generate-go-client-api generate-csharp-client-api generate-typescript-client-api
 
 .PHONY: build-cli
 
@@ -193,7 +193,7 @@ generate-db-models:
 # API regeneration commands
 #########################################################
 
-generate-apis: generate-go-server-api generate-go-client-api generate-csharp-client-api
+generate-apis: generate-go-server-api generate-go-client-api generate-csharp-client-api generate-typescript-client-api
 
 generate-go-server-api:
 
@@ -242,6 +242,20 @@ generate-csharp-client-api:
 		-g csharp-netcore \
 		--additional-properties=netCoreProjectFile=true,library=httpclient,packageName=BackendAPI,generateAliasAsModel=true \
 		-o /local/cli/generated/BackendAPI
+
+generate-typescript-client-api:
+
+#	rm -rf firebase/frontend/src/generated/
+	docker run \
+		--rm \
+		-v "${PWD}:/local" \
+		--user $(shell id -u):$(shell id -g) \
+		openapitools/openapi-generator-cli \
+		generate \
+		-i /local/admin-api/admin-api.yaml \
+		-g typescript-axios \
+		--additional-properties=generateAliasAsModel=true \
+		-o /local/firebase/frontend/src/generated
 
 #########################################################
 # CLI commands
