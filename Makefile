@@ -11,6 +11,8 @@
 
 .PHONY: build-cli
 
+OPENAPI_GENERATOR_VERSION:=v6.2.1
+
 ifndef ENV
 ENV:=environments/test
 endif
@@ -202,7 +204,7 @@ generate-go-server-api:
 		--rm \
 		-v "${PWD}:/local" \
 		--user $(shell id -u):$(shell id -g) \
-		openapitools/openapi-generator-cli \
+		openapitools/openapi-generator-cli:${OPENAPI_GENERATOR_VERSION} \
 		generate \
 		--git-user-id=falldamagestudio \
 		--git-repo-id=cloud-symbol-server/admin-api \
@@ -219,7 +221,7 @@ generate-go-client-api:
 		--rm \
 		-v "${PWD}:/local" \
 		--user $(shell id -u):$(shell id -g) \
-		openapitools/openapi-generator-cli \
+		openapitools/openapi-generator-cli:${OPENAPI_GENERATOR_VERSION} \
 		generate \
 		--git-user-id=falldamagestudio \
 		--git-repo-id=cloud-symbol-server/admin-api \
@@ -236,7 +238,7 @@ generate-csharp-client-api:
 		--rm \
 		-v "${PWD}:/local" \
 		--user $(shell id -u):$(shell id -g) \
-		openapitools/openapi-generator-cli \
+		openapitools/openapi-generator-cli:${OPENAPI_GENERATOR_VERSION} \
 		generate \
 		-i /local/admin-api/admin-api.yaml \
 		-g csharp-netcore \
@@ -250,7 +252,7 @@ generate-typescript-client-api:
 		--rm \
 		-v "${PWD}:/local" \
 		--user $(shell id -u):$(shell id -g) \
-		openapitools/openapi-generator-cli \
+		openapitools/openapi-generator-cli:${OPENAPI_GENERATOR_VERSION} \
 		generate \
 		-i /local/admin-api/admin-api.yaml \
 		-g typescript-axios \
