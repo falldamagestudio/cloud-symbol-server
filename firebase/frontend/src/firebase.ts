@@ -4,7 +4,7 @@ import { getFirestore } from "firebase/firestore"
 
 import store from './store/index'
 
-import { firebaseConfig } from './firebaseConfig'
+import { firebaseConfig } from './appConfig'
 
 export const firebaseApp = initializeApp(firebaseConfig)
 

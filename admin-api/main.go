@@ -32,5 +32,18 @@ func init() {
 func AdminAPI(w http.ResponseWriter, r *http.Request) {
 	log.Print("Path called: " + r.URL.Path)
 
+	// Set CORS headers for the preflight request
+	if r.Method == http.MethodOptions {
+		// Allow API calls from any web origin
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		// The calling party is allowed to cache the results from a preflight request for this many seconds
+		w.Header().Set("Access-Control-Max-Age", "3600")
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
+	// Set CORS headers for the main request.
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	router.ServeHTTP(w, r)
 }

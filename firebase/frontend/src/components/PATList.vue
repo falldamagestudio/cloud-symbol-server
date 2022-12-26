@@ -78,6 +78,8 @@ import { collection, DocumentData, getDocs, query, QueryDocumentSnapshot } from 
 import { db } from '../firebase'
 import PATListEntry from './PATListEntry.vue'
 
+import { api } from '../adminApi'
+
 interface Data {
   pats: QueryDocumentSnapshot<DocumentData>[]
 }
@@ -104,10 +106,20 @@ export default Vue.extend({
   methods: {
 
     async fetch() {
-      const patsRef = collection(db, 'users', this.email, 'pats')
-      const patsQuery = query(patsRef)
-      const patsSnapshot = await getDocs(patsQuery)
-      this.pats = patsSnapshot.docs
+
+      try {
+        const response = await api.getTokens()
+        console.log(response)
+      } catch (error) {
+        console.log(error)
+      }
+
+      //response.then(value => { this.pats = value })
+
+      // const patsRef = collection(db, 'users', this.email, 'pats')
+      // const patsQuery = query(patsRef)
+      // const patsSnapshot = await getDocs(patsQuery)
+      // this.pats = patsSnapshot.docs
     },
 
     refresh() {

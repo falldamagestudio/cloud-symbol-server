@@ -1,6 +1,9 @@
 module.exports = {
   configureWebpack: {
-    devtool: 'source-map'
+    devtool: 'source-map',
+    devServer: {
+      headers: { "Access-Control-Allow-Origin": "*" }
+    }
   },
 
   transpileDependencies: [

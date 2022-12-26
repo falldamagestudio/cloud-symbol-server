@@ -76,7 +76,7 @@
 <script lang="ts">
 
 import Vue from 'vue'
-import { adminAPIEndpoint, downloadAPIEndpoint } from '../firebaseConfig'
+import { adminAPIEndpoint, downloadAPIEndpoint } from '../appConfig'
 
 interface Data {
   howToUseTab: any,
