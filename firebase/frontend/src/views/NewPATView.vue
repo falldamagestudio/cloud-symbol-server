@@ -34,19 +34,20 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue';
+<script setup lang="ts">
 
+import { ref } from 'vue'
+import { useRouter } from 'vue-router/composables'
 import { doc, serverTimestamp, setDoc }  from 'firebase/firestore'
 
 import store from '../store/index'
 import { db } from '../firebase'
 
-interface Data {
-  description: string
-  email: string
-  isFormValid: boolean
-}
+const description = ref('')
+const email = store.state.user!.email!
+const isFormValid = ref(false)
+
+const router = useRouter()
 
 // dec2hex :: Integer -> String
 // i.e. 0-255 -> '00'-'ff'
@@ -61,38 +62,21 @@ function generateId (len: number): string {
   return Array.from(arr, dec2hex).join('')
 }
 
-export default Vue.extend({
+function validateDescription(description: string): boolean {
+    return Boolean(description)
+}
 
-  components: {
-  },
+async function generate() {
+  const id = generateId(32)
 
+  const patFields = {
+    description: description.value,
+    creationTimestamp: serverTimestamp()
+  }
 
-  methods: {
-    validateDescription(description: string): boolean {
-        return Boolean(description)
-    },
+  const patDocRef = doc(db, 'users', email, 'pats', id)
+  await setDoc(patDocRef, patFields)
+  router.push({ name: 'pats' })
+}
 
-    async generate() {
-      const id = generateId(32)
-
-      const patFields = {
-        description: this.description,
-        creationTimestamp: serverTimestamp()
-      }
-
-      const patDocRef = doc(db, 'users', this.email, 'pats', id)
-      await setDoc(patDocRef, patFields)
-      this.$router.push({ name: 'pats' })
-    },
-  },
-
-  data () : Data {
-    return {
-      description: '',
-      email: store.state.user!.email!,
-      isFormValid: false,
-    } 
-  },
-
-})
 </script>

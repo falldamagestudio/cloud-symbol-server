@@ -4,7 +4,7 @@
     <!-- Personal Access Token ID -->
 
     <td>
-      {{ pat.id | abbreviateId }}
+      {{ abbreviateId(pat.id) }}
 
       <!-- Shortcut for copying full PAT ID to clipboard -->
       <v-btn
@@ -22,7 +22,7 @@
     <!-- Personal Access Token creation timestamp -->
 
     <td>
-      {{ pat.get('creationTimestamp') | timestampToDisplayString }}
+      {{ timestampToDisplayString(pat.get('creationTimestamp')) }}
     </td>
 
     <!-- Personal Access Token description -->
@@ -73,68 +73,46 @@
 
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
-import Vue from 'vue'
-
+import { ref } from 'vue'
 import { doc, deleteDoc, Timestamp } from 'firebase/firestore'
+import dayjs from 'dayjs'
 
 import { db } from '../firebase'
 import PATUsageGuide from './PATUsageGuide.vue'
 
-import dayjs from 'dayjs'
+const props = defineProps<{
+  email: string,
+  pat: any,
+}>()
 
+const emit = defineEmits<{
+  (e: 'refresh'): void
+}>()
 
-interface Data {
-  useDialogVisible: boolean,
+const useDialogVisible = ref(false)
+
+function copyTextToClipboard(text: string) {
+  navigator.clipboard.writeText(text)
 }
 
-export default Vue.extend({
+async function revoke() {
+  const patDocRef = doc(db, 'users', props.email, 'pats', props.pat.id)
+  await deleteDoc(patDocRef)
+  emit('refresh')
+}
 
-  components: {
-    PATUsageGuide,
-  },
+function patUsageGuideDone() {
+  useDialogVisible.value = false
+}
 
-  props: {
-    email: String,
-    pat: Object,
-  },
+function abbreviateId(id: string): string {
+  return `${id.slice(0, 4)}...${id.slice(-4)}`
+}
 
-  data (): Data {
-    return {
-      useDialogVisible: false,
-    }
-  },
-
-  filters: {
-    
-    abbreviateId: function (id: string): string {
-      return `${id.slice(0, 4)}...${id.slice(-4)}`;
-    },
-
-    timestampToDisplayString: function (timestamp: Timestamp): string {
-      return dayjs(timestamp.toDate()).format('YYYY-MM-DD HH:mm');
-    }
-
-  },
-
-  methods: {
-
-    copyTextToClipboard(text: string) {
-      navigator.clipboard.writeText(text)
-    },
-
-    async revoke() {
-      const patDocRef = doc(db, 'users', this.email, 'pats', this.pat.id)
-      await deleteDoc(patDocRef)
-      this.$emit('refresh')
-    },
-
-    patUsageGuideDone() {
-      this.useDialogVisible = false
-    },
-  }
-
-})
+function timestampToDisplayString(timestamp: Timestamp): string {
+  return dayjs(timestamp.toDate()).format('YYYY-MM-DD HH:mm')
+}
 
 </script>

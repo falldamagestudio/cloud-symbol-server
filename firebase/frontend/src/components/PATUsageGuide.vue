@@ -73,46 +73,35 @@
   </v-card>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
-import Vue from 'vue'
+import { ref } from 'vue'
+
 import { adminAPIEndpoint, downloadAPIEndpoint } from '../appConfig'
 
-interface Data {
-  howToUseTab: any,
-  downloadConfigFileHref: string,
-  symbolServerDownloadAPIEndpoint: string,
+const props = defineProps<{
+  email: string,
+  pat: any,
+}>()
+
+const emit = defineEmits<{
+  (e: 'done'): void
+}>()
+
+const howToUseTab = ref(null)
+const downloadConfigFileHref = "data:application/json;charset=utf-8," + encodeURI(JSON.stringify({
+        'service-url': adminAPIEndpoint,
+        'email': props.email,
+        'pat': props.pat.id,
+      }, null, 2))
+const symbolServerDownloadAPIEndpoint = downloadAPIEndpoint.split('://')[0] + "://" + encodeURIComponent(props.email) + ':' + props.pat.id + '@' + downloadAPIEndpoint.split('://')[1]
+
+function copyTextToClipboard(text: string) {
+  navigator.clipboard.writeText(text)
 }
 
-export default Vue.extend({
-
-  props: {
-    email: String,
-    pat: Object,
-  },
-
-  data(): Data {
-    return {
-      howToUseTab: null,
-      downloadConfigFileHref: "data:application/json;charset=utf-8," + encodeURI(JSON.stringify({
-        'service-url': adminAPIEndpoint,
-        'email': this.email,
-        'pat': this.pat.id,
-      }, null, 2)),
-      symbolServerDownloadAPIEndpoint: downloadAPIEndpoint.split('://')[0] + "://" + encodeURIComponent(this.email) + ':' + this.pat.id + '@' + downloadAPIEndpoint.split('://')[1],
-    }
-  },
-
-  methods: {
-    copyTextToClipboard(text: string) {
-      navigator.clipboard.writeText(text)
-    },
-
-    done() {
-      this.$emit('done')
-    },
-  }
-
-})
+function done() {
+    emit('done')
+}
 
 </script>

@@ -54,50 +54,31 @@
   </v-app>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
-import Vue from 'vue';
-
+import { ref } from 'vue';
 import { signInWithRedirect, signOut } from 'firebase/auth'
-
 import { auth } from './firebase'
+
 import store, { LoginState } from './store/index'
 import { googleProvider } from './google-auth'
 import { version } from './appConfig'
 
-interface Data {
-  version: string,
+function login(): void {
+  const provider = googleProvider()
+  signInWithRedirect(auth, provider)
 }
 
-export default Vue.extend({
-  name: 'App',
-
-  data (): Data {
-    return {
-      version: version,
-    }
-  },
-
-  methods: {
-    login (): void {
-      const provider = googleProvider()
-      signInWithRedirect(auth, provider)
-    },
-
-    logout (): void {
-      signOut(auth)
-    },
-  },
-
-  computed: {
-    isLoggedIn(): boolean {
-      return store.state.user != null
-    },
-
-    isLoginStateUnknown(): boolean {
-      return store.state.loginState == LoginState.Unknown
-    },
+function logout(): void {
+  signOut(auth)
 }
 
-});
+function isLoggedIn(): boolean {
+  return store.state.user != null
+}
+
+function isLoginStateUnknown(): boolean {
+  return store.state.loginState == LoginState.Unknown
+}
+
 </script>

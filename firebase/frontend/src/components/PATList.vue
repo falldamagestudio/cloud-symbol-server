@@ -69,10 +69,9 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
-import Vue from 'vue'
-
+import { ref } from 'vue'
 import { collection, DocumentData, getDocs, query, QueryDocumentSnapshot } from 'firebase/firestore'
 
 import { db } from '../firebase'
@@ -80,57 +79,33 @@ import PATListEntry from './PATListEntry.vue'
 
 import { api } from '../adminApi'
 
-interface Data {
-  pats: QueryDocumentSnapshot<DocumentData>[]
+const props = defineProps<{
+  email: string,
+}>()
+
+const pats = ref([] as QueryDocumentSnapshot<DocumentData>[])
+
+async function fetch() {
+
+  // try {
+  //   const response = await api.getTokens()
+  //   console.log(response)
+  // } catch (error) {
+  //   console.log(error)
+  // }
+
+  //response.then(value => { this.pats = value })
+
+  const patsRef = collection(db, 'users', props.email, 'pats')
+  const patsQuery = query(patsRef)
+  const patsSnapshot = await getDocs(patsQuery)
+  pats.value = patsSnapshot.docs
 }
 
-export default Vue.extend({
+function refresh() {
+  fetch()
+}
 
-  components: {
-    PATListEntry
-  },
-
-  props: {
-    email: String,
-  },
-
-  data (): Data {
-    return {
-      pats: [ ],
-    }
-  },
-
-  watch: {
-  },
-
-  methods: {
-
-    async fetch() {
-
-      // try {
-      //   const response = await api.getTokens()
-      //   console.log(response)
-      // } catch (error) {
-      //   console.log(error)
-      // }
-
-      //response.then(value => { this.pats = value })
-
-      const patsRef = collection(db, 'users', this.email, 'pats')
-      const patsQuery = query(patsRef)
-      const patsSnapshot = await getDocs(patsQuery)
-      this.pats = patsSnapshot.docs
-    },
-
-    refresh() {
-      this.fetch()
-    },
-  },
-
-  created () {
-    this.fetch()
-  },
-
-})
+fetch()
 
 </script>

@@ -5,26 +5,11 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue';
-import PATList from '../components/PATList.vue';
+<script setup lang="ts">
+
 import store from '../store/index'
+import PATList from '../components/PATList.vue';
 
-interface Data {
-  email: string
-}
+const email = store.state.user!.email!
 
-export default Vue.extend({
-
-  components: {
-    PATList,
-  },
-
-  data () : Data {
-    return {
-      email: store.state.user!.email!
-    } 
-  },
-
-})
 </script>
