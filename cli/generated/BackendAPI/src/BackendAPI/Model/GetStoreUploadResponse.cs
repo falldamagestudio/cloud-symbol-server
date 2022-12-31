@@ -122,7 +122,7 @@ namespace BackendAPI.Model
         /// <returns>String presentation of the object</returns>
         public override string ToString()
         {
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             sb.Append("class GetStoreUploadResponse {\n");
             sb.Append("  Description: ").Append(Description).Append("\n");
             sb.Append("  BuildId: ").Append(BuildId).Append("\n");
@@ -160,8 +160,9 @@ namespace BackendAPI.Model
         public bool Equals(GetStoreUploadResponse input)
         {
             if (input == null)
+            {
                 return false;
-
+            }
             return 
                 (
                     this.Description == input.Description ||
@@ -200,14 +201,22 @@ namespace BackendAPI.Model
             {
                 int hashCode = 41;
                 if (this.Description != null)
-                    hashCode = hashCode * 59 + this.Description.GetHashCode();
+                {
+                    hashCode = (hashCode * 59) + this.Description.GetHashCode();
+                }
                 if (this.BuildId != null)
-                    hashCode = hashCode * 59 + this.BuildId.GetHashCode();
+                {
+                    hashCode = (hashCode * 59) + this.BuildId.GetHashCode();
+                }
                 if (this.Timestamp != null)
-                    hashCode = hashCode * 59 + this.Timestamp.GetHashCode();
+                {
+                    hashCode = (hashCode * 59) + this.Timestamp.GetHashCode();
+                }
                 if (this.Files != null)
-                    hashCode = hashCode * 59 + this.Files.GetHashCode();
-                hashCode = hashCode * 59 + this.Status.GetHashCode();
+                {
+                    hashCode = (hashCode * 59) + this.Files.GetHashCode();
+                }
+                hashCode = (hashCode * 59) + this.Status.GetHashCode();
                 return hashCode;
             }
         }

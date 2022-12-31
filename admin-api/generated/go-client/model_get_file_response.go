@@ -40,7 +40,7 @@ func NewGetFileResponseWithDefaults() *GetFileResponse {
 
 // GetFileName returns the FileName field value if set, zero value otherwise.
 func (o *GetFileResponse) GetFileName() string {
-	if o == nil || o.FileName == nil {
+	if o == nil || isNil(o.FileName) {
 		var ret string
 		return ret
 	}
@@ -50,15 +50,15 @@ func (o *GetFileResponse) GetFileName() string {
 // GetFileNameOk returns a tuple with the FileName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GetFileResponse) GetFileNameOk() (*string, bool) {
-	if o == nil || o.FileName == nil {
-		return nil, false
+	if o == nil || isNil(o.FileName) {
+    return nil, false
 	}
 	return o.FileName, true
 }
 
 // HasFileName returns a boolean if a field has been set.
 func (o *GetFileResponse) HasFileName() bool {
-	if o != nil && o.FileName != nil {
+	if o != nil && !isNil(o.FileName) {
 		return true
 	}
 
@@ -72,7 +72,7 @@ func (o *GetFileResponse) SetFileName(v string) {
 
 // GetHash returns the Hash field value if set, zero value otherwise.
 func (o *GetFileResponse) GetHash() string {
-	if o == nil || o.Hash == nil {
+	if o == nil || isNil(o.Hash) {
 		var ret string
 		return ret
 	}
@@ -82,15 +82,15 @@ func (o *GetFileResponse) GetHash() string {
 // GetHashOk returns a tuple with the Hash field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GetFileResponse) GetHashOk() (*string, bool) {
-	if o == nil || o.Hash == nil {
-		return nil, false
+	if o == nil || isNil(o.Hash) {
+    return nil, false
 	}
 	return o.Hash, true
 }
 
 // HasHash returns a boolean if a field has been set.
 func (o *GetFileResponse) HasHash() bool {
-	if o != nil && o.Hash != nil {
+	if o != nil && !isNil(o.Hash) {
 		return true
 	}
 
@@ -104,7 +104,7 @@ func (o *GetFileResponse) SetHash(v string) {
 
 // GetStatus returns the Status field value if set, zero value otherwise.
 func (o *GetFileResponse) GetStatus() string {
-	if o == nil || o.Status == nil {
+	if o == nil || isNil(o.Status) {
 		var ret string
 		return ret
 	}
@@ -114,15 +114,15 @@ func (o *GetFileResponse) GetStatus() string {
 // GetStatusOk returns a tuple with the Status field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GetFileResponse) GetStatusOk() (*string, bool) {
-	if o == nil || o.Status == nil {
-		return nil, false
+	if o == nil || isNil(o.Status) {
+    return nil, false
 	}
 	return o.Status, true
 }
 
 // HasStatus returns a boolean if a field has been set.
 func (o *GetFileResponse) HasStatus() bool {
-	if o != nil && o.Status != nil {
+	if o != nil && !isNil(o.Status) {
 		return true
 	}
 
@@ -136,13 +136,13 @@ func (o *GetFileResponse) SetStatus(v string) {
 
 func (o GetFileResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if o.FileName != nil {
+	if !isNil(o.FileName) {
 		toSerialize["fileName"] = o.FileName
 	}
-	if o.Hash != nil {
+	if !isNil(o.Hash) {
 		toSerialize["hash"] = o.Hash
 	}
-	if o.Status != nil {
+	if !isNil(o.Status) {
 		toSerialize["status"] = o.Status
 	}
 	return json.Marshal(toSerialize)

@@ -41,7 +41,7 @@ func NewUploadFileResponseWithDefaults() *UploadFileResponse {
 
 // GetFileName returns the FileName field value if set, zero value otherwise.
 func (o *UploadFileResponse) GetFileName() string {
-	if o == nil || o.FileName == nil {
+	if o == nil || isNil(o.FileName) {
 		var ret string
 		return ret
 	}
@@ -51,15 +51,15 @@ func (o *UploadFileResponse) GetFileName() string {
 // GetFileNameOk returns a tuple with the FileName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *UploadFileResponse) GetFileNameOk() (*string, bool) {
-	if o == nil || o.FileName == nil {
-		return nil, false
+	if o == nil || isNil(o.FileName) {
+    return nil, false
 	}
 	return o.FileName, true
 }
 
 // HasFileName returns a boolean if a field has been set.
 func (o *UploadFileResponse) HasFileName() bool {
-	if o != nil && o.FileName != nil {
+	if o != nil && !isNil(o.FileName) {
 		return true
 	}
 
@@ -73,7 +73,7 @@ func (o *UploadFileResponse) SetFileName(v string) {
 
 // GetHash returns the Hash field value if set, zero value otherwise.
 func (o *UploadFileResponse) GetHash() string {
-	if o == nil || o.Hash == nil {
+	if o == nil || isNil(o.Hash) {
 		var ret string
 		return ret
 	}
@@ -83,15 +83,15 @@ func (o *UploadFileResponse) GetHash() string {
 // GetHashOk returns a tuple with the Hash field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *UploadFileResponse) GetHashOk() (*string, bool) {
-	if o == nil || o.Hash == nil {
-		return nil, false
+	if o == nil || isNil(o.Hash) {
+    return nil, false
 	}
 	return o.Hash, true
 }
 
 // HasHash returns a boolean if a field has been set.
 func (o *UploadFileResponse) HasHash() bool {
-	if o != nil && o.Hash != nil {
+	if o != nil && !isNil(o.Hash) {
 		return true
 	}
 
@@ -105,7 +105,7 @@ func (o *UploadFileResponse) SetHash(v string) {
 
 // GetUrl returns the Url field value if set, zero value otherwise.
 func (o *UploadFileResponse) GetUrl() string {
-	if o == nil || o.Url == nil {
+	if o == nil || isNil(o.Url) {
 		var ret string
 		return ret
 	}
@@ -115,15 +115,15 @@ func (o *UploadFileResponse) GetUrl() string {
 // GetUrlOk returns a tuple with the Url field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *UploadFileResponse) GetUrlOk() (*string, bool) {
-	if o == nil || o.Url == nil {
-		return nil, false
+	if o == nil || isNil(o.Url) {
+    return nil, false
 	}
 	return o.Url, true
 }
 
 // HasUrl returns a boolean if a field has been set.
 func (o *UploadFileResponse) HasUrl() bool {
-	if o != nil && o.Url != nil {
+	if o != nil && !isNil(o.Url) {
 		return true
 	}
 
@@ -137,13 +137,13 @@ func (o *UploadFileResponse) SetUrl(v string) {
 
 func (o UploadFileResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if o.FileName != nil {
+	if !isNil(o.FileName) {
 		toSerialize["fileName"] = o.FileName
 	}
-	if o.Hash != nil {
+	if !isNil(o.Hash) {
 		toSerialize["hash"] = o.Hash
 	}
-	if o.Url != nil {
+	if !isNil(o.Url) {
 		toSerialize["url"] = o.Url
 	}
 	return json.Marshal(toSerialize)

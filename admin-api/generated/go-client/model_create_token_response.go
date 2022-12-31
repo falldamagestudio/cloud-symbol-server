@@ -39,7 +39,7 @@ func NewCreateTokenResponseWithDefaults() *CreateTokenResponse {
 
 // GetToken returns the Token field value if set, zero value otherwise.
 func (o *CreateTokenResponse) GetToken() string {
-	if o == nil || o.Token == nil {
+	if o == nil || isNil(o.Token) {
 		var ret string
 		return ret
 	}
@@ -49,15 +49,15 @@ func (o *CreateTokenResponse) GetToken() string {
 // GetTokenOk returns a tuple with the Token field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CreateTokenResponse) GetTokenOk() (*string, bool) {
-	if o == nil || o.Token == nil {
-		return nil, false
+	if o == nil || isNil(o.Token) {
+    return nil, false
 	}
 	return o.Token, true
 }
 
 // HasToken returns a boolean if a field has been set.
 func (o *CreateTokenResponse) HasToken() bool {
-	if o != nil && o.Token != nil {
+	if o != nil && !isNil(o.Token) {
 		return true
 	}
 
@@ -71,7 +71,7 @@ func (o *CreateTokenResponse) SetToken(v string) {
 
 func (o CreateTokenResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Token != nil {
+	if !isNil(o.Token) {
 		toSerialize["token"] = o.Token
 	}
 	return json.Marshal(toSerialize)

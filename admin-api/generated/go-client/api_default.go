@@ -12,40 +12,35 @@ package openapi
 
 import (
 	"bytes"
-	_context "context"
-	_ioutil "io/ioutil"
-	_nethttp "net/http"
-	_neturl "net/url"
+	"context"
+	"io/ioutil"
+	"net/http"
+	"net/url"
 	"strings"
 )
 
-// Linger please
-var (
-	_ _context.Context
-)
 
 // DefaultApiService DefaultApi service
 type DefaultApiService service
 
 type ApiCreateStoreRequest struct {
-	ctx _context.Context
+	ctx context.Context
 	ApiService *DefaultApiService
 	storeId string
 }
 
-
-func (r ApiCreateStoreRequest) Execute() (*_nethttp.Response, error) {
+func (r ApiCreateStoreRequest) Execute() (*http.Response, error) {
 	return r.ApiService.CreateStoreExecute(r)
 }
 
 /*
 CreateStore Create a new store
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param storeId ID of store to create
  @return ApiCreateStoreRequest
 */
-func (a *DefaultApiService) CreateStore(ctx _context.Context, storeId string) ApiCreateStoreRequest {
+func (a *DefaultApiService) CreateStore(ctx context.Context, storeId string) ApiCreateStoreRequest {
 	return ApiCreateStoreRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -54,26 +49,24 @@ func (a *DefaultApiService) CreateStore(ctx _context.Context, storeId string) Ap
 }
 
 // Execute executes the request
-func (a *DefaultApiService) CreateStoreExecute(r ApiCreateStoreRequest) (*_nethttp.Response, error) {
+func (a *DefaultApiService) CreateStoreExecute(r ApiCreateStoreRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodPost
+		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
+		formFiles            []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.CreateStore")
 	if err != nil {
-		return nil, GenericOpenAPIError{error: err.Error()}
+		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/stores/{storeId}"
-	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", _neturl.PathEscape(parameterToString(r.storeId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", url.PathEscape(parameterToString(r.storeId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -92,7 +85,7 @@ func (a *DefaultApiService) CreateStoreExecute(r ApiCreateStoreRequest) (*_netht
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return nil, err
 	}
@@ -102,15 +95,15 @@ func (a *DefaultApiService) CreateStoreExecute(r ApiCreateStoreRequest) (*_netht
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -121,7 +114,8 @@ func (a *DefaultApiService) CreateStoreExecute(r ApiCreateStoreRequest) (*_netht
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 409 {
@@ -131,7 +125,8 @@ func (a *DefaultApiService) CreateStoreExecute(r ApiCreateStoreRequest) (*_netht
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 		}
 		return localVarHTTPResponse, newErr
 	}
@@ -140,7 +135,7 @@ func (a *DefaultApiService) CreateStoreExecute(r ApiCreateStoreRequest) (*_netht
 }
 
 type ApiCreateStoreUploadRequest struct {
-	ctx _context.Context
+	ctx context.Context
 	ApiService *DefaultApiService
 	storeId string
 	createStoreUploadRequest *CreateStoreUploadRequest
@@ -151,18 +146,18 @@ func (r ApiCreateStoreUploadRequest) CreateStoreUploadRequest(createStoreUploadR
 	return r
 }
 
-func (r ApiCreateStoreUploadRequest) Execute() (CreateStoreUploadResponse, *_nethttp.Response, error) {
+func (r ApiCreateStoreUploadRequest) Execute() (*CreateStoreUploadResponse, *http.Response, error) {
 	return r.ApiService.CreateStoreUploadExecute(r)
 }
 
 /*
 CreateStoreUpload Start a new upload
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param storeId ID of the store containing the upload
  @return ApiCreateStoreUploadRequest
 */
-func (a *DefaultApiService) CreateStoreUpload(ctx _context.Context, storeId string) ApiCreateStoreUploadRequest {
+func (a *DefaultApiService) CreateStoreUpload(ctx context.Context, storeId string) ApiCreateStoreUploadRequest {
 	return ApiCreateStoreUploadRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -172,27 +167,25 @@ func (a *DefaultApiService) CreateStoreUpload(ctx _context.Context, storeId stri
 
 // Execute executes the request
 //  @return CreateStoreUploadResponse
-func (a *DefaultApiService) CreateStoreUploadExecute(r ApiCreateStoreUploadRequest) (CreateStoreUploadResponse, *_nethttp.Response, error) {
+func (a *DefaultApiService) CreateStoreUploadExecute(r ApiCreateStoreUploadRequest) (*CreateStoreUploadResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodPost
+		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  CreateStoreUploadResponse
+		formFiles            []formFile
+		localVarReturnValue  *CreateStoreUploadResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.CreateStoreUpload")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/stores/{storeId}/uploads"
-	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", _neturl.PathEscape(parameterToString(r.storeId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", url.PathEscape(parameterToString(r.storeId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 	if r.createStoreUploadRequest == nil {
 		return localVarReturnValue, nil, reportError("createStoreUploadRequest is required and must be specified")
 	}
@@ -216,7 +209,7 @@ func (a *DefaultApiService) CreateStoreUploadExecute(r ApiCreateStoreUploadReque
 	}
 	// body params
 	localVarPostBody = r.createStoreUploadRequest
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
@@ -226,15 +219,15 @@ func (a *DefaultApiService) CreateStoreUploadExecute(r ApiCreateStoreUploadReque
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -245,14 +238,15 @@ func (a *DefaultApiService) CreateStoreUploadExecute(r ApiCreateStoreUploadReque
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}
@@ -263,22 +257,21 @@ func (a *DefaultApiService) CreateStoreUploadExecute(r ApiCreateStoreUploadReque
 }
 
 type ApiCreateTokenRequest struct {
-	ctx _context.Context
+	ctx context.Context
 	ApiService *DefaultApiService
 }
 
-
-func (r ApiCreateTokenRequest) Execute() (CreateTokenResponse, *_nethttp.Response, error) {
+func (r ApiCreateTokenRequest) Execute() (*CreateTokenResponse, *http.Response, error) {
 	return r.ApiService.CreateTokenExecute(r)
 }
 
 /*
 CreateToken Create a new token for current user
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCreateTokenRequest
 */
-func (a *DefaultApiService) CreateToken(ctx _context.Context) ApiCreateTokenRequest {
+func (a *DefaultApiService) CreateToken(ctx context.Context) ApiCreateTokenRequest {
 	return ApiCreateTokenRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -287,26 +280,24 @@ func (a *DefaultApiService) CreateToken(ctx _context.Context) ApiCreateTokenRequ
 
 // Execute executes the request
 //  @return CreateTokenResponse
-func (a *DefaultApiService) CreateTokenExecute(r ApiCreateTokenRequest) (CreateTokenResponse, *_nethttp.Response, error) {
+func (a *DefaultApiService) CreateTokenExecute(r ApiCreateTokenRequest) (*CreateTokenResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodPost
+		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  CreateTokenResponse
+		formFiles            []formFile
+		localVarReturnValue  *CreateTokenResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.CreateToken")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/tokens"
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -325,7 +316,7 @@ func (a *DefaultApiService) CreateTokenExecute(r ApiCreateTokenRequest) (CreateT
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
@@ -335,15 +326,15 @@ func (a *DefaultApiService) CreateTokenExecute(r ApiCreateTokenRequest) (CreateT
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -354,14 +345,15 @@ func (a *DefaultApiService) CreateTokenExecute(r ApiCreateTokenRequest) (CreateT
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}
@@ -372,24 +364,23 @@ func (a *DefaultApiService) CreateTokenExecute(r ApiCreateTokenRequest) (CreateT
 }
 
 type ApiDeleteStoreRequest struct {
-	ctx _context.Context
+	ctx context.Context
 	ApiService *DefaultApiService
 	storeId string
 }
 
-
-func (r ApiDeleteStoreRequest) Execute() (*_nethttp.Response, error) {
+func (r ApiDeleteStoreRequest) Execute() (*http.Response, error) {
 	return r.ApiService.DeleteStoreExecute(r)
 }
 
 /*
 DeleteStore Delete an existing store
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param storeId ID of store to delete
  @return ApiDeleteStoreRequest
 */
-func (a *DefaultApiService) DeleteStore(ctx _context.Context, storeId string) ApiDeleteStoreRequest {
+func (a *DefaultApiService) DeleteStore(ctx context.Context, storeId string) ApiDeleteStoreRequest {
 	return ApiDeleteStoreRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -398,26 +389,24 @@ func (a *DefaultApiService) DeleteStore(ctx _context.Context, storeId string) Ap
 }
 
 // Execute executes the request
-func (a *DefaultApiService) DeleteStoreExecute(r ApiDeleteStoreRequest) (*_nethttp.Response, error) {
+func (a *DefaultApiService) DeleteStoreExecute(r ApiDeleteStoreRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodDelete
+		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
+		formFiles            []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.DeleteStore")
 	if err != nil {
-		return nil, GenericOpenAPIError{error: err.Error()}
+		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/stores/{storeId}"
-	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", _neturl.PathEscape(parameterToString(r.storeId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", url.PathEscape(parameterToString(r.storeId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -436,7 +425,7 @@ func (a *DefaultApiService) DeleteStoreExecute(r ApiDeleteStoreRequest) (*_netht
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return nil, err
 	}
@@ -446,15 +435,15 @@ func (a *DefaultApiService) DeleteStoreExecute(r ApiDeleteStoreRequest) (*_netht
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -465,7 +454,8 @@ func (a *DefaultApiService) DeleteStoreExecute(r ApiDeleteStoreRequest) (*_netht
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -475,7 +465,8 @@ func (a *DefaultApiService) DeleteStoreExecute(r ApiDeleteStoreRequest) (*_netht
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 		}
 		return localVarHTTPResponse, newErr
 	}
@@ -484,24 +475,23 @@ func (a *DefaultApiService) DeleteStoreExecute(r ApiDeleteStoreRequest) (*_netht
 }
 
 type ApiDeleteTokenRequest struct {
-	ctx _context.Context
+	ctx context.Context
 	ApiService *DefaultApiService
 	token string
 }
 
-
-func (r ApiDeleteTokenRequest) Execute() (*_nethttp.Response, error) {
+func (r ApiDeleteTokenRequest) Execute() (*http.Response, error) {
 	return r.ApiService.DeleteTokenExecute(r)
 }
 
 /*
 DeleteToken Delete a token for current user
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param token ID of the token to delete
  @return ApiDeleteTokenRequest
 */
-func (a *DefaultApiService) DeleteToken(ctx _context.Context, token string) ApiDeleteTokenRequest {
+func (a *DefaultApiService) DeleteToken(ctx context.Context, token string) ApiDeleteTokenRequest {
 	return ApiDeleteTokenRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -510,26 +500,24 @@ func (a *DefaultApiService) DeleteToken(ctx _context.Context, token string) ApiD
 }
 
 // Execute executes the request
-func (a *DefaultApiService) DeleteTokenExecute(r ApiDeleteTokenRequest) (*_nethttp.Response, error) {
+func (a *DefaultApiService) DeleteTokenExecute(r ApiDeleteTokenRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodDelete
+		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
+		formFiles            []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.DeleteToken")
 	if err != nil {
-		return nil, GenericOpenAPIError{error: err.Error()}
+		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/tokens/{token}"
-	localVarPath = strings.Replace(localVarPath, "{"+"token"+"}", _neturl.PathEscape(parameterToString(r.token, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"token"+"}", url.PathEscape(parameterToString(r.token, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -548,7 +536,7 @@ func (a *DefaultApiService) DeleteTokenExecute(r ApiDeleteTokenRequest) (*_netht
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return nil, err
 	}
@@ -558,15 +546,15 @@ func (a *DefaultApiService) DeleteTokenExecute(r ApiDeleteTokenRequest) (*_netht
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -577,7 +565,8 @@ func (a *DefaultApiService) DeleteTokenExecute(r ApiDeleteTokenRequest) (*_netht
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -587,7 +576,8 @@ func (a *DefaultApiService) DeleteTokenExecute(r ApiDeleteTokenRequest) (*_netht
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 		}
 		return localVarHTTPResponse, newErr
 	}
@@ -596,26 +586,25 @@ func (a *DefaultApiService) DeleteTokenExecute(r ApiDeleteTokenRequest) (*_netht
 }
 
 type ApiExpireStoreUploadRequest struct {
-	ctx _context.Context
+	ctx context.Context
 	ApiService *DefaultApiService
 	uploadId string
 	storeId string
 }
 
-
-func (r ApiExpireStoreUploadRequest) Execute() (*_nethttp.Response, error) {
+func (r ApiExpireStoreUploadRequest) Execute() (*http.Response, error) {
 	return r.ApiService.ExpireStoreUploadExecute(r)
 }
 
 /*
 ExpireStoreUpload Expire store upload and consider files for GC
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param uploadId ID of the upload to fetch
  @param storeId ID of the store containing the upload
  @return ApiExpireStoreUploadRequest
 */
-func (a *DefaultApiService) ExpireStoreUpload(ctx _context.Context, uploadId string, storeId string) ApiExpireStoreUploadRequest {
+func (a *DefaultApiService) ExpireStoreUpload(ctx context.Context, uploadId string, storeId string) ApiExpireStoreUploadRequest {
 	return ApiExpireStoreUploadRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -625,27 +614,25 @@ func (a *DefaultApiService) ExpireStoreUpload(ctx _context.Context, uploadId str
 }
 
 // Execute executes the request
-func (a *DefaultApiService) ExpireStoreUploadExecute(r ApiExpireStoreUploadRequest) (*_nethttp.Response, error) {
+func (a *DefaultApiService) ExpireStoreUploadExecute(r ApiExpireStoreUploadRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodPost
+		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
+		formFiles            []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.ExpireStoreUpload")
 	if err != nil {
-		return nil, GenericOpenAPIError{error: err.Error()}
+		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/stores/{storeId}/uploads/{uploadId}/expire"
-	localVarPath = strings.Replace(localVarPath, "{"+"uploadId"+"}", _neturl.PathEscape(parameterToString(r.uploadId, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", _neturl.PathEscape(parameterToString(r.storeId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"uploadId"+"}", url.PathEscape(parameterToString(r.uploadId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", url.PathEscape(parameterToString(r.storeId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -664,7 +651,7 @@ func (a *DefaultApiService) ExpireStoreUploadExecute(r ApiExpireStoreUploadReque
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return nil, err
 	}
@@ -674,15 +661,15 @@ func (a *DefaultApiService) ExpireStoreUploadExecute(r ApiExpireStoreUploadReque
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -693,7 +680,8 @@ func (a *DefaultApiService) ExpireStoreUploadExecute(r ApiExpireStoreUploadReque
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -703,7 +691,8 @@ func (a *DefaultApiService) ExpireStoreUploadExecute(r ApiExpireStoreUploadReque
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 		}
 		return localVarHTTPResponse, newErr
 	}
@@ -712,24 +701,23 @@ func (a *DefaultApiService) ExpireStoreUploadExecute(r ApiExpireStoreUploadReque
 }
 
 type ApiGetStoreFileIdsRequest struct {
-	ctx _context.Context
+	ctx context.Context
 	ApiService *DefaultApiService
 	storeId string
 }
 
-
-func (r ApiGetStoreFileIdsRequest) Execute() (GetStoreFileIdsResponse, *_nethttp.Response, error) {
+func (r ApiGetStoreFileIdsRequest) Execute() (*GetStoreFileIdsResponse, *http.Response, error) {
 	return r.ApiService.GetStoreFileIdsExecute(r)
 }
 
 /*
 GetStoreFileIds Fetch a list of all files in store
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param storeId ID of the store containing the files
  @return ApiGetStoreFileIdsRequest
 */
-func (a *DefaultApiService) GetStoreFileIds(ctx _context.Context, storeId string) ApiGetStoreFileIdsRequest {
+func (a *DefaultApiService) GetStoreFileIds(ctx context.Context, storeId string) ApiGetStoreFileIdsRequest {
 	return ApiGetStoreFileIdsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -739,27 +727,25 @@ func (a *DefaultApiService) GetStoreFileIds(ctx _context.Context, storeId string
 
 // Execute executes the request
 //  @return GetStoreFileIdsResponse
-func (a *DefaultApiService) GetStoreFileIdsExecute(r ApiGetStoreFileIdsRequest) (GetStoreFileIdsResponse, *_nethttp.Response, error) {
+func (a *DefaultApiService) GetStoreFileIdsExecute(r ApiGetStoreFileIdsRequest) (*GetStoreFileIdsResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  GetStoreFileIdsResponse
+		formFiles            []formFile
+		localVarReturnValue  *GetStoreFileIdsResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetStoreFileIds")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/stores/{storeId}/files"
-	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", _neturl.PathEscape(parameterToString(r.storeId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", url.PathEscape(parameterToString(r.storeId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -778,7 +764,7 @@ func (a *DefaultApiService) GetStoreFileIdsExecute(r ApiGetStoreFileIdsRequest) 
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
@@ -788,15 +774,15 @@ func (a *DefaultApiService) GetStoreFileIdsExecute(r ApiGetStoreFileIdsRequest) 
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -807,7 +793,8 @@ func (a *DefaultApiService) GetStoreFileIdsExecute(r ApiGetStoreFileIdsRequest) 
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -817,14 +804,15 @@ func (a *DefaultApiService) GetStoreFileIdsExecute(r ApiGetStoreFileIdsRequest) 
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}
@@ -835,26 +823,25 @@ func (a *DefaultApiService) GetStoreFileIdsExecute(r ApiGetStoreFileIdsRequest) 
 }
 
 type ApiGetStoreUploadRequest struct {
-	ctx _context.Context
+	ctx context.Context
 	ApiService *DefaultApiService
 	uploadId string
 	storeId string
 }
 
-
-func (r ApiGetStoreUploadRequest) Execute() (GetStoreUploadResponse, *_nethttp.Response, error) {
+func (r ApiGetStoreUploadRequest) Execute() (*GetStoreUploadResponse, *http.Response, error) {
 	return r.ApiService.GetStoreUploadExecute(r)
 }
 
 /*
 GetStoreUpload Fetch an upload
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param uploadId ID of the upload to fetch
  @param storeId ID of the store containing the upload
  @return ApiGetStoreUploadRequest
 */
-func (a *DefaultApiService) GetStoreUpload(ctx _context.Context, uploadId string, storeId string) ApiGetStoreUploadRequest {
+func (a *DefaultApiService) GetStoreUpload(ctx context.Context, uploadId string, storeId string) ApiGetStoreUploadRequest {
 	return ApiGetStoreUploadRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -865,28 +852,26 @@ func (a *DefaultApiService) GetStoreUpload(ctx _context.Context, uploadId string
 
 // Execute executes the request
 //  @return GetStoreUploadResponse
-func (a *DefaultApiService) GetStoreUploadExecute(r ApiGetStoreUploadRequest) (GetStoreUploadResponse, *_nethttp.Response, error) {
+func (a *DefaultApiService) GetStoreUploadExecute(r ApiGetStoreUploadRequest) (*GetStoreUploadResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  GetStoreUploadResponse
+		formFiles            []formFile
+		localVarReturnValue  *GetStoreUploadResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetStoreUpload")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/stores/{storeId}/uploads/{uploadId}"
-	localVarPath = strings.Replace(localVarPath, "{"+"uploadId"+"}", _neturl.PathEscape(parameterToString(r.uploadId, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", _neturl.PathEscape(parameterToString(r.storeId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"uploadId"+"}", url.PathEscape(parameterToString(r.uploadId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", url.PathEscape(parameterToString(r.storeId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -905,7 +890,7 @@ func (a *DefaultApiService) GetStoreUploadExecute(r ApiGetStoreUploadRequest) (G
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
@@ -915,15 +900,15 @@ func (a *DefaultApiService) GetStoreUploadExecute(r ApiGetStoreUploadRequest) (G
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -934,7 +919,8 @@ func (a *DefaultApiService) GetStoreUploadExecute(r ApiGetStoreUploadRequest) (G
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -944,14 +930,15 @@ func (a *DefaultApiService) GetStoreUploadExecute(r ApiGetStoreUploadRequest) (G
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}
@@ -962,24 +949,23 @@ func (a *DefaultApiService) GetStoreUploadExecute(r ApiGetStoreUploadRequest) (G
 }
 
 type ApiGetStoreUploadIdsRequest struct {
-	ctx _context.Context
+	ctx context.Context
 	ApiService *DefaultApiService
 	storeId string
 }
 
-
-func (r ApiGetStoreUploadIdsRequest) Execute() (GetStoreUploadIdsResponse, *_nethttp.Response, error) {
+func (r ApiGetStoreUploadIdsRequest) Execute() (*GetStoreUploadIdsResponse, *http.Response, error) {
 	return r.ApiService.GetStoreUploadIdsExecute(r)
 }
 
 /*
 GetStoreUploadIds Fetch a list of all uploads in store
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param storeId ID of the store containing the uploads
  @return ApiGetStoreUploadIdsRequest
 */
-func (a *DefaultApiService) GetStoreUploadIds(ctx _context.Context, storeId string) ApiGetStoreUploadIdsRequest {
+func (a *DefaultApiService) GetStoreUploadIds(ctx context.Context, storeId string) ApiGetStoreUploadIdsRequest {
 	return ApiGetStoreUploadIdsRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -989,27 +975,25 @@ func (a *DefaultApiService) GetStoreUploadIds(ctx _context.Context, storeId stri
 
 // Execute executes the request
 //  @return GetStoreUploadIdsResponse
-func (a *DefaultApiService) GetStoreUploadIdsExecute(r ApiGetStoreUploadIdsRequest) (GetStoreUploadIdsResponse, *_nethttp.Response, error) {
+func (a *DefaultApiService) GetStoreUploadIdsExecute(r ApiGetStoreUploadIdsRequest) (*GetStoreUploadIdsResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  GetStoreUploadIdsResponse
+		formFiles            []formFile
+		localVarReturnValue  *GetStoreUploadIdsResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetStoreUploadIds")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/stores/{storeId}/uploads"
-	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", _neturl.PathEscape(parameterToString(r.storeId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", url.PathEscape(parameterToString(r.storeId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1028,7 +1012,7 @@ func (a *DefaultApiService) GetStoreUploadIdsExecute(r ApiGetStoreUploadIdsReque
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
@@ -1038,15 +1022,15 @@ func (a *DefaultApiService) GetStoreUploadIdsExecute(r ApiGetStoreUploadIdsReque
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -1057,7 +1041,8 @@ func (a *DefaultApiService) GetStoreUploadIdsExecute(r ApiGetStoreUploadIdsReque
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1067,14 +1052,15 @@ func (a *DefaultApiService) GetStoreUploadIdsExecute(r ApiGetStoreUploadIdsReque
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}
@@ -1085,22 +1071,21 @@ func (a *DefaultApiService) GetStoreUploadIdsExecute(r ApiGetStoreUploadIdsReque
 }
 
 type ApiGetStoresRequest struct {
-	ctx _context.Context
+	ctx context.Context
 	ApiService *DefaultApiService
 }
 
-
-func (r ApiGetStoresRequest) Execute() (GetStoresResponse, *_nethttp.Response, error) {
+func (r ApiGetStoresRequest) Execute() (*GetStoresResponse, *http.Response, error) {
 	return r.ApiService.GetStoresExecute(r)
 }
 
 /*
 GetStores Fetch a list of all stores
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetStoresRequest
 */
-func (a *DefaultApiService) GetStores(ctx _context.Context) ApiGetStoresRequest {
+func (a *DefaultApiService) GetStores(ctx context.Context) ApiGetStoresRequest {
 	return ApiGetStoresRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1109,26 +1094,24 @@ func (a *DefaultApiService) GetStores(ctx _context.Context) ApiGetStoresRequest 
 
 // Execute executes the request
 //  @return GetStoresResponse
-func (a *DefaultApiService) GetStoresExecute(r ApiGetStoresRequest) (GetStoresResponse, *_nethttp.Response, error) {
+func (a *DefaultApiService) GetStoresExecute(r ApiGetStoresRequest) (*GetStoresResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  GetStoresResponse
+		formFiles            []formFile
+		localVarReturnValue  *GetStoresResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetStores")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/stores"
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1147,7 +1130,7 @@ func (a *DefaultApiService) GetStoresExecute(r ApiGetStoresRequest) (GetStoresRe
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
@@ -1157,15 +1140,15 @@ func (a *DefaultApiService) GetStoresExecute(r ApiGetStoresRequest) (GetStoresRe
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -1176,14 +1159,15 @@ func (a *DefaultApiService) GetStoresExecute(r ApiGetStoresRequest) (GetStoresRe
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}
@@ -1194,24 +1178,23 @@ func (a *DefaultApiService) GetStoresExecute(r ApiGetStoresRequest) (GetStoresRe
 }
 
 type ApiGetTokenRequest struct {
-	ctx _context.Context
+	ctx context.Context
 	ApiService *DefaultApiService
 	token string
 }
 
-
-func (r ApiGetTokenRequest) Execute() (GetTokenResponse, *_nethttp.Response, error) {
+func (r ApiGetTokenRequest) Execute() (*GetTokenResponse, *http.Response, error) {
 	return r.ApiService.GetTokenExecute(r)
 }
 
 /*
 GetToken Fetch a token for current user
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param token ID of the token to fetch
  @return ApiGetTokenRequest
 */
-func (a *DefaultApiService) GetToken(ctx _context.Context, token string) ApiGetTokenRequest {
+func (a *DefaultApiService) GetToken(ctx context.Context, token string) ApiGetTokenRequest {
 	return ApiGetTokenRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1221,27 +1204,25 @@ func (a *DefaultApiService) GetToken(ctx _context.Context, token string) ApiGetT
 
 // Execute executes the request
 //  @return GetTokenResponse
-func (a *DefaultApiService) GetTokenExecute(r ApiGetTokenRequest) (GetTokenResponse, *_nethttp.Response, error) {
+func (a *DefaultApiService) GetTokenExecute(r ApiGetTokenRequest) (*GetTokenResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  GetTokenResponse
+		formFiles            []formFile
+		localVarReturnValue  *GetTokenResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetToken")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/tokens/{token}"
-	localVarPath = strings.Replace(localVarPath, "{"+"token"+"}", _neturl.PathEscape(parameterToString(r.token, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"token"+"}", url.PathEscape(parameterToString(r.token, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1260,7 +1241,7 @@ func (a *DefaultApiService) GetTokenExecute(r ApiGetTokenRequest) (GetTokenRespo
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
@@ -1270,15 +1251,15 @@ func (a *DefaultApiService) GetTokenExecute(r ApiGetTokenRequest) (GetTokenRespo
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -1289,7 +1270,8 @@ func (a *DefaultApiService) GetTokenExecute(r ApiGetTokenRequest) (GetTokenRespo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -1299,14 +1281,15 @@ func (a *DefaultApiService) GetTokenExecute(r ApiGetTokenRequest) (GetTokenRespo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}
@@ -1317,22 +1300,21 @@ func (a *DefaultApiService) GetTokenExecute(r ApiGetTokenRequest) (GetTokenRespo
 }
 
 type ApiGetTokensRequest struct {
-	ctx _context.Context
+	ctx context.Context
 	ApiService *DefaultApiService
 }
 
-
-func (r ApiGetTokensRequest) Execute() (GetTokensResponse, *_nethttp.Response, error) {
+func (r ApiGetTokensRequest) Execute() (*GetTokensResponse, *http.Response, error) {
 	return r.ApiService.GetTokensExecute(r)
 }
 
 /*
 GetTokens Fetch a list of all tokens for current user
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetTokensRequest
 */
-func (a *DefaultApiService) GetTokens(ctx _context.Context) ApiGetTokensRequest {
+func (a *DefaultApiService) GetTokens(ctx context.Context) ApiGetTokensRequest {
 	return ApiGetTokensRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1341,26 +1323,24 @@ func (a *DefaultApiService) GetTokens(ctx _context.Context) ApiGetTokensRequest 
 
 // Execute executes the request
 //  @return GetTokensResponse
-func (a *DefaultApiService) GetTokensExecute(r ApiGetTokensRequest) (GetTokensResponse, *_nethttp.Response, error) {
+func (a *DefaultApiService) GetTokensExecute(r ApiGetTokensRequest) (*GetTokensResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  GetTokensResponse
+		formFiles            []formFile
+		localVarReturnValue  *GetTokensResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetTokens")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/tokens"
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1379,7 +1359,7 @@ func (a *DefaultApiService) GetTokensExecute(r ApiGetTokensRequest) (GetTokensRe
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
@@ -1389,15 +1369,15 @@ func (a *DefaultApiService) GetTokensExecute(r ApiGetTokensRequest) (GetTokensRe
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -1408,14 +1388,15 @@ func (a *DefaultApiService) GetTokensExecute(r ApiGetTokensRequest) (GetTokensRe
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}
@@ -1426,26 +1407,25 @@ func (a *DefaultApiService) GetTokensExecute(r ApiGetTokensRequest) (GetTokensRe
 }
 
 type ApiMarkStoreUploadAbortedRequest struct {
-	ctx _context.Context
+	ctx context.Context
 	ApiService *DefaultApiService
 	uploadId string
 	storeId string
 }
 
-
-func (r ApiMarkStoreUploadAbortedRequest) Execute() (*_nethttp.Response, error) {
+func (r ApiMarkStoreUploadAbortedRequest) Execute() (*http.Response, error) {
 	return r.ApiService.MarkStoreUploadAbortedExecute(r)
 }
 
 /*
 MarkStoreUploadAborted Mark an upload as aborted
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param uploadId ID of the upload to mark as aborted
  @param storeId ID of the store containing the upload
  @return ApiMarkStoreUploadAbortedRequest
 */
-func (a *DefaultApiService) MarkStoreUploadAborted(ctx _context.Context, uploadId string, storeId string) ApiMarkStoreUploadAbortedRequest {
+func (a *DefaultApiService) MarkStoreUploadAborted(ctx context.Context, uploadId string, storeId string) ApiMarkStoreUploadAbortedRequest {
 	return ApiMarkStoreUploadAbortedRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1455,27 +1435,25 @@ func (a *DefaultApiService) MarkStoreUploadAborted(ctx _context.Context, uploadI
 }
 
 // Execute executes the request
-func (a *DefaultApiService) MarkStoreUploadAbortedExecute(r ApiMarkStoreUploadAbortedRequest) (*_nethttp.Response, error) {
+func (a *DefaultApiService) MarkStoreUploadAbortedExecute(r ApiMarkStoreUploadAbortedRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodPost
+		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
+		formFiles            []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.MarkStoreUploadAborted")
 	if err != nil {
-		return nil, GenericOpenAPIError{error: err.Error()}
+		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/stores/{storeId}/uploads/{uploadId}/aborted"
-	localVarPath = strings.Replace(localVarPath, "{"+"uploadId"+"}", _neturl.PathEscape(parameterToString(r.uploadId, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", _neturl.PathEscape(parameterToString(r.storeId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"uploadId"+"}", url.PathEscape(parameterToString(r.uploadId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", url.PathEscape(parameterToString(r.storeId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1494,7 +1472,7 @@ func (a *DefaultApiService) MarkStoreUploadAbortedExecute(r ApiMarkStoreUploadAb
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return nil, err
 	}
@@ -1504,15 +1482,15 @@ func (a *DefaultApiService) MarkStoreUploadAbortedExecute(r ApiMarkStoreUploadAb
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -1523,7 +1501,8 @@ func (a *DefaultApiService) MarkStoreUploadAbortedExecute(r ApiMarkStoreUploadAb
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1533,7 +1512,8 @@ func (a *DefaultApiService) MarkStoreUploadAbortedExecute(r ApiMarkStoreUploadAb
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 		}
 		return localVarHTTPResponse, newErr
 	}
@@ -1542,26 +1522,25 @@ func (a *DefaultApiService) MarkStoreUploadAbortedExecute(r ApiMarkStoreUploadAb
 }
 
 type ApiMarkStoreUploadCompletedRequest struct {
-	ctx _context.Context
+	ctx context.Context
 	ApiService *DefaultApiService
 	uploadId string
 	storeId string
 }
 
-
-func (r ApiMarkStoreUploadCompletedRequest) Execute() (*_nethttp.Response, error) {
+func (r ApiMarkStoreUploadCompletedRequest) Execute() (*http.Response, error) {
 	return r.ApiService.MarkStoreUploadCompletedExecute(r)
 }
 
 /*
 MarkStoreUploadCompleted Mark an upload as completed
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param uploadId ID of the upload to fetch
  @param storeId ID of the store containing the upload
  @return ApiMarkStoreUploadCompletedRequest
 */
-func (a *DefaultApiService) MarkStoreUploadCompleted(ctx _context.Context, uploadId string, storeId string) ApiMarkStoreUploadCompletedRequest {
+func (a *DefaultApiService) MarkStoreUploadCompleted(ctx context.Context, uploadId string, storeId string) ApiMarkStoreUploadCompletedRequest {
 	return ApiMarkStoreUploadCompletedRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1571,27 +1550,25 @@ func (a *DefaultApiService) MarkStoreUploadCompleted(ctx _context.Context, uploa
 }
 
 // Execute executes the request
-func (a *DefaultApiService) MarkStoreUploadCompletedExecute(r ApiMarkStoreUploadCompletedRequest) (*_nethttp.Response, error) {
+func (a *DefaultApiService) MarkStoreUploadCompletedExecute(r ApiMarkStoreUploadCompletedRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodPost
+		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
+		formFiles            []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.MarkStoreUploadCompleted")
 	if err != nil {
-		return nil, GenericOpenAPIError{error: err.Error()}
+		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/stores/{storeId}/uploads/{uploadId}/completed"
-	localVarPath = strings.Replace(localVarPath, "{"+"uploadId"+"}", _neturl.PathEscape(parameterToString(r.uploadId, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", _neturl.PathEscape(parameterToString(r.storeId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"uploadId"+"}", url.PathEscape(parameterToString(r.uploadId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", url.PathEscape(parameterToString(r.storeId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1610,7 +1587,7 @@ func (a *DefaultApiService) MarkStoreUploadCompletedExecute(r ApiMarkStoreUpload
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return nil, err
 	}
@@ -1620,15 +1597,15 @@ func (a *DefaultApiService) MarkStoreUploadCompletedExecute(r ApiMarkStoreUpload
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -1639,7 +1616,8 @@ func (a *DefaultApiService) MarkStoreUploadCompletedExecute(r ApiMarkStoreUpload
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1649,7 +1627,8 @@ func (a *DefaultApiService) MarkStoreUploadCompletedExecute(r ApiMarkStoreUpload
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 		}
 		return localVarHTTPResponse, newErr
 	}
@@ -1658,28 +1637,27 @@ func (a *DefaultApiService) MarkStoreUploadCompletedExecute(r ApiMarkStoreUpload
 }
 
 type ApiMarkStoreUploadFileUploadedRequest struct {
-	ctx _context.Context
+	ctx context.Context
 	ApiService *DefaultApiService
 	uploadId string
 	storeId string
 	fileId int32
 }
 
-
-func (r ApiMarkStoreUploadFileUploadedRequest) Execute() (*_nethttp.Response, error) {
+func (r ApiMarkStoreUploadFileUploadedRequest) Execute() (*http.Response, error) {
 	return r.ApiService.MarkStoreUploadFileUploadedExecute(r)
 }
 
 /*
 MarkStoreUploadFileUploaded Mark a file within an upload as uploaded
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param uploadId ID of the upload to fetch
  @param storeId ID of the store containing the upload
  @param fileId Index of the file within the upload that should be marked as uploaded
  @return ApiMarkStoreUploadFileUploadedRequest
 */
-func (a *DefaultApiService) MarkStoreUploadFileUploaded(ctx _context.Context, uploadId string, storeId string, fileId int32) ApiMarkStoreUploadFileUploadedRequest {
+func (a *DefaultApiService) MarkStoreUploadFileUploaded(ctx context.Context, uploadId string, storeId string, fileId int32) ApiMarkStoreUploadFileUploadedRequest {
 	return ApiMarkStoreUploadFileUploadedRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1690,28 +1668,26 @@ func (a *DefaultApiService) MarkStoreUploadFileUploaded(ctx _context.Context, up
 }
 
 // Execute executes the request
-func (a *DefaultApiService) MarkStoreUploadFileUploadedExecute(r ApiMarkStoreUploadFileUploadedRequest) (*_nethttp.Response, error) {
+func (a *DefaultApiService) MarkStoreUploadFileUploadedExecute(r ApiMarkStoreUploadFileUploadedRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodPost
+		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
+		formFiles            []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.MarkStoreUploadFileUploaded")
 	if err != nil {
-		return nil, GenericOpenAPIError{error: err.Error()}
+		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/stores/{storeId}/uploads/{uploadId}/files/{fileId}/uploaded"
-	localVarPath = strings.Replace(localVarPath, "{"+"uploadId"+"}", _neturl.PathEscape(parameterToString(r.uploadId, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", _neturl.PathEscape(parameterToString(r.storeId, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"fileId"+"}", _neturl.PathEscape(parameterToString(r.fileId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"uploadId"+"}", url.PathEscape(parameterToString(r.uploadId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", url.PathEscape(parameterToString(r.storeId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"fileId"+"}", url.PathEscape(parameterToString(r.fileId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1730,7 +1706,7 @@ func (a *DefaultApiService) MarkStoreUploadFileUploadedExecute(r ApiMarkStoreUpl
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return nil, err
 	}
@@ -1740,15 +1716,15 @@ func (a *DefaultApiService) MarkStoreUploadFileUploadedExecute(r ApiMarkStoreUpl
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -1759,7 +1735,8 @@ func (a *DefaultApiService) MarkStoreUploadFileUploadedExecute(r ApiMarkStoreUpl
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1769,7 +1746,8 @@ func (a *DefaultApiService) MarkStoreUploadFileUploadedExecute(r ApiMarkStoreUpl
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 		}
 		return localVarHTTPResponse, newErr
 	}
@@ -1778,7 +1756,7 @@ func (a *DefaultApiService) MarkStoreUploadFileUploadedExecute(r ApiMarkStoreUpl
 }
 
 type ApiUpdateTokenRequest struct {
-	ctx _context.Context
+	ctx context.Context
 	ApiService *DefaultApiService
 	token string
 	updateTokenRequest *UpdateTokenRequest
@@ -1789,18 +1767,18 @@ func (r ApiUpdateTokenRequest) UpdateTokenRequest(updateTokenRequest UpdateToken
 	return r
 }
 
-func (r ApiUpdateTokenRequest) Execute() (*_nethttp.Response, error) {
+func (r ApiUpdateTokenRequest) Execute() (*http.Response, error) {
 	return r.ApiService.UpdateTokenExecute(r)
 }
 
 /*
 UpdateToken Update details of a token for current user
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param token ID of the token to update
  @return ApiUpdateTokenRequest
 */
-func (a *DefaultApiService) UpdateToken(ctx _context.Context, token string) ApiUpdateTokenRequest {
+func (a *DefaultApiService) UpdateToken(ctx context.Context, token string) ApiUpdateTokenRequest {
 	return ApiUpdateTokenRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1809,26 +1787,24 @@ func (a *DefaultApiService) UpdateToken(ctx _context.Context, token string) ApiU
 }
 
 // Execute executes the request
-func (a *DefaultApiService) UpdateTokenExecute(r ApiUpdateTokenRequest) (*_nethttp.Response, error) {
+func (a *DefaultApiService) UpdateTokenExecute(r ApiUpdateTokenRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodPut
+		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
+		formFiles            []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.UpdateToken")
 	if err != nil {
-		return nil, GenericOpenAPIError{error: err.Error()}
+		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/tokens/{token}"
-	localVarPath = strings.Replace(localVarPath, "{"+"token"+"}", _neturl.PathEscape(parameterToString(r.token, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"token"+"}", url.PathEscape(parameterToString(r.token, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 	if r.updateTokenRequest == nil {
 		return nil, reportError("updateTokenRequest is required and must be specified")
 	}
@@ -1852,7 +1828,7 @@ func (a *DefaultApiService) UpdateTokenExecute(r ApiUpdateTokenRequest) (*_netht
 	}
 	// body params
 	localVarPostBody = r.updateTokenRequest
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return nil, err
 	}
@@ -1862,15 +1838,15 @@ func (a *DefaultApiService) UpdateTokenExecute(r ApiUpdateTokenRequest) (*_netht
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -1881,7 +1857,8 @@ func (a *DefaultApiService) UpdateTokenExecute(r ApiUpdateTokenRequest) (*_netht
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
@@ -1891,7 +1868,8 @@ func (a *DefaultApiService) UpdateTokenExecute(r ApiUpdateTokenRequest) (*_netht
 				newErr.error = err.Error()
 				return localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+            		newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+            		newErr.model = v
 		}
 		return localVarHTTPResponse, newErr
 	}

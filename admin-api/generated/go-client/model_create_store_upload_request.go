@@ -20,7 +20,7 @@ type CreateStoreUploadRequest struct {
 	UseProgressApi *bool `json:"useProgressApi,omitempty"`
 	Description *string `json:"description,omitempty"`
 	BuildId *string `json:"buildId,omitempty"`
-	Files *[]UploadFileRequest `json:"files,omitempty"`
+	Files []UploadFileRequest `json:"files,omitempty"`
 }
 
 // NewCreateStoreUploadRequest instantiates a new CreateStoreUploadRequest object
@@ -42,7 +42,7 @@ func NewCreateStoreUploadRequestWithDefaults() *CreateStoreUploadRequest {
 
 // GetUseProgressApi returns the UseProgressApi field value if set, zero value otherwise.
 func (o *CreateStoreUploadRequest) GetUseProgressApi() bool {
-	if o == nil || o.UseProgressApi == nil {
+	if o == nil || isNil(o.UseProgressApi) {
 		var ret bool
 		return ret
 	}
@@ -52,15 +52,15 @@ func (o *CreateStoreUploadRequest) GetUseProgressApi() bool {
 // GetUseProgressApiOk returns a tuple with the UseProgressApi field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CreateStoreUploadRequest) GetUseProgressApiOk() (*bool, bool) {
-	if o == nil || o.UseProgressApi == nil {
-		return nil, false
+	if o == nil || isNil(o.UseProgressApi) {
+    return nil, false
 	}
 	return o.UseProgressApi, true
 }
 
 // HasUseProgressApi returns a boolean if a field has been set.
 func (o *CreateStoreUploadRequest) HasUseProgressApi() bool {
-	if o != nil && o.UseProgressApi != nil {
+	if o != nil && !isNil(o.UseProgressApi) {
 		return true
 	}
 
@@ -74,7 +74,7 @@ func (o *CreateStoreUploadRequest) SetUseProgressApi(v bool) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *CreateStoreUploadRequest) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || isNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -84,15 +84,15 @@ func (o *CreateStoreUploadRequest) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CreateStoreUploadRequest) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
-		return nil, false
+	if o == nil || isNil(o.Description) {
+    return nil, false
 	}
 	return o.Description, true
 }
 
 // HasDescription returns a boolean if a field has been set.
 func (o *CreateStoreUploadRequest) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !isNil(o.Description) {
 		return true
 	}
 
@@ -106,7 +106,7 @@ func (o *CreateStoreUploadRequest) SetDescription(v string) {
 
 // GetBuildId returns the BuildId field value if set, zero value otherwise.
 func (o *CreateStoreUploadRequest) GetBuildId() string {
-	if o == nil || o.BuildId == nil {
+	if o == nil || isNil(o.BuildId) {
 		var ret string
 		return ret
 	}
@@ -116,15 +116,15 @@ func (o *CreateStoreUploadRequest) GetBuildId() string {
 // GetBuildIdOk returns a tuple with the BuildId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CreateStoreUploadRequest) GetBuildIdOk() (*string, bool) {
-	if o == nil || o.BuildId == nil {
-		return nil, false
+	if o == nil || isNil(o.BuildId) {
+    return nil, false
 	}
 	return o.BuildId, true
 }
 
 // HasBuildId returns a boolean if a field has been set.
 func (o *CreateStoreUploadRequest) HasBuildId() bool {
-	if o != nil && o.BuildId != nil {
+	if o != nil && !isNil(o.BuildId) {
 		return true
 	}
 
@@ -138,25 +138,25 @@ func (o *CreateStoreUploadRequest) SetBuildId(v string) {
 
 // GetFiles returns the Files field value if set, zero value otherwise.
 func (o *CreateStoreUploadRequest) GetFiles() []UploadFileRequest {
-	if o == nil || o.Files == nil {
+	if o == nil || isNil(o.Files) {
 		var ret []UploadFileRequest
 		return ret
 	}
-	return *o.Files
+	return o.Files
 }
 
 // GetFilesOk returns a tuple with the Files field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *CreateStoreUploadRequest) GetFilesOk() (*[]UploadFileRequest, bool) {
-	if o == nil || o.Files == nil {
-		return nil, false
+func (o *CreateStoreUploadRequest) GetFilesOk() ([]UploadFileRequest, bool) {
+	if o == nil || isNil(o.Files) {
+    return nil, false
 	}
 	return o.Files, true
 }
 
 // HasFiles returns a boolean if a field has been set.
 func (o *CreateStoreUploadRequest) HasFiles() bool {
-	if o != nil && o.Files != nil {
+	if o != nil && !isNil(o.Files) {
 		return true
 	}
 
@@ -165,21 +165,21 @@ func (o *CreateStoreUploadRequest) HasFiles() bool {
 
 // SetFiles gets a reference to the given []UploadFileRequest and assigns it to the Files field.
 func (o *CreateStoreUploadRequest) SetFiles(v []UploadFileRequest) {
-	o.Files = &v
+	o.Files = v
 }
 
 func (o CreateStoreUploadRequest) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if o.UseProgressApi != nil {
+	if !isNil(o.UseProgressApi) {
 		toSerialize["useProgressApi"] = o.UseProgressApi
 	}
-	if o.Description != nil {
+	if !isNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if o.BuildId != nil {
+	if !isNil(o.BuildId) {
 		toSerialize["buildId"] = o.BuildId
 	}
-	if o.Files != nil {
+	if !isNil(o.Files) {
 		toSerialize["files"] = o.Files
 	}
 	return json.Marshal(toSerialize)

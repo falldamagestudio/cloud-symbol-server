@@ -43,7 +43,7 @@ func NewGetTokenResponseWithDefaults() *GetTokenResponse {
 
 // GetToken returns the Token field value if set, zero value otherwise.
 func (o *GetTokenResponse) GetToken() string {
-	if o == nil || o.Token == nil {
+	if o == nil || isNil(o.Token) {
 		var ret string
 		return ret
 	}
@@ -53,15 +53,15 @@ func (o *GetTokenResponse) GetToken() string {
 // GetTokenOk returns a tuple with the Token field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GetTokenResponse) GetTokenOk() (*string, bool) {
-	if o == nil || o.Token == nil {
-		return nil, false
+	if o == nil || isNil(o.Token) {
+    return nil, false
 	}
 	return o.Token, true
 }
 
 // HasToken returns a boolean if a field has been set.
 func (o *GetTokenResponse) HasToken() bool {
-	if o != nil && o.Token != nil {
+	if o != nil && !isNil(o.Token) {
 		return true
 	}
 
@@ -75,7 +75,7 @@ func (o *GetTokenResponse) SetToken(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *GetTokenResponse) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || isNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -85,15 +85,15 @@ func (o *GetTokenResponse) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GetTokenResponse) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
-		return nil, false
+	if o == nil || isNil(o.Description) {
+    return nil, false
 	}
 	return o.Description, true
 }
 
 // HasDescription returns a boolean if a field has been set.
 func (o *GetTokenResponse) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !isNil(o.Description) {
 		return true
 	}
 
@@ -107,7 +107,7 @@ func (o *GetTokenResponse) SetDescription(v string) {
 
 // GetCreationTimestamp returns the CreationTimestamp field value if set, zero value otherwise.
 func (o *GetTokenResponse) GetCreationTimestamp() string {
-	if o == nil || o.CreationTimestamp == nil {
+	if o == nil || isNil(o.CreationTimestamp) {
 		var ret string
 		return ret
 	}
@@ -117,15 +117,15 @@ func (o *GetTokenResponse) GetCreationTimestamp() string {
 // GetCreationTimestampOk returns a tuple with the CreationTimestamp field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GetTokenResponse) GetCreationTimestampOk() (*string, bool) {
-	if o == nil || o.CreationTimestamp == nil {
-		return nil, false
+	if o == nil || isNil(o.CreationTimestamp) {
+    return nil, false
 	}
 	return o.CreationTimestamp, true
 }
 
 // HasCreationTimestamp returns a boolean if a field has been set.
 func (o *GetTokenResponse) HasCreationTimestamp() bool {
-	if o != nil && o.CreationTimestamp != nil {
+	if o != nil && !isNil(o.CreationTimestamp) {
 		return true
 	}
 
@@ -139,13 +139,13 @@ func (o *GetTokenResponse) SetCreationTimestamp(v string) {
 
 func (o GetTokenResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Token != nil {
+	if !isNil(o.Token) {
 		toSerialize["token"] = o.Token
 	}
-	if o.Description != nil {
+	if !isNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if o.CreationTimestamp != nil {
+	if !isNil(o.CreationTimestamp) {
 		toSerialize["creationTimestamp"] = o.CreationTimestamp
 	}
 	return json.Marshal(toSerialize)

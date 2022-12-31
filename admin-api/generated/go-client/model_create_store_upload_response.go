@@ -17,7 +17,7 @@ import (
 // CreateStoreUploadResponse struct for CreateStoreUploadResponse
 type CreateStoreUploadResponse struct {
 	Id *string `json:"id,omitempty"`
-	Files *[]UploadFileResponse `json:"files,omitempty"`
+	Files []UploadFileResponse `json:"files,omitempty"`
 }
 
 // NewCreateStoreUploadResponse instantiates a new CreateStoreUploadResponse object
@@ -39,7 +39,7 @@ func NewCreateStoreUploadResponseWithDefaults() *CreateStoreUploadResponse {
 
 // GetId returns the Id field value if set, zero value otherwise.
 func (o *CreateStoreUploadResponse) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil || isNil(o.Id) {
 		var ret string
 		return ret
 	}
@@ -49,15 +49,15 @@ func (o *CreateStoreUploadResponse) GetId() string {
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CreateStoreUploadResponse) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
-		return nil, false
+	if o == nil || isNil(o.Id) {
+    return nil, false
 	}
 	return o.Id, true
 }
 
 // HasId returns a boolean if a field has been set.
 func (o *CreateStoreUploadResponse) HasId() bool {
-	if o != nil && o.Id != nil {
+	if o != nil && !isNil(o.Id) {
 		return true
 	}
 
@@ -71,25 +71,25 @@ func (o *CreateStoreUploadResponse) SetId(v string) {
 
 // GetFiles returns the Files field value if set, zero value otherwise.
 func (o *CreateStoreUploadResponse) GetFiles() []UploadFileResponse {
-	if o == nil || o.Files == nil {
+	if o == nil || isNil(o.Files) {
 		var ret []UploadFileResponse
 		return ret
 	}
-	return *o.Files
+	return o.Files
 }
 
 // GetFilesOk returns a tuple with the Files field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *CreateStoreUploadResponse) GetFilesOk() (*[]UploadFileResponse, bool) {
-	if o == nil || o.Files == nil {
-		return nil, false
+func (o *CreateStoreUploadResponse) GetFilesOk() ([]UploadFileResponse, bool) {
+	if o == nil || isNil(o.Files) {
+    return nil, false
 	}
 	return o.Files, true
 }
 
 // HasFiles returns a boolean if a field has been set.
 func (o *CreateStoreUploadResponse) HasFiles() bool {
-	if o != nil && o.Files != nil {
+	if o != nil && !isNil(o.Files) {
 		return true
 	}
 
@@ -98,15 +98,15 @@ func (o *CreateStoreUploadResponse) HasFiles() bool {
 
 // SetFiles gets a reference to the given []UploadFileResponse and assigns it to the Files field.
 func (o *CreateStoreUploadResponse) SetFiles(v []UploadFileResponse) {
-	o.Files = &v
+	o.Files = v
 }
 
 func (o CreateStoreUploadResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Id != nil {
+	if !isNil(o.Id) {
 		toSerialize["id"] = o.Id
 	}
-	if o.Files != nil {
+	if !isNil(o.Files) {
 		toSerialize["files"] = o.Files
 	}
 	return json.Marshal(toSerialize)

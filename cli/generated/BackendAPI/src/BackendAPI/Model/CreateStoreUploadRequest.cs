@@ -77,7 +77,7 @@ namespace BackendAPI.Model
         /// <returns>String presentation of the object</returns>
         public override string ToString()
         {
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             sb.Append("class CreateStoreUploadRequest {\n");
             sb.Append("  UseProgressApi: ").Append(UseProgressApi).Append("\n");
             sb.Append("  Description: ").Append(Description).Append("\n");
@@ -114,8 +114,9 @@ namespace BackendAPI.Model
         public bool Equals(CreateStoreUploadRequest input)
         {
             if (input == null)
+            {
                 return false;
-
+            }
             return 
                 (
                     this.UseProgressApi == input.UseProgressApi ||
@@ -148,13 +149,19 @@ namespace BackendAPI.Model
             unchecked // Overflow is fine, just wrap
             {
                 int hashCode = 41;
-                hashCode = hashCode * 59 + this.UseProgressApi.GetHashCode();
+                hashCode = (hashCode * 59) + this.UseProgressApi.GetHashCode();
                 if (this.Description != null)
-                    hashCode = hashCode * 59 + this.Description.GetHashCode();
+                {
+                    hashCode = (hashCode * 59) + this.Description.GetHashCode();
+                }
                 if (this.BuildId != null)
-                    hashCode = hashCode * 59 + this.BuildId.GetHashCode();
+                {
+                    hashCode = (hashCode * 59) + this.BuildId.GetHashCode();
+                }
                 if (this.Files != null)
-                    hashCode = hashCode * 59 + this.Files.GetHashCode();
+                {
+                    hashCode = (hashCode * 59) + this.Files.GetHashCode();
+                }
                 return hashCode;
             }
         }

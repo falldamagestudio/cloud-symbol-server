@@ -542,7 +542,7 @@ components:
           example: Used for local testing purposes
           type: string
         creationTimestamp:
-          description: Creation timestamp, in RFC3339 format
+          description: "Creation timestamp, in RFC3339 format"
           example: 2019-10-12T07:20:50.52Z
           type: string
       type: object
@@ -562,9 +562,9 @@ components:
     createStoreUploadRequest:
       properties:
         useProgressApi:
-          description: When present and set to true, the client will provide progress
-            updates; Legacy clients will create an upload, then upload the required
-            files to GCS, without progress/completion callbacks
+          description: "When present and set to true, the client will provide progress\
+            \ updates; Legacy clients will create an upload, then upload the required\
+            \ files to GCS, without progress/completion callbacks"
           example: true
           type: boolean
         description:
@@ -589,12 +589,12 @@ components:
       type: object
     getStoreUploadIdsResponse:
       items:
-        example: '["1","2","3"]'
+        example: "[\"1\",\"2\",\"3\"]"
         type: string
       type: array
     getStoreFileIdsResponse:
       items:
-        example: '["1","2","3"]'
+        example: "[\"1\",\"2\",\"3\"]"
         type: string
       type: array
     createStoreUploadResponse:
@@ -629,8 +629,8 @@ components:
           example: 7F416863ABF34C3E894BAD1739BAA5571
           type: string
         url:
-          description: Short-lived signed URL where the client should upload the file
-            to, or blank if the file already exists in the storage backend
+          description: "Short-lived signed URL where the client should upload the\
+            \ file to, or blank if the file already exists in the storage backend"
           example: https://storage.googleapis.com/storage/v1/b/example-bucket/o/stores/default/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
           type: string
       type: object

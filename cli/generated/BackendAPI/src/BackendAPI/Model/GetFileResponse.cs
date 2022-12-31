@@ -112,7 +112,7 @@ namespace BackendAPI.Model
         /// <returns>String presentation of the object</returns>
         public override string ToString()
         {
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             sb.Append("class GetFileResponse {\n");
             sb.Append("  FileName: ").Append(FileName).Append("\n");
             sb.Append("  Hash: ").Append(Hash).Append("\n");
@@ -148,8 +148,9 @@ namespace BackendAPI.Model
         public bool Equals(GetFileResponse input)
         {
             if (input == null)
+            {
                 return false;
-
+            }
             return 
                 (
                     this.FileName == input.FileName ||
@@ -177,10 +178,14 @@ namespace BackendAPI.Model
             {
                 int hashCode = 41;
                 if (this.FileName != null)
-                    hashCode = hashCode * 59 + this.FileName.GetHashCode();
+                {
+                    hashCode = (hashCode * 59) + this.FileName.GetHashCode();
+                }
                 if (this.Hash != null)
-                    hashCode = hashCode * 59 + this.Hash.GetHashCode();
-                hashCode = hashCode * 59 + this.Status.GetHashCode();
+                {
+                    hashCode = (hashCode * 59) + this.Hash.GetHashCode();
+                }
+                hashCode = (hashCode * 59) + this.Status.GetHashCode();
                 return hashCode;
             }
         }

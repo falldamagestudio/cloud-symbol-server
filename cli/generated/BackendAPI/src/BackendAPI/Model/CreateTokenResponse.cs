@@ -53,7 +53,7 @@ namespace BackendAPI.Model
         /// <returns>String presentation of the object</returns>
         public override string ToString()
         {
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             sb.Append("class CreateTokenResponse {\n");
             sb.Append("  Token: ").Append(Token).Append("\n");
             sb.Append("}\n");
@@ -87,8 +87,9 @@ namespace BackendAPI.Model
         public bool Equals(CreateTokenResponse input)
         {
             if (input == null)
+            {
                 return false;
-
+            }
             return 
                 (
                     this.Token == input.Token ||
@@ -107,7 +108,9 @@ namespace BackendAPI.Model
             {
                 int hashCode = 41;
                 if (this.Token != null)
-                    hashCode = hashCode * 59 + this.Token.GetHashCode();
+                {
+                    hashCode = (hashCode * 59) + this.Token.GetHashCode();
+                }
                 return hashCode;
             }
         }

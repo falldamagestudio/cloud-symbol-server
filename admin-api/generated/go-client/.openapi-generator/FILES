@@ -34,4 +34,5 @@ model_update_token_request.go
 model_upload_file_request.go
 model_upload_file_response.go
 response.go
+test/api_default_test.go
 utils.go

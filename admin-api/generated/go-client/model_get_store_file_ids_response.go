@@ -49,15 +49,15 @@ func (o *GetStoreFileIdsResponse) UnmarshalJSON(bytes []byte) (err error) {
 }
 
 type NullableGetStoreFileIdsResponse struct {
-	value *GetStoreFileIdsResponse
+	value GetStoreFileIdsResponse
 	isSet bool
 }
 
-func (v NullableGetStoreFileIdsResponse) Get() *GetStoreFileIdsResponse {
+func (v NullableGetStoreFileIdsResponse) Get() GetStoreFileIdsResponse {
 	return v.value
 }
 
-func (v *NullableGetStoreFileIdsResponse) Set(val *GetStoreFileIdsResponse) {
+func (v *NullableGetStoreFileIdsResponse) Set(val GetStoreFileIdsResponse) {
 	v.value = val
 	v.isSet = true
 }
@@ -71,7 +71,7 @@ func (v *NullableGetStoreFileIdsResponse) Unset() {
 	v.isSet = false
 }
 
-func NewNullableGetStoreFileIdsResponse(val *GetStoreFileIdsResponse) *NullableGetStoreFileIdsResponse {
+func NewNullableGetStoreFileIdsResponse(val GetStoreFileIdsResponse) *NullableGetStoreFileIdsResponse {
 	return &NullableGetStoreFileIdsResponse{value: val, isSet: true}
 }
 

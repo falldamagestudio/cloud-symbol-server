@@ -49,15 +49,15 @@ func (o *GetTokensResponse) UnmarshalJSON(bytes []byte) (err error) {
 }
 
 type NullableGetTokensResponse struct {
-	value *GetTokensResponse
+	value GetTokensResponse
 	isSet bool
 }
 
-func (v NullableGetTokensResponse) Get() *GetTokensResponse {
+func (v NullableGetTokensResponse) Get() GetTokensResponse {
 	return v.value
 }
 
-func (v *NullableGetTokensResponse) Set(val *GetTokensResponse) {
+func (v *NullableGetTokensResponse) Set(val GetTokensResponse) {
 	v.value = val
 	v.isSet = true
 }
@@ -71,7 +71,7 @@ func (v *NullableGetTokensResponse) Unset() {
 	v.isSet = false
 }
 
-func NewNullableGetTokensResponse(val *GetTokensResponse) *NullableGetTokensResponse {
+func NewNullableGetTokensResponse(val GetTokensResponse) *NullableGetTokensResponse {
 	return &NullableGetTokensResponse{value: val, isSet: true}
 }
 

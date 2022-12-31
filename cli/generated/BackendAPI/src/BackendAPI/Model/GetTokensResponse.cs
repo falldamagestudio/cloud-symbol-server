@@ -45,7 +45,7 @@ namespace BackendAPI.Model
         /// <returns>String presentation of the object</returns>
         public override string ToString()
         {
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             sb.Append("class GetTokensResponse {\n");
             sb.Append("  ").Append(base.ToString().Replace("\n", "\n  ")).Append("\n");
             sb.Append("}\n");
@@ -79,8 +79,9 @@ namespace BackendAPI.Model
         public bool Equals(GetTokensResponse input)
         {
             if (input == null)
+            {
                 return false;
-
+            }
             return base.Equals(input);
         }
 

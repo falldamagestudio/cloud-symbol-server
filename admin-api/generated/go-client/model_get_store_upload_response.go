@@ -19,7 +19,7 @@ type GetStoreUploadResponse struct {
 	Description *string `json:"description,omitempty"`
 	BuildId *string `json:"buildId,omitempty"`
 	Timestamp *string `json:"timestamp,omitempty"`
-	Files *[]GetFileResponse `json:"files,omitempty"`
+	Files []GetFileResponse `json:"files,omitempty"`
 	Status *string `json:"status,omitempty"`
 }
 
@@ -42,7 +42,7 @@ func NewGetStoreUploadResponseWithDefaults() *GetStoreUploadResponse {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *GetStoreUploadResponse) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || isNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -52,15 +52,15 @@ func (o *GetStoreUploadResponse) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GetStoreUploadResponse) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
-		return nil, false
+	if o == nil || isNil(o.Description) {
+    return nil, false
 	}
 	return o.Description, true
 }
 
 // HasDescription returns a boolean if a field has been set.
 func (o *GetStoreUploadResponse) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !isNil(o.Description) {
 		return true
 	}
 
@@ -74,7 +74,7 @@ func (o *GetStoreUploadResponse) SetDescription(v string) {
 
 // GetBuildId returns the BuildId field value if set, zero value otherwise.
 func (o *GetStoreUploadResponse) GetBuildId() string {
-	if o == nil || o.BuildId == nil {
+	if o == nil || isNil(o.BuildId) {
 		var ret string
 		return ret
 	}
@@ -84,15 +84,15 @@ func (o *GetStoreUploadResponse) GetBuildId() string {
 // GetBuildIdOk returns a tuple with the BuildId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GetStoreUploadResponse) GetBuildIdOk() (*string, bool) {
-	if o == nil || o.BuildId == nil {
-		return nil, false
+	if o == nil || isNil(o.BuildId) {
+    return nil, false
 	}
 	return o.BuildId, true
 }
 
 // HasBuildId returns a boolean if a field has been set.
 func (o *GetStoreUploadResponse) HasBuildId() bool {
-	if o != nil && o.BuildId != nil {
+	if o != nil && !isNil(o.BuildId) {
 		return true
 	}
 
@@ -106,7 +106,7 @@ func (o *GetStoreUploadResponse) SetBuildId(v string) {
 
 // GetTimestamp returns the Timestamp field value if set, zero value otherwise.
 func (o *GetStoreUploadResponse) GetTimestamp() string {
-	if o == nil || o.Timestamp == nil {
+	if o == nil || isNil(o.Timestamp) {
 		var ret string
 		return ret
 	}
@@ -116,15 +116,15 @@ func (o *GetStoreUploadResponse) GetTimestamp() string {
 // GetTimestampOk returns a tuple with the Timestamp field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GetStoreUploadResponse) GetTimestampOk() (*string, bool) {
-	if o == nil || o.Timestamp == nil {
-		return nil, false
+	if o == nil || isNil(o.Timestamp) {
+    return nil, false
 	}
 	return o.Timestamp, true
 }
 
 // HasTimestamp returns a boolean if a field has been set.
 func (o *GetStoreUploadResponse) HasTimestamp() bool {
-	if o != nil && o.Timestamp != nil {
+	if o != nil && !isNil(o.Timestamp) {
 		return true
 	}
 
@@ -138,25 +138,25 @@ func (o *GetStoreUploadResponse) SetTimestamp(v string) {
 
 // GetFiles returns the Files field value if set, zero value otherwise.
 func (o *GetStoreUploadResponse) GetFiles() []GetFileResponse {
-	if o == nil || o.Files == nil {
+	if o == nil || isNil(o.Files) {
 		var ret []GetFileResponse
 		return ret
 	}
-	return *o.Files
+	return o.Files
 }
 
 // GetFilesOk returns a tuple with the Files field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *GetStoreUploadResponse) GetFilesOk() (*[]GetFileResponse, bool) {
-	if o == nil || o.Files == nil {
-		return nil, false
+func (o *GetStoreUploadResponse) GetFilesOk() ([]GetFileResponse, bool) {
+	if o == nil || isNil(o.Files) {
+    return nil, false
 	}
 	return o.Files, true
 }
 
 // HasFiles returns a boolean if a field has been set.
 func (o *GetStoreUploadResponse) HasFiles() bool {
-	if o != nil && o.Files != nil {
+	if o != nil && !isNil(o.Files) {
 		return true
 	}
 
@@ -165,12 +165,12 @@ func (o *GetStoreUploadResponse) HasFiles() bool {
 
 // SetFiles gets a reference to the given []GetFileResponse and assigns it to the Files field.
 func (o *GetStoreUploadResponse) SetFiles(v []GetFileResponse) {
-	o.Files = &v
+	o.Files = v
 }
 
 // GetStatus returns the Status field value if set, zero value otherwise.
 func (o *GetStoreUploadResponse) GetStatus() string {
-	if o == nil || o.Status == nil {
+	if o == nil || isNil(o.Status) {
 		var ret string
 		return ret
 	}
@@ -180,15 +180,15 @@ func (o *GetStoreUploadResponse) GetStatus() string {
 // GetStatusOk returns a tuple with the Status field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GetStoreUploadResponse) GetStatusOk() (*string, bool) {
-	if o == nil || o.Status == nil {
-		return nil, false
+	if o == nil || isNil(o.Status) {
+    return nil, false
 	}
 	return o.Status, true
 }
 
 // HasStatus returns a boolean if a field has been set.
 func (o *GetStoreUploadResponse) HasStatus() bool {
-	if o != nil && o.Status != nil {
+	if o != nil && !isNil(o.Status) {
 		return true
 	}
 
@@ -202,19 +202,19 @@ func (o *GetStoreUploadResponse) SetStatus(v string) {
 
 func (o GetStoreUploadResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Description != nil {
+	if !isNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if o.BuildId != nil {
+	if !isNil(o.BuildId) {
 		toSerialize["buildId"] = o.BuildId
 	}
-	if o.Timestamp != nil {
+	if !isNil(o.Timestamp) {
 		toSerialize["timestamp"] = o.Timestamp
 	}
-	if o.Files != nil {
+	if !isNil(o.Files) {
 		toSerialize["files"] = o.Files
 	}
-	if o.Status != nil {
+	if !isNil(o.Status) {
 		toSerialize["status"] = o.Status
 	}
 	return json.Marshal(toSerialize)

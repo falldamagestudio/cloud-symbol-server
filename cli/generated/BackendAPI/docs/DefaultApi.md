@@ -2,25 +2,24 @@
 
 All URIs are relative to *http://localhost*
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**CreateStore**](DefaultApi.md#createstore) | **POST** /stores/{storeId} | Create a new store
-[**CreateStoreUpload**](DefaultApi.md#createstoreupload) | **POST** /stores/{storeId}/uploads | Start a new upload
-[**CreateToken**](DefaultApi.md#createtoken) | **POST** /tokens | Create a new token for current user
-[**DeleteStore**](DefaultApi.md#deletestore) | **DELETE** /stores/{storeId} | Delete an existing store
-[**DeleteToken**](DefaultApi.md#deletetoken) | **DELETE** /tokens/{token} | Delete a token for current user
-[**ExpireStoreUpload**](DefaultApi.md#expirestoreupload) | **POST** /stores/{storeId}/uploads/{uploadId}/expire | Expire store upload and consider files for GC
-[**GetStoreFileIds**](DefaultApi.md#getstorefileids) | **GET** /stores/{storeId}/files | Fetch a list of all files in store
-[**GetStoreUpload**](DefaultApi.md#getstoreupload) | **GET** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
-[**GetStoreUploadIds**](DefaultApi.md#getstoreuploadids) | **GET** /stores/{storeId}/uploads | Fetch a list of all uploads in store
-[**GetStores**](DefaultApi.md#getstores) | **GET** /stores | Fetch a list of all stores
-[**GetToken**](DefaultApi.md#gettoken) | **GET** /tokens/{token} | Fetch a token for current user
-[**GetTokens**](DefaultApi.md#gettokens) | **GET** /tokens | Fetch a list of all tokens for current user
-[**MarkStoreUploadAborted**](DefaultApi.md#markstoreuploadaborted) | **POST** /stores/{storeId}/uploads/{uploadId}/aborted | Mark an upload as aborted
-[**MarkStoreUploadCompleted**](DefaultApi.md#markstoreuploadcompleted) | **POST** /stores/{storeId}/uploads/{uploadId}/completed | Mark an upload as completed
-[**MarkStoreUploadFileUploaded**](DefaultApi.md#markstoreuploadfileuploaded) | **POST** /stores/{storeId}/uploads/{uploadId}/files/{fileId}/uploaded | Mark a file within an upload as uploaded
-[**UpdateToken**](DefaultApi.md#updatetoken) | **PUT** /tokens/{token} | Update details of a token for current user
-
+| Method | HTTP request | Description |
+|--------|--------------|-------------|
+| [**CreateStore**](DefaultApi.md#createstore) | **POST** /stores/{storeId} | Create a new store |
+| [**CreateStoreUpload**](DefaultApi.md#createstoreupload) | **POST** /stores/{storeId}/uploads | Start a new upload |
+| [**CreateToken**](DefaultApi.md#createtoken) | **POST** /tokens | Create a new token for current user |
+| [**DeleteStore**](DefaultApi.md#deletestore) | **DELETE** /stores/{storeId} | Delete an existing store |
+| [**DeleteToken**](DefaultApi.md#deletetoken) | **DELETE** /tokens/{token} | Delete a token for current user |
+| [**ExpireStoreUpload**](DefaultApi.md#expirestoreupload) | **POST** /stores/{storeId}/uploads/{uploadId}/expire | Expire store upload and consider files for GC |
+| [**GetStoreFileIds**](DefaultApi.md#getstorefileids) | **GET** /stores/{storeId}/files | Fetch a list of all files in store |
+| [**GetStoreUpload**](DefaultApi.md#getstoreupload) | **GET** /stores/{storeId}/uploads/{uploadId} | Fetch an upload |
+| [**GetStoreUploadIds**](DefaultApi.md#getstoreuploadids) | **GET** /stores/{storeId}/uploads | Fetch a list of all uploads in store |
+| [**GetStores**](DefaultApi.md#getstores) | **GET** /stores | Fetch a list of all stores |
+| [**GetToken**](DefaultApi.md#gettoken) | **GET** /tokens/{token} | Fetch a token for current user |
+| [**GetTokens**](DefaultApi.md#gettokens) | **GET** /tokens | Fetch a list of all tokens for current user |
+| [**MarkStoreUploadAborted**](DefaultApi.md#markstoreuploadaborted) | **POST** /stores/{storeId}/uploads/{uploadId}/aborted | Mark an upload as aborted |
+| [**MarkStoreUploadCompleted**](DefaultApi.md#markstoreuploadcompleted) | **POST** /stores/{storeId}/uploads/{uploadId}/completed | Mark an upload as completed |
+| [**MarkStoreUploadFileUploaded**](DefaultApi.md#markstoreuploadfileuploaded) | **POST** /stores/{storeId}/uploads/{uploadId}/files/{fileId}/uploaded | Mark a file within an upload as uploaded |
+| [**UpdateToken**](DefaultApi.md#updatetoken) | **PUT** /tokens/{token} | Update details of a token for current user |
 
 <a name="createstore"></a>
 # **CreateStore**
@@ -49,7 +48,7 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var storeId = storeId_example;  // string | ID of store to create
+            var storeId = "storeId_example";  // string | ID of store to create
 
             try
             {
@@ -58,8 +57,8 @@ namespace Example
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DefaultApi.CreateStore: " + e.Message );
-                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print("Exception when calling DefaultApi.CreateStore: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
         }
@@ -67,11 +66,28 @@ namespace Example
 }
 ```
 
+#### Using the CreateStoreWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Create a new store
+    apiInstance.CreateStoreWithHttpInfo(storeId);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling DefaultApi.CreateStoreWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **storeId** | **string**| ID of store to create | 
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **storeId** | **string** | ID of store to create |  |
 
 ### Return type
 
@@ -123,7 +139,7 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var storeId = storeId_example;  // string | ID of the store containing the upload
+            var storeId = "storeId_example";  // string | ID of the store containing the upload
             var createStoreUploadRequest = new CreateStoreUploadRequest(); // CreateStoreUploadRequest | 
 
             try
@@ -134,8 +150,8 @@ namespace Example
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DefaultApi.CreateStoreUpload: " + e.Message );
-                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print("Exception when calling DefaultApi.CreateStoreUpload: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
         }
@@ -143,12 +159,32 @@ namespace Example
 }
 ```
 
+#### Using the CreateStoreUploadWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Start a new upload
+    ApiResponse<CreateStoreUploadResponse> response = apiInstance.CreateStoreUploadWithHttpInfo(storeId, createStoreUploadRequest);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling DefaultApi.CreateStoreUploadWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **storeId** | **string**| ID of the store containing the upload | 
- **createStoreUploadRequest** | [**CreateStoreUploadRequest**](CreateStoreUploadRequest.md)|  | 
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **storeId** | **string** | ID of the store containing the upload |  |
+| **createStoreUploadRequest** | [**CreateStoreUploadRequest**](CreateStoreUploadRequest.md) |  |  |
 
 ### Return type
 
@@ -208,8 +244,8 @@ namespace Example
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DefaultApi.CreateToken: " + e.Message );
-                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print("Exception when calling DefaultApi.CreateToken: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
         }
@@ -217,9 +253,28 @@ namespace Example
 }
 ```
 
+#### Using the CreateTokenWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Create a new token for current user
+    ApiResponse<CreateTokenResponse> response = apiInstance.CreateTokenWithHttpInfo();
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling DefaultApi.CreateTokenWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
 ### Parameters
 This endpoint does not need any parameter.
-
 ### Return type
 
 [**CreateTokenResponse**](CreateTokenResponse.md)
@@ -269,7 +324,7 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var storeId = storeId_example;  // string | ID of store to delete
+            var storeId = "storeId_example";  // string | ID of store to delete
 
             try
             {
@@ -278,8 +333,8 @@ namespace Example
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DefaultApi.DeleteStore: " + e.Message );
-                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print("Exception when calling DefaultApi.DeleteStore: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
         }
@@ -287,11 +342,28 @@ namespace Example
 }
 ```
 
+#### Using the DeleteStoreWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Delete an existing store
+    apiInstance.DeleteStoreWithHttpInfo(storeId);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling DefaultApi.DeleteStoreWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **storeId** | **string**| ID of store to delete | 
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **storeId** | **string** | ID of store to delete |  |
 
 ### Return type
 
@@ -343,7 +415,7 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var token = token_example;  // string | ID of the token to delete
+            var token = "token_example";  // string | ID of the token to delete
 
             try
             {
@@ -352,8 +424,8 @@ namespace Example
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DefaultApi.DeleteToken: " + e.Message );
-                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print("Exception when calling DefaultApi.DeleteToken: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
         }
@@ -361,11 +433,28 @@ namespace Example
 }
 ```
 
+#### Using the DeleteTokenWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Delete a token for current user
+    apiInstance.DeleteTokenWithHttpInfo(token);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling DefaultApi.DeleteTokenWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **token** | **string**| ID of the token to delete | 
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **token** | **string** | ID of the token to delete |  |
 
 ### Return type
 
@@ -417,8 +506,8 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var uploadId = uploadId_example;  // string | ID of the upload to fetch
-            var storeId = storeId_example;  // string | ID of the store containing the upload
+            var uploadId = "uploadId_example";  // string | ID of the upload to fetch
+            var storeId = "storeId_example";  // string | ID of the store containing the upload
 
             try
             {
@@ -427,8 +516,8 @@ namespace Example
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DefaultApi.ExpireStoreUpload: " + e.Message );
-                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print("Exception when calling DefaultApi.ExpireStoreUpload: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
         }
@@ -436,12 +525,29 @@ namespace Example
 }
 ```
 
+#### Using the ExpireStoreUploadWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Expire store upload and consider files for GC
+    apiInstance.ExpireStoreUploadWithHttpInfo(uploadId, storeId);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling DefaultApi.ExpireStoreUploadWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **uploadId** | **string**| ID of the upload to fetch | 
- **storeId** | **string**| ID of the store containing the upload | 
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **uploadId** | **string** | ID of the upload to fetch |  |
+| **storeId** | **string** | ID of the store containing the upload |  |
 
 ### Return type
 
@@ -493,7 +599,7 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var storeId = storeId_example;  // string | ID of the store containing the files
+            var storeId = "storeId_example";  // string | ID of the store containing the files
 
             try
             {
@@ -503,8 +609,8 @@ namespace Example
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DefaultApi.GetStoreFileIds: " + e.Message );
-                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print("Exception when calling DefaultApi.GetStoreFileIds: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
         }
@@ -512,11 +618,31 @@ namespace Example
 }
 ```
 
+#### Using the GetStoreFileIdsWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Fetch a list of all files in store
+    ApiResponse<GetStoreFileIdsResponse> response = apiInstance.GetStoreFileIdsWithHttpInfo(storeId);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling DefaultApi.GetStoreFileIdsWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **storeId** | **string**| ID of the store containing the files | 
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **storeId** | **string** | ID of the store containing the files |  |
 
 ### Return type
 
@@ -568,8 +694,8 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var uploadId = uploadId_example;  // string | ID of the upload to fetch
-            var storeId = storeId_example;  // string | ID of the store containing the upload
+            var uploadId = "uploadId_example";  // string | ID of the upload to fetch
+            var storeId = "storeId_example";  // string | ID of the store containing the upload
 
             try
             {
@@ -579,8 +705,8 @@ namespace Example
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DefaultApi.GetStoreUpload: " + e.Message );
-                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print("Exception when calling DefaultApi.GetStoreUpload: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
         }
@@ -588,12 +714,32 @@ namespace Example
 }
 ```
 
+#### Using the GetStoreUploadWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Fetch an upload
+    ApiResponse<GetStoreUploadResponse> response = apiInstance.GetStoreUploadWithHttpInfo(uploadId, storeId);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling DefaultApi.GetStoreUploadWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **uploadId** | **string**| ID of the upload to fetch | 
- **storeId** | **string**| ID of the store containing the upload | 
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **uploadId** | **string** | ID of the upload to fetch |  |
+| **storeId** | **string** | ID of the store containing the upload |  |
 
 ### Return type
 
@@ -645,7 +791,7 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var storeId = storeId_example;  // string | ID of the store containing the uploads
+            var storeId = "storeId_example";  // string | ID of the store containing the uploads
 
             try
             {
@@ -655,8 +801,8 @@ namespace Example
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DefaultApi.GetStoreUploadIds: " + e.Message );
-                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print("Exception when calling DefaultApi.GetStoreUploadIds: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
         }
@@ -664,11 +810,31 @@ namespace Example
 }
 ```
 
+#### Using the GetStoreUploadIdsWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Fetch a list of all uploads in store
+    ApiResponse<GetStoreUploadIdsResponse> response = apiInstance.GetStoreUploadIdsWithHttpInfo(storeId);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling DefaultApi.GetStoreUploadIdsWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **storeId** | **string**| ID of the store containing the uploads | 
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **storeId** | **string** | ID of the store containing the uploads |  |
 
 ### Return type
 
@@ -729,8 +895,8 @@ namespace Example
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DefaultApi.GetStores: " + e.Message );
-                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print("Exception when calling DefaultApi.GetStores: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
         }
@@ -738,9 +904,28 @@ namespace Example
 }
 ```
 
+#### Using the GetStoresWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Fetch a list of all stores
+    ApiResponse<GetStoresResponse> response = apiInstance.GetStoresWithHttpInfo();
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling DefaultApi.GetStoresWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
 ### Parameters
 This endpoint does not need any parameter.
-
 ### Return type
 
 [**GetStoresResponse**](GetStoresResponse.md)
@@ -790,7 +975,7 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var token = token_example;  // string | ID of the token to fetch
+            var token = "token_example";  // string | ID of the token to fetch
 
             try
             {
@@ -800,8 +985,8 @@ namespace Example
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DefaultApi.GetToken: " + e.Message );
-                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print("Exception when calling DefaultApi.GetToken: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
         }
@@ -809,11 +994,31 @@ namespace Example
 }
 ```
 
+#### Using the GetTokenWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Fetch a token for current user
+    ApiResponse<GetTokenResponse> response = apiInstance.GetTokenWithHttpInfo(token);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling DefaultApi.GetTokenWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **token** | **string**| ID of the token to fetch | 
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **token** | **string** | ID of the token to fetch |  |
 
 ### Return type
 
@@ -874,8 +1079,8 @@ namespace Example
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DefaultApi.GetTokens: " + e.Message );
-                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print("Exception when calling DefaultApi.GetTokens: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
         }
@@ -883,9 +1088,28 @@ namespace Example
 }
 ```
 
+#### Using the GetTokensWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Fetch a list of all tokens for current user
+    ApiResponse<GetTokensResponse> response = apiInstance.GetTokensWithHttpInfo();
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling DefaultApi.GetTokensWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
 ### Parameters
 This endpoint does not need any parameter.
-
 ### Return type
 
 [**GetTokensResponse**](GetTokensResponse.md)
@@ -935,8 +1159,8 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var uploadId = uploadId_example;  // string | ID of the upload to mark as aborted
-            var storeId = storeId_example;  // string | ID of the store containing the upload
+            var uploadId = "uploadId_example";  // string | ID of the upload to mark as aborted
+            var storeId = "storeId_example";  // string | ID of the store containing the upload
 
             try
             {
@@ -945,8 +1169,8 @@ namespace Example
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DefaultApi.MarkStoreUploadAborted: " + e.Message );
-                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print("Exception when calling DefaultApi.MarkStoreUploadAborted: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
         }
@@ -954,12 +1178,29 @@ namespace Example
 }
 ```
 
+#### Using the MarkStoreUploadAbortedWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Mark an upload as aborted
+    apiInstance.MarkStoreUploadAbortedWithHttpInfo(uploadId, storeId);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling DefaultApi.MarkStoreUploadAbortedWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **uploadId** | **string**| ID of the upload to mark as aborted | 
- **storeId** | **string**| ID of the store containing the upload | 
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **uploadId** | **string** | ID of the upload to mark as aborted |  |
+| **storeId** | **string** | ID of the store containing the upload |  |
 
 ### Return type
 
@@ -1011,8 +1252,8 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var uploadId = uploadId_example;  // string | ID of the upload to fetch
-            var storeId = storeId_example;  // string | ID of the store containing the upload
+            var uploadId = "uploadId_example";  // string | ID of the upload to fetch
+            var storeId = "storeId_example";  // string | ID of the store containing the upload
 
             try
             {
@@ -1021,8 +1262,8 @@ namespace Example
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DefaultApi.MarkStoreUploadCompleted: " + e.Message );
-                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print("Exception when calling DefaultApi.MarkStoreUploadCompleted: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
         }
@@ -1030,12 +1271,29 @@ namespace Example
 }
 ```
 
+#### Using the MarkStoreUploadCompletedWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Mark an upload as completed
+    apiInstance.MarkStoreUploadCompletedWithHttpInfo(uploadId, storeId);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling DefaultApi.MarkStoreUploadCompletedWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **uploadId** | **string**| ID of the upload to fetch | 
- **storeId** | **string**| ID of the store containing the upload | 
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **uploadId** | **string** | ID of the upload to fetch |  |
+| **storeId** | **string** | ID of the store containing the upload |  |
 
 ### Return type
 
@@ -1087,8 +1345,8 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var uploadId = uploadId_example;  // string | ID of the upload to fetch
-            var storeId = storeId_example;  // string | ID of the store containing the upload
+            var uploadId = "uploadId_example";  // string | ID of the upload to fetch
+            var storeId = "storeId_example";  // string | ID of the store containing the upload
             var fileId = 56;  // int | Index of the file within the upload that should be marked as uploaded
 
             try
@@ -1098,8 +1356,8 @@ namespace Example
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DefaultApi.MarkStoreUploadFileUploaded: " + e.Message );
-                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print("Exception when calling DefaultApi.MarkStoreUploadFileUploaded: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
         }
@@ -1107,13 +1365,30 @@ namespace Example
 }
 ```
 
+#### Using the MarkStoreUploadFileUploadedWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Mark a file within an upload as uploaded
+    apiInstance.MarkStoreUploadFileUploadedWithHttpInfo(uploadId, storeId, fileId);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling DefaultApi.MarkStoreUploadFileUploadedWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **uploadId** | **string**| ID of the upload to fetch | 
- **storeId** | **string**| ID of the store containing the upload | 
- **fileId** | **int**| Index of the file within the upload that should be marked as uploaded | 
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **uploadId** | **string** | ID of the upload to fetch |  |
+| **storeId** | **string** | ID of the store containing the upload |  |
+| **fileId** | **int** | Index of the file within the upload that should be marked as uploaded |  |
 
 ### Return type
 
@@ -1165,7 +1440,7 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var token = token_example;  // string | ID of the token to update
+            var token = "token_example";  // string | ID of the token to update
             var updateTokenRequest = new UpdateTokenRequest(); // UpdateTokenRequest | 
 
             try
@@ -1175,8 +1450,8 @@ namespace Example
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DefaultApi.UpdateToken: " + e.Message );
-                Debug.Print("Status Code: "+ e.ErrorCode);
+                Debug.Print("Exception when calling DefaultApi.UpdateToken: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
         }
@@ -1184,12 +1459,29 @@ namespace Example
 }
 ```
 
+#### Using the UpdateTokenWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Update details of a token for current user
+    apiInstance.UpdateTokenWithHttpInfo(token, updateTokenRequest);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling DefaultApi.UpdateTokenWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **token** | **string**| ID of the token to update | 
- **updateTokenRequest** | [**UpdateTokenRequest**](UpdateTokenRequest.md)|  | 
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **token** | **string** | ID of the token to update |  |
+| **updateTokenRequest** | [**UpdateTokenRequest**](UpdateTokenRequest.md) |  |  |
 
 ### Return type
 
