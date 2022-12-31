@@ -41,4 +41,7 @@ export const useAuthUserStore = defineStore('authUser', {
       this.loginState = LoginState.Unknown
     },
   },
+
+  persist: true,
+
 })
