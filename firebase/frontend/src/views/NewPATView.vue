@@ -40,11 +40,13 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router/composables'
 import { doc, serverTimestamp, setDoc }  from 'firebase/firestore'
 
-import store from '../store/index'
+import { useAuthUserStore } from '../stores/authUser'
 import { db } from '../firebase'
 
+const authUserStore = useAuthUserStore()
+
 const description = ref('')
-const email = store.state.user!.email!
+const email = authUserStore.user!.email!
 const isFormValid = ref(false)
 
 const router = useRouter()

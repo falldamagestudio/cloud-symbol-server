@@ -3,7 +3,7 @@
 
     <!-- Display main UI when user is logged in -->
 
-    <template v-if="isLoggedIn">
+    <template v-if="isLoggedIn()">
       <v-app-bar app color="primary" dark>
 
         <div class="d-flex align-center">
@@ -29,7 +29,7 @@
 
     <!-- Display a spinner when the app doesn't yet know the user's login status -->
 
-    <template v-else-if="isLoginStateUnknown">
+    <template v-else-if="isLoginStateUnknown()">
 
       <v-container fill-height fluid>
         <v-row align="center" justify="center">
@@ -60,9 +60,11 @@ import { ref } from 'vue';
 import { signInWithRedirect, signOut } from 'firebase/auth'
 import { auth } from './firebase'
 
-import store, { LoginState } from './store/index'
+import { useAuthUserStore, LoginState } from './stores/authUser'
 import { googleProvider } from './google-auth'
 import { version } from './appConfig'
+
+const authUserStore = useAuthUserStore()
 
 function login(): void {
   const provider = googleProvider()
@@ -74,11 +76,11 @@ function logout(): void {
 }
 
 function isLoggedIn(): boolean {
-  return store.state.user != null
+   return authUserStore.user != null
 }
 
 function isLoginStateUnknown(): boolean {
-  return store.state.loginState == LoginState.Unknown
+    return authUserStore.loginState == LoginState.Unknown
 }
 
 </script>

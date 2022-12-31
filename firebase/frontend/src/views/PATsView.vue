@@ -7,9 +7,11 @@
 
 <script setup lang="ts">
 
-import store from '../store/index'
+import { useAuthUserStore } from '../stores/authUser'
 import PATList from '../components/PATList.vue';
 
-const email = store.state.user!.email!
+const authUserStore = useAuthUserStore()
+
+const email = authUserStore.user!.email!
 
 </script>
