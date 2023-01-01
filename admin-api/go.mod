@@ -9,8 +9,10 @@ require (
 	github.com/GoogleCloudPlatform/functions-framework-go v1.5.2
 	github.com/friendsofgo/errors v0.9.2
 	github.com/gorilla/mux v1.8.0
-	github.com/jackc/pgconn v1.13.0 // indirect
-	github.com/jackc/pgerrcode v0.0.0-20220416144525-469b46aa5efa // indirect
+	github.com/jackc/pgconn v1.13.0
+	github.com/jackc/pgerrcode v0.0.0-20220416144525-469b46aa5efa
+	github.com/rs/cors v1.8.3
+	github.com/stretchr/testify v1.8.0
 	github.com/volatiletech/null/v8 v8.1.2
 	github.com/volatiletech/sqlboiler/v4 v4.13.0
 	github.com/volatiletech/strmangle v0.0.4
