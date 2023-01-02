@@ -63,7 +63,7 @@ func writeAuthenticationHttpError(w http.ResponseWriter, status int, message str
 	return nil
 }
 
-func validateUsernamePassword(r *http.Request) (bool, int) {
+func validateUsernamePassword(r *http.Request) (string, int) {
 
 	// Fetch email + PAT from Basic Authentication header of WWW request
 
@@ -72,7 +72,7 @@ func validateUsernamePassword(r *http.Request) (bool, int) {
 	if !basicAuthPresent {
 
 		log.Print("Basic auth header (with email/token) not provided")
-		return false, 0
+		return "", 0
 	}
 
 	log.Printf("Basic Auth header present, email: %v, PAT: %v", email, pat)
@@ -82,7 +82,7 @@ func validateUsernamePassword(r *http.Request) (bool, int) {
 	firestoreClient, err := helpers.FirestoreClient(r.Context())
 	if err != nil {
 		log.Printf("Unable to talk to database: %v", err)
-		return false, http.StatusInternalServerError
+		return "", http.StatusInternalServerError
 	}
 
 	patDocRef := firestoreClient.Collection("users").Doc(email).Collection("pats").Doc(pat)
@@ -90,33 +90,33 @@ func validateUsernamePassword(r *http.Request) (bool, int) {
 	if _, err := patDocRef.Get(r.Context()); err != nil {
 
 		log.Printf("Unable to find email %v, pat %v combination in database: %v", email, pat, err)
-		return false, http.StatusUnauthorized
+		return "", http.StatusUnauthorized
 	}
 
 	log.Printf("Email/PAT pair %v, %v exist in database; authentication successful", email, pat)
-	return true, 0
+	return email, 0
 }
 
-func (authenticationMiddleware *AuthenticationMiddleware) validateAuthToken(r *http.Request) (bool, int) {
+func (authenticationMiddleware *AuthenticationMiddleware) validateAuthToken(r *http.Request) (string, int) {
 
 	// Validate
 
 	token, err := jwt.ParseRequest(r, jwt.WithKeySet(authenticationMiddleware.Ks))
 	if err != nil {
 		log.Printf("Error when parsing JWT: %v", err)
-		return false, 0
+		return "", 0
 	}
 
 	if err := jwt.Validate(token, jwt.WithAudience(authenticationMiddleware.ClientID)); err != nil {
 		log.Printf("JWT fails validation: %v", err)
-		return false, http.StatusUnauthorized
+		return "", http.StatusUnauthorized
 	}
 
-	email := token.PrivateClaims()["email"]
+	email := token.PrivateClaims()["email"].(string)
 
 	log.Printf("JWT auth token for %v validated", email)
 
-	return true, 0
+	return email, 0
 }
 
 func (authenticationMiddleware *AuthenticationMiddleware) Handler(next http.Handler) http.Handler {
@@ -127,7 +127,7 @@ func (authenticationMiddleware *AuthenticationMiddleware) Handler(next http.Hand
 
 		// Authenticate via username + password combination
 
-		authenticated, statusCode := validateUsernamePassword(r)
+		userIdentity, statusCode := validateUsernamePassword(r)
 		if statusCode != 0 {
 
 			if statusCode == http.StatusUnauthorized {
@@ -140,11 +140,11 @@ func (authenticationMiddleware *AuthenticationMiddleware) Handler(next http.Hand
 			}
 		}
 
-		if !authenticated {
+		if userIdentity == "" {
 
 			// Authenticate via Bearer token
 
-			authenticated, statusCode = authenticationMiddleware.validateAuthToken(r)
+			userIdentity, statusCode = authenticationMiddleware.validateAuthToken(r)
 			if statusCode != 0 {
 
 				if statusCode == http.StatusUnauthorized {
@@ -158,7 +158,7 @@ func (authenticationMiddleware *AuthenticationMiddleware) Handler(next http.Hand
 			}
 		}
 
-		if !authenticated {
+		if userIdentity == "" {
 
 			// No valid authentication found
 
@@ -167,6 +167,10 @@ func (authenticationMiddleware *AuthenticationMiddleware) Handler(next http.Hand
 			return
 		}
 
-		next.ServeHTTP(w, r)
+		ctxWithUserIdentity := helpers.AddUserIdentity(r.Context(), userIdentity)
+
+		// Chain to following handlers, and include user identity in context
+
+		next.ServeHTTP(w, r.WithContext(ctxWithUserIdentity))
 	})
 }
