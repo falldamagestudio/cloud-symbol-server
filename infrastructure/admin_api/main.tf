@@ -121,7 +121,7 @@ resource "google_project_iam_member" "function_db_user_cloudsql_instance_user" {
   member  = "serviceAccount:${google_service_account.function_service_account.email}"
 }
 
-# Allow the admin DB access's service account to create & use objects within schema
+# Allow the cloud function's service account to use objects within schema, but not create/destroy them
 # Reference: https://registry.terraform.io/providers/cyrilgdn/postgresql/latest/docs/resources/postgresql_grant#examples
 # Reference: https://www.postgresql.org/docs/current/ddl-priv.html
 # Reference: https://dba.stackexchange.com/questions/117109/how-to-manage-default-privileges-for-users-on-a-database-vs-schema

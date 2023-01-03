@@ -34,27 +34,12 @@ resource "google_project_iam_member" "iam_admin_user_cloudsql_instance_user" {
   member  = "serviceAccount:${google_service_account.iam_admin_user_service_account.email}"
 }
 
-# Allow the admin DB access's service account to use database
-# Reference: https://registry.terraform.io/providers/cyrilgdn/postgresql/latest/docs/resources/postgresql_grant#examples
-# Reference: https://www.postgresql.org/docs/current/ddl-priv.html
-# Reference: https://dba.stackexchange.com/questions/117109/how-to-manage-default-privileges-for-users-on-a-database-vs-schema
-resource "postgresql_grant" "iam_admin_user_allow_database_connect" {
-  depends_on = [ google_sql_user.iam_admin_user ]
-  database    = var.database_name
-  role        = google_sql_user.iam_admin_user.name
-  object_type = "database"
-  privileges  = [ "CONNECT" ]
-}
-
 # Allow the admin DB access's service account to create & use objects within schema
 # Reference: https://registry.terraform.io/providers/cyrilgdn/postgresql/latest/docs/resources/postgresql_grant#examples
 # Reference: https://www.postgresql.org/docs/current/ddl-priv.html
 # Reference: https://dba.stackexchange.com/questions/117109/how-to-manage-default-privileges-for-users-on-a-database-vs-schema
-resource "postgresql_grant" "iam_admin_user_allow_schema_create_and_usage" {
-  depends_on = [ postgresql_grant.iam_admin_user_allow_schema_create_and_usage ]
-  database    = var.database_name
+resource "postgresql_grant_role" "function_db_user_allow_readwrite" {
   role        = google_sql_user.iam_admin_user.name
-  schema      = var.schema_name
-  object_type = "schema"
-  privileges  = [ "CREATE", "USAGE" ]
+  # TODO: source role name from state
+  grant_role  = "cloud_symbol_server_admin"
 }

@@ -10,9 +10,9 @@ module "database" {
   source = "./database"
 }
 
-module "iam_admin" {
+module "admin_role" {
   depends_on = [ module.database ]
-  source = "./iam-admin"
+  source = "./admin-role"
 
   project_id = var.project_id
   database_instance_name = var.database_instance_name
@@ -29,3 +29,14 @@ module "read_write_role" {
   database_name = module.database.database_name
   schema_name = module.database.schema_name
 }
+
+module "iam_admin" {
+  depends_on = [ module.admin_role ]
+  source = "./iam-admin"
+
+  project_id = var.project_id
+  database_instance_name = var.database_instance_name
+  database_name = module.database.database_name
+  schema_name = module.database.schema_name
+}
+

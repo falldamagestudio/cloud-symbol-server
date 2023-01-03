@@ -1,4 +1,5 @@
 .PHONY: deploy deploy-core deploy-database deploy-db-migrations deploy-download-api deploy-admin-api deploy-firebase-and-frontend
+.PHONY: remove-db-migrations
 .PHONY: destroy
 .PHONY: test test-download-api test-admin-api test-cli
 
@@ -54,7 +55,7 @@ deploy-db-migrations:
 	# Both fail and success paths from migration result in killing the proxy as well
 	migrate -source "file://./db-migrations" -database "$(shell jq -r ".dbMigrationEndpoint" < $(ENV)/config.json)" -verbose up || (cat db_migration_proxy.pid | xargs kill && rm db_migration_proxy.pid && exit 1) && (cat db_migration_proxy.pid | xargs kill && rm db_migration_proxy.pid && exit 0)
 
-drop-db:
+remove-db-migrations:
 	# Run Cloud SQL proxy in the background
 	# We don't know whether or not the user already has a proxy running
 	# If this is a first-time deploy via the 'deploy' Makefile target, the user has not been able to start a proxy
@@ -63,7 +64,7 @@ drop-db:
 	# We are not sure how long it takes for the proxy to start; we guess that 2 seconds should be enough
 	sleep 2
 	# Both fail and success paths from migration result in killing the proxy as well
-	migrate -source "file://./db-migrations" -database "$(shell jq -r ".dbMigrationEndpoint" < $(ENV)/config.json)" -verbose drop -f || (cat db_migration_proxy.pid | xargs kill && rm db_migration_proxy.pid && exit 1) && (cat db_migration_proxy.pid | xargs kill && rm db_migration_proxy.pid && exit 0)
+	migrate -source "file://./db-migrations" -database "$(shell jq -r ".dbMigrationEndpoint" < $(ENV)/config.json)" -verbose down -all || (cat db_migration_proxy.pid | xargs kill && rm db_migration_proxy.pid && exit 1) && (cat db_migration_proxy.pid | xargs kill && rm db_migration_proxy.pid && exit 0)
 
 deploy-database:
 	cd $(ENV)/database && terraform init && terraform apply -auto-approve

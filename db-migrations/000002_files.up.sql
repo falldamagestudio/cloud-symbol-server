@@ -1,3 +1,9 @@
+-- Run all SQL operations in the context of the group role, not the specific user
+-- This ensures that all DB objects that we create will have the group role as its owner
+SET ROLE cloud_symbol_server_admin;
+
+BEGIN;
+
 CREATE TABLE cloud_symbol_server.personal_access_tokens (
   pat_id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 
@@ -18,7 +24,12 @@ CREATE TABLE cloud_symbol_server.personal_access_tokens (
   -- Creation timestamp, in RFC3339 format
   -- Example: 1985-04-12T23:20:50.52Z
   creation_timestamp timestamp NOT NULL
-)
+);
+
+-- Ensure read-write role can access table
+GRANT SELECT, INSERT, UPDATE, DELETE
+ON cloud_symbol_server.personal_access_tokens
+TO cloud_symbol_server_readwrite;
 
 CREATE TABLE cloud_symbol_server.stores (
   store_id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -31,12 +42,20 @@ CREATE TABLE cloud_symbol_server.stores (
   next_store_upload_index integer NOT NULL
 );
 
+GRANT SELECT, INSERT, UPDATE, DELETE
+ON cloud_symbol_server.stores
+TO cloud_symbol_server_readwrite;
+
 CREATE TYPE cloud_symbol_server.store_upload_status AS ENUM (
   'in_progress',
   'completed',
   'aborted',
   'expired'
 );
+
+GRANT USAGE
+ON TYPE cloud_symbol_server.store_upload_status
+TO cloud_symbol_server_readwrite;
 
 CREATE TABLE cloud_symbol_server.store_uploads (
   upload_id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -65,6 +84,11 @@ CREATE TABLE cloud_symbol_server.store_uploads (
   UNIQUE (store_id, store_upload_index)
 );
 
+-- Ensure read-write role can access table
+GRANT SELECT, INSERT, UPDATE, DELETE
+ON cloud_symbol_server.store_uploads
+TO cloud_symbol_server_readwrite;
+
 CREATE TABLE cloud_symbol_server.store_files (
   file_id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 
@@ -80,10 +104,19 @@ CREATE TABLE cloud_symbol_server.store_files (
   UNIQUE (store_id, file_name)
 );
 
+-- Ensure read-write role can access table
+GRANT SELECT, INSERT, UPDATE, DELETE
+ON cloud_symbol_server.store_files
+TO cloud_symbol_server_readwrite;
+
 CREATE TYPE cloud_symbol_server.store_file_hash_status AS ENUM (
   'pending',
   'present'
 );
+
+GRANT USAGE
+ON TYPE cloud_symbol_server.store_file_hash_status
+TO cloud_symbol_server_readwrite;
 
 CREATE TABLE cloud_symbol_server.store_file_hashes (
   hash_id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -104,6 +137,11 @@ CREATE TABLE cloud_symbol_server.store_file_hashes (
   UNIQUE (file_id, hash)
 );
 
+-- Ensure read-write role can access table
+GRANT SELECT, INSERT, UPDATE, DELETE
+ON cloud_symbol_server.store_file_hashes
+TO cloud_symbol_server_readwrite;
+
 CREATE TYPE cloud_symbol_server.store_upload_file_status AS ENUM (
   'already_present',
   'pending',
@@ -111,6 +149,10 @@ CREATE TYPE cloud_symbol_server.store_upload_file_status AS ENUM (
   'aborted',
   'expired'
 );
+
+GRANT USAGE
+ON TYPE cloud_symbol_server.store_upload_file_status
+TO cloud_symbol_server_readwrite;
 
 CREATE TABLE cloud_symbol_server.store_upload_files (
   file_id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -147,3 +189,10 @@ CREATE TABLE cloud_symbol_server.store_upload_files (
   -- upload-file-indices are unique for an upload
   UNIQUE (upload_id, upload_file_index)
 );
+
+-- Ensure read-write role can access table
+GRANT SELECT, INSERT, UPDATE, DELETE
+ON cloud_symbol_server.store_upload_files
+TO cloud_symbol_server_readwrite;
+
+COMMIT;
