@@ -55,7 +55,7 @@
             v-for="pat in pats"
           >
             <PATListEntry
-              v-bind:key="pat.id"
+              v-bind:key="pat.token"
               :email="email"
               :pat="pat"
               @refresh="refresh()"
@@ -76,30 +76,30 @@ import { collection, DocumentData, getDocs, query, QueryDocumentSnapshot } from 
 
 import { db } from '../firebase'
 import PATListEntry from './PATListEntry.vue'
-
 import { api } from '../adminApi'
+import { GetTokensResponse } from '../generated/api'
 
 const props = defineProps<{
   email: string,
 }>()
 
-const pats = ref([] as QueryDocumentSnapshot<DocumentData>[])
+const pats = ref([] as GetTokensResponse)
 
 async function fetch() {
 
-  // try {
-  //   const response = await api.getTokens()
-  //   console.log(response)
-  // } catch (error) {
-  //   console.log(error)
-  // }
-
-  //response.then(value => { this.pats = value })
-
-  const patsRef = collection(db, 'users', props.email, 'pats')
-  const patsQuery = query(patsRef)
-  const patsSnapshot = await getDocs(patsQuery)
-  pats.value = patsSnapshot.docs
+  try {
+    const response = await api.getTokens()
+    console.log("start")
+    for (const x in response.data) {
+      console.log(x)
+    }
+    console.log("end")
+    pats.value = response.data
+    console.log(response)
+    console.log(response.data)
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 function refresh() {

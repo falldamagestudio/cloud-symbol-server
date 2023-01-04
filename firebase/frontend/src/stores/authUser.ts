@@ -28,7 +28,7 @@ export const useAuthUserStore = defineStore('authUser', {
   }),
 
   actions: {
-    setUser (user: null | User) {
+    setUser (user: User | null) {
       this.user = user
       if (this.user) {
         this.loginState = LoginState.LoggedIn
@@ -36,12 +36,9 @@ export const useAuthUserStore = defineStore('authUser', {
         this.loginState = LoginState.LoggedOut
       }
     },
-
-    setLoginStateUnknown () {
-      this.loginState = LoginState.Unknown
-    },
   },
 
-  persist: true,
-
+  persist: {
+    paths: ['loginState'],
+  },
 })

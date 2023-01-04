@@ -1,15 +1,15 @@
 <template>
 
   <tr>
-    <!-- Personal Access Token ID -->
+    <!-- Personal Access Token token-->
 
     <td>
-      {{ abbreviateId(pat.id) }}
+      {{ abbreviateToken(pat.token) }}
 
-      <!-- Shortcut for copying full PAT ID to clipboard -->
+      <!-- Shortcut for copying full PAT token to clipboard -->
       <v-btn
         icon
-        @click="copyTextToClipboard(pat.id)"
+        @click="copyTextToClipboard(pat.token)"
       >
         <v-icon
           small
@@ -22,13 +22,13 @@
     <!-- Personal Access Token creation timestamp -->
 
     <td>
-      {{ timestampToDisplayString(pat.get('creationTimestamp')) }}
+      {{ timestampToDisplayString(pat.creationTimestamp) }}
     </td>
 
     <!-- Personal Access Token description -->
 
     <td>
-      {{ pat.get('description') }}
+      {{ pat.description }}
     </td>
 
     <td>
@@ -81,10 +81,12 @@ import dayjs from 'dayjs'
 
 import { db } from '../firebase'
 import PATUsageGuide from './PATUsageGuide.vue'
+import { GetTokenResponse } from '../generated/api'
+
 
 const props = defineProps<{
   email: string,
-  pat: any,
+  pat: GetTokenResponse,
 }>()
 
 const emit = defineEmits<{
@@ -107,8 +109,8 @@ function patUsageGuideDone() {
   useDialogVisible.value = false
 }
 
-function abbreviateId(id: string): string {
-  return `${id.slice(0, 4)}...${id.slice(-4)}`
+function abbreviateToken(token: string): string {
+  return `${token.slice(0, 4)}...${token.slice(-4)}`
 }
 
 function timestampToDisplayString(timestamp: Timestamp): string {
