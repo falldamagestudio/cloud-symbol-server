@@ -23,8 +23,7 @@ func UpdateToken(ctx context.Context, token string, updateTokenRequest openapi.U
 		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
 	}
 
-	// TODO: fetch owner from auth
-	owner := "hello"
+	owner := helpers.GetUserIdentity(ctx)
 
 	// update PAT
 	numRowsAffected, err := models.PersonalAccessTokens(

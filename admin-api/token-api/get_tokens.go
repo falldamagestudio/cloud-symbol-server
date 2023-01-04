@@ -24,8 +24,7 @@ func GetTokens(ctx context.Context) (openapi.ImplResponse, error) {
 		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
 	}
 
-	// TODO: fetch owner from auth
-	owner := "hello"
+	owner := helpers.GetUserIdentity(ctx)
 
 	// fetch PAT
 	pats, err := models.PersonalAccessTokens(

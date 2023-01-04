@@ -37,8 +37,7 @@ func CreateToken(ctx context.Context) (openapi.ImplResponse, error) {
 		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
 	}
 
-	// TODO: fetch owner from auth
-	owner := "hello"
+	owner := helpers.GetUserIdentity(ctx)
 
 	tokenLength := 32
 
