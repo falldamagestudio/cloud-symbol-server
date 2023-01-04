@@ -79,22 +79,20 @@ func validateUsernamePassword(r *http.Request) (string, int) {
 
 	// Validate that email + PAT exists in database
 
-	firestoreClient, err := helpers.FirestoreClient(r.Context())
+	success, err := helpers.ValidateEmailAndPAT(r.Context(), email, pat)
+
 	if err != nil {
-		log.Printf("Unable to talk to database: %v", err)
+		log.Printf("Error while looking up email/PAT pair %v, %v in database: %v", email, pat, err)
 		return "", http.StatusInternalServerError
 	}
 
-	patDocRef := firestoreClient.Collection("users").Doc(email).Collection("pats").Doc(pat)
-
-	if _, err := patDocRef.Get(r.Context()); err != nil {
-
-		log.Printf("Unable to find email %v, pat %v combination in database: %v", email, pat, err)
-		return "", http.StatusUnauthorized
+	if !success {
+		log.Printf("Email/PAT pair %v, %v does not exist in database", email, pat)
+		return "", 0
+	} else {
+		log.Printf("Email/PAT pair %v, %v exists in database; authentication successful", email, pat)
+		return email, 0
 	}
-
-	log.Printf("Email/PAT pair %v, %v exist in database; authentication successful", email, pat)
-	return email, 0
 }
 
 func (authenticationMiddleware *AuthenticationMiddleware) validateAuthToken(r *http.Request) (string, int) {
