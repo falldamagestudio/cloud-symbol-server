@@ -38,10 +38,9 @@
 
 import { ref } from 'vue'
 import { useRouter } from 'vue-router/composables'
-import { doc, serverTimestamp, setDoc }  from 'firebase/firestore'
 
 import { useAuthUserStore } from '../stores/authUser'
-import { db } from '../firebase'
+import { api } from '../adminApi'
 
 const authUserStore = useAuthUserStore()
 
@@ -51,33 +50,21 @@ const isFormValid = ref(false)
 
 const router = useRouter()
 
-// dec2hex :: Integer -> String
-// i.e. 0-255 -> '00'-'ff'
-function dec2hex (dec: number) : string {
-  return dec.toString(16).padStart(2, "0")
-}
-
-// generateId :: Integer -> String
-function generateId (len: number): string {
-  const arr = new Uint8Array((len || 40) / 2)
-  window.crypto.getRandomValues(arr)
-  return Array.from(arr, dec2hex).join('')
-}
-
 function validateDescription(description: string): boolean {
     return Boolean(description)
 }
 
 async function generate() {
-  const id = generateId(32)
 
-  const patFields = {
-    description: description.value,
-    creationTimestamp: serverTimestamp()
+  try {
+    const createTokenResponse = await api.createToken()
+    const updateTokenResponse = await api.updateToken(createTokenResponse.data.token!, {
+      description: description.value
+    })
+  } catch (error) {
+    console.log(error)
   }
 
-  const patDocRef = doc(db, 'users', email, 'pats', id)
-  await setDoc(patDocRef, patFields)
   router.push({ name: 'pats' })
 }
 

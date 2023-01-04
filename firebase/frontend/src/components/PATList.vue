@@ -72,31 +72,22 @@
 <script setup lang="ts">
 
 import { ref } from 'vue'
-import { collection, DocumentData, getDocs, query, QueryDocumentSnapshot } from 'firebase/firestore'
 
-import { db } from '../firebase'
 import PATListEntry from './PATListEntry.vue'
 import { api } from '../adminApi'
-import { GetTokensResponse } from '../generated/api'
+import { GetTokenResponse } from '../generated/api'
 
 const props = defineProps<{
   email: string,
 }>()
 
-const pats = ref([] as GetTokensResponse)
+const pats = ref([] as GetTokenResponse[])
 
 async function fetch() {
 
   try {
     const response = await api.getTokens()
-    console.log("start")
-    for (const x in response.data) {
-      console.log(x)
-    }
-    console.log("end")
     pats.value = response.data
-    console.log(response)
-    console.log(response.data)
   } catch (error) {
     console.log(error)
   }

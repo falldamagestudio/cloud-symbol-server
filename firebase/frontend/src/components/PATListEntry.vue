@@ -79,8 +79,8 @@ import { ref } from 'vue'
 import { doc, deleteDoc, Timestamp } from 'firebase/firestore'
 import dayjs from 'dayjs'
 
-import { db } from '../firebase'
 import PATUsageGuide from './PATUsageGuide.vue'
+import { api } from '../adminApi'
 import { GetTokenResponse } from '../generated/api'
 
 
@@ -100,8 +100,13 @@ function copyTextToClipboard(text: string) {
 }
 
 async function revoke() {
-  const patDocRef = doc(db, 'users', props.email, 'pats', props.pat.id)
-  await deleteDoc(patDocRef)
+
+  try {
+    const response = await api.deleteToken(props.pat.token)
+  } catch (error) {
+    console.log(error)
+  }
+
   emit('refresh')
 }
 
@@ -113,8 +118,8 @@ function abbreviateToken(token: string): string {
   return `${token.slice(0, 4)}...${token.slice(-4)}`
 }
 
-function timestampToDisplayString(timestamp: Timestamp): string {
-  return dayjs(timestamp.toDate()).format('YYYY-MM-DD HH:mm')
+function timestampToDisplayString(timestamp: string): string {
+  return dayjs(timestamp).format('YYYY-MM-DD HH:mm')
 }
 
 </script>

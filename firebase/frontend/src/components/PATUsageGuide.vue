@@ -78,10 +78,11 @@
 import { ref } from 'vue'
 
 import { adminAPIEndpoint, downloadAPIEndpoint } from '../appConfig'
+import { GetTokenResponse } from '../generated/api'
 
 const props = defineProps<{
   email: string,
-  pat: any,
+  pat: GetTokenResponse,
 }>()
 
 const emit = defineEmits<{
@@ -92,9 +93,9 @@ const howToUseTab = ref(null)
 const downloadConfigFileHref = "data:application/json;charset=utf-8," + encodeURI(JSON.stringify({
         'service-url': adminAPIEndpoint,
         'email': props.email,
-        'pat': props.pat.id,
+        'pat': props.pat.token,
       }, null, 2))
-const symbolServerDownloadAPIEndpoint = downloadAPIEndpoint.split('://')[0] + "://" + encodeURIComponent(props.email) + ':' + props.pat.id + '@' + downloadAPIEndpoint.split('://')[1]
+const symbolServerDownloadAPIEndpoint = downloadAPIEndpoint.split('://')[0] + "://" + encodeURIComponent(props.email) + ':' + props.pat.token + '@' + downloadAPIEndpoint.split('://')[1]
 
 function copyTextToClipboard(text: string) {
   navigator.clipboard.writeText(text)
