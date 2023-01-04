@@ -4,12 +4,8 @@ docs/CreateStoreUploadResponse.md
 docs/CreateTokenResponse.md
 docs/DefaultApi.md
 docs/GetFileResponse.md
-docs/GetStoreFileIdsResponse.md
-docs/GetStoreUploadIdsResponse.md
 docs/GetStoreUploadResponse.md
-docs/GetStoresResponse.md
 docs/GetTokenResponse.md
-docs/GetTokensResponse.md
 docs/MessageResponse.md
 docs/UpdateTokenRequest.md
 docs/UploadFileRequest.md
@@ -37,12 +33,8 @@ src/BackendAPI/Model/CreateStoreUploadRequest.cs
 src/BackendAPI/Model/CreateStoreUploadResponse.cs
 src/BackendAPI/Model/CreateTokenResponse.cs
 src/BackendAPI/Model/GetFileResponse.cs
-src/BackendAPI/Model/GetStoreFileIdsResponse.cs
-src/BackendAPI/Model/GetStoreUploadIdsResponse.cs
 src/BackendAPI/Model/GetStoreUploadResponse.cs
-src/BackendAPI/Model/GetStoresResponse.cs
 src/BackendAPI/Model/GetTokenResponse.cs
-src/BackendAPI/Model/GetTokensResponse.cs
 src/BackendAPI/Model/MessageResponse.cs
 src/BackendAPI/Model/UpdateTokenRequest.cs
 src/BackendAPI/Model/UploadFileRequest.cs

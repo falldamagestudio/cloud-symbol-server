@@ -154,8 +154,8 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the files</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>GetStoreFileIdsResponse</returns>
-        GetStoreFileIdsResponse GetStoreFileIds(string storeId, int operationIndex = 0);
+        /// <returns>List&lt;string&gt;</returns>
+        List<string> GetStoreFileIds(string storeId, int operationIndex = 0);
 
         /// <summary>
         /// Fetch a list of all files in store
@@ -166,8 +166,8 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the files</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of GetStoreFileIdsResponse</returns>
-        ApiResponse<GetStoreFileIdsResponse> GetStoreFileIdsWithHttpInfo(string storeId, int operationIndex = 0);
+        /// <returns>ApiResponse of List&lt;string&gt;</returns>
+        ApiResponse<List<string>> GetStoreFileIdsWithHttpInfo(string storeId, int operationIndex = 0);
         /// <summary>
         /// Fetch an upload
         /// </summary>
@@ -196,8 +196,8 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the uploads</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>GetStoreUploadIdsResponse</returns>
-        GetStoreUploadIdsResponse GetStoreUploadIds(string storeId, int operationIndex = 0);
+        /// <returns>List&lt;string&gt;</returns>
+        List<string> GetStoreUploadIds(string storeId, int operationIndex = 0);
 
         /// <summary>
         /// Fetch a list of all uploads in store
@@ -208,15 +208,15 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the uploads</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of GetStoreUploadIdsResponse</returns>
-        ApiResponse<GetStoreUploadIdsResponse> GetStoreUploadIdsWithHttpInfo(string storeId, int operationIndex = 0);
+        /// <returns>ApiResponse of List&lt;string&gt;</returns>
+        ApiResponse<List<string>> GetStoreUploadIdsWithHttpInfo(string storeId, int operationIndex = 0);
         /// <summary>
         /// Fetch a list of all stores
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>GetStoresResponse</returns>
-        GetStoresResponse GetStores(int operationIndex = 0);
+        /// <returns>List&lt;string&gt;</returns>
+        List<string> GetStores(int operationIndex = 0);
 
         /// <summary>
         /// Fetch a list of all stores
@@ -226,8 +226,8 @@ namespace BackendAPI.Api
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of GetStoresResponse</returns>
-        ApiResponse<GetStoresResponse> GetStoresWithHttpInfo(int operationIndex = 0);
+        /// <returns>ApiResponse of List&lt;string&gt;</returns>
+        ApiResponse<List<string>> GetStoresWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Fetch a token for current user
         /// </summary>
@@ -253,8 +253,8 @@ namespace BackendAPI.Api
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>GetTokensResponse</returns>
-        GetTokensResponse GetTokens(int operationIndex = 0);
+        /// <returns>List&lt;GetTokenResponse&gt;</returns>
+        List<GetTokenResponse> GetTokens(int operationIndex = 0);
 
         /// <summary>
         /// Fetch a list of all tokens for current user
@@ -264,8 +264,8 @@ namespace BackendAPI.Api
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of GetTokensResponse</returns>
-        ApiResponse<GetTokensResponse> GetTokensWithHttpInfo(int operationIndex = 0);
+        /// <returns>ApiResponse of List&lt;GetTokenResponse&gt;</returns>
+        ApiResponse<List<GetTokenResponse>> GetTokensWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// Mark an upload as aborted
         /// </summary>
@@ -527,8 +527,8 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the files</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of GetStoreFileIdsResponse</returns>
-        System.Threading.Tasks.Task<GetStoreFileIdsResponse> GetStoreFileIdsAsync(string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <returns>Task of List&lt;string&gt;</returns>
+        System.Threading.Tasks.Task<List<string>> GetStoreFileIdsAsync(string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// Fetch a list of all files in store
@@ -540,8 +540,8 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the files</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (GetStoreFileIdsResponse)</returns>
-        System.Threading.Tasks.Task<ApiResponse<GetStoreFileIdsResponse>> GetStoreFileIdsWithHttpInfoAsync(string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <returns>Task of ApiResponse (List&lt;string&gt;)</returns>
+        System.Threading.Tasks.Task<ApiResponse<List<string>>> GetStoreFileIdsWithHttpInfoAsync(string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Fetch an upload
         /// </summary>
@@ -579,8 +579,8 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the uploads</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of GetStoreUploadIdsResponse</returns>
-        System.Threading.Tasks.Task<GetStoreUploadIdsResponse> GetStoreUploadIdsAsync(string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <returns>Task of List&lt;string&gt;</returns>
+        System.Threading.Tasks.Task<List<string>> GetStoreUploadIdsAsync(string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// Fetch a list of all uploads in store
@@ -592,8 +592,8 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the uploads</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (GetStoreUploadIdsResponse)</returns>
-        System.Threading.Tasks.Task<ApiResponse<GetStoreUploadIdsResponse>> GetStoreUploadIdsWithHttpInfoAsync(string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <returns>Task of ApiResponse (List&lt;string&gt;)</returns>
+        System.Threading.Tasks.Task<ApiResponse<List<string>>> GetStoreUploadIdsWithHttpInfoAsync(string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Fetch a list of all stores
         /// </summary>
@@ -603,8 +603,8 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of GetStoresResponse</returns>
-        System.Threading.Tasks.Task<GetStoresResponse> GetStoresAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <returns>Task of List&lt;string&gt;</returns>
+        System.Threading.Tasks.Task<List<string>> GetStoresAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// Fetch a list of all stores
@@ -615,8 +615,8 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (GetStoresResponse)</returns>
-        System.Threading.Tasks.Task<ApiResponse<GetStoresResponse>> GetStoresWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <returns>Task of ApiResponse (List&lt;string&gt;)</returns>
+        System.Threading.Tasks.Task<ApiResponse<List<string>>> GetStoresWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Fetch a token for current user
         /// </summary>
@@ -651,8 +651,8 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of GetTokensResponse</returns>
-        System.Threading.Tasks.Task<GetTokensResponse> GetTokensAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <returns>Task of List&lt;GetTokenResponse&gt;</returns>
+        System.Threading.Tasks.Task<List<GetTokenResponse>> GetTokensAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// Fetch a list of all tokens for current user
@@ -663,8 +663,8 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (GetTokensResponse)</returns>
-        System.Threading.Tasks.Task<ApiResponse<GetTokensResponse>> GetTokensWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <returns>Task of ApiResponse (List&lt;GetTokenResponse&gt;)</returns>
+        System.Threading.Tasks.Task<ApiResponse<List<GetTokenResponse>>> GetTokensWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Mark an upload as aborted
         /// </summary>
@@ -1849,10 +1849,10 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the files</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>GetStoreFileIdsResponse</returns>
-        public GetStoreFileIdsResponse GetStoreFileIds(string storeId, int operationIndex = 0)
+        /// <returns>List&lt;string&gt;</returns>
+        public List<string> GetStoreFileIds(string storeId, int operationIndex = 0)
         {
-            BackendAPI.Client.ApiResponse<GetStoreFileIdsResponse> localVarResponse = GetStoreFileIdsWithHttpInfo(storeId);
+            BackendAPI.Client.ApiResponse<List<string>> localVarResponse = GetStoreFileIdsWithHttpInfo(storeId);
             return localVarResponse.Data;
         }
 
@@ -1862,8 +1862,8 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the files</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of GetStoreFileIdsResponse</returns>
-        public BackendAPI.Client.ApiResponse<GetStoreFileIdsResponse> GetStoreFileIdsWithHttpInfo(string storeId, int operationIndex = 0)
+        /// <returns>ApiResponse of List&lt;string&gt;</returns>
+        public BackendAPI.Client.ApiResponse<List<string>> GetStoreFileIdsWithHttpInfo(string storeId, int operationIndex = 0)
         {
             // verify the required parameter 'storeId' is set
             if (storeId == null)
@@ -1906,7 +1906,7 @@ namespace BackendAPI.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<GetStoreFileIdsResponse>("/stores/{storeId}/files", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<List<string>>("/stores/{storeId}/files", localVarRequestOptions, this.Configuration);
             if (this.ExceptionFactory != null)
             {
                 Exception _exception = this.ExceptionFactory("GetStoreFileIds", localVarResponse);
@@ -1926,10 +1926,10 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the files</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of GetStoreFileIdsResponse</returns>
-        public async System.Threading.Tasks.Task<GetStoreFileIdsResponse> GetStoreFileIdsAsync(string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        /// <returns>Task of List&lt;string&gt;</returns>
+        public async System.Threading.Tasks.Task<List<string>> GetStoreFileIdsAsync(string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            BackendAPI.Client.ApiResponse<GetStoreFileIdsResponse> localVarResponse = await GetStoreFileIdsWithHttpInfoAsync(storeId, operationIndex, cancellationToken).ConfigureAwait(false);
+            BackendAPI.Client.ApiResponse<List<string>> localVarResponse = await GetStoreFileIdsWithHttpInfoAsync(storeId, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
@@ -1940,8 +1940,8 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the files</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (GetStoreFileIdsResponse)</returns>
-        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetStoreFileIdsResponse>> GetStoreFileIdsWithHttpInfoAsync(string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        /// <returns>Task of ApiResponse (List&lt;string&gt;)</returns>
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<List<string>>> GetStoreFileIdsWithHttpInfoAsync(string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'storeId' is set
             if (storeId == null)
@@ -1985,7 +1985,7 @@ namespace BackendAPI.Api
             }
 
             // make the HTTP request
-            var localVarResponse = await this.AsynchronousClient.GetAsync<GetStoreFileIdsResponse>("/stores/{storeId}/files", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<List<string>>("/stores/{storeId}/files", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
@@ -2179,10 +2179,10 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the uploads</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>GetStoreUploadIdsResponse</returns>
-        public GetStoreUploadIdsResponse GetStoreUploadIds(string storeId, int operationIndex = 0)
+        /// <returns>List&lt;string&gt;</returns>
+        public List<string> GetStoreUploadIds(string storeId, int operationIndex = 0)
         {
-            BackendAPI.Client.ApiResponse<GetStoreUploadIdsResponse> localVarResponse = GetStoreUploadIdsWithHttpInfo(storeId);
+            BackendAPI.Client.ApiResponse<List<string>> localVarResponse = GetStoreUploadIdsWithHttpInfo(storeId);
             return localVarResponse.Data;
         }
 
@@ -2192,8 +2192,8 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the uploads</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of GetStoreUploadIdsResponse</returns>
-        public BackendAPI.Client.ApiResponse<GetStoreUploadIdsResponse> GetStoreUploadIdsWithHttpInfo(string storeId, int operationIndex = 0)
+        /// <returns>ApiResponse of List&lt;string&gt;</returns>
+        public BackendAPI.Client.ApiResponse<List<string>> GetStoreUploadIdsWithHttpInfo(string storeId, int operationIndex = 0)
         {
             // verify the required parameter 'storeId' is set
             if (storeId == null)
@@ -2236,7 +2236,7 @@ namespace BackendAPI.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<GetStoreUploadIdsResponse>("/stores/{storeId}/uploads", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<List<string>>("/stores/{storeId}/uploads", localVarRequestOptions, this.Configuration);
             if (this.ExceptionFactory != null)
             {
                 Exception _exception = this.ExceptionFactory("GetStoreUploadIds", localVarResponse);
@@ -2256,10 +2256,10 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the uploads</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of GetStoreUploadIdsResponse</returns>
-        public async System.Threading.Tasks.Task<GetStoreUploadIdsResponse> GetStoreUploadIdsAsync(string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        /// <returns>Task of List&lt;string&gt;</returns>
+        public async System.Threading.Tasks.Task<List<string>> GetStoreUploadIdsAsync(string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            BackendAPI.Client.ApiResponse<GetStoreUploadIdsResponse> localVarResponse = await GetStoreUploadIdsWithHttpInfoAsync(storeId, operationIndex, cancellationToken).ConfigureAwait(false);
+            BackendAPI.Client.ApiResponse<List<string>> localVarResponse = await GetStoreUploadIdsWithHttpInfoAsync(storeId, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
@@ -2270,8 +2270,8 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the uploads</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (GetStoreUploadIdsResponse)</returns>
-        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetStoreUploadIdsResponse>> GetStoreUploadIdsWithHttpInfoAsync(string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        /// <returns>Task of ApiResponse (List&lt;string&gt;)</returns>
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<List<string>>> GetStoreUploadIdsWithHttpInfoAsync(string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'storeId' is set
             if (storeId == null)
@@ -2315,7 +2315,7 @@ namespace BackendAPI.Api
             }
 
             // make the HTTP request
-            var localVarResponse = await this.AsynchronousClient.GetAsync<GetStoreUploadIdsResponse>("/stores/{storeId}/uploads", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<List<string>>("/stores/{storeId}/uploads", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
@@ -2334,10 +2334,10 @@ namespace BackendAPI.Api
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>GetStoresResponse</returns>
-        public GetStoresResponse GetStores(int operationIndex = 0)
+        /// <returns>List&lt;string&gt;</returns>
+        public List<string> GetStores(int operationIndex = 0)
         {
-            BackendAPI.Client.ApiResponse<GetStoresResponse> localVarResponse = GetStoresWithHttpInfo();
+            BackendAPI.Client.ApiResponse<List<string>> localVarResponse = GetStoresWithHttpInfo();
             return localVarResponse.Data;
         }
 
@@ -2346,8 +2346,8 @@ namespace BackendAPI.Api
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of GetStoresResponse</returns>
-        public BackendAPI.Client.ApiResponse<GetStoresResponse> GetStoresWithHttpInfo(int operationIndex = 0)
+        /// <returns>ApiResponse of List&lt;string&gt;</returns>
+        public BackendAPI.Client.ApiResponse<List<string>> GetStoresWithHttpInfo(int operationIndex = 0)
         {
             BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
 
@@ -2383,7 +2383,7 @@ namespace BackendAPI.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<GetStoresResponse>("/stores", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<List<string>>("/stores", localVarRequestOptions, this.Configuration);
             if (this.ExceptionFactory != null)
             {
                 Exception _exception = this.ExceptionFactory("GetStores", localVarResponse);
@@ -2402,10 +2402,10 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of GetStoresResponse</returns>
-        public async System.Threading.Tasks.Task<GetStoresResponse> GetStoresAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        /// <returns>Task of List&lt;string&gt;</returns>
+        public async System.Threading.Tasks.Task<List<string>> GetStoresAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            BackendAPI.Client.ApiResponse<GetStoresResponse> localVarResponse = await GetStoresWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            BackendAPI.Client.ApiResponse<List<string>> localVarResponse = await GetStoresWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
@@ -2415,8 +2415,8 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (GetStoresResponse)</returns>
-        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetStoresResponse>> GetStoresWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        /// <returns>Task of ApiResponse (List&lt;string&gt;)</returns>
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<List<string>>> GetStoresWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
             BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
@@ -2453,7 +2453,7 @@ namespace BackendAPI.Api
             }
 
             // make the HTTP request
-            var localVarResponse = await this.AsynchronousClient.GetAsync<GetStoresResponse>("/stores", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<List<string>>("/stores", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
@@ -2628,10 +2628,10 @@ namespace BackendAPI.Api
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>GetTokensResponse</returns>
-        public GetTokensResponse GetTokens(int operationIndex = 0)
+        /// <returns>List&lt;GetTokenResponse&gt;</returns>
+        public List<GetTokenResponse> GetTokens(int operationIndex = 0)
         {
-            BackendAPI.Client.ApiResponse<GetTokensResponse> localVarResponse = GetTokensWithHttpInfo();
+            BackendAPI.Client.ApiResponse<List<GetTokenResponse>> localVarResponse = GetTokensWithHttpInfo();
             return localVarResponse.Data;
         }
 
@@ -2640,8 +2640,8 @@ namespace BackendAPI.Api
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of GetTokensResponse</returns>
-        public BackendAPI.Client.ApiResponse<GetTokensResponse> GetTokensWithHttpInfo(int operationIndex = 0)
+        /// <returns>ApiResponse of List&lt;GetTokenResponse&gt;</returns>
+        public BackendAPI.Client.ApiResponse<List<GetTokenResponse>> GetTokensWithHttpInfo(int operationIndex = 0)
         {
             BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
 
@@ -2677,7 +2677,7 @@ namespace BackendAPI.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<GetTokensResponse>("/tokens", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<List<GetTokenResponse>>("/tokens", localVarRequestOptions, this.Configuration);
             if (this.ExceptionFactory != null)
             {
                 Exception _exception = this.ExceptionFactory("GetTokens", localVarResponse);
@@ -2696,10 +2696,10 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of GetTokensResponse</returns>
-        public async System.Threading.Tasks.Task<GetTokensResponse> GetTokensAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        /// <returns>Task of List&lt;GetTokenResponse&gt;</returns>
+        public async System.Threading.Tasks.Task<List<GetTokenResponse>> GetTokensAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            BackendAPI.Client.ApiResponse<GetTokensResponse> localVarResponse = await GetTokensWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            BackendAPI.Client.ApiResponse<List<GetTokenResponse>> localVarResponse = await GetTokensWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
@@ -2709,8 +2709,8 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (GetTokensResponse)</returns>
-        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetTokensResponse>> GetTokensWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        /// <returns>Task of ApiResponse (List&lt;GetTokenResponse&gt;)</returns>
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<List<GetTokenResponse>>> GetTokensWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
             BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
@@ -2747,7 +2747,7 @@ namespace BackendAPI.Api
             }
 
             // make the HTTP request
-            var localVarResponse = await this.AsynchronousClient.GetAsync<GetTokensResponse>("/tokens", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<List<GetTokenResponse>>("/tokens", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {

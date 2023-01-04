@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -126,10 +127,10 @@ namespace ClientAPI
             public GetStoreUploadIdsException(string message) : base(message) { }
         }
 
-        public async Task<BackendAPI.Model.GetStoreUploadIdsResponse> GetStoreUploadIdsAsync(string store) {
+        public async Task<List<string>> GetStoreUploadIdsAsync(string store) {
 
             try {
-                BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreUploadIdsResponse> response = await backendApi.GetStoreUploadIdsWithHttpInfoAsync(store);
+                BackendAPI.Client.ApiResponse<List<string>> response = await backendApi.GetStoreUploadIdsWithHttpInfoAsync(store);
                 if (response.ErrorText != null)
                     throw new ApiException(response.ErrorText);
                 return response.Data;
@@ -191,9 +192,9 @@ namespace ClientAPI
             }
         }
 
-        public async Task<BackendAPI.Model.GetStoresResponse> GetStoresAsync() {
+        public async Task<List<string>> GetStoresAsync() {
 
-            BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoresResponse> response = await backendApi.GetStoresWithHttpInfoAsync();
+            BackendAPI.Client.ApiResponse<List<string>> response = await backendApi.GetStoresWithHttpInfoAsync();
             if (response.ErrorText != null)
                 throw new ApiException(response.ErrorText);
             return response.Data;

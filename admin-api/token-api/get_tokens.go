@@ -45,9 +45,5 @@ func GetTokens(ctx context.Context) (openapi.ImplResponse, error) {
 		}
 	}
 
-	getTokensResponse := openapi.GetTokensResponse{
-		Items: tokensArray,
-	}
-
-	return openapi.Response(http.StatusOK, getTokensResponse), nil
+	return openapi.Response(http.StatusOK, tokensArray), nil
 }

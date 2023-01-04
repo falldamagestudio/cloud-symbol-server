@@ -574,7 +574,7 @@ void (empty response body)
 
 <a name="getstorefileids"></a>
 # **GetStoreFileIds**
-> GetStoreFileIdsResponse GetStoreFileIds (string storeId)
+> List&lt;string&gt; GetStoreFileIds (string storeId)
 
 Fetch a list of all files in store
 
@@ -604,7 +604,7 @@ namespace Example
             try
             {
                 // Fetch a list of all files in store
-                GetStoreFileIdsResponse result = apiInstance.GetStoreFileIds(storeId);
+                List<string> result = apiInstance.GetStoreFileIds(storeId);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -625,7 +625,7 @@ This returns an ApiResponse object which contains the response data, status code
 try
 {
     // Fetch a list of all files in store
-    ApiResponse<GetStoreFileIdsResponse> response = apiInstance.GetStoreFileIdsWithHttpInfo(storeId);
+    ApiResponse<List<string>> response = apiInstance.GetStoreFileIdsWithHttpInfo(storeId);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -646,7 +646,7 @@ catch (ApiException e)
 
 ### Return type
 
-[**GetStoreFileIdsResponse**](GetStoreFileIdsResponse.md)
+**List<string>**
 
 ### Authorization
 
@@ -766,7 +766,7 @@ catch (ApiException e)
 
 <a name="getstoreuploadids"></a>
 # **GetStoreUploadIds**
-> GetStoreUploadIdsResponse GetStoreUploadIds (string storeId)
+> List&lt;string&gt; GetStoreUploadIds (string storeId)
 
 Fetch a list of all uploads in store
 
@@ -796,7 +796,7 @@ namespace Example
             try
             {
                 // Fetch a list of all uploads in store
-                GetStoreUploadIdsResponse result = apiInstance.GetStoreUploadIds(storeId);
+                List<string> result = apiInstance.GetStoreUploadIds(storeId);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -817,7 +817,7 @@ This returns an ApiResponse object which contains the response data, status code
 try
 {
     // Fetch a list of all uploads in store
-    ApiResponse<GetStoreUploadIdsResponse> response = apiInstance.GetStoreUploadIdsWithHttpInfo(storeId);
+    ApiResponse<List<string>> response = apiInstance.GetStoreUploadIdsWithHttpInfo(storeId);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -838,7 +838,7 @@ catch (ApiException e)
 
 ### Return type
 
-[**GetStoreUploadIdsResponse**](GetStoreUploadIdsResponse.md)
+**List<string>**
 
 ### Authorization
 
@@ -861,7 +861,7 @@ catch (ApiException e)
 
 <a name="getstores"></a>
 # **GetStores**
-> GetStoresResponse GetStores ()
+> List&lt;string&gt; GetStores ()
 
 Fetch a list of all stores
 
@@ -890,7 +890,7 @@ namespace Example
             try
             {
                 // Fetch a list of all stores
-                GetStoresResponse result = apiInstance.GetStores();
+                List<string> result = apiInstance.GetStores();
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -911,7 +911,7 @@ This returns an ApiResponse object which contains the response data, status code
 try
 {
     // Fetch a list of all stores
-    ApiResponse<GetStoresResponse> response = apiInstance.GetStoresWithHttpInfo();
+    ApiResponse<List<string>> response = apiInstance.GetStoresWithHttpInfo();
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -928,7 +928,7 @@ catch (ApiException e)
 This endpoint does not need any parameter.
 ### Return type
 
-[**GetStoresResponse**](GetStoresResponse.md)
+**List<string>**
 
 ### Authorization
 
@@ -1045,7 +1045,7 @@ catch (ApiException e)
 
 <a name="gettokens"></a>
 # **GetTokens**
-> GetTokensResponse GetTokens ()
+> List&lt;GetTokenResponse&gt; GetTokens ()
 
 Fetch a list of all tokens for current user
 
@@ -1074,7 +1074,7 @@ namespace Example
             try
             {
                 // Fetch a list of all tokens for current user
-                GetTokensResponse result = apiInstance.GetTokens();
+                List<GetTokenResponse> result = apiInstance.GetTokens();
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -1095,7 +1095,7 @@ This returns an ApiResponse object which contains the response data, status code
 try
 {
     // Fetch a list of all tokens for current user
-    ApiResponse<GetTokensResponse> response = apiInstance.GetTokensWithHttpInfo();
+    ApiResponse<List<GetTokenResponse>> response = apiInstance.GetTokensWithHttpInfo();
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -1112,7 +1112,7 @@ catch (ApiException e)
 This endpoint does not need any parameter.
 ### Return type
 
-[**GetTokensResponse**](GetTokensResponse.md)
+[**List&lt;GetTokenResponse&gt;**](GetTokenResponse.md)
 
 ### Authorization
 

@@ -706,7 +706,7 @@ type ApiGetStoreFileIdsRequest struct {
 	storeId string
 }
 
-func (r ApiGetStoreFileIdsRequest) Execute() (*GetStoreFileIdsResponse, *http.Response, error) {
+func (r ApiGetStoreFileIdsRequest) Execute() ([]string, *http.Response, error) {
 	return r.ApiService.GetStoreFileIdsExecute(r)
 }
 
@@ -726,13 +726,13 @@ func (a *DefaultApiService) GetStoreFileIds(ctx context.Context, storeId string)
 }
 
 // Execute executes the request
-//  @return GetStoreFileIdsResponse
-func (a *DefaultApiService) GetStoreFileIdsExecute(r ApiGetStoreFileIdsRequest) (*GetStoreFileIdsResponse, *http.Response, error) {
+//  @return []string
+func (a *DefaultApiService) GetStoreFileIdsExecute(r ApiGetStoreFileIdsRequest) ([]string, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *GetStoreFileIdsResponse
+		localVarReturnValue  []string
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetStoreFileIds")
@@ -954,7 +954,7 @@ type ApiGetStoreUploadIdsRequest struct {
 	storeId string
 }
 
-func (r ApiGetStoreUploadIdsRequest) Execute() (*GetStoreUploadIdsResponse, *http.Response, error) {
+func (r ApiGetStoreUploadIdsRequest) Execute() ([]string, *http.Response, error) {
 	return r.ApiService.GetStoreUploadIdsExecute(r)
 }
 
@@ -974,13 +974,13 @@ func (a *DefaultApiService) GetStoreUploadIds(ctx context.Context, storeId strin
 }
 
 // Execute executes the request
-//  @return GetStoreUploadIdsResponse
-func (a *DefaultApiService) GetStoreUploadIdsExecute(r ApiGetStoreUploadIdsRequest) (*GetStoreUploadIdsResponse, *http.Response, error) {
+//  @return []string
+func (a *DefaultApiService) GetStoreUploadIdsExecute(r ApiGetStoreUploadIdsRequest) ([]string, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *GetStoreUploadIdsResponse
+		localVarReturnValue  []string
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetStoreUploadIds")
@@ -1075,7 +1075,7 @@ type ApiGetStoresRequest struct {
 	ApiService *DefaultApiService
 }
 
-func (r ApiGetStoresRequest) Execute() (*GetStoresResponse, *http.Response, error) {
+func (r ApiGetStoresRequest) Execute() ([]string, *http.Response, error) {
 	return r.ApiService.GetStoresExecute(r)
 }
 
@@ -1093,13 +1093,13 @@ func (a *DefaultApiService) GetStores(ctx context.Context) ApiGetStoresRequest {
 }
 
 // Execute executes the request
-//  @return GetStoresResponse
-func (a *DefaultApiService) GetStoresExecute(r ApiGetStoresRequest) (*GetStoresResponse, *http.Response, error) {
+//  @return []string
+func (a *DefaultApiService) GetStoresExecute(r ApiGetStoresRequest) ([]string, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *GetStoresResponse
+		localVarReturnValue  []string
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetStores")
@@ -1304,7 +1304,7 @@ type ApiGetTokensRequest struct {
 	ApiService *DefaultApiService
 }
 
-func (r ApiGetTokensRequest) Execute() (*GetTokensResponse, *http.Response, error) {
+func (r ApiGetTokensRequest) Execute() ([]GetTokenResponse, *http.Response, error) {
 	return r.ApiService.GetTokensExecute(r)
 }
 
@@ -1322,13 +1322,13 @@ func (a *DefaultApiService) GetTokens(ctx context.Context) ApiGetTokensRequest {
 }
 
 // Execute executes the request
-//  @return GetTokensResponse
-func (a *DefaultApiService) GetTokensExecute(r ApiGetTokensRequest) (*GetTokensResponse, *http.Response, error) {
+//  @return []GetTokenResponse
+func (a *DefaultApiService) GetTokensExecute(r ApiGetTokensRequest) ([]GetTokenResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *GetTokensResponse
+		localVarReturnValue  []GetTokenResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetTokens")

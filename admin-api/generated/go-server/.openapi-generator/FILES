@@ -10,12 +10,8 @@ go/model_create_store_upload_request.go
 go/model_create_store_upload_response.go
 go/model_create_token_response.go
 go/model_get_file_response.go
-go/model_get_store_file_ids_response.go
-go/model_get_store_upload_ids_response.go
 go/model_get_store_upload_response.go
-go/model_get_stores_response.go
 go/model_get_token_response.go
-go/model_get_tokens_response.go
 go/model_message_response.go
 go/model_update_token_request.go
 go/model_upload_file_request.go

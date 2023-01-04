@@ -20,7 +20,7 @@ namespace ClientAPI
 
             BackendApiWrapper backendApiWrapper = new BackendApiWrapper(ServiceURL, Email, PAT);
 
-            BackendAPI.Model.GetStoreUploadIdsResponse getStoreUploadIdsResponse = await backendApiWrapper.GetStoreUploadIdsAsync(store);
+            List<string> getStoreUploadIdsResponse = await backendApiWrapper.GetStoreUploadIdsAsync(store);
 
             List<StoreUpload> uploads = new List<StoreUpload>();
 

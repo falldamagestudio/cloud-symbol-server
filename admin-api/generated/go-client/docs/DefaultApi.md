@@ -421,7 +421,7 @@ Name | Type | Description  | Notes
 
 ## GetStoreFileIds
 
-> GetStoreFileIdsResponse GetStoreFileIds(ctx, storeId).Execute()
+> []string GetStoreFileIds(ctx, storeId).Execute()
 
 Fetch a list of all files in store
 
@@ -447,7 +447,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStoreFileIds``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetStoreFileIds`: GetStoreFileIdsResponse
+    // response from `GetStoreFileIds`: []string
     fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetStoreFileIds`: %v\n", resp)
 }
 ```
@@ -471,7 +471,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetStoreFileIdsResponse**](GetStoreFileIdsResponse.md)
+**[]string**
 
 ### Authorization
 
@@ -560,7 +560,7 @@ Name | Type | Description  | Notes
 
 ## GetStoreUploadIds
 
-> GetStoreUploadIdsResponse GetStoreUploadIds(ctx, storeId).Execute()
+> []string GetStoreUploadIds(ctx, storeId).Execute()
 
 Fetch a list of all uploads in store
 
@@ -586,7 +586,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStoreUploadIds``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetStoreUploadIds`: GetStoreUploadIdsResponse
+    // response from `GetStoreUploadIds`: []string
     fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetStoreUploadIds`: %v\n", resp)
 }
 ```
@@ -610,7 +610,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetStoreUploadIdsResponse**](GetStoreUploadIdsResponse.md)
+**[]string**
 
 ### Authorization
 
@@ -628,7 +628,7 @@ Name | Type | Description  | Notes
 
 ## GetStores
 
-> GetStoresResponse GetStores(ctx).Execute()
+> []string GetStores(ctx).Execute()
 
 Fetch a list of all stores
 
@@ -653,7 +653,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStores``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetStores`: GetStoresResponse
+    // response from `GetStores`: []string
     fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetStores`: %v\n", resp)
 }
 ```
@@ -669,7 +669,7 @@ Other parameters are passed through a pointer to a apiGetStoresRequest struct vi
 
 ### Return type
 
-[**GetStoresResponse**](GetStoresResponse.md)
+**[]string**
 
 ### Authorization
 
@@ -755,7 +755,7 @@ Name | Type | Description  | Notes
 
 ## GetTokens
 
-> GetTokensResponse GetTokens(ctx).Execute()
+> []GetTokenResponse GetTokens(ctx).Execute()
 
 Fetch a list of all tokens for current user
 
@@ -780,7 +780,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetTokens``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetTokens`: GetTokensResponse
+    // response from `GetTokens`: []GetTokenResponse
     fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetTokens`: %v\n", resp)
 }
 ```
@@ -796,7 +796,7 @@ Other parameters are passed through a pointer to a apiGetTokensRequest struct vi
 
 ### Return type
 
-[**GetTokensResponse**](GetTokensResponse.md)
+[**[]GetTokenResponse**](GetTokenResponse.md)
 
 ### Authorization
 

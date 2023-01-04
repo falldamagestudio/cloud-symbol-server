@@ -124,20 +124,6 @@ export type GetFileResponseStatusEnum = typeof GetFileResponseStatusEnum[keyof t
 /**
  * 
  * @export
- * @interface GetStoreFileIdsResponse
- */
-export interface GetStoreFileIdsResponse extends Array<string> {
-}
-/**
- * 
- * @export
- * @interface GetStoreUploadIdsResponse
- */
-export interface GetStoreUploadIdsResponse extends Array<string> {
-}
-/**
- * 
- * @export
  * @interface GetStoreUploadResponse
  */
 export interface GetStoreUploadResponse {
@@ -186,13 +172,6 @@ export type GetStoreUploadResponseStatusEnum = typeof GetStoreUploadResponseStat
 /**
  * 
  * @export
- * @interface GetStoresResponse
- */
-export interface GetStoresResponse extends Array<string> {
-}
-/**
- * 
- * @export
  * @interface GetTokenResponse
  */
 export interface GetTokenResponse {
@@ -214,13 +193,6 @@ export interface GetTokenResponse {
      * @memberof GetTokenResponse
      */
     'creationTimestamp'?: string;
-}
-/**
- * 
- * @export
- * @interface GetTokensResponse
- */
-export interface GetTokensResponse extends Array<GetTokenResponse> {
 }
 /**
  * 
@@ -1015,7 +987,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getStoreFileIds(storeId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStoreFileIdsResponse>> {
+        async getStoreFileIds(storeId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getStoreFileIds(storeId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1038,7 +1010,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getStoreUploadIds(storeId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStoreUploadIdsResponse>> {
+        async getStoreUploadIds(storeId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getStoreUploadIds(storeId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1048,7 +1020,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getStores(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStoresResponse>> {
+        async getStores(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getStores(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1069,7 +1041,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTokens(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTokensResponse>> {
+        async getTokens(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetTokenResponse>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTokens(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1200,7 +1172,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStoreFileIds(storeId: string, options?: any): AxiosPromise<GetStoreFileIdsResponse> {
+        getStoreFileIds(storeId: string, options?: any): AxiosPromise<Array<string>> {
             return localVarFp.getStoreFileIds(storeId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1221,7 +1193,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStoreUploadIds(storeId: string, options?: any): AxiosPromise<GetStoreUploadIdsResponse> {
+        getStoreUploadIds(storeId: string, options?: any): AxiosPromise<Array<string>> {
             return localVarFp.getStoreUploadIds(storeId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1230,7 +1202,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStores(options?: any): AxiosPromise<GetStoresResponse> {
+        getStores(options?: any): AxiosPromise<Array<string>> {
             return localVarFp.getStores(options).then((request) => request(axios, basePath));
         },
         /**
@@ -1249,7 +1221,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTokens(options?: any): AxiosPromise<GetTokensResponse> {
+        getTokens(options?: any): AxiosPromise<Array<GetTokenResponse>> {
             return localVarFp.getTokens(options).then((request) => request(axios, basePath));
         },
         /**

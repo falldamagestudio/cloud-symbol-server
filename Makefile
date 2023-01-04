@@ -211,7 +211,7 @@ generate-go-server-api:
 		--git-repo-id=cloud-symbol-server/admin-api \
 		-i /local/admin-api/admin-api.yaml \
 		-g go-server \
-		--additional-properties=generateAliasAsModel=true \
+		--additional-properties=generateAliasAsModel=false \
 		-o /local/admin-api/generated/go-server
 
 generate-go-client-api:
@@ -228,7 +228,7 @@ generate-go-client-api:
 		--git-repo-id=cloud-symbol-server/admin-api \
 		-i /local/admin-api/admin-api.yaml \
 		-g go \
-		--additional-properties=generateAliasAsModel=true \
+		--additional-properties=generateAliasAsModel=false \
 		-o /local/admin-api/generated/go-client
 
 generate-csharp-client-api:
@@ -243,7 +243,7 @@ generate-csharp-client-api:
 		generate \
 		-i /local/admin-api/admin-api.yaml \
 		-g csharp-netcore \
-		--additional-properties=netCoreProjectFile=true,library=httpclient,packageName=BackendAPI,generateAliasAsModel=true \
+		--additional-properties=netCoreProjectFile=true,library=httpclient,packageName=BackendAPI,generateAliasAsModel=false \
 		-o /local/cli/generated/BackendAPI
 
 generate-typescript-client-api:
@@ -257,7 +257,7 @@ generate-typescript-client-api:
 		generate \
 		-i /local/admin-api/admin-api.yaml \
 		-g typescript-axios \
-		--additional-properties=generateAliasAsModel=true \
+		--additional-properties=generateAliasAsModel=false \
 		-o /local/firebase/frontend/src/generated
 
 #########################################################
