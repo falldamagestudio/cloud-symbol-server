@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
@@ -60,6 +61,7 @@ func writeAuthenticationHttpError(w http.ResponseWriter, status int, message str
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 	w.Write(messageJsonBytes)
+	log.Print(message)
 	return nil
 }
 
@@ -99,22 +101,27 @@ func (authenticationMiddleware *AuthenticationMiddleware) validateAuthToken(r *h
 
 	// Validate
 
-	token, err := jwt.ParseRequest(r, jwt.WithKeySet(authenticationMiddleware.Ks))
-	if err != nil {
-		log.Printf("Error when parsing JWT: %v", err)
+	if authorizationHeaderValues, ok := r.Header["Authorization"]; !ok || (len(authorizationHeaderValues) != 1) || !strings.HasPrefix(authorizationHeaderValues[0], "Bearer ") {
+		log.Print("No JWT auth token present")
 		return "", 0
+	} else {
+		token, err := jwt.ParseRequest(r, jwt.WithKeySet(authenticationMiddleware.Ks))
+		if err != nil {
+			log.Printf("Error when parsing JWT: %v", err)
+			return "", 0
+		}
+	
+		if err := jwt.Validate(token, jwt.WithAudience(authenticationMiddleware.ClientID)); err != nil {
+			log.Printf("JWT fails validation: %v", err)
+			return "", http.StatusUnauthorized
+		}
+	
+		email := token.PrivateClaims()["email"].(string)
+	
+		log.Printf("JWT auth token for %v validated", email)
+	
+		return email, 0
 	}
-
-	if err := jwt.Validate(token, jwt.WithAudience(authenticationMiddleware.ClientID)); err != nil {
-		log.Printf("JWT fails validation: %v", err)
-		return "", http.StatusUnauthorized
-	}
-
-	email := token.PrivateClaims()["email"].(string)
-
-	log.Printf("JWT auth token for %v validated", email)
-
-	return email, 0
 }
 
 func (authenticationMiddleware *AuthenticationMiddleware) Handler(next http.Handler) http.Handler {
