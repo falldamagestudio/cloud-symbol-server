@@ -17,6 +17,7 @@ import (
 )
 
 type AuthenticationMiddleware struct {
+	// JSON Web Key Set used to validate authenticity of OpenID Connect ID Tokens
 	Ks jwk.Set
 
 	// Expected Client ID when authenticating with OpenID Connect ID Token
@@ -24,14 +25,16 @@ type AuthenticationMiddleware struct {
 }
 
 const (
-	jwksRefreshIntervalMinutes = 15
-
+	// We expect OpenID Connect ID Tokens from Firebase's auth flow
+	//
 	// We use an undocumented API endpoint to retrieve the JWKS
 	// since the official endpoint (at https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com)
 	// requires to be converted to JWKS format for use with the jwx toolkit
 	//
 	// Reference: https://stackoverflow.com/a/71988314
 	jwksEndpoint = "https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com"
+
+	jwksRefreshIntervalMinutes = 15
 )
 
 func createAuthenticationMiddleware(clientID string) (*AuthenticationMiddleware, error) {
@@ -92,6 +95,9 @@ func validateUsernamePassword(r *http.Request) (string, int) {
 		log.Printf("Email/PAT pair %v, %v does not exist in database", email, pat)
 		return "", 0
 	} else {
+
+		// email + PAT are valid
+
 		log.Printf("Email/PAT pair %v, %v exists in database; authentication successful", email, pat)
 		return email, 0
 	}
@@ -99,23 +105,30 @@ func validateUsernamePassword(r *http.Request) (string, int) {
 
 func (authenticationMiddleware *AuthenticationMiddleware) validateAuthToken(r *http.Request) (string, int) {
 
-	// Validate
+	// Check for token in Authorization header in WWW request
 
 	if authorizationHeaderValues, ok := r.Header["Authorization"]; !ok || (len(authorizationHeaderValues) != 1) || !strings.HasPrefix(authorizationHeaderValues[0], "Bearer ") {
 		log.Print("No JWT auth token present")
 		return "", 0
 	} else {
+
+		// Fetch JWT, and validate that it originates from Google
+
 		token, err := jwt.ParseRequest(r, jwt.WithKeySet(authenticationMiddleware.Ks))
 		if err != nil {
 			log.Printf("Error when parsing JWT: %v", err)
 			return "", 0
 		}
-	
+
+		// Validate that JWT is intended for this particular GCP project
+
 		if err := jwt.Validate(token, jwt.WithAudience(authenticationMiddleware.ClientID)); err != nil {
 			log.Printf("JWT fails validation: %v", err)
 			return "", http.StatusUnauthorized
 		}
 	
+		// JWT is valid
+
 		email := token.PrivateClaims()["email"].(string)
 	
 		log.Printf("JWT auth token for %v validated", email)
@@ -172,9 +185,9 @@ func (authenticationMiddleware *AuthenticationMiddleware) Handler(next http.Hand
 			return
 		}
 
-		ctxWithUserIdentity := helpers.AddUserIdentity(r.Context(), userIdentity)
-
 		// Chain to following handlers, and include user identity in context
+
+		ctxWithUserIdentity := helpers.AddUserIdentity(r.Context(), userIdentity)
 
 		next.ServeHTTP(w, r.WithContext(ctxWithUserIdentity))
 	})
