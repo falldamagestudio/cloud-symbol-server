@@ -12,6 +12,18 @@ import (
 	"cloud.google.com/go/cloudsqlconn/postgres/pgxv4"
 )
 
+const (
+	// Current Cloud SQL instance
+	// Example: test-cloud-symbol-server:europe-west1:db
+	env_CLOUD_SQL_INSTANCE = "CLOUD_SQL_INSTANCE"
+
+	// Current Cloud SQL user account
+	// Example: admin-api@test-cloud-symbol-server.iam
+	env_CLOUD_SQL_USER = "CLOUD_SQL_USER"
+
+	dbName = "cloud_symbol_server"
+)
+
 var db *sql.DB
 
 type ErrCloudSQLInstance struct {
@@ -23,7 +35,7 @@ func (err ErrCloudSQLInstance) Error() string {
 
 func getCloudSQLInstance() (string, error) {
 
-	cloudSQLInstance := os.Getenv("CLOUD_SQL_INSTANCE")
+	cloudSQLInstance := os.Getenv(env_CLOUD_SQL_INSTANCE)
 	if cloudSQLInstance == "" {
 		return "", &ErrCloudSQLInstance{}
 	}
@@ -40,7 +52,7 @@ func (err ErrCloudSQLUser) Error() string {
 
 func getCloudSQLUser() (string, error) {
 
-	cloudSQLUser := os.Getenv("CLOUD_SQL_USER")
+	cloudSQLUser := os.Getenv(env_CLOUD_SQL_USER)
 	if cloudSQLUser == "" {
 		return "", &ErrCloudSQLUser{}
 	}
@@ -62,7 +74,7 @@ func InitSQL() {
 		return
 	}
 
-	dbDriver := "cloudsql-postgres"
+	const dbDriver = "cloudsql-postgres"
 
 	log.Printf("Registering cloudsql-postgres driver")
 	cleanup, err := pgxv4.RegisterDriver(dbDriver, cloudsqlconn.WithIAMAuthN())
@@ -71,8 +83,6 @@ func InitSQL() {
 		return
 	}
 	defer cleanup()
-
-	dbName := "cloud_symbol_server"
 
 	log.Printf("Establishing connection to cloud SQL / DB")
 	db, err = sql.Open(

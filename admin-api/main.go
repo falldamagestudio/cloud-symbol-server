@@ -9,6 +9,7 @@ import (
 	"github.com/rs/cors"
 
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
+	authentication "github.com/falldamagestudio/cloud-symbol-server/admin-api/authentication"
 	helpers "github.com/falldamagestudio/cloud-symbol-server/admin-api/helpers"
 )
 
@@ -17,6 +18,10 @@ type ApiService struct {
 
 var corsHandler *cors.Cors
 var router *mux.Router
+
+const (
+	env_GCP_PROJECT_ID = "GCP_PROJECT_ID"
+)
 
 func init() {
 
@@ -48,10 +53,16 @@ func init() {
 		panic("GCP_PROJECT_ID must be set")
 	}
 
-	authenticationMiddleware, err := createAuthenticationMiddleware(clientID)
+	usernamePasswordValidator := authentication.CreateUsernamePasswordValidator()
+	authTokenValidator, err := authentication.CreateAuthTokenValidator(clientID)
 	if err != nil {
-		panic("Failed creating authentication handler")
+		panic(err)
 	}
+	authenticationMiddleware := authentication.CreateAuthenticationMiddleware([]authentication.Validator{
+		usernamePasswordValidator,
+		authTokenValidator,
+	})
+
 	router.Use(authenticationMiddleware.Handler)
 }
 
