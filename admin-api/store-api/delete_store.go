@@ -12,18 +12,19 @@ import (
 
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
 	models "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/sql-db-models"
-	helpers "github.com/falldamagestudio/cloud-symbol-server/admin-api/helpers"
+	cloud_storage "github.com/falldamagestudio/cloud-symbol-server/admin-api/cloud_storage"
+	postgres "github.com/falldamagestudio/cloud-symbol-server/admin-api/postgres"
 )
 
 func DeleteStore(ctx context.Context, storeId string) (openapi.ImplResponse, error) {
 
-	storageClient, err := helpers.GetStorageClient(ctx)
+	storageClient, err := cloud_storage.GetStorageClient(ctx)
 	if err != nil {
 		log.Printf("Unable to create storageClient: %v", err)
 		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: "Unable to create storage client"}), err
 	}
 
-	tx, err := helpers.BeginDBTransaction(ctx)
+	tx, err := postgres.BeginDBTransaction(ctx)
 	if err != nil {
 		log.Printf("Err: %v", err)
 		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")
@@ -121,7 +122,7 @@ func DeleteStore(ctx context.Context, storeId string) (openapi.ImplResponse, err
 
 	// Delete all related files in Cloud Storage
 
-	if err = helpers.DeleteAllObjectsInStore(ctx, storageClient, storeId); err != nil {
+	if err = cloud_storage.DeleteAllObjectsInStore(ctx, storageClient, storeId); err != nil {
 		if err != nil {
 			log.Printf("Unable to delete all documents in collection, err = %v", err)
 			return openapi.Response(http.StatusInternalServerError, nil), err

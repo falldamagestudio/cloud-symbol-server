@@ -8,8 +8,8 @@ import (
 
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 
-	helpers "github.com/falldamagestudio/cloud-symbol-server/admin-api/helpers"
 	models "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/sql-db-models"
+	postgres "github.com/falldamagestudio/cloud-symbol-server/admin-api/postgres"
 )
 
 type UsernamePasswordValidator struct {
@@ -55,7 +55,7 @@ func (*UsernamePasswordValidator) Validate(r *http.Request) (string, int, string
 }
 
 func doesOwnerAndPatExistInDB(ctx context.Context, email string, pat string) (bool, error) {
-	db := helpers.GetDB()
+	db := postgres.GetDB()
 	if db == nil {
 		return false, errors.New("no DB")
 	}

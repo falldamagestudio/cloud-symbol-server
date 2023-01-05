@@ -1,5 +1,5 @@
 package upload_api
-
+  
 import (
 	"context"
 	"database/sql"
@@ -17,7 +17,9 @@ import (
 
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
 	models "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/sql-db-models"
+	cloud_storage "github.com/falldamagestudio/cloud-symbol-server/admin-api/cloud_storage"
 	helpers "github.com/falldamagestudio/cloud-symbol-server/admin-api/helpers"
+	postgres "github.com/falldamagestudio/cloud-symbol-server/admin-api/postgres"
 )
 
 func uploadFileRequestToPath(storeId string, uploadFileRequest openapi.UploadFileRequest) string {
@@ -28,13 +30,13 @@ func CreateStoreUpload(context context.Context, storeId string, createStoreUploa
 
 	signedURLExpirationSeconds := 15 * 60
 
-	storageClient, err := helpers.GetStorageClient(context)
+	storageClient, err := cloud_storage.GetStorageClient(context)
 	if err != nil {
 		log.Printf("Unable to create storageClient: %v", err)
 		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: fmt.Sprintf("Unable to create storage client")}), err
 	}
 
-	symbolStoreBucketName, err := helpers.GetSymbolStoreBucketName()
+	symbolStoreBucketName, err := cloud_storage.GetSymbolStoreBucketName()
 	if err != nil {
 		log.Printf("Unable to determine symbol store bucket name: %v", err)
 		return openapi.Response(http.StatusInternalServerError, &openapi.MessageResponse{Message: fmt.Sprintf("Unable to determine symbol store bucket name")}), err
@@ -144,7 +146,7 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry helpers.Sto
 
 	log.Printf("Writing upload to database: %v", storeUploadEntry)
 
-	tx, err := helpers.BeginDBTransaction(ctx)
+	tx, err := postgres.BeginDBTransaction(ctx)
 	if err != nil {
 		return "", err
 	}

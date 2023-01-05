@@ -1,6 +1,7 @@
 package admin_api
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -10,7 +11,7 @@ import (
 
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
 	authentication "github.com/falldamagestudio/cloud-symbol-server/admin-api/authentication"
-	helpers "github.com/falldamagestudio/cloud-symbol-server/admin-api/helpers"
+	postgres "github.com/falldamagestudio/cloud-symbol-server/admin-api/postgres"
 )
 
 type ApiService struct {
@@ -25,7 +26,7 @@ const (
 
 func init() {
 
-	helpers.InitSQL()
+	postgres.InitSQL()
 
 	apiService := &ApiService{}
 	DefaultApiController := openapi.NewDefaultApiController(apiService)
@@ -48,9 +49,9 @@ func init() {
 		Debug:              false,
 	})
 
-	clientID := os.Getenv("GCP_PROJECT_ID")
+	clientID := os.Getenv(env_GCP_PROJECT_ID)
 	if clientID == "" {
-		panic("GCP_PROJECT_ID must be set")
+		panic(fmt.Sprintf("%v must be set", env_GCP_PROJECT_ID))
 	}
 
 	usernamePasswordValidator := authentication.CreateUsernamePasswordValidator()

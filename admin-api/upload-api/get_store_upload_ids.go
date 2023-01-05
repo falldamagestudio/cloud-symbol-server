@@ -13,14 +13,14 @@ import (
 
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
 	models "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/sql-db-models"
-	helpers "github.com/falldamagestudio/cloud-symbol-server/admin-api/helpers"
+	postgres "github.com/falldamagestudio/cloud-symbol-server/admin-api/postgres"
 )
 
 func GetStoreUploadIds(ctx context.Context, storeId string) (openapi.ImplResponse, error) {
 
 	log.Printf("Getting store upload IDs")
 
-	tx, err := helpers.BeginDBTransaction(ctx)
+	tx, err := postgres.BeginDBTransaction(ctx)
 	if err != nil {
 		log.Printf("Err: %v", err)
 		return openapi.Response(http.StatusInternalServerError, nil), errors.New("no DB")

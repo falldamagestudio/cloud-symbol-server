@@ -1,4 +1,4 @@
-package helpers
+package cloud_storage
 
 import (
 	"context"
