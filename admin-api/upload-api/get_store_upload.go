@@ -13,7 +13,6 @@ import (
 
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
 	models "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/sql-db-models"
-	helpers "github.com/falldamagestudio/cloud-symbol-server/admin-api/helpers"
 	postgres "github.com/falldamagestudio/cloud-symbol-server/admin-api/postgres"
 )
 
@@ -78,18 +77,18 @@ func GetStoreUpload(ctx context.Context, uploadId string, storeId string) (opena
 	getStoreUploadResponse.BuildId = upload.Build
 	getStoreUploadResponse.Timestamp = upload.Timestamp.Format(time.RFC3339)
 	// Uploads created before the progress API existed do not have any Status field in the DB
-	// These uploads should be interpreted as having status "Unknown"
+	// These uploads will be assumed to be completed
 	if upload.Status != "" {
 		getStoreUploadResponse.Status = upload.Status
 	} else {
-		getStoreUploadResponse.Status = helpers.StoreUploadEntry_Status_Unknown
+		getStoreUploadResponse.Status = models.StoreUploadStatusCompleted
 	}
 
 	for _, file := range uploadFiles {
 
 		// Uploaded files created before the progress API existed do not have any Status field in the DB
-		// These files should be interpreted as having status "Unknown"
-		status := helpers.FileDBEntry_Status_Unknown
+		// These files will be interpreted as being completed
+		status := models.StoreUploadFileStatusCompleted
 		if file.Status != "" {
 			status = file.Status
 		}

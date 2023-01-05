@@ -18,12 +18,24 @@ import (
 	openapi "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/go-server/go"
 	models "github.com/falldamagestudio/cloud-symbol-server/admin-api/generated/sql-db-models"
 	cloud_storage "github.com/falldamagestudio/cloud-symbol-server/admin-api/cloud_storage"
-	helpers "github.com/falldamagestudio/cloud-symbol-server/admin-api/helpers"
 	postgres "github.com/falldamagestudio/cloud-symbol-server/admin-api/postgres"
 )
 
 func uploadFileRequestToPath(storeId string, uploadFileRequest openapi.UploadFileRequest) string {
 	return fmt.Sprintf("stores/%s/%s/%s/%s", storeId, uploadFileRequest.FileName, uploadFileRequest.Hash, uploadFileRequest.FileName)
+}
+
+type FileEntry struct {
+	FileName string
+	Hash     string
+	Status   string
+}
+
+type StoreUploadEntry struct {
+	Description string
+	BuildId     string
+	Files       []FileEntry
+	Status      string
 }
 
 func CreateStoreUpload(context context.Context, storeId string, createStoreUploadRequest openapi.CreateStoreUploadRequest) (openapi.ImplResponse, error) {
@@ -89,40 +101,39 @@ func CreateStoreUpload(context context.Context, storeId string, createStoreUploa
 		}
 	}
 
-	// Log upload to Firestore DB
+	// Log upload to database
 
-	files := make([]helpers.FileDBEntry, 0)
+	files := make([]FileEntry, 0)
 
 	for _, file := range createStoreUploadResponse.Files {
-		status := helpers.FileDBEntry_Status_AlreadyPresent
+		status := models.StoreUploadFileStatusAlreadyPresent
 		if file.Url != "" {
-			// Legacy API users will not report completion of individual file upload; therefore the file's stats will remain unknown
+			// Legacy API users will not report completion of individual file upload; therefore the file's stats will be assumed to be completed immediately
 			// For those that use the progress API, however, we can say for sure that the file is pending upload at this point
 			if createStoreUploadRequest.UseProgressApi {
-				status = helpers.FileDBEntry_Status_Pending
+				status = models.StoreUploadFileStatusPending
 			} else {
-				status = helpers.FileDBEntry_Status_Unknown
+				status = models.StoreUploadFileStatusCompleted
 			}
 		}
-		files = append(files, helpers.FileDBEntry{
+		files = append(files, FileEntry{
 			FileName: file.FileName,
 			Hash:     file.Hash,
 			Status:   status,
 		})
 	}
 
-	// Legacy API users will not report completion/abortion of the upload operation; therefore the upload's state will remain unkonwn
+	// Legacy API users will not report completion/abortion of the upload operation; therefore the upload's state will be assumed to be completed immediately
 	// For those that use the progress API, however, we can say for sure that the upload is in progress at this point
-	uploadStatus := helpers.StoreUploadEntry_Status_Unknown
+	uploadStatus := models.StoreUploadStatusCompleted
 	if createStoreUploadRequest.UseProgressApi {
-		uploadStatus = helpers.StoreUploadEntry_Status_InProgress
+		uploadStatus = models.StoreUploadStatusInProgress
 	}
 
-	uploadContent := helpers.StoreUploadEntry{
+	uploadContent := StoreUploadEntry{
 		Description: createStoreUploadRequest.Description,
 		BuildId:     createStoreUploadRequest.BuildId,
 		Files:       files,
-		Timestamp:   time.Now().Format(time.RFC3339),
 		Status:      uploadStatus,
 	}
 
@@ -142,7 +153,7 @@ func CreateStoreUpload(context context.Context, storeId string, createStoreUploa
 	return openapi.Response(http.StatusOK, createStoreUploadResponse), nil
 }
 
-func logUpload(ctx context.Context, storeId string, storeUploadEntry helpers.StoreUploadEntry) (string, error) {
+func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUploadEntry) (string, error) {
 
 	log.Printf("Writing upload to database: %v", storeUploadEntry)
 
@@ -174,22 +185,14 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry helpers.Sto
 		return "", err
 	}
 
-	// Translate "unknown" StoreUploadEntry status to "completed"
-	// We assume that all uploads using non-progression API succeeds
-	uploadStatus := storeUploadEntry.Status
-	if uploadStatus == helpers.StoreUploadEntry_Status_Unknown {
-		uploadStatus = models.StoreUploadStatusCompleted
-	}
-
 	// Add upload entry to DB
 	var upload = models.StoreUpload{
 		StoreID:          null.IntFrom(store.StoreID),
 		StoreUploadIndex: storeUploadIndex,
 		Description:      storeUploadEntry.Description,
 		Build:            storeUploadEntry.BuildId,
-		// TODO: source timestamp from StoreUploadEntry, don't override it with time.Now() Here
 		Timestamp: time.Now(),
-		Status:    uploadStatus,
+		Status:    	       storeUploadEntry.Status,
 	}
 	err = upload.Insert(ctx, tx, boil.Infer())
 	if err != nil {
@@ -233,7 +236,7 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry helpers.Sto
 			// Translate all storefilehash statuses except "pending" to "present"
 			// We assume that all uploads using non-progression API succeeds
 			fileHashStatus := models.StoreFileHashStatusPresent
-			if fileHashStatus == helpers.FileDBEntry_Status_Pending {
+			if file.Status == models.StoreUploadFileStatusPending {
 				fileHashStatus = models.StoreFileHashStatusPending
 			}
 
@@ -254,19 +257,12 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry helpers.Sto
 			return "", err
 		}
 
-		// Translate "unknown" upload-file status to "completed"
-		// We assume that all uploads using non-progression API succeeds
-		uploadFileStatus := file.Status
-		if uploadFileStatus == helpers.FileDBEntry_Status_Unknown {
-			uploadFileStatus = models.StoreUploadFileStatusCompleted
-		}
-
 		// Create store-upload-file
 		var uploadFile = models.StoreUploadFile{
 			UploadID:        null.IntFrom(upload.UploadID),
 			HashID:          null.IntFrom(storeFileHash.HashID),
 			UploadFileIndex: uploadFileIndex,
-			Status:          uploadFileStatus,
+			Status:          file.Status,
 			FileName:        file.FileName,
 			FileHash:        file.Hash,
 		}

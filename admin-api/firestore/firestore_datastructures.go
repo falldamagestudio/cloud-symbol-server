@@ -1,4 +1,4 @@
-package helpers
+package firestore
 
 const (
 	FileDBEntry_Status_Unknown        = "unknown"
