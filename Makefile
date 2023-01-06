@@ -1,7 +1,7 @@
-.PHONY: deploy deploy-core deploy-database deploy-db-migrations deploy-download-api deploy-admin-api deploy-firebase-and-frontend
+.PHONY: deploy deploy-core deploy-database deploy-db-migrations deploy-backend-api deploy-firebase-and-frontend
 .PHONY: remove-db-migrations
 .PHONY: destroy
-.PHONY: test test-download-api test-admin-api test-cli
+.PHONY: test test-backend-api test-cli
 
 .PHONY: run-local-firebase-emulators
 .PHONY: run-local-backend-api
@@ -69,11 +69,8 @@ remove-db-migrations:
 deploy-database:
 	cd $(ENV)/database && terraform init && terraform apply -auto-approve
 
-deploy-download-api:
-	cd $(ENV)/download_api && terraform init && terraform apply -auto-approve
-
-deploy-admin-api:
-	cd $(ENV)/admin_api && terraform init && terraform apply -auto-approve
+deploy-backend-api:
+	cd $(ENV)/backend_api && terraform init && terraform apply -auto-approve
 
 inject-cli-binaries-into-frontend:
 	cp cli/cloud-symbol-server-cli/bin/Release/net6.0/linux-x64/publish/cloud-symbol-server-cli \
@@ -85,41 +82,31 @@ deploy-firebase-and-frontend: build-cli inject-cli-binaries-into-frontend
 	cd firebase/frontend \
 		&&	npm install \
 		&&	VUE_APP_FIREBASE_CONFIG='$(shell cat $(ENV)/firebase/frontend/firebase-config.json)' \
-			VUE_APP_ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < $(ENV)/config.json)" \
-			VUE_APP_DOWNLOAD_API_ENDPOINT="$(shell jq -r ".downloadAPIEndpoint" < $(ENV)/config.json)" \
+			VUE_APP_BACKEND_API_ENDPOINT="$(shell jq -r ".backendAPIEndpoint" < $(ENV)/config.json)" \
 			VUE_APP_VERSION="$(VERSION)" \
 			npm run build
 	cd firebase && firebase deploy --project="$(shell jq -r ".gcpProjectId" < $(ENV)/firebase/config.json)"
 
-deploy: deploy-core deploy-database deploy-db-migrations deploy-download-api deploy-admin-api deploy-firebase-and-frontend
+deploy: deploy-core deploy-database deploy-db-migrations deploy-backend-api deploy-firebase-and-frontend
 
 destroy:
 	cd $(ENV)/core && terraform destroy
 
-test-download-api:
-	cd download-api/test \
-	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < $(ENV)/config.json)" \
-		DOWNLOAD_API_ENDPOINT="$(shell jq -r ".downloadAPIEndpoint" < $(ENV)/config.json)" \
+test-backend-api:
+	cd backend-api/test \
+	&&	BACKEND_API_ENDPOINT="$(shell jq -r ".backendAPIEndpoint" < $(ENV)/config.json)" \
 		TEST_EMAIL="$(shell jq -r ".email" < $(ENV)/test-credentials.json)" \
 		TEST_PAT="$(shell jq -r ".pat" < $(ENV)/test-credentials.json)" \
-		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/download-api/test -count=1
-
-test-admin-api:
-	cd admin-api/test \
-	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < $(ENV)/config.json)" \
-		TEST_EMAIL="$(shell jq -r ".email" < $(ENV)/test-credentials.json)" \
-		TEST_PAT="$(shell jq -r ".pat" < $(ENV)/test-credentials.json)" \
-		go test -timeout 60s github.com/falldamagestudio/cloud-symbol-server/backend-api/test -count=1
+		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/backend-api/test -count=1
 
 test-cli:
 	cd cli \
-	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < $(ENV)/config.json)" \
-		DOWNLOAD_API_ENDPOINT="$(shell jq -r ".downloadAPIEndpoint" < $(ENV)/config.json)" \
+	&&	BACKEND_API_ENDPOINT="$(shell jq -r ".backendAPIEndpoint" < $(ENV)/config.json)" \
 		TEST_EMAIL="$(shell jq -r ".email" < $(ENV)/test-credentials.json)" \
 		TEST_PAT="$(shell jq -r ".pat" < $(ENV)/test-credentials.json)" \
 		dotnet test
 
-test: test-download-api test-admin-api test-cli
+test: test-backend-api test-cli
 
 #########################################################
 # Local (emulator) commands

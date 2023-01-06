@@ -23,12 +23,16 @@ resource "google_storage_bucket_object" "cloud_function_bucket_object" {
   source = local.zip_filename
 }
 
+locals {
+  cloud_sql_instance = "${var.project_id}:${var.database_region}:${var.database_instance_name}"
+}
+
 # Deploy the cloud function
 resource "google_cloudfunctions_function" "function" {
   depends_on = [google_storage_bucket_iam_member.function_symbol_store_access]
 
-  name                  = "AdminAPI"
-  description           = "Admin API"
+  name                  = "BackendAPI"
+  description           = "Backend API"
   runtime               = "go116"
   region                = var.function_region
   service_account_email = google_service_account.function_service_account.email
@@ -37,10 +41,12 @@ resource "google_cloudfunctions_function" "function" {
   source_archive_bucket = google_storage_bucket.cloud_function_source_bucket.name
   source_archive_object = google_storage_bucket_object.cloud_function_bucket_object.name
   trigger_http          = true
-  entry_point           = "AdminAPI"
+  entry_point           = "BackendAPI"
   environment_variables = {
     GCP_PROJECT_ID           = var.project_id
     SYMBOL_STORE_BUCKET_NAME = var.symbol_store_bucket_name
+    CLOUD_SQL_INSTANCE       = local.cloud_sql_instance
+    CLOUD_SQL_USER           = google_sql_user.function_db_user.name
   }
 
   vpc_connector = var.serverless_vpc_connector_name
@@ -48,8 +54,8 @@ resource "google_cloudfunctions_function" "function" {
 
 # Create a service account. The cloud function will run in the context of this service account
 resource "google_service_account" "function_service_account" {
-  account_id   = "admin-api"
-  display_name = "Service Account used to run the Upload API Cloud Function"
+  account_id   = "backend-api"
+  display_name = "Service Account used to run the Backend API Cloud Function"
 }
 
 # Grant the cloud function's service account admin permissions to symbol store bucket
