@@ -64,8 +64,10 @@ async function fetch() {
 
   try {
     storeFiles.value.length = 0
-    const storeFileIdsResponse = await api.getStoreFileIds(props.store)
-    for (const storeFileId of storeFileIdsResponse.data) {
+    const offset = 0
+    const limit = 100
+    const storeFilesResponse = await api.getStoreFiles(props.store, offset, limit)
+    for (const storeFileId of storeFilesResponse.data.files) {
       storeFiles.value.push(storeFileId)
     }
   } catch (error) {

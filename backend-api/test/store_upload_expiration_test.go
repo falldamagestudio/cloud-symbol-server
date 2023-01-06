@@ -77,14 +77,14 @@ func TestExpireRemovesOnlyFilesWithZeroReferences(t *testing.T) {
 	// Validate files from uploads 1 & 2 exist
 
 	{
-		getStoreFileIdsResponse, _, err := apiClient.DefaultApi.GetStoreFileIds(authContext, storeId).Execute()
+		getStoreFilesResponse, _, err := apiClient.DefaultApi.GetStoreFiles(authContext, storeId).Execute()
 		if err != nil {
-			t.Fatalf("Get file ids failed: %v", err)
+			t.Fatalf("Get files failed: %v", err)
 		}
 
-		expectedNumFiles := 3
-		if expectedNumFiles != len(getStoreFileIdsResponse) {
-			t.Fatalf("After upload 1 + 2, there should be %d files present, but only %d found", expectedNumFiles, len(getStoreFileIdsResponse))
+		expectedNumFiles := int32(3)
+		if expectedNumFiles != *getStoreFilesResponse.Pagination.Total {
+			t.Fatalf("After upload 1 + 2, there should be %d files present, but only %d found", expectedNumFiles, *getStoreFilesResponse.Pagination.Total)
 		}
 	}
 
@@ -98,14 +98,14 @@ func TestExpireRemovesOnlyFilesWithZeroReferences(t *testing.T) {
 	// Validate only files from upload 2 exist
 
 	{
-		getStoreFileIdsResponse, _, err := apiClient.DefaultApi.GetStoreFileIds(authContext, storeId).Execute()
+		getStoreFilesResponse, _, err := apiClient.DefaultApi.GetStoreFiles(authContext, storeId).Execute()
 		if err != nil {
 			t.Fatalf("Get file ids failed: %v", err)
 		}
 
-		expectedNumFiles := 2
-		if expectedNumFiles != len(getStoreFileIdsResponse) {
-			t.Fatalf("After upload 1 + 2 and expire 1, there should be %d files present, but only %d found", expectedNumFiles, len(getStoreFileIdsResponse))
+		expectedNumFiles := int32(2)
+		if expectedNumFiles != *getStoreFilesResponse.Pagination.Total {
+			t.Fatalf("After upload 1 + 2 and expire 1, there should be %d files present, but only %d found", expectedNumFiles, *getStoreFilesResponse.Pagination.Total)
 		}
 	}
 
@@ -119,14 +119,14 @@ func TestExpireRemovesOnlyFilesWithZeroReferences(t *testing.T) {
 	// Validate no files exist
 
 	{
-		getStoreFileIdsResponse, _, err := apiClient.DefaultApi.GetStoreFileIds(authContext, storeId).Execute()
+		getStoreFilesResponse, _, err := apiClient.DefaultApi.GetStoreFiles(authContext, storeId).Execute()
 		if err != nil {
 			t.Fatalf("Get file ids failed: %v", err)
 		}
 
-		expectedNumFiles := 0
-		if expectedNumFiles != len(getStoreFileIdsResponse) {
-			t.Fatalf("After upload 1 + 2 and expire 1 + 2, there should be %d files present, but only %d found", expectedNumFiles, len(getStoreFileIdsResponse))
+		expectedNumFiles := int32(0)
+		if expectedNumFiles != *getStoreFilesResponse.Pagination.Total {
+			t.Fatalf("After upload 1 + 2 and expire 1 + 2, there should be %d files present, but only %d found", expectedNumFiles, *getStoreFilesResponse.Pagination.Total)
 		}
 	}
 }

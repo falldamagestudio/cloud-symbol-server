@@ -9,9 +9,11 @@ docs/CreateStoreUploadResponse.md
 docs/CreateTokenResponse.md
 docs/DefaultApi.md
 docs/GetFileResponse.md
+docs/GetStoreFilesResponse.md
 docs/GetStoreUploadResponse.md
 docs/GetTokenResponse.md
 docs/MessageResponse.md
+docs/PaginationResponse.md
 docs/UpdateTokenRequest.md
 docs/UploadFileRequest.md
 docs/UploadFileResponse.md
@@ -19,9 +21,11 @@ model_create_store_upload_request.go
 model_create_store_upload_response.go
 model_create_token_response.go
 model_get_file_response.go
+model_get_store_files_response.go
 model_get_store_upload_response.go
 model_get_token_response.go
 model_message_response.go
+model_pagination_response.go
 model_update_token_request.go
 model_upload_file_request.go
 model_upload_file_response.go

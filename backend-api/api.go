@@ -19,8 +19,8 @@ func (s *ApiService) DeleteStore(ctx context.Context, storeId string) (openapi.I
 	return store_api.DeleteStore(ctx, storeId)
 }
 
-func (s *ApiService) GetStoreFileIds(ctx context.Context, storeId string) (openapi.ImplResponse, error) {
-	return store_api.GetStoreFileIds(ctx, storeId)
+func (s *ApiService) GetStoreFiles(ctx context.Context, storeId string, offset int32, limit int32) (openapi.ImplResponse, error) {
+	return store_api.GetStoreFiles(ctx, storeId, offset, limit)
 }
 
 func (s *ApiService) GetStores(ctx context.Context) (openapi.ImplResponse, error) {

@@ -124,6 +124,25 @@ export type GetFileResponseStatusEnum = typeof GetFileResponseStatusEnum[keyof t
 /**
  * 
  * @export
+ * @interface GetStoreFilesResponse
+ */
+export interface GetStoreFilesResponse {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof GetStoreFilesResponse
+     */
+    'files'?: Array<string>;
+    /**
+     * 
+     * @type {PaginationResponse}
+     * @memberof GetStoreFilesResponse
+     */
+    'pagination'?: PaginationResponse;
+}
+/**
+ * 
+ * @export
  * @interface GetStoreUploadResponse
  */
 export interface GetStoreUploadResponse {
@@ -206,6 +225,19 @@ export interface MessageResponse {
      * @memberof MessageResponse
      */
     'message'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface PaginationResponse
+ */
+export interface PaginationResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof PaginationResponse
+     */
+    'total'?: number;
 }
 /**
  * 
@@ -507,14 +539,16 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Fetch a list of all files in store
+         * @summary Fetch a list of files in store
          * @param {string} storeId ID of the store containing the files
+         * @param {number} [offset] How many entries to skip (used for pagination of results)
+         * @param {number} [limit] Max number of results to return (used for pagination of results)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStoreFileIds: async (storeId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getStoreFiles: async (storeId: string, offset?: number, limit?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'storeId' is not null or undefined
-            assertParamExists('getStoreFileIds', 'storeId', storeId)
+            assertParamExists('getStoreFiles', 'storeId', storeId)
             const localVarPath = `/stores/{storeId}/files`
                 .replace(`{${"storeId"}}`, encodeURIComponent(String(storeId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -531,6 +565,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication emailAndPat required
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
 
 
     
@@ -982,13 +1024,15 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Fetch a list of all files in store
+         * @summary Fetch a list of files in store
          * @param {string} storeId ID of the store containing the files
+         * @param {number} [offset] How many entries to skip (used for pagination of results)
+         * @param {number} [limit] Max number of results to return (used for pagination of results)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getStoreFileIds(storeId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getStoreFileIds(storeId, options);
+        async getStoreFiles(storeId: string, offset?: number, limit?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStoreFilesResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStoreFiles(storeId, offset, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1167,13 +1211,15 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Fetch a list of all files in store
+         * @summary Fetch a list of files in store
          * @param {string} storeId ID of the store containing the files
+         * @param {number} [offset] How many entries to skip (used for pagination of results)
+         * @param {number} [limit] Max number of results to return (used for pagination of results)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStoreFileIds(storeId: string, options?: any): AxiosPromise<Array<string>> {
-            return localVarFp.getStoreFileIds(storeId, options).then((request) => request(axios, basePath));
+        getStoreFiles(storeId: string, offset?: number, limit?: number, options?: any): AxiosPromise<GetStoreFilesResponse> {
+            return localVarFp.getStoreFiles(storeId, offset, limit, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1354,14 +1400,16 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @summary Fetch a list of all files in store
+     * @summary Fetch a list of files in store
      * @param {string} storeId ID of the store containing the files
+     * @param {number} [offset] How many entries to skip (used for pagination of results)
+     * @param {number} [limit] Max number of results to return (used for pagination of results)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getStoreFileIds(storeId: string, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).getStoreFileIds(storeId, options).then((request) => request(this.axios, this.basePath));
+    public getStoreFiles(storeId: string, offset?: number, limit?: number, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getStoreFiles(storeId, offset, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

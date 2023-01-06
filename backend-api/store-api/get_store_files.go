@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 
+	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 
 	openapi "github.com/falldamagestudio/cloud-symbol-server/backend-api/generated/go-server/go"
@@ -15,9 +15,9 @@ import (
 	postgres "github.com/falldamagestudio/cloud-symbol-server/backend-api/postgres"
 )
 
-func GetStoreFileIds(ctx context.Context, storeId string) (openapi.ImplResponse, error) {
+func GetStoreFiles(ctx context.Context, storeId string, offset int32, limit int32) (openapi.ImplResponse, error) {
 
-	log.Printf("Getting store file IDs")
+	log.Printf("Getting store files; store %v, offset %v, limit %v", storeId, offset, limit)
 
 	tx, err := postgres.BeginDBTransaction(ctx)
 	if err != nil {
@@ -36,11 +36,27 @@ func GetStoreFileIds(ctx context.Context, storeId string) (openapi.ImplResponse,
 		return openapi.Response(http.StatusInternalServerError, fmt.Sprintf("error while accessing store: %v", err)), err
 	}
 
-	// Fetch IDs of all files within store
+	// Count total number of files in store that match filter query, ignoring pagination
+	total, err := models.StoreFiles(
+		qm.Distinct(models.StoreFileColumns.FileID),
+		qm.Where(models.StoreFileTableColumns.StoreID+" = ?", store.StoreID),
+	).Count(ctx, tx)
+	if err != nil {
+		log.Printf("Error while accessing files in store %v : %v", storeId, err)
+		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing files in store %v : %v", storeId, err)}), err
+	}
+
+	boil.DebugMode = true
+
+	log.Printf("offset: %v", offset)
+	log.Printf("limit: %v", limit)
+
+	// Fetch all files within store
 	files, err := models.StoreFiles(
-		qm.Select(models.StoreFileColumns.FileID),
 		qm.Where(models.StoreFileTableColumns.StoreID+" = ?", store.StoreID),
 		qm.OrderBy(models.StoreFileColumns.FileID),
+		qm.Offset(int(offset)),
+		qm.Limit(int(limit)),
 	).All(ctx, tx)
 	if err != nil {
 		log.Printf("Error while accessing files in store %v : %v", storeId, err)
@@ -48,10 +64,17 @@ func GetStoreFileIds(ctx context.Context, storeId string) (openapi.ImplResponse,
 	}
 
 	// Convert DB query result to a plain array of strings
-	var storeFileIds = make([]string, len(files))
+	var storeFiles = make([]string, len(files))
 
 	for index, file := range files {
-		storeFileIds[index] = strconv.Itoa(file.FileID)
+		storeFiles[index] = file.FileName
+	}
+
+	storeFilesResponse := &openapi.GetStoreFilesResponse{
+		Files: storeFiles,
+		Pagination: openapi.PaginationResponse{
+			Total: int32(total),
+		},
 	}
 
 	err = tx.Commit()
@@ -60,7 +83,7 @@ func GetStoreFileIds(ctx context.Context, storeId string) (openapi.ImplResponse,
 		return openapi.Response(http.StatusInternalServerError, fmt.Sprintf("unable to commit transaction: %v", err)), err
 	}
 
-	log.Printf("Response: %v", storeFileIds)
+	log.Printf("Response: %v", storeFilesResponse)
 
-	return openapi.Response(http.StatusOK, storeFileIds), nil
+	return openapi.Response(http.StatusOK, storeFilesResponse), nil
 }

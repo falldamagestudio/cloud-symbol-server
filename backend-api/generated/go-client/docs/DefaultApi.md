@@ -10,7 +10,7 @@ Method | HTTP request | Description
 [**DeleteStore**](DefaultApi.md#DeleteStore) | **Delete** /stores/{storeId} | Delete an existing store
 [**DeleteToken**](DefaultApi.md#DeleteToken) | **Delete** /tokens/{token} | Delete a token for current user
 [**ExpireStoreUpload**](DefaultApi.md#ExpireStoreUpload) | **Post** /stores/{storeId}/uploads/{uploadId}/expire | Expire store upload and consider files for GC
-[**GetStoreFileIds**](DefaultApi.md#GetStoreFileIds) | **Get** /stores/{storeId}/files | Fetch a list of all files in store
+[**GetStoreFiles**](DefaultApi.md#GetStoreFiles) | **Get** /stores/{storeId}/files | Fetch a list of files in store
 [**GetStoreUpload**](DefaultApi.md#GetStoreUpload) | **Get** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
 [**GetStoreUploadIds**](DefaultApi.md#GetStoreUploadIds) | **Get** /stores/{storeId}/uploads | Fetch a list of all uploads in store
 [**GetStores**](DefaultApi.md#GetStores) | **Get** /stores | Fetch a list of all stores
@@ -419,11 +419,11 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## GetStoreFileIds
+## GetStoreFiles
 
-> []string GetStoreFileIds(ctx, storeId).Execute()
+> GetStoreFilesResponse GetStoreFiles(ctx, storeId).Offset(offset).Limit(limit).Execute()
 
-Fetch a list of all files in store
+Fetch a list of files in store
 
 ### Example
 
@@ -439,16 +439,18 @@ import (
 
 func main() {
     storeId := "storeId_example" // string | ID of the store containing the files
+    offset := int32(56) // int32 | How many entries to skip (used for pagination of results) (optional) (default to 0)
+    limit := int32(56) // int32 | Max number of results to return (used for pagination of results) (optional) (default to 25)
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.DefaultApi.GetStoreFileIds(context.Background(), storeId).Execute()
+    resp, r, err := apiClient.DefaultApi.GetStoreFiles(context.Background(), storeId).Offset(offset).Limit(limit).Execute()
     if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStoreFileIds``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStoreFiles``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetStoreFileIds`: []string
-    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetStoreFileIds`: %v\n", resp)
+    // response from `GetStoreFiles`: GetStoreFilesResponse
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetStoreFiles`: %v\n", resp)
 }
 ```
 
@@ -462,16 +464,18 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiGetStoreFileIdsRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetStoreFilesRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **offset** | **int32** | How many entries to skip (used for pagination of results) | [default to 0]
+ **limit** | **int32** | Max number of results to return (used for pagination of results) | [default to 25]
 
 ### Return type
 
-**[]string**
+[**GetStoreFilesResponse**](GetStoreFilesResponse.md)
 
 ### Authorization
 

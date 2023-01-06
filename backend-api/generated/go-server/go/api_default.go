@@ -87,10 +87,10 @@ func (c *DefaultApiController) Routes() Routes {
 			c.ExpireStoreUpload,
 		},
 		{
-			"GetStoreFileIds",
+			"GetStoreFiles",
 			strings.ToUpper("Get"),
 			"/stores/{storeId}/files",
-			c.GetStoreFileIds,
+			c.GetStoreFiles,
 		},
 		{
 			"GetStoreUpload",
@@ -255,12 +255,23 @@ func (c *DefaultApiController) ExpireStoreUpload(w http.ResponseWriter, r *http.
 
 }
 
-// GetStoreFileIds - Fetch a list of all files in store
-func (c *DefaultApiController) GetStoreFileIds(w http.ResponseWriter, r *http.Request) {
+// GetStoreFiles - Fetch a list of files in store
+func (c *DefaultApiController) GetStoreFiles(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
+	query := r.URL.Query()
 	storeIdParam := params["storeId"]
 	
-	result, err := c.service.GetStoreFileIds(r.Context(), storeIdParam)
+	offsetParam, err := parseInt32Parameter(query.Get("offset"), false)
+	if err != nil {
+		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		return
+	}
+	limitParam, err := parseInt32Parameter(query.Get("limit"), false)
+	if err != nil {
+		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		return
+	}
+	result, err := c.service.GetStoreFiles(r.Context(), storeIdParam, offsetParam, limitParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)

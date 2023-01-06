@@ -84,7 +84,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**DeleteStore**](docs/DefaultApi.md#deletestore) | **Delete** /stores/{storeId} | Delete an existing store
 *DefaultApi* | [**DeleteToken**](docs/DefaultApi.md#deletetoken) | **Delete** /tokens/{token} | Delete a token for current user
 *DefaultApi* | [**ExpireStoreUpload**](docs/DefaultApi.md#expirestoreupload) | **Post** /stores/{storeId}/uploads/{uploadId}/expire | Expire store upload and consider files for GC
-*DefaultApi* | [**GetStoreFileIds**](docs/DefaultApi.md#getstorefileids) | **Get** /stores/{storeId}/files | Fetch a list of all files in store
+*DefaultApi* | [**GetStoreFiles**](docs/DefaultApi.md#getstorefiles) | **Get** /stores/{storeId}/files | Fetch a list of files in store
 *DefaultApi* | [**GetStoreUpload**](docs/DefaultApi.md#getstoreupload) | **Get** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
 *DefaultApi* | [**GetStoreUploadIds**](docs/DefaultApi.md#getstoreuploadids) | **Get** /stores/{storeId}/uploads | Fetch a list of all uploads in store
 *DefaultApi* | [**GetStores**](docs/DefaultApi.md#getstores) | **Get** /stores | Fetch a list of all stores
@@ -102,9 +102,11 @@ Class | Method | HTTP request | Description
  - [CreateStoreUploadResponse](docs/CreateStoreUploadResponse.md)
  - [CreateTokenResponse](docs/CreateTokenResponse.md)
  - [GetFileResponse](docs/GetFileResponse.md)
+ - [GetStoreFilesResponse](docs/GetStoreFilesResponse.md)
  - [GetStoreUploadResponse](docs/GetStoreUploadResponse.md)
  - [GetTokenResponse](docs/GetTokenResponse.md)
  - [MessageResponse](docs/MessageResponse.md)
+ - [PaginationResponse](docs/PaginationResponse.md)
  - [UpdateTokenRequest](docs/UpdateTokenRequest.md)
  - [UploadFileRequest](docs/UploadFileRequest.md)
  - [UploadFileResponse](docs/UploadFileResponse.md)

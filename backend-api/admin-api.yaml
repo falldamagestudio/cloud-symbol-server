@@ -192,8 +192,8 @@ paths:
 
   /stores/{storeId}/files:
     get:
-      summary: Fetch a list of all files in store
-      operationId: getStoreFileIds
+      summary: Fetch a list of files in store
+      operationId: getStoreFiles
       parameters:
         - in: path
           name: storeId
@@ -201,6 +201,23 @@ paths:
             type: string
           required: true
           description: ID of the store containing the files
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          required: false
+          description: How many entries to skip (used for pagination of results)
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 25
+          required: false
+          description: Max number of results to return (used for pagination of results)
 
       responses:
         200:
@@ -208,7 +225,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getStoreFileIdsResponse'
+                $ref: '#/components/schemas/getStoreFilesResponse'
 
         401:
           $ref: '#/components/responses/401'
@@ -552,14 +569,22 @@ components:
           - "2"
           - "3"
 
-    getStoreFileIdsResponse:
-      type: array
-      items:
-        type: string
-        example: 
-          - "1"
-          - "2"
-          - "3"
+    paginationResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        
+
+    getStoreFilesResponse:
+      type: object
+      properties:
+        files:
+          type: array
+          items:
+            type: string
+        pagination:
+          type: paginationResponse
 
     createStoreUploadResponse:
       type: object

@@ -700,25 +700,39 @@ func (a *DefaultApiService) ExpireStoreUploadExecute(r ApiExpireStoreUploadReque
 	return localVarHTTPResponse, nil
 }
 
-type ApiGetStoreFileIdsRequest struct {
+type ApiGetStoreFilesRequest struct {
 	ctx context.Context
 	ApiService *DefaultApiService
 	storeId string
+	offset *int32
+	limit *int32
 }
 
-func (r ApiGetStoreFileIdsRequest) Execute() ([]string, *http.Response, error) {
-	return r.ApiService.GetStoreFileIdsExecute(r)
+// How many entries to skip (used for pagination of results)
+func (r ApiGetStoreFilesRequest) Offset(offset int32) ApiGetStoreFilesRequest {
+	r.offset = &offset
+	return r
+}
+
+// Max number of results to return (used for pagination of results)
+func (r ApiGetStoreFilesRequest) Limit(limit int32) ApiGetStoreFilesRequest {
+	r.limit = &limit
+	return r
+}
+
+func (r ApiGetStoreFilesRequest) Execute() (*GetStoreFilesResponse, *http.Response, error) {
+	return r.ApiService.GetStoreFilesExecute(r)
 }
 
 /*
-GetStoreFileIds Fetch a list of all files in store
+GetStoreFiles Fetch a list of files in store
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param storeId ID of the store containing the files
- @return ApiGetStoreFileIdsRequest
+ @return ApiGetStoreFilesRequest
 */
-func (a *DefaultApiService) GetStoreFileIds(ctx context.Context, storeId string) ApiGetStoreFileIdsRequest {
-	return ApiGetStoreFileIdsRequest{
+func (a *DefaultApiService) GetStoreFiles(ctx context.Context, storeId string) ApiGetStoreFilesRequest {
+	return ApiGetStoreFilesRequest{
 		ApiService: a,
 		ctx: ctx,
 		storeId: storeId,
@@ -726,16 +740,16 @@ func (a *DefaultApiService) GetStoreFileIds(ctx context.Context, storeId string)
 }
 
 // Execute executes the request
-//  @return []string
-func (a *DefaultApiService) GetStoreFileIdsExecute(r ApiGetStoreFileIdsRequest) ([]string, *http.Response, error) {
+//  @return GetStoreFilesResponse
+func (a *DefaultApiService) GetStoreFilesExecute(r ApiGetStoreFilesRequest) (*GetStoreFilesResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  []string
+		localVarReturnValue  *GetStoreFilesResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetStoreFileIds")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetStoreFiles")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -747,6 +761,12 @@ func (a *DefaultApiService) GetStoreFileIdsExecute(r ApiGetStoreFileIdsRequest) 
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if r.offset != nil {
+		localVarQueryParams.Add("offset", parameterToString(*r.offset, ""))
+	}
+	if r.limit != nil {
+		localVarQueryParams.Add("limit", parameterToString(*r.limit, ""))
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 

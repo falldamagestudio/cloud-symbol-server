@@ -149,25 +149,29 @@ namespace BackendAPI.Api
         /// <returns>ApiResponse of Object(void)</returns>
         ApiResponse<Object> ExpireStoreUploadWithHttpInfo(string uploadId, string storeId, int operationIndex = 0);
         /// <summary>
-        /// Fetch a list of all files in store
+        /// Fetch a list of files in store
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the files</param>
+        /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
+        /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>List&lt;string&gt;</returns>
-        List<string> GetStoreFileIds(string storeId, int operationIndex = 0);
+        /// <returns>GetStoreFilesResponse</returns>
+        GetStoreFilesResponse GetStoreFiles(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0);
 
         /// <summary>
-        /// Fetch a list of all files in store
+        /// Fetch a list of files in store
         /// </summary>
         /// <remarks>
         /// 
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the files</param>
+        /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
+        /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of List&lt;string&gt;</returns>
-        ApiResponse<List<string>> GetStoreFileIdsWithHttpInfo(string storeId, int operationIndex = 0);
+        /// <returns>ApiResponse of GetStoreFilesResponse</returns>
+        ApiResponse<GetStoreFilesResponse> GetStoreFilesWithHttpInfo(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0);
         /// <summary>
         /// Fetch an upload
         /// </summary>
@@ -518,30 +522,34 @@ namespace BackendAPI.Api
         /// <returns>Task of ApiResponse</returns>
         System.Threading.Tasks.Task<ApiResponse<Object>> ExpireStoreUploadWithHttpInfoAsync(string uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
-        /// Fetch a list of all files in store
+        /// Fetch a list of files in store
         /// </summary>
         /// <remarks>
         /// 
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the files</param>
+        /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
+        /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of List&lt;string&gt;</returns>
-        System.Threading.Tasks.Task<List<string>> GetStoreFileIdsAsync(string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <returns>Task of GetStoreFilesResponse</returns>
+        System.Threading.Tasks.Task<GetStoreFilesResponse> GetStoreFilesAsync(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
-        /// Fetch a list of all files in store
+        /// Fetch a list of files in store
         /// </summary>
         /// <remarks>
         /// 
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the files</param>
+        /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
+        /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (List&lt;string&gt;)</returns>
-        System.Threading.Tasks.Task<ApiResponse<List<string>>> GetStoreFileIdsWithHttpInfoAsync(string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <returns>Task of ApiResponse (GetStoreFilesResponse)</returns>
+        System.Threading.Tasks.Task<ApiResponse<GetStoreFilesResponse>> GetStoreFilesWithHttpInfoAsync(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Fetch an upload
         /// </summary>
@@ -1844,31 +1852,35 @@ namespace BackendAPI.Api
         }
 
         /// <summary>
-        /// Fetch a list of all files in store 
+        /// Fetch a list of files in store 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the files</param>
+        /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
+        /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>List&lt;string&gt;</returns>
-        public List<string> GetStoreFileIds(string storeId, int operationIndex = 0)
+        /// <returns>GetStoreFilesResponse</returns>
+        public GetStoreFilesResponse GetStoreFiles(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0)
         {
-            BackendAPI.Client.ApiResponse<List<string>> localVarResponse = GetStoreFileIdsWithHttpInfo(storeId);
+            BackendAPI.Client.ApiResponse<GetStoreFilesResponse> localVarResponse = GetStoreFilesWithHttpInfo(storeId, offset, limit);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        /// Fetch a list of all files in store 
+        /// Fetch a list of files in store 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the files</param>
+        /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
+        /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of List&lt;string&gt;</returns>
-        public BackendAPI.Client.ApiResponse<List<string>> GetStoreFileIdsWithHttpInfo(string storeId, int operationIndex = 0)
+        /// <returns>ApiResponse of GetStoreFilesResponse</returns>
+        public BackendAPI.Client.ApiResponse<GetStoreFilesResponse> GetStoreFilesWithHttpInfo(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0)
         {
             // verify the required parameter 'storeId' is set
             if (storeId == null)
             {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->GetStoreFileIds");
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->GetStoreFiles");
             }
 
             BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
@@ -1894,8 +1906,16 @@ namespace BackendAPI.Api
             }
 
             localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
+            if (offset != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "offset", offset));
+            }
+            if (limit != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "limit", limit));
+            }
 
-            localVarRequestOptions.Operation = "DefaultApi.GetStoreFileIds";
+            localVarRequestOptions.Operation = "DefaultApi.GetStoreFiles";
             localVarRequestOptions.OperationIndex = operationIndex;
 
             // authentication (emailAndPat) required
@@ -1906,10 +1926,10 @@ namespace BackendAPI.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<List<string>>("/stores/{storeId}/files", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<GetStoreFilesResponse>("/stores/{storeId}/files", localVarRequestOptions, this.Configuration);
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("GetStoreFileIds", localVarResponse);
+                Exception _exception = this.ExceptionFactory("GetStoreFiles", localVarResponse);
                 if (_exception != null)
                 {
                     throw _exception;
@@ -1920,33 +1940,37 @@ namespace BackendAPI.Api
         }
 
         /// <summary>
-        /// Fetch a list of all files in store 
+        /// Fetch a list of files in store 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the files</param>
+        /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
+        /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of List&lt;string&gt;</returns>
-        public async System.Threading.Tasks.Task<List<string>> GetStoreFileIdsAsync(string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        /// <returns>Task of GetStoreFilesResponse</returns>
+        public async System.Threading.Tasks.Task<GetStoreFilesResponse> GetStoreFilesAsync(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            BackendAPI.Client.ApiResponse<List<string>> localVarResponse = await GetStoreFileIdsWithHttpInfoAsync(storeId, operationIndex, cancellationToken).ConfigureAwait(false);
+            BackendAPI.Client.ApiResponse<GetStoreFilesResponse> localVarResponse = await GetStoreFilesWithHttpInfoAsync(storeId, offset, limit, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        /// Fetch a list of all files in store 
+        /// Fetch a list of files in store 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the files</param>
+        /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
+        /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (List&lt;string&gt;)</returns>
-        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<List<string>>> GetStoreFileIdsWithHttpInfoAsync(string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        /// <returns>Task of ApiResponse (GetStoreFilesResponse)</returns>
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetStoreFilesResponse>> GetStoreFilesWithHttpInfoAsync(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'storeId' is set
             if (storeId == null)
             {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->GetStoreFileIds");
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->GetStoreFiles");
             }
 
 
@@ -1973,8 +1997,16 @@ namespace BackendAPI.Api
             }
 
             localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
+            if (offset != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "offset", offset));
+            }
+            if (limit != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "limit", limit));
+            }
 
-            localVarRequestOptions.Operation = "DefaultApi.GetStoreFileIds";
+            localVarRequestOptions.Operation = "DefaultApi.GetStoreFiles";
             localVarRequestOptions.OperationIndex = operationIndex;
 
             // authentication (emailAndPat) required
@@ -1985,11 +2017,11 @@ namespace BackendAPI.Api
             }
 
             // make the HTTP request
-            var localVarResponse = await this.AsynchronousClient.GetAsync<List<string>>("/stores/{storeId}/files", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<GetStoreFilesResponse>("/stores/{storeId}/files", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("GetStoreFileIds", localVarResponse);
+                Exception _exception = this.ExceptionFactory("GetStoreFiles", localVarResponse);
                 if (_exception != null)
                 {
                     throw _exception;

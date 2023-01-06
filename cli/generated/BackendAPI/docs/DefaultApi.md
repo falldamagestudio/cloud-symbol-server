@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost*
 | [**DeleteStore**](DefaultApi.md#deletestore) | **DELETE** /stores/{storeId} | Delete an existing store |
 | [**DeleteToken**](DefaultApi.md#deletetoken) | **DELETE** /tokens/{token} | Delete a token for current user |
 | [**ExpireStoreUpload**](DefaultApi.md#expirestoreupload) | **POST** /stores/{storeId}/uploads/{uploadId}/expire | Expire store upload and consider files for GC |
-| [**GetStoreFileIds**](DefaultApi.md#getstorefileids) | **GET** /stores/{storeId}/files | Fetch a list of all files in store |
+| [**GetStoreFiles**](DefaultApi.md#getstorefiles) | **GET** /stores/{storeId}/files | Fetch a list of files in store |
 | [**GetStoreUpload**](DefaultApi.md#getstoreupload) | **GET** /stores/{storeId}/uploads/{uploadId} | Fetch an upload |
 | [**GetStoreUploadIds**](DefaultApi.md#getstoreuploadids) | **GET** /stores/{storeId}/uploads | Fetch a list of all uploads in store |
 | [**GetStores**](DefaultApi.md#getstores) | **GET** /stores | Fetch a list of all stores |
@@ -572,11 +572,11 @@ void (empty response body)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-<a name="getstorefileids"></a>
-# **GetStoreFileIds**
-> List&lt;string&gt; GetStoreFileIds (string storeId)
+<a name="getstorefiles"></a>
+# **GetStoreFiles**
+> GetStoreFilesResponse GetStoreFiles (string storeId, int? offset = null, int? limit = null)
 
-Fetch a list of all files in store
+Fetch a list of files in store
 
 ### Example
 ```csharp
@@ -588,7 +588,7 @@ using BackendAPI.Model;
 
 namespace Example
 {
-    public class GetStoreFileIdsExample
+    public class GetStoreFilesExample
     {
         public static void Main()
         {
@@ -600,16 +600,18 @@ namespace Example
 
             var apiInstance = new DefaultApi(config);
             var storeId = "storeId_example";  // string | ID of the store containing the files
+            var offset = 0;  // int? | How many entries to skip (used for pagination of results) (optional)  (default to 0)
+            var limit = 25;  // int? | Max number of results to return (used for pagination of results) (optional)  (default to 25)
 
             try
             {
-                // Fetch a list of all files in store
-                List<string> result = apiInstance.GetStoreFileIds(storeId);
+                // Fetch a list of files in store
+                GetStoreFilesResponse result = apiInstance.GetStoreFiles(storeId, offset, limit);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DefaultApi.GetStoreFileIds: " + e.Message);
+                Debug.Print("Exception when calling DefaultApi.GetStoreFiles: " + e.Message);
                 Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
@@ -618,21 +620,21 @@ namespace Example
 }
 ```
 
-#### Using the GetStoreFileIdsWithHttpInfo variant
+#### Using the GetStoreFilesWithHttpInfo variant
 This returns an ApiResponse object which contains the response data, status code and headers.
 
 ```csharp
 try
 {
-    // Fetch a list of all files in store
-    ApiResponse<List<string>> response = apiInstance.GetStoreFileIdsWithHttpInfo(storeId);
+    // Fetch a list of files in store
+    ApiResponse<GetStoreFilesResponse> response = apiInstance.GetStoreFilesWithHttpInfo(storeId, offset, limit);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
 }
 catch (ApiException e)
 {
-    Debug.Print("Exception when calling DefaultApi.GetStoreFileIdsWithHttpInfo: " + e.Message);
+    Debug.Print("Exception when calling DefaultApi.GetStoreFilesWithHttpInfo: " + e.Message);
     Debug.Print("Status Code: " + e.ErrorCode);
     Debug.Print(e.StackTrace);
 }
@@ -643,10 +645,12 @@ catch (ApiException e)
 | Name | Type | Description | Notes |
 |------|------|-------------|-------|
 | **storeId** | **string** | ID of the store containing the files |  |
+| **offset** | **int?** | How many entries to skip (used for pagination of results) | [optional] [default to 0] |
+| **limit** | **int?** | Max number of results to return (used for pagination of results) | [optional] [default to 25] |
 
 ### Return type
 
-**List<string>**
+[**GetStoreFilesResponse**](GetStoreFilesResponse.md)
 
 ### Authorization
 
