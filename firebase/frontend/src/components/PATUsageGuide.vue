@@ -77,7 +77,7 @@
 
 import { ref } from 'vue'
 
-import { adminAPIEndpoint, downloadAPIEndpoint } from '../appConfig'
+import { backendAPIEndpoint, downloadAPIEndpoint } from '../appConfig'
 import { GetTokenResponse } from '../generated/api'
 
 const props = defineProps<{
@@ -91,7 +91,7 @@ const emit = defineEmits<{
 
 const howToUseTab = ref(null)
 const downloadConfigFileHref = "data:application/json;charset=utf-8," + encodeURI(JSON.stringify({
-        'service-url': adminAPIEndpoint,
+        'service-url': backendAPIEndpoint,
         'email': props.email,
         'pat': props.pat.token,
       }, null, 2))

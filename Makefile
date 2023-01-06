@@ -4,8 +4,8 @@
 .PHONY: test test-download-api test-admin-api test-cli
 
 .PHONY: run-local-firebase-emulators
-.PHONY: run-local-download-api run-local-admin-api
-.PHONY: test-local test-local-download-api test-local-admin-api test-local-cli
+.PHONY: run-local-backend-api
+.PHONY: test-local test-local-backend-api test-local-cli
 
 .PHONY: generate-db-models
 .PHONY: generate-apis generate-go-server-api generate-go-client-api generate-csharp-client-api generate-typescript-client-api
@@ -109,7 +109,7 @@ test-admin-api:
 	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < $(ENV)/config.json)" \
 		TEST_EMAIL="$(shell jq -r ".email" < $(ENV)/test-credentials.json)" \
 		TEST_PAT="$(shell jq -r ".pat" < $(ENV)/test-credentials.json)" \
-		go test -timeout 60s github.com/falldamagestudio/cloud-symbol-server/admin-api/test -count=1
+		go test -timeout 60s github.com/falldamagestudio/cloud-symbol-server/backend-api/test -count=1
 
 test-cli:
 	cd cli \
@@ -131,57 +131,39 @@ run-local-sql-auth-proxy:
 run-local-psql:
 	psql "host=127.0.0.1 sslmode=disable dbname=cloud_symbol_server user=$(shell jq -r ".psqlUser" < $(ENV)/config.json)"
 
-run-local-download-api:
-	cd download-api/cmd \
-	&&	GCP_PROJECT_ID=test-cloud-symbol-server \
-		SYMBOL_STORE_BUCKET_NAME="$(shell jq -r ".symbol_store_bucket_name" < environments/local/core/config.json)" \
-		PORT=8083 \
-		GOOGLE_APPLICATION_CREDENTIALS="../../environments/local/download_api/google_application_credentials.json" \
-		go run main.go
-
-run-local-admin-api:
-	cd admin-api/cmd \
+run-local-backend-api:
+	cd backend-api/cmd \
 	&&	GCP_PROJECT_ID=test-cloud-symbol-server \
 		SYMBOL_STORE_BUCKET_NAME="$(shell jq -r ".symbol_store_bucket_name" < environments/local/core/config.json)" \
 		CLOUD_SQL_INSTANCE="$(shell jq -r ".cloudSQLInstance" < $(ENV)/config.json)" \
 		CLOUD_SQL_USER="$(shell jq -r ".cloudSQLAdminUser" < $(ENV)/config.json)" \
 		PORT=8084 \
-		GOOGLE_APPLICATION_CREDENTIALS="../../environments/local/admin_api/google_application_credentials.json" \
+		GOOGLE_APPLICATION_CREDENTIALS="../../environments/local/backend_api/google_application_credentials.json" \
 		go run main.go
 
 run-local-frontend:
 	cd firebase/frontend \
 	&&	npm install \
 	&&	VUE_APP_FIREBASE_CONFIG='$(shell cat environments/local/firebase/frontend/firebase-config.json)' \
-		VUE_APP_ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < environments/local/config.json)" \
-		VUE_APP_DOWNLOAD_API_ENDPOINT="$(shell jq -r ".downloadAPIEndpoint" < environments/local/config.json)" \
+		VUE_APP_BACKEND_API_ENDPOINT="$(shell jq -r ".backendAPIEndpoint" < environments/local/config.json)" \
 		VUE_APP_VERSION="$(VERSION)" \
 		npm run serve
 
-test-local-download-api:
-	cd download-api/test \
-	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < environments/local/config.json)" \
-		DOWNLOAD_API_ENDPOINT="$(shell jq -r ".downloadAPIEndpoint" < environments/local/config.json)" \
+test-local-backend-api:
+	cd backend-api/test \
+	&&	BACKEND_API_ENDPOINT="$(shell jq -r ".backendAPIEndpoint" < environments/local/config.json)" \
 		TEST_EMAIL="$(shell jq -r ".email" < environments/local/test-credentials.json)" \
 		TEST_PAT="$(shell jq -r ".pat" < environments/local/test-credentials.json)" \
-		go test -timeout 30s github.com/falldamagestudio/cloud-symbol-server/download-api/test -count=1
-
-test-local-admin-api:
-	cd admin-api/test \
-	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < environments/local/config.json)" \
-		TEST_EMAIL="$(shell jq -r ".email" < environments/local/test-credentials.json)" \
-		TEST_PAT="$(shell jq -r ".pat" < environments/local/test-credentials.json)" \
-		go test -timeout 60s github.com/falldamagestudio/cloud-symbol-server/admin-api/test -count=1
+		go test -timeout 60s github.com/falldamagestudio/cloud-symbol-server/backend-api/test -count=1
 
 test-local-cli:
 	cd cli \
-	&&	ADMIN_API_ENDPOINT="$(shell jq -r ".adminAPIEndpoint" < environments/local/config.json)" \
-		DOWNLOAD_API_ENDPOINT="$(shell jq -r ".downloadAPIEndpoint" < environments/local/config.json)" \
+	&&	BACKEND_API_ENDPOINT="$(shell jq -r ".backendAPIEndpoint" < environments/local/config.json)" \
 		TEST_EMAIL="$(shell jq -r ".email" < environments/local/test-credentials.json)" \
 		TEST_PAT="$(shell jq -r ".pat" < environments/local/test-credentials.json)" \
 		dotnet test
 
-test-local: test-local-download-api test-local-admin-api test-local-cli
+test-local: test-local-backend-api test-local-cli
 
 #########################################################
 # DB model regeneration commands
@@ -190,7 +172,7 @@ test-local: test-local-download-api test-local-admin-api test-local-cli
 generate-db-models:
 	# This will connect to the SQL db
 	# The user should have the SQL Auth proxy running (via `make run-local-sql-auth-proxy`) first
-	sqlboiler psql --output admin-api/generated/sql-db-models --wipe
+	sqlboiler psql --output backend-api/generated/sql-db-models --wipe
 
 #########################################################
 # API regeneration commands
@@ -200,7 +182,7 @@ generate-apis: generate-go-server-api generate-go-client-api generate-csharp-cli
 
 generate-go-server-api:
 
-	rm -rf admin-api/generated/go-server/go
+	rm -rf backend-api/generated/go-server/go
 	docker run \
 		--rm \
 		-v "${PWD}:/local" \
@@ -208,16 +190,16 @@ generate-go-server-api:
 		openapitools/openapi-generator-cli:${OPENAPI_GENERATOR_VERSION} \
 		generate \
 		--git-user-id=falldamagestudio \
-		--git-repo-id=cloud-symbol-server/admin-api \
-		-i /local/admin-api/admin-api.yaml \
+		--git-repo-id=cloud-symbol-server/backend-api \
+		-i /local/backend-api/admin-api.yaml \
 		-g go-server \
 		--additional-properties=generateAliasAsModel=false \
-		-o /local/admin-api/generated/go-server
+		-o /local/backend-api/generated/go-server
 
 generate-go-client-api:
 
-	rm -rf admin-api/generated/go-client/docs
-	rm -rf admin-api/generated/go-client/*.go
+	rm -rf backend-api/generated/go-client/docs
+	rm -rf backend-api/generated/go-client/*.go
 	docker run \
 		--rm \
 		-v "${PWD}:/local" \
@@ -225,11 +207,11 @@ generate-go-client-api:
 		openapitools/openapi-generator-cli:${OPENAPI_GENERATOR_VERSION} \
 		generate \
 		--git-user-id=falldamagestudio \
-		--git-repo-id=cloud-symbol-server/admin-api \
-		-i /local/admin-api/admin-api.yaml \
+		--git-repo-id=cloud-symbol-server/backend-api \
+		-i /local/backend-api/admin-api.yaml \
 		-g go \
 		--additional-properties=generateAliasAsModel=false \
-		-o /local/admin-api/generated/go-client
+		-o /local/backend-api/generated/go-client
 
 generate-csharp-client-api:
 
@@ -241,7 +223,7 @@ generate-csharp-client-api:
 		--user $(shell id -u):$(shell id -g) \
 		openapitools/openapi-generator-cli:${OPENAPI_GENERATOR_VERSION} \
 		generate \
-		-i /local/admin-api/admin-api.yaml \
+		-i /local/backend-api/admin-api.yaml \
 		-g csharp-netcore \
 		--additional-properties=netCoreProjectFile=true,library=httpclient,packageName=BackendAPI,generateAliasAsModel=false \
 		-o /local/cli/generated/BackendAPI
@@ -255,7 +237,7 @@ generate-typescript-client-api:
 		--user $(shell id -u):$(shell id -g) \
 		openapitools/openapi-generator-cli:${OPENAPI_GENERATOR_VERSION} \
 		generate \
-		-i /local/admin-api/admin-api.yaml \
+		-i /local/backend-api/admin-api.yaml \
 		-g typescript-axios \
 		--additional-properties=generateAliasAsModel=false \
 		-o /local/firebase/frontend/src/generated

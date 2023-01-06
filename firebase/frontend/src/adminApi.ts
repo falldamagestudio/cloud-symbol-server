@@ -2,11 +2,11 @@ import axios from 'axios'
 
 import { Configuration, ConfigurationParameters } from './generated/configuration'
 import { DefaultApiFactory } from './generated/api'
-import { adminAPIEndpoint } from './appConfig'
+import { backendAPIEndpoint } from './appConfig'
 import { useAuthUserStore } from './stores/authUser'
 
 const axiosInstance = axios.create({
-  baseURL: adminAPIEndpoint,
+  baseURL: backendAPIEndpoint,
   timeout: 5000,
 });
 
@@ -22,7 +22,7 @@ axiosInstance.interceptors.request.use((request: any) => {
 });
 
 const apiConfigurationParameters = {
-  basePath: adminAPIEndpoint
+  basePath: backendAPIEndpoint
 } as ConfigurationParameters
 
 const apiConfiguration = new Configuration(apiConfigurationParameters)
