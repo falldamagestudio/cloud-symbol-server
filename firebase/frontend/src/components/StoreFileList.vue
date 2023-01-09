@@ -14,43 +14,16 @@
 
     <!-- List of files in store -->
 
-    <v-simple-table>
+    <v-data-table
+      :headers="headers"
+      :items="storeFiles"
+      :server-items-length="total"
+      :options="options"
+      :page="options.page"
+      :items-per-page="options.itemsPerPage"
+      @pagination="updatePagination"
+    />
 
-      <template
-        v-slot:default
-      >
-        <thead>
-          <tr>
-            <th class="text-left">
-              Store name
-            </th>
-          </tr>
-        </thead>
-
-        <tbody>
-
-          <template
-            v-for="file in storeFiles"
-          >
-            <tr
-              v-bind:key="file"
-            >
-              <td>
-                {{file}}
-              </td>
-            </tr>
-          </template>
-
-        </tbody>
-      </template>
-
-    </v-simple-table>
-
-    <v-pagination
-      :length="totalPages"
-      v-model="currentPage"
-    >
-    </v-pagination>
   </div>
 </template>
 
@@ -64,32 +37,36 @@ const props = defineProps<{
   store: string,
 }>()
 
-const storeFiles = ref([] as string[])
+const headers = [
+  {
+    text: "Name",
+    value: "name",
+  }
+]
 
-const currentPage = ref(1)
-const limit = ref(1)
-const totalPages = ref(1)
+interface StoreFileEntry {
+  name: string
+}
 
-watch(currentPage, (newPage) => {
-  refresh()
-})
+let options = {
+  page: 1,
+  itemsPerPage: 5,
+}
 
-watch(limit, (newLimit) => {
-  currentPage.value = 1
-})
-
-const total = ref(undefined as number)
-watch([total, limit], ([newTotal, newLimit]) => {
-  totalPages.value = Math.ceil(newTotal / newLimit)
-})
+const storeFiles = ref([] as StoreFileEntry[])
+const total = ref(1)
 
 async function fetch() {
 
   try {
+    const storeFilesResponse = await api.getStoreFiles(props.store, (options.page - 1) * options.itemsPerPage, options.itemsPerPage)
     storeFiles.value.length = 0
-    const storeFilesResponse = await api.getStoreFiles(props.store, (currentPage.value - 1) * limit.value, limit.value)
-    for (const storeFileId of storeFilesResponse.data.files) {
-      storeFiles.value.push(storeFileId)
+    if (storeFilesResponse.data.files) {
+      for (const storeFileId of storeFilesResponse.data.files) {
+        storeFiles.value.push({
+          name: storeFileId
+        })
+      }
     }
     total.value = storeFilesResponse.data.pagination.total
   } catch (error) {
@@ -97,8 +74,18 @@ async function fetch() {
   }
 }
 
-function refresh() {
-  fetch()
+function updatePagination(newOptions: {
+  page: number,
+  itemsPerPage: number,
+  pageStart: number,
+  pageStop: number,
+  pageCount: number,
+  itemsLength: number
+}) {
+  if ((options.page != newOptions.page) || (options.itemsPerPage != newOptions.itemsPerPage)) {
+    options = newOptions
+    fetch()
+  }
 }
 
 fetch()
