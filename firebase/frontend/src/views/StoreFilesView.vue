@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Stores</h1>
+    <h1>Files</h1>
     <StoreFileList :store="$route.params.store"/>
   </div>
 </template>
