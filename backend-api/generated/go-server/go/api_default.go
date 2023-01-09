@@ -87,6 +87,12 @@ func (c *DefaultApiController) Routes() Routes {
 			c.ExpireStoreUpload,
 		},
 		{
+			"GetStoreFileHashes",
+			strings.ToUpper("Get"),
+			"/stores/{storeId}/files/{fileId}/hashes",
+			c.GetStoreFileHashes,
+		},
+		{
 			"GetStoreFiles",
 			strings.ToUpper("Get"),
 			"/stores/{storeId}/files",
@@ -245,6 +251,35 @@ func (c *DefaultApiController) ExpireStoreUpload(w http.ResponseWriter, r *http.
 	storeIdParam := params["storeId"]
 	
 	result, err := c.service.ExpireStoreUpload(r.Context(), uploadIdParam, storeIdParam)
+	// If an error occurred, encode the error with the status code
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
+	// If no error, encode the body and the result code
+	EncodeJSONResponse(result.Body, &result.Code, w)
+
+}
+
+// GetStoreFileHashes - Fetch a list of hashes for a specific file in store
+func (c *DefaultApiController) GetStoreFileHashes(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	query := r.URL.Query()
+	storeIdParam := params["storeId"]
+	
+	fileIdParam := params["fileId"]
+	
+	offsetParam, err := parseInt32Parameter(query.Get("offset"), false)
+	if err != nil {
+		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		return
+	}
+	limitParam, err := parseInt32Parameter(query.Get("limit"), false)
+	if err != nil {
+		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		return
+	}
+	result, err := c.service.GetStoreFileHashes(r.Context(), storeIdParam, fileIdParam, offsetParam, limitParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)
