@@ -22,7 +22,13 @@
       :page="options.page"
       :items-per-page="options.itemsPerPage"
       @pagination="updatePagination"
-    />
+    >
+      <template
+        v-slot:item.name="{ item }"
+      >
+        <a :href="generateStoreFileHref(item)">{{ item.name }}</a>
+      </template>    
+    </v-data-table>
 
   </div>
 </template>
@@ -55,6 +61,11 @@ let options = {
 
 const storeFiles = ref([] as StoreFileEntry[])
 const total = ref(1)
+
+function generateStoreFileHref(file: StoreFileEntry): string {
+  const storeId = "blah"
+  return `http://localhost:8080/stores/${storeId}/files/${file.name}`
+}
 
 async function fetch() {
 
