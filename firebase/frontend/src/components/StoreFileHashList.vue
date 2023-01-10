@@ -102,7 +102,6 @@ async function fetch() {
         })
       }
     }
-    console.log(storeFileHashesResponse)
     total.value = storeFileHashesResponse.data.pagination.total
   } catch (error) {
     console.log(error)
