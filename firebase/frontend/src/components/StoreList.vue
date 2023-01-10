@@ -36,7 +36,7 @@
               v-bind:key="store"
             >
               <td>
-                {{store}} - <a :href="generateStoreFilesHref(store)">Files</a>
+                {{store}} - <router-link :to="{ name: 'storeFiles', params: { store: store } }">Files</router-link>
               </td>
             </tr>
           </template>
@@ -55,10 +55,6 @@ import { ref } from 'vue'
 import { api } from '../adminApi'
 
 const stores = ref([] as string[])
-
-function generateStoreFilesHref(storeId: string): string {
-  return `http://localhost:8080/stores/${storeId}/files`
-}
 
 async function fetch() {
 

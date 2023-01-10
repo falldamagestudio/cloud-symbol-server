@@ -26,7 +26,7 @@
       <template
         v-slot:item.name="{ item }"
       >
-        <a :href="generateStoreFileHref(item)">{{ item.name }}</a>
+        <router-link :to="{ name: 'storeFileHashes', params: { store: store, file: item.name } }">{{ item.name }}</router-link>
       </template>    
     </v-data-table>
 
@@ -61,11 +61,6 @@ let options = {
 
 const storeFiles = ref([] as StoreFileEntry[])
 const total = ref(1)
-
-function generateStoreFileHref(file: StoreFileEntry): string {
-  const storeId = "blah"
-  return `http://localhost:8080/stores/${storeId}/files/${file.name}`
-}
 
 async function fetch() {
 
