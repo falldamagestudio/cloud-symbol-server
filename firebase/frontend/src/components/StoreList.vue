@@ -3,14 +3,7 @@
 
     <!-- Header -->
 
-    <v-row>
-
-      <v-col
-      >
-        Stores
-      </v-col>
-
-    </v-row>
+    <v-breadcrumbs/>
 
     <!-- List of stores -->
 

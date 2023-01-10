@@ -3,14 +3,9 @@
 
     <!-- Header -->
 
-    <v-row>
-
-      <v-col
-      >
-        Store Files
-      </v-col>
-
-    </v-row>
+    <v-breadcrumbs
+      :items="breadcrumbItems"
+    />
 
     <!-- List of files in store -->
 
@@ -37,11 +32,22 @@
 
 import { computed, ref, watch } from 'vue'
 
+import router from '../router/index'
 import { api } from '../adminApi'
 
 const props = defineProps<{
   store: string,
 }>()
+
+const breadcrumbItems = [
+  {
+    text: props.store,
+    disabled: false,
+    href: router.match({
+      name: 'stores',
+    }).path,
+  },
+]
 
 const headers = [
   {
