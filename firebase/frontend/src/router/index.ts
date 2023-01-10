@@ -11,7 +11,7 @@ Vue.use(VueRouter)
 const routes: Array<RouteConfig> = [
   {
     path: '/',
-    redirect: '/pats'
+    redirect: '/stores'
   },
   {
     path: '/pats',

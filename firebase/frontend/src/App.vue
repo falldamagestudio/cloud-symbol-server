@@ -4,7 +4,7 @@
     <!-- Display main UI when user is logged in -->
 
     <template v-if="isLoggedIn()">
-      <v-app-bar app color="primary" dark>
+      <v-app-bar app clipped-left color="primary" dark>
 
         <div class="d-flex align-center">
 
@@ -19,6 +19,8 @@
         <v-btn v-on:click="logout">Logout</v-btn>
 
       </v-app-bar>
+
+      <NavigationDrawer/>
 
       <v-main>
         <v-container fluid>
@@ -62,6 +64,8 @@ import { auth } from './firebase'
 import { useAuthUserStore, LoginState } from './stores/authUser'
 import { googleProvider } from './google-auth'
 import { version } from './appConfig'
+
+import NavigationDrawer from './components/NavigationDrawer.vue'
 
 const authUserStore = useAuthUserStore()
 
