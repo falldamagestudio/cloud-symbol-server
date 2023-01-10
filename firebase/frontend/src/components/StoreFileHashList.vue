@@ -7,16 +7,16 @@
 
       <v-col
       >
-        Store Files
+        Store {{ props.store }} - File {{ props.file }}
       </v-col>
 
     </v-row>
 
-    <!-- List of files in store -->
+    <!-- List of file-hashes for file -->
 
     <v-data-table
       :headers="headers"
-      :items="storeFiles"
+      :items="storeFileHashes"
       :server-items-length="total"
       :options="options"
       :page="options.page"
@@ -26,7 +26,12 @@
       <template
         v-slot:item.name="{ item }"
       >
-        <a :href="generateStoreFileHref(item)">{{ item.name }}</a>
+        {{ item.hash }}
+      </template>    
+      <template
+        v-slot:item.status="{ item }"
+      >
+        {{ item.status }}
       </template>    
     </v-data-table>
 
@@ -41,17 +46,23 @@ import { api } from '../adminApi'
 
 const props = defineProps<{
   store: string,
+  file: string,
 }>()
 
 const headers = [
   {
     text: "Name",
     value: "name",
+  },
+  {
+    text: "Status",
+    value: "status",
   }
 ]
 
-interface StoreFileEntry {
-  name: string
+interface StoreFileHashEntry {
+  hash: string
+  status: string
 }
 
 let options = {
@@ -59,27 +70,24 @@ let options = {
   itemsPerPage: 5,
 }
 
-const storeFiles = ref([] as StoreFileEntry[])
+const storeFileHashes = ref([] as StoreFileHashEntry[])
 const total = ref(1)
-
-function generateStoreFileHref(file: StoreFileEntry): string {
-  const storeId = "blah"
-  return `http://localhost:8080/stores/${storeId}/files/${file.name}`
-}
 
 async function fetch() {
 
   try {
-    const storeFilesResponse = await api.getStoreFiles(props.store, (options.page - 1) * options.itemsPerPage, options.itemsPerPage)
-    storeFiles.value.length = 0
-    if (storeFilesResponse.data.files) {
-      for (const storeFileId of storeFilesResponse.data.files) {
-        storeFiles.value.push({
-          name: storeFileId
+    const storeFileHashesResponse = await api.getStoreFileHashes(props.store, props.file, (options.page - 1) * options.itemsPerPage, options.itemsPerPage)
+    storeFileHashes.value.length = 0
+    if (storeFileHashesResponse.data.hashes) {
+      for (const hash of storeFileHashesResponse.data.hashes) {
+        storeFileHashes.value.push({
+          hash: hash.hash,
+          status: hash.status,
         })
       }
     }
-    total.value = storeFilesResponse.data.pagination.total
+    console.log(storeFileHashesResponse)
+    total.value = storeFileHashesResponse.data.pagination.total
   } catch (error) {
     console.log(error)
   }
