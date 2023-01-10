@@ -2,12 +2,12 @@ package store_api
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"fmt"
 	"log"
 	"net/http"
 
-	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 
 	openapi "github.com/falldamagestudio/cloud-symbol-server/backend-api/generated/go-server/go"
@@ -30,7 +30,11 @@ func GetStoreFiles(ctx context.Context, storeId string, offset int32, limit int3
 		qm.Where(models.StoreColumns.Name+" = ?", storeId),
 		qm.For("share"),
 	).One(ctx, tx)
-	if err != nil {
+	if err == sql.ErrNoRows {
+		log.Printf("Store %v not found; err = %v", storeId, err)
+		tx.Rollback()
+		return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Store %v not found", storeId)}), err
+	} else if err != nil {
 		log.Printf("error while accessing store: %v", err)
 		tx.Rollback()
 		return openapi.Response(http.StatusInternalServerError, fmt.Sprintf("error while accessing store: %v", err)), err
@@ -45,11 +49,6 @@ func GetStoreFiles(ctx context.Context, storeId string, offset int32, limit int3
 		log.Printf("Error while accessing files in store %v : %v", storeId, err)
 		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing files in store %v : %v", storeId, err)}), err
 	}
-
-	boil.DebugMode = true
-
-	log.Printf("offset: %v", offset)
-	log.Printf("limit: %v", limit)
 
 	// Fetch all files within store
 	files, err := models.StoreFiles(
