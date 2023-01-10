@@ -208,7 +208,8 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 
 		// Create store-file, in case one doesn't exist yet
 		storeFile, err := models.StoreFiles(
-			qm.Where(models.StoreFileColumns.StoreID+" = ? AND "+models.StoreFileColumns.FileName+" = ?", store.StoreID, file.FileName),
+			qm.Where(models.StoreFileColumns.StoreID+" = ?", store.StoreID),
+			qm.And(models.StoreFileColumns.FileName+" = ?", file.FileName),
 		).One(ctx, tx)
 		if err == sql.ErrNoRows {
 			storeFile = &models.StoreFile{
@@ -230,6 +231,7 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 		// Create store-file-hash, in case one doesn't exist yet
 		storeFileHash, err := models.StoreFileHashes(
 			qm.Where(models.StoreFileHashColumns.FileID+" = ?", storeFile.FileID),
+			qm.And(models.StoreFileHashColumns.Hash+" = ?", file.Hash),
 		).One(ctx, tx)
 		if err == sql.ErrNoRows {
 

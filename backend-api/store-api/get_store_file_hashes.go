@@ -2,12 +2,12 @@ package store_api
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"fmt"
 	"log"
 	"net/http"
 
-	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 
 	openapi "github.com/falldamagestudio/cloud-symbol-server/backend-api/generated/go-server/go"
@@ -15,9 +15,9 @@ import (
 	postgres "github.com/falldamagestudio/cloud-symbol-server/backend-api/postgres"
 )
 
-func GetStoreFiles(ctx context.Context, storeId string, offset int32, limit int32) (openapi.ImplResponse, error) {
+func GetStoreFileHashes(ctx context.Context, storeId string, fileId string, offset int32, limit int32) (openapi.ImplResponse, error) {
 
-	log.Printf("Getting store files; store %v, offset %v, limit %v", storeId, offset, limit)
+	log.Printf("Getting store file hashes; store %v, file %v, offset %v, limit %v", storeId, fileId, offset, limit)
 
 	tx, err := postgres.BeginDBTransaction(ctx)
 	if err != nil {
@@ -30,48 +30,70 @@ func GetStoreFiles(ctx context.Context, storeId string, offset int32, limit int3
 		qm.Where(models.StoreColumns.Name+" = ?", storeId),
 		qm.For("share"),
 	).One(ctx, tx)
-	if err != nil {
+	if err == sql.ErrNoRows {
+		log.Printf("Store %v not found; err = %v", storeId, err)
+		tx.Rollback()
+		return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Store %v not found", storeId)}), err
+	} else if err != nil {
 		log.Printf("error while accessing store: %v", err)
 		tx.Rollback()
 		return openapi.Response(http.StatusInternalServerError, fmt.Sprintf("error while accessing store: %v", err)), err
 	}
 
-	// Count total number of files in store that match filter query, ignoring pagination
-	total, err := models.StoreFiles(
-		qm.Distinct(models.StoreFileColumns.FileID),
-		qm.Where(models.StoreFileTableColumns.StoreID+" = ?", store.StoreID),
-	).Count(ctx, tx)
-	if err != nil {
-		log.Printf("Error while accessing files in store %v : %v", storeId, err)
-		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing files in store %v : %v", storeId, err)}), err
+	// Locate file in DB, and ensure file remains throughout entire txn
+	file, err := models.StoreFiles(
+		qm.Where(models.StoreFileColumns.StoreID+" = ?", store.StoreID),
+		qm.And(models.StoreFileColumns.FileName+" = ?", fileId),
+		qm.For("share"),
+	).One(ctx, tx)
+	if err == sql.ErrNoRows {
+		log.Printf("Store file %v / %v not found; err = %v", storeId, fileId, err)
+		tx.Rollback()
+		return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("Store / file %v / %v not found", storeId, fileId)}), err
+	} else if err != nil {
+		log.Printf("error while accessing store file: %v", err)
+		tx.Rollback()
+		return openapi.Response(http.StatusInternalServerError, fmt.Sprintf("error while accessing store file : %v", err)), err
 	}
 
-	boil.DebugMode = true
+	// Count total number of hashes in file that match filter query, ignoring pagination
+	total, err := models.StoreFileHashes(
+		qm.Distinct(models.StoreFileHashColumns.HashID),
+		qm.Where(models.StoreFileHashTableColumns.FileID+" = ?", file.FileID),
+	).Count(ctx, tx)
+	if err != nil {
+		log.Printf("Error while accessing hashes in store-file %v/%v : %v", storeId, fileId, err)
+		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing hashes in store-file %v/%v : %v", storeId, fileId, err)}), err
+	}
 
-	log.Printf("offset: %v", offset)
-	log.Printf("limit: %v", limit)
+	log.Printf("BLAH: total: %v", total)
 
-	// Fetch all files within store
-	files, err := models.StoreFiles(
-		qm.Where(models.StoreFileTableColumns.StoreID+" = ?", store.StoreID),
-		qm.OrderBy(models.StoreFileColumns.FileID),
+	// Fetch all hashes within file
+	hashes, err := models.StoreFileHashes(
+		qm.Where(models.StoreFileHashTableColumns.FileID+" = ?", file.FileID),
+		qm.OrderBy(models.StoreFileHashColumns.HashID),
 		qm.Offset(int(offset)),
 		qm.Limit(int(limit)),
 	).All(ctx, tx)
 	if err != nil {
-		log.Printf("Error while accessing files in store %v : %v", storeId, err)
-		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing files in store %v : %v", storeId, err)}), err
+		log.Printf("Error while accessing hashes in store-file %v/%v : %v", storeId, fileId, err)
+		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing hashes in store-file %v/%v : %v", storeId, fileId, err)}), err
 	}
+
+	log.Printf("BLAH: hashes: %v", hashes)
 
 	// Convert DB query result to a plain array of strings
-	var storeFiles = make([]string, len(files))
+	var storeFileHashes = make([]openapi.GetStoreFileHashResponse, len(hashes))
 
-	for index, file := range files {
-		storeFiles[index] = file.FileName
+	for index, hash := range hashes {
+		storeFileHashes[index] = openapi.GetStoreFileHashResponse{
+			Hash: hash.Hash,
+			Status: openapi.StoreFileHashStatus(hash.Status),
+		}
 	}
 
-	storeFilesResponse := &openapi.GetStoreFilesResponse{
-		Files: storeFiles,
+	storeFileHashesResponse := &openapi.GetStoreFileHashesResponse{
+		Hashes: storeFileHashes,
 		Pagination: openapi.PaginationResponse{
 			Total: int32(total),
 		},
@@ -83,7 +105,7 @@ func GetStoreFiles(ctx context.Context, storeId string, offset int32, limit int3
 		return openapi.Response(http.StatusInternalServerError, fmt.Sprintf("unable to commit transaction: %v", err)), err
 	}
 
-	log.Printf("Response: %v", storeFilesResponse)
+	log.Printf("Response: %v", storeFileHashesResponse)
 
-	return openapi.Response(http.StatusOK, storeFilesResponse), nil
+	return openapi.Response(http.StatusOK, storeFileHashesResponse), nil
 }

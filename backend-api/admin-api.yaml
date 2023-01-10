@@ -643,7 +643,7 @@ components:
           items:
             type: string
         pagination:
-          type: paginationResponse
+          $ref: '#/components/schemas/paginationResponse'
 
     getStoreFileHashResponse:
       type: object
@@ -657,12 +657,12 @@ components:
     getStoreFileHashesResponse:
       type: object
       properties:
-        files:
+        hashes:
           type: array
           items:
             $ref: getStoreFileHashResponse
         pagination:
-          type: paginationResponse
+          $ref: '#/components/schemas/paginationResponse'
 
     createStoreUploadResponse:
       type: object

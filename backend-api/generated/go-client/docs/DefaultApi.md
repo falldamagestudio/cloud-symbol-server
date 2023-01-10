@@ -10,6 +10,7 @@ Method | HTTP request | Description
 [**DeleteStore**](DefaultApi.md#DeleteStore) | **Delete** /stores/{storeId} | Delete an existing store
 [**DeleteToken**](DefaultApi.md#DeleteToken) | **Delete** /tokens/{token} | Delete a token for current user
 [**ExpireStoreUpload**](DefaultApi.md#ExpireStoreUpload) | **Post** /stores/{storeId}/uploads/{uploadId}/expire | Expire store upload and consider files for GC
+[**GetStoreFileHashes**](DefaultApi.md#GetStoreFileHashes) | **Get** /stores/{storeId}/files/{fileId}/hashes | Fetch a list of hashes for a specific file in store
 [**GetStoreFiles**](DefaultApi.md#GetStoreFiles) | **Get** /stores/{storeId}/files | Fetch a list of files in store
 [**GetStoreUpload**](DefaultApi.md#GetStoreUpload) | **Get** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
 [**GetStoreUploadIds**](DefaultApi.md#GetStoreUploadIds) | **Get** /stores/{storeId}/uploads | Fetch a list of all uploads in store
@@ -404,6 +405,81 @@ Name | Type | Description  | Notes
 ### Return type
 
  (empty response body)
+
+### Authorization
+
+[emailAndPat](../README.md#emailAndPat)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetStoreFileHashes
+
+> GetStoreFileHashesResponse GetStoreFileHashes(ctx, storeId, fileId).Offset(offset).Limit(limit).Execute()
+
+Fetch a list of hashes for a specific file in store
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    storeId := "storeId_example" // string | ID of the store containing the file
+    fileId := "fileId_example" // string | ID of the file
+    offset := int32(56) // int32 | How many entries to skip (used for pagination of results) (optional) (default to 0)
+    limit := int32(56) // int32 | Max number of results to return (used for pagination of results) (optional) (default to 25)
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.DefaultApi.GetStoreFileHashes(context.Background(), storeId, fileId).Offset(offset).Limit(limit).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStoreFileHashes``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `GetStoreFileHashes`: GetStoreFileHashesResponse
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetStoreFileHashes`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**storeId** | **string** | ID of the store containing the file | 
+**fileId** | **string** | ID of the file | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetStoreFileHashesRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+ **offset** | **int32** | How many entries to skip (used for pagination of results) | [default to 0]
+ **limit** | **int32** | Max number of results to return (used for pagination of results) | [default to 25]
+
+### Return type
+
+[**GetStoreFileHashesResponse**](GetStoreFileHashesResponse.md)
 
 ### Authorization
 

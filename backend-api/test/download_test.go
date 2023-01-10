@@ -76,9 +76,11 @@ func TestAccessFileThatExists(t *testing.T) {
 
 	email, pat := getTestEmailAndPat()
 
+	authContext, apiClient := getAPIClient(email, pat)
+
 	storeId := "example"
 
-	if err := ensureTestStoreExistsAndIsPopulated(email, pat, storeId); err != nil {
+	if err := ensureTestStoreExistsAndIsPopulated(apiClient, authContext, storeId); err != nil {
 		t.Fatalf("Error when creating/populating test store: %v", err)
 	}
 
@@ -137,9 +139,11 @@ func TestAccessFileThatDoesNotExist(t *testing.T) {
 
 	email, pat := getTestEmailAndPat()
 
+	authContext, apiClient := getAPIClient(email, pat)
+
 	storeId := "example"
 
-	if err := ensureTestStoreExistsAndIsPopulated(email, pat, storeId); err != nil {
+	if err := ensureTestStoreExistsAndIsPopulated(apiClient, authContext, storeId); err != nil {
 		t.Fatalf("Error when creating/populating test store: %v", err)
 	}
 

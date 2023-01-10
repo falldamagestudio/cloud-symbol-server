@@ -262,6 +262,67 @@ paths:
                 $ref: '#/components/schemas/messageResponse'
           description: No such store
       summary: Fetch a list of files in store
+  /stores/{storeId}/files/{fileId}/hashes:
+    get:
+      operationId: getStoreFileHashes
+      parameters:
+      - description: ID of the store containing the file
+        explode: false
+        in: path
+        name: storeId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of the file
+        explode: false
+        in: path
+        name: fileId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: How many entries to skip (used for pagination of results)
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: Max number of results to return (used for pagination of results)
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 25
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getStoreFileHashesResponse'
+          description: Success
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Not authorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: No such store
+      summary: Fetch a list of hashes for a specific file in store
   /stores/{storeId}/uploads:
     get:
       operationId: getStoreUploadIds
@@ -527,6 +588,11 @@ components:
             $ref: '#/components/schemas/messageResponse'
       description: Not authorized
   schemas:
+    storeFileHashStatus:
+      enum:
+      - pending
+      - present
+      type: string
     messageResponse:
       properties:
         message:
@@ -614,13 +680,16 @@ components:
         type: string
       type: array
     paginationResponse:
+      example:
+        total: 0
       properties:
         total:
           type: integer
       type: object
     getStoreFilesResponse:
       example:
-        pagination: ""
+        pagination:
+          total: 0
         files:
         - files
         - files
@@ -630,7 +699,35 @@ components:
             type: string
           type: array
         pagination:
-          type: paginationResponse
+          $ref: '#/components/schemas/paginationResponse'
+      type: object
+    getStoreFileHashResponse:
+      example:
+        hash: 7F416863ABF34C3E894BAD1739BAA5571
+        status: null
+      properties:
+        hash:
+          example: 7F416863ABF34C3E894BAD1739BAA5571
+          type: string
+        status:
+          $ref: '#/components/schemas/storeFileHashStatus'
+      type: object
+    getStoreFileHashesResponse:
+      example:
+        pagination:
+          total: 0
+        hashes:
+        - hash: 7F416863ABF34C3E894BAD1739BAA5571
+          status: null
+        - hash: 7F416863ABF34C3E894BAD1739BAA5571
+          status: null
+      properties:
+        hashes:
+          items:
+            $ref: '#/components/schemas/getStoreFileHashResponse'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/paginationResponse'
       type: object
     createStoreUploadResponse:
       example:

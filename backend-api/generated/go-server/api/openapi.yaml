@@ -680,13 +680,16 @@ components:
         type: string
       type: array
     paginationResponse:
+      example:
+        total: 0
       properties:
         total:
           type: integer
       type: object
     getStoreFilesResponse:
       example:
-        pagination: ""
+        pagination:
+          total: 0
         files:
         - files
         - files
@@ -696,7 +699,7 @@ components:
             type: string
           type: array
         pagination:
-          type: paginationResponse
+          $ref: '#/components/schemas/paginationResponse'
       type: object
     getStoreFileHashResponse:
       example:
@@ -711,19 +714,20 @@ components:
       type: object
     getStoreFileHashesResponse:
       example:
-        pagination: ""
-        files:
+        pagination:
+          total: 0
+        hashes:
         - hash: 7F416863ABF34C3E894BAD1739BAA5571
           status: null
         - hash: 7F416863ABF34C3E894BAD1739BAA5571
           status: null
       properties:
-        files:
+        hashes:
           items:
             $ref: '#/components/schemas/getStoreFileHashResponse'
           type: array
         pagination:
-          type: paginationResponse
+          $ref: '#/components/schemas/paginationResponse'
       type: object
     createStoreUploadResponse:
       example:

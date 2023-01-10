@@ -208,9 +208,7 @@ func populateTestStore(adminAPIClient *openapi_client.APIClient, authContext con
 	return nil
 }
 
-func ensureTestStoreExistsAndIsPopulated(email string, pat string, storeId string) error {
-
-	authContext, apiClient := getAPIClient(email, pat)
+func ensureTestStoreExistsAndIsPopulated(apiClient *openapi_client.APIClient, authContext context.Context, storeId string) error {
 
 	if err := ensureTestStoreExists(apiClient, authContext, storeId); err != nil {
 		return err

@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Files** | Pointer to **[]string** |  | [optional] 
-**Pagination** | Pointer to [**PaginationResponse**](paginationResponse.md) |  | [optional] 
+**Pagination** | Pointer to [**PaginationResponse**](PaginationResponse.md) |  | [optional] 
 
 ## Methods
 

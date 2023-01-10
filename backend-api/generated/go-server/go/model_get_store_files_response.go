@@ -18,6 +18,9 @@ type GetStoreFilesResponse struct {
 
 // AssertGetStoreFilesResponseRequired checks if the required fields are not zero-ed
 func AssertGetStoreFilesResponseRequired(obj GetStoreFilesResponse) error {
+	if err := AssertPaginationResponseRequired(obj.Pagination); err != nil {
+		return err
+	}
 	return nil
 }
 
