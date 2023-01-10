@@ -66,8 +66,6 @@ func GetStoreFileHashes(ctx context.Context, storeId string, fileId string, offs
 		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing hashes in store-file %v/%v : %v", storeId, fileId, err)}), err
 	}
 
-	log.Printf("BLAH: total: %v", total)
-
 	// Fetch all hashes within file
 	hashes, err := models.StoreFileHashes(
 		qm.Where(models.StoreFileHashTableColumns.FileID+" = ?", file.FileID),
@@ -79,8 +77,6 @@ func GetStoreFileHashes(ctx context.Context, storeId string, fileId string, offs
 		log.Printf("Error while accessing hashes in store-file %v/%v : %v", storeId, fileId, err)
 		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing hashes in store-file %v/%v : %v", storeId, fileId, err)}), err
 	}
-
-	log.Printf("BLAH: hashes: %v", hashes)
 
 	// Convert DB query result to a plain array of strings
 	var storeFileHashes = make([]openapi.GetStoreFileHashResponse, len(hashes))
