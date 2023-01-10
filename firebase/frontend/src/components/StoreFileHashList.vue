@@ -1,12 +1,6 @@
 <template>
   <div>
 
-    <!-- Header -->
-
-    <v-breadcrumbs
-      :items="breadcrumbItems"
-    />
-
     <!-- List of file-hashes for file -->
 
     <v-data-table
@@ -37,33 +31,12 @@
 
 import { computed, ref, watch } from 'vue'
 
-import router from '../router/index'
 import { api } from '../adminApi'
 
 const props = defineProps<{
   store: string,
   file: string,
 }>()
-
-const breadcrumbItems = [
-  {
-    text: props.store,
-    disabled: false,
-    href: router.match({
-      name: 'stores',
-    }).path,
-  },
-  {
-    text: props.file,
-    disabled: false,
-    href: router.match({
-      name: 'storeFiles',
-      params: {
-        store: props.file,
-      },
-    }).path,
-  },
-]
 
 const headers = [
   {

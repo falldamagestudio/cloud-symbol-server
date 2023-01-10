@@ -1,10 +1,6 @@
 <template>
   <div>
 
-    <!-- Header -->
-
-    <v-breadcrumbs/>
-
     <!-- List of stores -->
 
     <v-simple-table>
