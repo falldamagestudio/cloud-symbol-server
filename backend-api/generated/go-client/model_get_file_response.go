@@ -16,17 +16,20 @@ import (
 
 // GetFileResponse struct for GetFileResponse
 type GetFileResponse struct {
-	FileName *string `json:"fileName,omitempty"`
-	Hash *string `json:"hash,omitempty"`
-	Status *string `json:"status,omitempty"`
+	FileName string `json:"fileName"`
+	Hash string `json:"hash"`
+	Status string `json:"status"`
 }
 
 // NewGetFileResponse instantiates a new GetFileResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetFileResponse() *GetFileResponse {
+func NewGetFileResponse(fileName string, hash string, status string) *GetFileResponse {
 	this := GetFileResponse{}
+	this.FileName = fileName
+	this.Hash = hash
+	this.Status = status
 	return &this
 }
 
@@ -38,111 +41,87 @@ func NewGetFileResponseWithDefaults() *GetFileResponse {
 	return &this
 }
 
-// GetFileName returns the FileName field value if set, zero value otherwise.
+// GetFileName returns the FileName field value
 func (o *GetFileResponse) GetFileName() string {
-	if o == nil || isNil(o.FileName) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.FileName
+
+	return o.FileName
 }
 
-// GetFileNameOk returns a tuple with the FileName field value if set, nil otherwise
+// GetFileNameOk returns a tuple with the FileName field value
 // and a boolean to check if the value has been set.
 func (o *GetFileResponse) GetFileNameOk() (*string, bool) {
-	if o == nil || isNil(o.FileName) {
+	if o == nil {
     return nil, false
 	}
-	return o.FileName, true
+	return &o.FileName, true
 }
 
-// HasFileName returns a boolean if a field has been set.
-func (o *GetFileResponse) HasFileName() bool {
-	if o != nil && !isNil(o.FileName) {
-		return true
-	}
-
-	return false
-}
-
-// SetFileName gets a reference to the given string and assigns it to the FileName field.
+// SetFileName sets field value
 func (o *GetFileResponse) SetFileName(v string) {
-	o.FileName = &v
+	o.FileName = v
 }
 
-// GetHash returns the Hash field value if set, zero value otherwise.
+// GetHash returns the Hash field value
 func (o *GetFileResponse) GetHash() string {
-	if o == nil || isNil(o.Hash) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Hash
+
+	return o.Hash
 }
 
-// GetHashOk returns a tuple with the Hash field value if set, nil otherwise
+// GetHashOk returns a tuple with the Hash field value
 // and a boolean to check if the value has been set.
 func (o *GetFileResponse) GetHashOk() (*string, bool) {
-	if o == nil || isNil(o.Hash) {
+	if o == nil {
     return nil, false
 	}
-	return o.Hash, true
+	return &o.Hash, true
 }
 
-// HasHash returns a boolean if a field has been set.
-func (o *GetFileResponse) HasHash() bool {
-	if o != nil && !isNil(o.Hash) {
-		return true
-	}
-
-	return false
-}
-
-// SetHash gets a reference to the given string and assigns it to the Hash field.
+// SetHash sets field value
 func (o *GetFileResponse) SetHash(v string) {
-	o.Hash = &v
+	o.Hash = v
 }
 
-// GetStatus returns the Status field value if set, zero value otherwise.
+// GetStatus returns the Status field value
 func (o *GetFileResponse) GetStatus() string {
-	if o == nil || isNil(o.Status) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Status
+
+	return o.Status
 }
 
-// GetStatusOk returns a tuple with the Status field value if set, nil otherwise
+// GetStatusOk returns a tuple with the Status field value
 // and a boolean to check if the value has been set.
 func (o *GetFileResponse) GetStatusOk() (*string, bool) {
-	if o == nil || isNil(o.Status) {
+	if o == nil {
     return nil, false
 	}
-	return o.Status, true
+	return &o.Status, true
 }
 
-// HasStatus returns a boolean if a field has been set.
-func (o *GetFileResponse) HasStatus() bool {
-	if o != nil && !isNil(o.Status) {
-		return true
-	}
-
-	return false
-}
-
-// SetStatus gets a reference to the given string and assigns it to the Status field.
+// SetStatus sets field value
 func (o *GetFileResponse) SetStatus(v string) {
-	o.Status = &v
+	o.Status = v
 }
 
 func (o GetFileResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if !isNil(o.FileName) {
+	if true {
 		toSerialize["fileName"] = o.FileName
 	}
-	if !isNil(o.Hash) {
+	if true {
 		toSerialize["hash"] = o.Hash
 	}
-	if !isNil(o.Status) {
+	if true {
 		toSerialize["status"] = o.Status
 	}
 	return json.Marshal(toSerialize)

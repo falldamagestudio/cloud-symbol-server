@@ -16,8 +16,8 @@ import (
 
 // UploadFileResponse struct for UploadFileResponse
 type UploadFileResponse struct {
-	FileName *string `json:"fileName,omitempty"`
-	Hash *string `json:"hash,omitempty"`
+	FileName string `json:"fileName"`
+	Hash string `json:"hash"`
 	// Short-lived signed URL where the client should upload the file to, or blank if the file already exists in the storage backend
 	Url *string `json:"url,omitempty"`
 }
@@ -26,8 +26,10 @@ type UploadFileResponse struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewUploadFileResponse() *UploadFileResponse {
+func NewUploadFileResponse(fileName string, hash string) *UploadFileResponse {
 	this := UploadFileResponse{}
+	this.FileName = fileName
+	this.Hash = hash
 	return &this
 }
 
@@ -39,68 +41,52 @@ func NewUploadFileResponseWithDefaults() *UploadFileResponse {
 	return &this
 }
 
-// GetFileName returns the FileName field value if set, zero value otherwise.
+// GetFileName returns the FileName field value
 func (o *UploadFileResponse) GetFileName() string {
-	if o == nil || isNil(o.FileName) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.FileName
+
+	return o.FileName
 }
 
-// GetFileNameOk returns a tuple with the FileName field value if set, nil otherwise
+// GetFileNameOk returns a tuple with the FileName field value
 // and a boolean to check if the value has been set.
 func (o *UploadFileResponse) GetFileNameOk() (*string, bool) {
-	if o == nil || isNil(o.FileName) {
+	if o == nil {
     return nil, false
 	}
-	return o.FileName, true
+	return &o.FileName, true
 }
 
-// HasFileName returns a boolean if a field has been set.
-func (o *UploadFileResponse) HasFileName() bool {
-	if o != nil && !isNil(o.FileName) {
-		return true
-	}
-
-	return false
-}
-
-// SetFileName gets a reference to the given string and assigns it to the FileName field.
+// SetFileName sets field value
 func (o *UploadFileResponse) SetFileName(v string) {
-	o.FileName = &v
+	o.FileName = v
 }
 
-// GetHash returns the Hash field value if set, zero value otherwise.
+// GetHash returns the Hash field value
 func (o *UploadFileResponse) GetHash() string {
-	if o == nil || isNil(o.Hash) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Hash
+
+	return o.Hash
 }
 
-// GetHashOk returns a tuple with the Hash field value if set, nil otherwise
+// GetHashOk returns a tuple with the Hash field value
 // and a boolean to check if the value has been set.
 func (o *UploadFileResponse) GetHashOk() (*string, bool) {
-	if o == nil || isNil(o.Hash) {
+	if o == nil {
     return nil, false
 	}
-	return o.Hash, true
+	return &o.Hash, true
 }
 
-// HasHash returns a boolean if a field has been set.
-func (o *UploadFileResponse) HasHash() bool {
-	if o != nil && !isNil(o.Hash) {
-		return true
-	}
-
-	return false
-}
-
-// SetHash gets a reference to the given string and assigns it to the Hash field.
+// SetHash sets field value
 func (o *UploadFileResponse) SetHash(v string) {
-	o.Hash = &v
+	o.Hash = v
 }
 
 // GetUrl returns the Url field value if set, zero value otherwise.
@@ -137,10 +123,10 @@ func (o *UploadFileResponse) SetUrl(v string) {
 
 func (o UploadFileResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if !isNil(o.FileName) {
+	if true {
 		toSerialize["fileName"] = o.FileName
 	}
-	if !isNil(o.Hash) {
+	if true {
 		toSerialize["hash"] = o.Hash
 	}
 	if !isNil(o.Url) {

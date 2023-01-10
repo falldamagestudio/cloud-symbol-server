@@ -12,17 +12,28 @@ package openapi
 type GetTokenResponse struct {
 
 	// Personal Access Token This token can be used for authentication when accessing non-token related APIs
-	Token string `json:"token,omitempty"`
+	Token string `json:"token"`
 
 	// Textual description of token Users fill this in to remind themselves the purpose of a token and/or where it is used
-	Description string `json:"description,omitempty"`
+	Description string `json:"description"`
 
 	// Creation timestamp, in RFC3339 format
-	CreationTimestamp string `json:"creationTimestamp,omitempty"`
+	CreationTimestamp string `json:"creationTimestamp"`
 }
 
 // AssertGetTokenResponseRequired checks if the required fields are not zero-ed
 func AssertGetTokenResponseRequired(obj GetTokenResponse) error {
+	elements := map[string]interface{}{
+		"token": obj.Token,
+		"description": obj.Description,
+		"creationTimestamp": obj.CreationTimestamp,
+	}
+	for name, el := range elements {
+		if isZero := IsZeroValue(el); isZero {
+			return &RequiredError{Field: name}
+		}
+	}
+
 	return nil
 }
 

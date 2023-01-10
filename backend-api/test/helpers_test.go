@@ -167,12 +167,12 @@ func populateTestStore(adminAPIClient *openapi_client.APIClient, authContext con
 
 	files := []openapi_client.UploadFileRequest{
 		{
-			FileName: &fileName1,
-			Hash:     &hash1,
+			FileName: fileName1,
+			Hash:     hash1,
 		},
 		{
-			FileName: &fileName2,
-			Hash:     &hash2,
+			FileName: fileName2,
+			Hash:     hash2,
 		},
 	}
 
@@ -193,7 +193,7 @@ func populateTestStore(adminAPIClient *openapi_client.APIClient, authContext con
 	retryClient := retry.NewClient()
 
 	for _, fileToUpload := range createStoreUploadResponse.Files {
-		content := contentUploads[*fileToUpload.FileName]
+		content := contentUploads[fileToUpload.FileName]
 
 		request, err := retry.NewRequest(http.MethodPut, *fileToUpload.Url, []byte(content))
 		if err != nil {
@@ -284,8 +284,8 @@ func upload(apiClient *openapi_client.APIClient, authContext context.Context, st
 		sourceFile := &testUpload.Files[fileIndex]
 		targetFile := &((*createStoreUploadRequest).Files)[fileIndex]
 
-		targetFile.FileName = &sourceFile.FileName
-		targetFile.Hash = &sourceFile.Hash
+		targetFile.FileName = sourceFile.FileName
+		targetFile.Hash = sourceFile.Hash
 	}
 
 	createStoreUploadResponse, _, err := apiClient.DefaultApi.CreateStoreUpload(authContext, storeId).CreateStoreUploadRequest(*createStoreUploadRequest).Execute()
@@ -295,7 +295,7 @@ func upload(apiClient *openapi_client.APIClient, authContext context.Context, st
 
 	// Upload individual files, and mark them as uploaded
 
-	storeUploadId := *createStoreUploadResponse.Id
+	storeUploadId := createStoreUploadResponse.Id
 
 	for fileIndex := range createStoreUploadRequest.Files {
 

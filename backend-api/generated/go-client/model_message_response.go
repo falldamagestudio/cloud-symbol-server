@@ -16,15 +16,16 @@ import (
 
 // MessageResponse struct for MessageResponse
 type MessageResponse struct {
-	Message *string `json:"message,omitempty"`
+	Message string `json:"message"`
 }
 
 // NewMessageResponse instantiates a new MessageResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewMessageResponse() *MessageResponse {
+func NewMessageResponse(message string) *MessageResponse {
 	this := MessageResponse{}
+	this.Message = message
 	return &this
 }
 
@@ -36,41 +37,33 @@ func NewMessageResponseWithDefaults() *MessageResponse {
 	return &this
 }
 
-// GetMessage returns the Message field value if set, zero value otherwise.
+// GetMessage returns the Message field value
 func (o *MessageResponse) GetMessage() string {
-	if o == nil || isNil(o.Message) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Message
+
+	return o.Message
 }
 
-// GetMessageOk returns a tuple with the Message field value if set, nil otherwise
+// GetMessageOk returns a tuple with the Message field value
 // and a boolean to check if the value has been set.
 func (o *MessageResponse) GetMessageOk() (*string, bool) {
-	if o == nil || isNil(o.Message) {
+	if o == nil {
     return nil, false
 	}
-	return o.Message, true
+	return &o.Message, true
 }
 
-// HasMessage returns a boolean if a field has been set.
-func (o *MessageResponse) HasMessage() bool {
-	if o != nil && !isNil(o.Message) {
-		return true
-	}
-
-	return false
-}
-
-// SetMessage gets a reference to the given string and assigns it to the Message field.
+// SetMessage sets field value
 func (o *MessageResponse) SetMessage(v string) {
-	o.Message = &v
+	o.Message = v
 }
 
 func (o MessageResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if !isNil(o.Message) {
+	if true {
 		toSerialize["message"] = o.Message
 	}
 	return json.Marshal(toSerialize)

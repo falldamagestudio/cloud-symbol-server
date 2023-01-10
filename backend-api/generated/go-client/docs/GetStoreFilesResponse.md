@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Files** | Pointer to **[]string** |  | [optional] 
-**Pagination** | Pointer to [**PaginationResponse**](PaginationResponse.md) |  | [optional] 
+**Files** | **[]string** |  | 
+**Pagination** | [**PaginationResponse**](PaginationResponse.md) |  | 
 
 ## Methods
 
 ### NewGetStoreFilesResponse
 
-`func NewGetStoreFilesResponse() *GetStoreFilesResponse`
+`func NewGetStoreFilesResponse(files []string, pagination PaginationResponse, ) *GetStoreFilesResponse`
 
 NewGetStoreFilesResponse instantiates a new GetStoreFilesResponse object
 This constructor will assign default values to properties that have it defined,
@@ -45,11 +45,6 @@ and a boolean to check if the value has been set.
 
 SetFiles sets Files field to given value.
 
-### HasFiles
-
-`func (o *GetStoreFilesResponse) HasFiles() bool`
-
-HasFiles returns a boolean if a field has been set.
 
 ### GetPagination
 
@@ -70,11 +65,6 @@ and a boolean to check if the value has been set.
 
 SetPagination sets Pagination field to given value.
 
-### HasPagination
-
-`func (o *GetStoreFilesResponse) HasPagination() bool`
-
-HasPagination returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

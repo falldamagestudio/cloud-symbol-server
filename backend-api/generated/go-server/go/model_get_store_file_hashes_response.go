@@ -11,13 +11,23 @@ package openapi
 
 type GetStoreFileHashesResponse struct {
 
-	Hashes []GetStoreFileHashResponse `json:"hashes,omitempty"`
+	Hashes []GetStoreFileHashResponse `json:"hashes"`
 
-	Pagination PaginationResponse `json:"pagination,omitempty"`
+	Pagination PaginationResponse `json:"pagination"`
 }
 
 // AssertGetStoreFileHashesResponseRequired checks if the required fields are not zero-ed
 func AssertGetStoreFileHashesResponseRequired(obj GetStoreFileHashesResponse) error {
+	elements := map[string]interface{}{
+		"hashes": obj.Hashes,
+		"pagination": obj.Pagination,
+	}
+	for name, el := range elements {
+		if isZero := IsZeroValue(el); isZero {
+			return &RequiredError{Field: name}
+		}
+	}
+
 	for _, el := range obj.Hashes {
 		if err := AssertGetStoreFileHashResponseRequired(el); err != nil {
 			return err

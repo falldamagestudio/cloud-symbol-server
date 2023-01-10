@@ -538,6 +538,8 @@ components:
 
     messageResponse:
       type: object
+      required:
+        - message
       properties:
         message:
           type: string
@@ -550,6 +552,8 @@ components:
 
     createTokenResponse:
       type: object
+      required:
+        - token
       properties:
         token:
           type: string
@@ -558,6 +562,10 @@ components:
 
     getTokenResponse:
       type: object
+      required:
+        - token
+        - description
+        - creationTimestamp
       properties:
         token:
           type: string
@@ -576,6 +584,8 @@ components:
 
     updateTokenRequest:
       type: object
+      required:
+        - description
       properties:
         description:
           type: string
@@ -591,6 +601,15 @@ components:
 
     createStoreUploadRequest:
       type: object
+      # This API call will continue to be used by legacy clients for some time. Those
+      #  may pass only some of these parameters. Therefore we leave all parameters here as
+      #  optional for the time being.
+      #
+      # required:
+      #   - useProgressApi
+      #   - description
+      #   - buildId
+      #   - files
       properties:
         useProgressApi:
           type: boolean
@@ -611,6 +630,9 @@ components:
 
     uploadFileRequest:
       type: object
+      required:
+        - fileName
+        - hash
       properties:
         fileName:
           type: string
@@ -630,6 +652,8 @@ components:
 
     paginationResponse:
       type: object
+      required:
+        - total
       properties:
         total:
           type: integer
@@ -637,6 +661,9 @@ components:
 
     getStoreFilesResponse:
       type: object
+      required:
+        - files
+        - pagination
       properties:
         files:
           type: array
@@ -647,6 +674,9 @@ components:
 
     getStoreFileHashResponse:
       type: object
+      required:
+        - hash
+        - status
       properties:
         hash: 
           type: string
@@ -656,6 +686,9 @@ components:
 
     getStoreFileHashesResponse:
       type: object
+      required:
+        - hashes
+        - pagination
       properties:
         hashes:
           type: array
@@ -666,6 +699,9 @@ components:
 
     createStoreUploadResponse:
       type: object
+      required:
+        - id
+        - files
       properties:
         id:
           type: string
@@ -677,6 +713,9 @@ components:
 
     uploadFileResponse:
       type: object
+      required:
+        - fileName
+        - hash
       properties:
         fileName:
           type: string
@@ -691,6 +730,12 @@ components:
 
     getStoreUploadResponse:
       type: object
+      required:
+        - description
+        - buildId
+        - timestamp
+        - files
+        - status
       properties:
         description:
           type: string
@@ -717,6 +762,10 @@ components:
 
     getFileResponse:
       type: object
+      required:
+        - fileName
+        - hash
+        - status
       properties:
         fileName:
           type: string

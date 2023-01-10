@@ -17,15 +17,16 @@ import (
 // UpdateTokenRequest struct for UpdateTokenRequest
 type UpdateTokenRequest struct {
 	// Textual description of token Users fill this in to remind themselves the purpose of a token and/or where it is used
-	Description *string `json:"description,omitempty"`
+	Description string `json:"description"`
 }
 
 // NewUpdateTokenRequest instantiates a new UpdateTokenRequest object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewUpdateTokenRequest() *UpdateTokenRequest {
+func NewUpdateTokenRequest(description string) *UpdateTokenRequest {
 	this := UpdateTokenRequest{}
+	this.Description = description
 	return &this
 }
 
@@ -37,41 +38,33 @@ func NewUpdateTokenRequestWithDefaults() *UpdateTokenRequest {
 	return &this
 }
 
-// GetDescription returns the Description field value if set, zero value otherwise.
+// GetDescription returns the Description field value
 func (o *UpdateTokenRequest) GetDescription() string {
-	if o == nil || isNil(o.Description) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Description
+
+	return o.Description
 }
 
-// GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
+// GetDescriptionOk returns a tuple with the Description field value
 // and a boolean to check if the value has been set.
 func (o *UpdateTokenRequest) GetDescriptionOk() (*string, bool) {
-	if o == nil || isNil(o.Description) {
+	if o == nil {
     return nil, false
 	}
-	return o.Description, true
+	return &o.Description, true
 }
 
-// HasDescription returns a boolean if a field has been set.
-func (o *UpdateTokenRequest) HasDescription() bool {
-	if o != nil && !isNil(o.Description) {
-		return true
-	}
-
-	return false
-}
-
-// SetDescription gets a reference to the given string and assigns it to the Description field.
+// SetDescription sets field value
 func (o *UpdateTokenRequest) SetDescription(v string) {
-	o.Description = &v
+	o.Description = v
 }
 
 func (o UpdateTokenRequest) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if !isNil(o.Description) {
+	if true {
 		toSerialize["description"] = o.Description
 	}
 	return json.Marshal(toSerialize)

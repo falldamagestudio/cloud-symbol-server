@@ -26,35 +26,43 @@ using OpenAPIDateConverter = BackendAPI.Client.OpenAPIDateConverter;
 namespace BackendAPI.Model
 {
     /// <summary>
-    /// MessageResponse
+    /// GetStoreFileHashResponse
     /// </summary>
-    [DataContract(Name = "messageResponse")]
-    public partial class MessageResponse : IEquatable<MessageResponse>, IValidatableObject
+    [DataContract(Name = "getStoreFileHashResponse")]
+    public partial class GetStoreFileHashResponse : IEquatable<GetStoreFileHashResponse>, IValidatableObject
     {
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="MessageResponse" /> class.
+        /// Gets or Sets Status
+        /// </summary>
+        [DataMember(Name = "status", IsRequired = true, EmitDefaultValue = true)]
+        public StoreFileHashStatus Status { get; set; }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetStoreFileHashResponse" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected MessageResponse() { }
+        protected GetStoreFileHashResponse() { }
         /// <summary>
-        /// Initializes a new instance of the <see cref="MessageResponse" /> class.
+        /// Initializes a new instance of the <see cref="GetStoreFileHashResponse" /> class.
         /// </summary>
-        /// <param name="message">message (required).</param>
-        public MessageResponse(string message = default(string))
+        /// <param name="hash">hash (required).</param>
+        /// <param name="status">status (required).</param>
+        public GetStoreFileHashResponse(string hash = default(string), StoreFileHashStatus status = default(StoreFileHashStatus))
         {
-            // to ensure "message" is required (not null)
-            if (message == null)
+            // to ensure "hash" is required (not null)
+            if (hash == null)
             {
-                throw new ArgumentNullException("message is a required property for MessageResponse and cannot be null");
+                throw new ArgumentNullException("hash is a required property for GetStoreFileHashResponse and cannot be null");
             }
-            this.Message = message;
+            this.Hash = hash;
+            this.Status = status;
         }
 
         /// <summary>
-        /// Gets or Sets Message
+        /// Gets or Sets Hash
         /// </summary>
-        [DataMember(Name = "message", IsRequired = true, EmitDefaultValue = true)]
-        public string Message { get; set; }
+        [DataMember(Name = "hash", IsRequired = true, EmitDefaultValue = true)]
+        public string Hash { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -63,8 +71,9 @@ namespace BackendAPI.Model
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("class MessageResponse {\n");
-            sb.Append("  Message: ").Append(Message).Append("\n");
+            sb.Append("class GetStoreFileHashResponse {\n");
+            sb.Append("  Hash: ").Append(Hash).Append("\n");
+            sb.Append("  Status: ").Append(Status).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -85,15 +94,15 @@ namespace BackendAPI.Model
         /// <returns>Boolean</returns>
         public override bool Equals(object input)
         {
-            return this.Equals(input as MessageResponse);
+            return this.Equals(input as GetStoreFileHashResponse);
         }
 
         /// <summary>
-        /// Returns true if MessageResponse instances are equal
+        /// Returns true if GetStoreFileHashResponse instances are equal
         /// </summary>
-        /// <param name="input">Instance of MessageResponse to be compared</param>
+        /// <param name="input">Instance of GetStoreFileHashResponse to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(MessageResponse input)
+        public bool Equals(GetStoreFileHashResponse input)
         {
             if (input == null)
             {
@@ -101,9 +110,13 @@ namespace BackendAPI.Model
             }
             return 
                 (
-                    this.Message == input.Message ||
-                    (this.Message != null &&
-                    this.Message.Equals(input.Message))
+                    this.Hash == input.Hash ||
+                    (this.Hash != null &&
+                    this.Hash.Equals(input.Hash))
+                ) && 
+                (
+                    this.Status == input.Status ||
+                    this.Status.Equals(input.Status)
                 );
         }
 
@@ -116,10 +129,11 @@ namespace BackendAPI.Model
             unchecked // Overflow is fine, just wrap
             {
                 int hashCode = 41;
-                if (this.Message != null)
+                if (this.Hash != null)
                 {
-                    hashCode = (hashCode * 59) + this.Message.GetHashCode();
+                    hashCode = (hashCode * 59) + this.Hash.GetHashCode();
                 }
+                hashCode = (hashCode * 59) + this.Status.GetHashCode();
                 return hashCode;
             }
         }

@@ -12,11 +12,20 @@ package openapi
 type UpdateTokenRequest struct {
 
 	// Textual description of token Users fill this in to remind themselves the purpose of a token and/or where it is used
-	Description string `json:"description,omitempty"`
+	Description string `json:"description"`
 }
 
 // AssertUpdateTokenRequestRequired checks if the required fields are not zero-ed
 func AssertUpdateTokenRequestRequired(obj UpdateTokenRequest) error {
+	elements := map[string]interface{}{
+		"description": obj.Description,
+	}
+	for name, el := range elements {
+		if isZero := IsZeroValue(el); isZero {
+			return &RequiredError{Field: name}
+		}
+	}
+
 	return nil
 }
 

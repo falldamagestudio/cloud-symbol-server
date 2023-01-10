@@ -1122,7 +1122,7 @@ import (
 
 func main() {
     token := "token_example" // string | ID of the token to update
-    updateTokenRequest := *openapiclient.NewUpdateTokenRequest() // UpdateTokenRequest | 
+    updateTokenRequest := *openapiclient.NewUpdateTokenRequest("Used for local testing purposes") // UpdateTokenRequest | 
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)

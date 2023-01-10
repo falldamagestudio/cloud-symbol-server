@@ -16,16 +16,18 @@ import (
 
 // GetStoreFileHashesResponse struct for GetStoreFileHashesResponse
 type GetStoreFileHashesResponse struct {
-	Hashes []GetStoreFileHashResponse `json:"hashes,omitempty"`
-	Pagination *PaginationResponse `json:"pagination,omitempty"`
+	Hashes []GetStoreFileHashResponse `json:"hashes"`
+	Pagination PaginationResponse `json:"pagination"`
 }
 
 // NewGetStoreFileHashesResponse instantiates a new GetStoreFileHashesResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetStoreFileHashesResponse() *GetStoreFileHashesResponse {
+func NewGetStoreFileHashesResponse(hashes []GetStoreFileHashResponse, pagination PaginationResponse) *GetStoreFileHashesResponse {
 	this := GetStoreFileHashesResponse{}
+	this.Hashes = hashes
+	this.Pagination = pagination
 	return &this
 }
 
@@ -37,76 +39,60 @@ func NewGetStoreFileHashesResponseWithDefaults() *GetStoreFileHashesResponse {
 	return &this
 }
 
-// GetHashes returns the Hashes field value if set, zero value otherwise.
+// GetHashes returns the Hashes field value
 func (o *GetStoreFileHashesResponse) GetHashes() []GetStoreFileHashResponse {
-	if o == nil || isNil(o.Hashes) {
+	if o == nil {
 		var ret []GetStoreFileHashResponse
 		return ret
 	}
+
 	return o.Hashes
 }
 
-// GetHashesOk returns a tuple with the Hashes field value if set, nil otherwise
+// GetHashesOk returns a tuple with the Hashes field value
 // and a boolean to check if the value has been set.
 func (o *GetStoreFileHashesResponse) GetHashesOk() ([]GetStoreFileHashResponse, bool) {
-	if o == nil || isNil(o.Hashes) {
+	if o == nil {
     return nil, false
 	}
 	return o.Hashes, true
 }
 
-// HasHashes returns a boolean if a field has been set.
-func (o *GetStoreFileHashesResponse) HasHashes() bool {
-	if o != nil && !isNil(o.Hashes) {
-		return true
-	}
-
-	return false
-}
-
-// SetHashes gets a reference to the given []GetStoreFileHashResponse and assigns it to the Hashes field.
+// SetHashes sets field value
 func (o *GetStoreFileHashesResponse) SetHashes(v []GetStoreFileHashResponse) {
 	o.Hashes = v
 }
 
-// GetPagination returns the Pagination field value if set, zero value otherwise.
+// GetPagination returns the Pagination field value
 func (o *GetStoreFileHashesResponse) GetPagination() PaginationResponse {
-	if o == nil || isNil(o.Pagination) {
+	if o == nil {
 		var ret PaginationResponse
 		return ret
 	}
-	return *o.Pagination
+
+	return o.Pagination
 }
 
-// GetPaginationOk returns a tuple with the Pagination field value if set, nil otherwise
+// GetPaginationOk returns a tuple with the Pagination field value
 // and a boolean to check if the value has been set.
 func (o *GetStoreFileHashesResponse) GetPaginationOk() (*PaginationResponse, bool) {
-	if o == nil || isNil(o.Pagination) {
+	if o == nil {
     return nil, false
 	}
-	return o.Pagination, true
+	return &o.Pagination, true
 }
 
-// HasPagination returns a boolean if a field has been set.
-func (o *GetStoreFileHashesResponse) HasPagination() bool {
-	if o != nil && !isNil(o.Pagination) {
-		return true
-	}
-
-	return false
-}
-
-// SetPagination gets a reference to the given PaginationResponse and assigns it to the Pagination field.
+// SetPagination sets field value
 func (o *GetStoreFileHashesResponse) SetPagination(v PaginationResponse) {
-	o.Pagination = &v
+	o.Pagination = v
 }
 
 func (o GetStoreFileHashesResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if !isNil(o.Hashes) {
+	if true {
 		toSerialize["hashes"] = o.Hashes
 	}
-	if !isNil(o.Pagination) {
+	if true {
 		toSerialize["pagination"] = o.Pagination
 	}
 	return json.Marshal(toSerialize)

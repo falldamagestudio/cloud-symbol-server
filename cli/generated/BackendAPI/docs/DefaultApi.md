@@ -10,6 +10,7 @@ All URIs are relative to *http://localhost*
 | [**DeleteStore**](DefaultApi.md#deletestore) | **DELETE** /stores/{storeId} | Delete an existing store |
 | [**DeleteToken**](DefaultApi.md#deletetoken) | **DELETE** /tokens/{token} | Delete a token for current user |
 | [**ExpireStoreUpload**](DefaultApi.md#expirestoreupload) | **POST** /stores/{storeId}/uploads/{uploadId}/expire | Expire store upload and consider files for GC |
+| [**GetStoreFileHashes**](DefaultApi.md#getstorefilehashes) | **GET** /stores/{storeId}/files/{fileId}/hashes | Fetch a list of hashes for a specific file in store |
 | [**GetStoreFiles**](DefaultApi.md#getstorefiles) | **GET** /stores/{storeId}/files | Fetch a list of files in store |
 | [**GetStoreUpload**](DefaultApi.md#getstoreupload) | **GET** /stores/{storeId}/uploads/{uploadId} | Fetch an upload |
 | [**GetStoreUploadIds**](DefaultApi.md#getstoreuploadids) | **GET** /stores/{storeId}/uploads | Fetch a list of all uploads in store |
@@ -569,6 +570,107 @@ void (empty response body)
 | **200** | Success |  -  |
 | **401** | Not authorized |  -  |
 | **404** | No such store/upload |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="getstorefilehashes"></a>
+# **GetStoreFileHashes**
+> GetStoreFileHashesResponse GetStoreFileHashes (string storeId, string fileId, int? offset = null, int? limit = null)
+
+Fetch a list of hashes for a specific file in store
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using BackendAPI.Api;
+using BackendAPI.Client;
+using BackendAPI.Model;
+
+namespace Example
+{
+    public class GetStoreFileHashesExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure HTTP basic authorization: emailAndPat
+            config.Username = "YOUR_USERNAME";
+            config.Password = "YOUR_PASSWORD";
+
+            var apiInstance = new DefaultApi(config);
+            var storeId = "storeId_example";  // string | ID of the store containing the file
+            var fileId = "fileId_example";  // string | ID of the file
+            var offset = 0;  // int? | How many entries to skip (used for pagination of results) (optional)  (default to 0)
+            var limit = 25;  // int? | Max number of results to return (used for pagination of results) (optional)  (default to 25)
+
+            try
+            {
+                // Fetch a list of hashes for a specific file in store
+                GetStoreFileHashesResponse result = apiInstance.GetStoreFileHashes(storeId, fileId, offset, limit);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling DefaultApi.GetStoreFileHashes: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the GetStoreFileHashesWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Fetch a list of hashes for a specific file in store
+    ApiResponse<GetStoreFileHashesResponse> response = apiInstance.GetStoreFileHashesWithHttpInfo(storeId, fileId, offset, limit);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling DefaultApi.GetStoreFileHashesWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **storeId** | **string** | ID of the store containing the file |  |
+| **fileId** | **string** | ID of the file |  |
+| **offset** | **int?** | How many entries to skip (used for pagination of results) | [optional] [default to 0] |
+| **limit** | **int?** | Max number of results to return (used for pagination of results) | [optional] [default to 25] |
+
+### Return type
+
+[**GetStoreFileHashesResponse**](GetStoreFileHashesResponse.md)
+
+### Authorization
+
+[emailAndPat](../README.md#emailAndPat)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **401** | Not authorized |  -  |
+| **404** | No such store |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

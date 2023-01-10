@@ -11,13 +11,23 @@ package openapi
 
 type CreateStoreUploadResponse struct {
 
-	Id string `json:"id,omitempty"`
+	Id string `json:"id"`
 
-	Files []UploadFileResponse `json:"files,omitempty"`
+	Files []UploadFileResponse `json:"files"`
 }
 
 // AssertCreateStoreUploadResponseRequired checks if the required fields are not zero-ed
 func AssertCreateStoreUploadResponseRequired(obj CreateStoreUploadResponse) error {
+	elements := map[string]interface{}{
+		"id": obj.Id,
+		"files": obj.Files,
+	}
+	for name, el := range elements {
+		if isZero := IsZeroValue(el); isZero {
+			return &RequiredError{Field: name}
+		}
+	}
+
 	for _, el := range obj.Files {
 		if err := AssertUploadFileResponseRequired(el); err != nil {
 			return err

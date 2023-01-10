@@ -34,9 +34,19 @@ namespace BackendAPI.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateTokenRequest" /> class.
         /// </summary>
-        /// <param name="description">Textual description of token Users fill this in to remind themselves the purpose of a token and/or where it is used.</param>
+        [JsonConstructorAttribute]
+        protected UpdateTokenRequest() { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpdateTokenRequest" /> class.
+        /// </summary>
+        /// <param name="description">Textual description of token Users fill this in to remind themselves the purpose of a token and/or where it is used (required).</param>
         public UpdateTokenRequest(string description = default(string))
         {
+            // to ensure "description" is required (not null)
+            if (description == null)
+            {
+                throw new ArgumentNullException("description is a required property for UpdateTokenRequest and cannot be null");
+            }
             this.Description = description;
         }
 
@@ -44,7 +54,7 @@ namespace BackendAPI.Model
         /// Textual description of token Users fill this in to remind themselves the purpose of a token and/or where it is used
         /// </summary>
         /// <value>Textual description of token Users fill this in to remind themselves the purpose of a token and/or where it is used</value>
-        [DataMember(Name = "description", EmitDefaultValue = false)]
+        [DataMember(Name = "description", IsRequired = true, EmitDefaultValue = true)]
         public string Description { get; set; }
 
         /// <summary>

@@ -11,11 +11,20 @@ package openapi
 
 type PaginationResponse struct {
 
-	Total int32 `json:"total,omitempty"`
+	Total int32 `json:"total"`
 }
 
 // AssertPaginationResponseRequired checks if the required fields are not zero-ed
 func AssertPaginationResponseRequired(obj PaginationResponse) error {
+	elements := map[string]interface{}{
+		"total": obj.Total,
+	}
+	for name, el := range elements {
+		if isZero := IsZeroValue(el); isZero {
+			return &RequiredError{Field: name}
+		}
+	}
+
 	return nil
 }
 

@@ -1,7 +1,6 @@
 package backend_api
 
 import (
-	"log"
 	"net/http"
 	"testing"
 )
@@ -84,8 +83,8 @@ func TestExpireRemovesOnlyFilesWithZeroReferences(t *testing.T) {
 		}
 
 		expectedNumFiles := int32(3)
-		if expectedNumFiles != *getStoreFilesResponse.Pagination.Total {
-			t.Fatalf("After upload 1 + 2, there should be %d files present, but only %d found", expectedNumFiles, *getStoreFilesResponse.Pagination.Total)
+		if expectedNumFiles != getStoreFilesResponse.Pagination.Total {
+			t.Fatalf("After upload 1 + 2, there should be %d files present, but only %d found", expectedNumFiles, getStoreFilesResponse.Pagination.Total)
 		}
 	}
 
@@ -105,8 +104,8 @@ func TestExpireRemovesOnlyFilesWithZeroReferences(t *testing.T) {
 		}
 
 		expectedNumFiles := int32(2)
-		if expectedNumFiles != *getStoreFilesResponse.Pagination.Total {
-			t.Fatalf("After upload 1 + 2 and expire 1, there should be %d files present, but only %d found", expectedNumFiles, *getStoreFilesResponse.Pagination.Total)
+		if expectedNumFiles != getStoreFilesResponse.Pagination.Total {
+			t.Fatalf("After upload 1 + 2 and expire 1, there should be %d files present, but only %d found", expectedNumFiles, getStoreFilesResponse.Pagination.Total)
 		}
 	}
 
@@ -126,8 +125,8 @@ func TestExpireRemovesOnlyFilesWithZeroReferences(t *testing.T) {
 		}
 
 		expectedNumFiles := int32(0)
-		if expectedNumFiles != *getStoreFilesResponse.Pagination.Total {
-			t.Fatalf("After upload 1 + 2 and expire 1 + 2, there should be %d files present, but only %d found", expectedNumFiles, *getStoreFilesResponse.Pagination.Total)
+		if expectedNumFiles != getStoreFilesResponse.Pagination.Total {
+			t.Fatalf("After upload 1 + 2 and expire 1 + 2, there should be %d files present, but only %d found", expectedNumFiles, getStoreFilesResponse.Pagination.Total)
 		}
 	}
 }

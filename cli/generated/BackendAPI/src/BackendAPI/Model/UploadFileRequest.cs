@@ -34,24 +34,39 @@ namespace BackendAPI.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="UploadFileRequest" /> class.
         /// </summary>
-        /// <param name="fileName">fileName.</param>
-        /// <param name="hash">hash.</param>
+        [JsonConstructorAttribute]
+        protected UploadFileRequest() { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UploadFileRequest" /> class.
+        /// </summary>
+        /// <param name="fileName">fileName (required).</param>
+        /// <param name="hash">hash (required).</param>
         public UploadFileRequest(string fileName = default(string), string hash = default(string))
         {
+            // to ensure "fileName" is required (not null)
+            if (fileName == null)
+            {
+                throw new ArgumentNullException("fileName is a required property for UploadFileRequest and cannot be null");
+            }
             this.FileName = fileName;
+            // to ensure "hash" is required (not null)
+            if (hash == null)
+            {
+                throw new ArgumentNullException("hash is a required property for UploadFileRequest and cannot be null");
+            }
             this.Hash = hash;
         }
 
         /// <summary>
         /// Gets or Sets FileName
         /// </summary>
-        [DataMember(Name = "fileName", EmitDefaultValue = false)]
+        [DataMember(Name = "fileName", IsRequired = true, EmitDefaultValue = true)]
         public string FileName { get; set; }
 
         /// <summary>
         /// Gets or Sets Hash
         /// </summary>
-        [DataMember(Name = "hash", EmitDefaultValue = false)]
+        [DataMember(Name = "hash", IsRequired = true, EmitDefaultValue = true)]
         public string Hash { get; set; }
 
         /// <summary>

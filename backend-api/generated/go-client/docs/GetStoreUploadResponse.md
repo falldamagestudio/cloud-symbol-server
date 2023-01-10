@@ -4,17 +4,17 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Description** | Pointer to **string** |  | [optional] 
-**BuildId** | Pointer to **string** |  | [optional] 
-**Timestamp** | Pointer to **string** |  | [optional] 
-**Files** | Pointer to [**[]GetFileResponse**](GetFileResponse.md) |  | [optional] 
-**Status** | Pointer to **string** |  | [optional] 
+**Description** | **string** |  | 
+**BuildId** | **string** |  | 
+**Timestamp** | **string** |  | 
+**Files** | [**[]GetFileResponse**](GetFileResponse.md) |  | 
+**Status** | **string** |  | 
 
 ## Methods
 
 ### NewGetStoreUploadResponse
 
-`func NewGetStoreUploadResponse() *GetStoreUploadResponse`
+`func NewGetStoreUploadResponse(description string, buildId string, timestamp string, files []GetFileResponse, status string, ) *GetStoreUploadResponse`
 
 NewGetStoreUploadResponse instantiates a new GetStoreUploadResponse object
 This constructor will assign default values to properties that have it defined,
@@ -48,11 +48,6 @@ and a boolean to check if the value has been set.
 
 SetDescription sets Description field to given value.
 
-### HasDescription
-
-`func (o *GetStoreUploadResponse) HasDescription() bool`
-
-HasDescription returns a boolean if a field has been set.
 
 ### GetBuildId
 
@@ -73,11 +68,6 @@ and a boolean to check if the value has been set.
 
 SetBuildId sets BuildId field to given value.
 
-### HasBuildId
-
-`func (o *GetStoreUploadResponse) HasBuildId() bool`
-
-HasBuildId returns a boolean if a field has been set.
 
 ### GetTimestamp
 
@@ -98,11 +88,6 @@ and a boolean to check if the value has been set.
 
 SetTimestamp sets Timestamp field to given value.
 
-### HasTimestamp
-
-`func (o *GetStoreUploadResponse) HasTimestamp() bool`
-
-HasTimestamp returns a boolean if a field has been set.
 
 ### GetFiles
 
@@ -123,11 +108,6 @@ and a boolean to check if the value has been set.
 
 SetFiles sets Files field to given value.
 
-### HasFiles
-
-`func (o *GetStoreUploadResponse) HasFiles() bool`
-
-HasFiles returns a boolean if a field has been set.
 
 ### GetStatus
 
@@ -148,11 +128,6 @@ and a boolean to check if the value has been set.
 
 SetStatus sets Status field to given value.
 
-### HasStatus
-
-`func (o *GetStoreUploadResponse) HasStatus() bool`
-
-HasStatus returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

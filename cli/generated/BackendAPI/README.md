@@ -110,6 +110,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**DeleteStore**](docs/DefaultApi.md#deletestore) | **DELETE** /stores/{storeId} | Delete an existing store
 *DefaultApi* | [**DeleteToken**](docs/DefaultApi.md#deletetoken) | **DELETE** /tokens/{token} | Delete a token for current user
 *DefaultApi* | [**ExpireStoreUpload**](docs/DefaultApi.md#expirestoreupload) | **POST** /stores/{storeId}/uploads/{uploadId}/expire | Expire store upload and consider files for GC
+*DefaultApi* | [**GetStoreFileHashes**](docs/DefaultApi.md#getstorefilehashes) | **GET** /stores/{storeId}/files/{fileId}/hashes | Fetch a list of hashes for a specific file in store
 *DefaultApi* | [**GetStoreFiles**](docs/DefaultApi.md#getstorefiles) | **GET** /stores/{storeId}/files | Fetch a list of files in store
 *DefaultApi* | [**GetStoreUpload**](docs/DefaultApi.md#getstoreupload) | **GET** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
 *DefaultApi* | [**GetStoreUploadIds**](docs/DefaultApi.md#getstoreuploadids) | **GET** /stores/{storeId}/uploads | Fetch a list of all uploads in store
@@ -129,11 +130,14 @@ Class | Method | HTTP request | Description
  - [Model.CreateStoreUploadResponse](docs/CreateStoreUploadResponse.md)
  - [Model.CreateTokenResponse](docs/CreateTokenResponse.md)
  - [Model.GetFileResponse](docs/GetFileResponse.md)
+ - [Model.GetStoreFileHashResponse](docs/GetStoreFileHashResponse.md)
+ - [Model.GetStoreFileHashesResponse](docs/GetStoreFileHashesResponse.md)
  - [Model.GetStoreFilesResponse](docs/GetStoreFilesResponse.md)
  - [Model.GetStoreUploadResponse](docs/GetStoreUploadResponse.md)
  - [Model.GetTokenResponse](docs/GetTokenResponse.md)
  - [Model.MessageResponse](docs/MessageResponse.md)
  - [Model.PaginationResponse](docs/PaginationResponse.md)
+ - [Model.StoreFileHashStatus](docs/StoreFileHashStatus.md)
  - [Model.UpdateTokenRequest](docs/UpdateTokenRequest.md)
  - [Model.UploadFileRequest](docs/UploadFileRequest.md)
  - [Model.UploadFileResponse](docs/UploadFileResponse.md)

@@ -109,16 +109,16 @@ func TestGetStoreFileHashesWithPaginationSucceeds(t *testing.T) {
 
 	files := []openapi_client.UploadFileRequest{
 		{
-			FileName: &fileName1,
-			Hash:     &hash1,
+			FileName: fileName1,
+			Hash:     hash1,
 		},
 		{
-			FileName: &fileName2,
-			Hash:     &hash2,
+			FileName: fileName2,
+			Hash:     hash2,
 		},
 		{
-			FileName: &fileName3,
-			Hash:     &hash3,
+			FileName: fileName3,
+			Hash:     hash3,
 		},
 	}
 
@@ -160,15 +160,15 @@ func TestGetStoreFileHashesWithPaginationSucceeds(t *testing.T) {
 	}
 
 	expectedUploadStatus := "in_progress"
-	if *getStoreUploadResponse.Status != expectedUploadStatus {
-		t.Fatalf("GetStoreUpload should return an upload with status %v, but it has status %v", expectedUploadStatus, *getStoreUploadResponse.Status)
+	if getStoreUploadResponse.Status != expectedUploadStatus {
+		t.Fatalf("GetStoreUpload should return an upload with status %v, but it has status %v", expectedUploadStatus, getStoreUploadResponse.Status)
 	}
 
 	// Ensure file is in "pending" status
 
 	expectedUploadFileStatus := "pending"
-	if *(getStoreUploadResponse.Files)[0].Status != expectedUploadFileStatus {
-		t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, *(getStoreUploadResponse.Files)[0].Status)
+	if (getStoreUploadResponse.Files)[0].Status != expectedUploadFileStatus {
+		t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, (getStoreUploadResponse.Files)[0].Status)
 	}
 
 	// Complete upload of first file
@@ -193,15 +193,15 @@ func TestGetStoreFileHashesWithPaginationSucceeds(t *testing.T) {
 		}
 
 		expectedUploadStatus := "in_progress"
-		if *getStoreUploadResponse.Status != expectedUploadStatus {
-			t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadStatus, *getStoreUploadResponse.Status)
+		if getStoreUploadResponse.Status != expectedUploadStatus {
+			t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadStatus, getStoreUploadResponse.Status)
 		}
 
 		// Ensure file has transitioned to "uploaded" status
 
 		expectedUploadFileStatus := "completed"
-		if *(getStoreUploadResponse.Files)[0].Status != expectedUploadFileStatus {
-			t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, *(getStoreUploadResponse.Files)[0].Status)
+		if (getStoreUploadResponse.Files)[0].Status != expectedUploadFileStatus {
+			t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, (getStoreUploadResponse.Files)[0].Status)
 		}
 
 		// Fetch store-file info
@@ -216,8 +216,8 @@ func TestGetStoreFileHashesWithPaginationSucceeds(t *testing.T) {
 
 		expectedNumResults := 2
 		expectedTotalResults := int32(2)
-		if (len(getStoreFileHashesResponse.Hashes) != expectedNumResults) || (*getStoreFileHashesResponse.Pagination.Total != expectedTotalResults) || (*(getStoreFileHashesResponse.Hashes)[0].Hash != hash1) || (*(getStoreFileHashesResponse.Hashes)[1].Hash != hash2) {
-			t.Fatalf("GetStoreFileHashes should show %v results with hashes %v & %v, and %v total, but shows the following hashes: %v, and total: %v", expectedNumResults, hash1, hash2, expectedTotalResults, getStoreFileHashesResponse.Hashes, *getStoreFileHashesResponse.Pagination.Total)
+		if (len(getStoreFileHashesResponse.Hashes) != expectedNumResults) || (getStoreFileHashesResponse.Pagination.Total != expectedTotalResults) || (getStoreFileHashesResponse.Hashes[0].Hash != hash1) || ((getStoreFileHashesResponse.Hashes)[1].Hash != hash2) {
+			t.Fatalf("GetStoreFileHashes should show %v results with hashes %v & %v, and %v total, but shows the following hashes: %v, and total: %v", expectedNumResults, hash1, hash2, expectedTotalResults, getStoreFileHashesResponse.Hashes, getStoreFileHashesResponse.Pagination.Total)
 		}
 	}
 
@@ -235,8 +235,8 @@ func TestGetStoreFileHashesWithPaginationSucceeds(t *testing.T) {
 
 		expectedNumResults := 1
 		expectedTotalResults := int32(2)
-		if (len(getStoreFileHashesResponse.Hashes) != expectedNumResults) || (*getStoreFileHashesResponse.Pagination.Total != expectedTotalResults) || (*(getStoreFileHashesResponse.Hashes)[0].Hash != hash1) {
-			t.Fatalf("GetStoreFileHashes should show %v result with hash %v, and %v total, but shows the following files: %v, and total: %v", expectedNumResults, hash1, expectedTotalResults, getStoreFileHashesResponse.Hashes, *getStoreFileHashesResponse.Pagination.Total)
+		if (len(getStoreFileHashesResponse.Hashes) != expectedNumResults) || (getStoreFileHashesResponse.Pagination.Total != expectedTotalResults) || (getStoreFileHashesResponse.Hashes[0].Hash != hash1) {
+			t.Fatalf("GetStoreFileHashes should show %v result with hash %v, and %v total, but shows the following files: %v, and total: %v", expectedNumResults, hash1, expectedTotalResults, getStoreFileHashesResponse.Hashes, getStoreFileHashesResponse.Pagination.Total)
 		}
 	}
 
@@ -253,8 +253,8 @@ func TestGetStoreFileHashesWithPaginationSucceeds(t *testing.T) {
 
 		expectedNumResults := 1
 		expectedTotalResults := int32(2)
-		if (len(getStoreFileHashesResponse.Hashes) != expectedNumResults) || (*getStoreFileHashesResponse.Pagination.Total != expectedTotalResults) || (*(getStoreFileHashesResponse.Hashes)[0].Hash != hash2) {
-			t.Fatalf("GetStoreFileHashes should show %v results with hash %v, and %v total, but shows the following files: %v, and total: %v", expectedNumResults, hash2, expectedTotalResults, getStoreFileHashesResponse.Hashes, *getStoreFileHashesResponse.Pagination.Total)
+		if (len(getStoreFileHashesResponse.Hashes) != expectedNumResults) || (getStoreFileHashesResponse.Pagination.Total != expectedTotalResults) || (getStoreFileHashesResponse.Hashes[0].Hash != hash2) {
+			t.Fatalf("GetStoreFileHashes should show %v results with hash %v, and %v total, but shows the following files: %v, and total: %v", expectedNumResults, hash2, expectedTotalResults, getStoreFileHashesResponse.Hashes, getStoreFileHashesResponse.Pagination.Total)
 		}
 	}
 }

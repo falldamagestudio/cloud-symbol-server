@@ -34,12 +34,27 @@ namespace BackendAPI.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="UploadFileResponse" /> class.
         /// </summary>
-        /// <param name="fileName">fileName.</param>
-        /// <param name="hash">hash.</param>
+        [JsonConstructorAttribute]
+        protected UploadFileResponse() { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UploadFileResponse" /> class.
+        /// </summary>
+        /// <param name="fileName">fileName (required).</param>
+        /// <param name="hash">hash (required).</param>
         /// <param name="url">Short-lived signed URL where the client should upload the file to, or blank if the file already exists in the storage backend.</param>
         public UploadFileResponse(string fileName = default(string), string hash = default(string), string url = default(string))
         {
+            // to ensure "fileName" is required (not null)
+            if (fileName == null)
+            {
+                throw new ArgumentNullException("fileName is a required property for UploadFileResponse and cannot be null");
+            }
             this.FileName = fileName;
+            // to ensure "hash" is required (not null)
+            if (hash == null)
+            {
+                throw new ArgumentNullException("hash is a required property for UploadFileResponse and cannot be null");
+            }
             this.Hash = hash;
             this.Url = url;
         }
@@ -47,13 +62,13 @@ namespace BackendAPI.Model
         /// <summary>
         /// Gets or Sets FileName
         /// </summary>
-        [DataMember(Name = "fileName", EmitDefaultValue = false)]
+        [DataMember(Name = "fileName", IsRequired = true, EmitDefaultValue = true)]
         public string FileName { get; set; }
 
         /// <summary>
         /// Gets or Sets Hash
         /// </summary>
-        [DataMember(Name = "hash", EmitDefaultValue = false)]
+        [DataMember(Name = "hash", IsRequired = true, EmitDefaultValue = true)]
         public string Hash { get; set; }
 
         /// <summary>

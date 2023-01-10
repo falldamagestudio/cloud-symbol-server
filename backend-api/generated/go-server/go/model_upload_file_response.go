@@ -11,9 +11,9 @@ package openapi
 
 type UploadFileResponse struct {
 
-	FileName string `json:"fileName,omitempty"`
+	FileName string `json:"fileName"`
 
-	Hash string `json:"hash,omitempty"`
+	Hash string `json:"hash"`
 
 	// Short-lived signed URL where the client should upload the file to, or blank if the file already exists in the storage backend
 	Url string `json:"url,omitempty"`
@@ -21,6 +21,16 @@ type UploadFileResponse struct {
 
 // AssertUploadFileResponseRequired checks if the required fields are not zero-ed
 func AssertUploadFileResponseRequired(obj UploadFileResponse) error {
+	elements := map[string]interface{}{
+		"fileName": obj.FileName,
+		"hash": obj.Hash,
+	}
+	for name, el := range elements {
+		if isZero := IsZeroValue(el); isZero {
+			return &RequiredError{Field: name}
+		}
+	}
+
 	return nil
 }
 

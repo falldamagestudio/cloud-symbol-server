@@ -34,13 +34,33 @@ namespace BackendAPI.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="GetTokenResponse" /> class.
         /// </summary>
-        /// <param name="token">Personal Access Token This token can be used for authentication when accessing non-token related APIs.</param>
-        /// <param name="description">Textual description of token Users fill this in to remind themselves the purpose of a token and/or where it is used.</param>
-        /// <param name="creationTimestamp">Creation timestamp, in RFC3339 format.</param>
+        [JsonConstructorAttribute]
+        protected GetTokenResponse() { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetTokenResponse" /> class.
+        /// </summary>
+        /// <param name="token">Personal Access Token This token can be used for authentication when accessing non-token related APIs (required).</param>
+        /// <param name="description">Textual description of token Users fill this in to remind themselves the purpose of a token and/or where it is used (required).</param>
+        /// <param name="creationTimestamp">Creation timestamp, in RFC3339 format (required).</param>
         public GetTokenResponse(string token = default(string), string description = default(string), string creationTimestamp = default(string))
         {
+            // to ensure "token" is required (not null)
+            if (token == null)
+            {
+                throw new ArgumentNullException("token is a required property for GetTokenResponse and cannot be null");
+            }
             this.Token = token;
+            // to ensure "description" is required (not null)
+            if (description == null)
+            {
+                throw new ArgumentNullException("description is a required property for GetTokenResponse and cannot be null");
+            }
             this.Description = description;
+            // to ensure "creationTimestamp" is required (not null)
+            if (creationTimestamp == null)
+            {
+                throw new ArgumentNullException("creationTimestamp is a required property for GetTokenResponse and cannot be null");
+            }
             this.CreationTimestamp = creationTimestamp;
         }
 
@@ -48,21 +68,21 @@ namespace BackendAPI.Model
         /// Personal Access Token This token can be used for authentication when accessing non-token related APIs
         /// </summary>
         /// <value>Personal Access Token This token can be used for authentication when accessing non-token related APIs</value>
-        [DataMember(Name = "token", EmitDefaultValue = false)]
+        [DataMember(Name = "token", IsRequired = true, EmitDefaultValue = true)]
         public string Token { get; set; }
 
         /// <summary>
         /// Textual description of token Users fill this in to remind themselves the purpose of a token and/or where it is used
         /// </summary>
         /// <value>Textual description of token Users fill this in to remind themselves the purpose of a token and/or where it is used</value>
-        [DataMember(Name = "description", EmitDefaultValue = false)]
+        [DataMember(Name = "description", IsRequired = true, EmitDefaultValue = true)]
         public string Description { get; set; }
 
         /// <summary>
         /// Creation timestamp, in RFC3339 format
         /// </summary>
         /// <value>Creation timestamp, in RFC3339 format</value>
-        [DataMember(Name = "creationTimestamp", EmitDefaultValue = false)]
+        [DataMember(Name = "creationTimestamp", IsRequired = true, EmitDefaultValue = true)]
         public string CreationTimestamp { get; set; }
 
         /// <summary>

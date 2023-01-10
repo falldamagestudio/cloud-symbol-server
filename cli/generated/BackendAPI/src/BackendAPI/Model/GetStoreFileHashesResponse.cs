@@ -26,35 +26,48 @@ using OpenAPIDateConverter = BackendAPI.Client.OpenAPIDateConverter;
 namespace BackendAPI.Model
 {
     /// <summary>
-    /// MessageResponse
+    /// GetStoreFileHashesResponse
     /// </summary>
-    [DataContract(Name = "messageResponse")]
-    public partial class MessageResponse : IEquatable<MessageResponse>, IValidatableObject
+    [DataContract(Name = "getStoreFileHashesResponse")]
+    public partial class GetStoreFileHashesResponse : IEquatable<GetStoreFileHashesResponse>, IValidatableObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MessageResponse" /> class.
+        /// Initializes a new instance of the <see cref="GetStoreFileHashesResponse" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected MessageResponse() { }
+        protected GetStoreFileHashesResponse() { }
         /// <summary>
-        /// Initializes a new instance of the <see cref="MessageResponse" /> class.
+        /// Initializes a new instance of the <see cref="GetStoreFileHashesResponse" /> class.
         /// </summary>
-        /// <param name="message">message (required).</param>
-        public MessageResponse(string message = default(string))
+        /// <param name="hashes">hashes (required).</param>
+        /// <param name="pagination">pagination (required).</param>
+        public GetStoreFileHashesResponse(List<GetStoreFileHashResponse> hashes = default(List<GetStoreFileHashResponse>), PaginationResponse pagination = default(PaginationResponse))
         {
-            // to ensure "message" is required (not null)
-            if (message == null)
+            // to ensure "hashes" is required (not null)
+            if (hashes == null)
             {
-                throw new ArgumentNullException("message is a required property for MessageResponse and cannot be null");
+                throw new ArgumentNullException("hashes is a required property for GetStoreFileHashesResponse and cannot be null");
             }
-            this.Message = message;
+            this.Hashes = hashes;
+            // to ensure "pagination" is required (not null)
+            if (pagination == null)
+            {
+                throw new ArgumentNullException("pagination is a required property for GetStoreFileHashesResponse and cannot be null");
+            }
+            this.Pagination = pagination;
         }
 
         /// <summary>
-        /// Gets or Sets Message
+        /// Gets or Sets Hashes
         /// </summary>
-        [DataMember(Name = "message", IsRequired = true, EmitDefaultValue = true)]
-        public string Message { get; set; }
+        [DataMember(Name = "hashes", IsRequired = true, EmitDefaultValue = true)]
+        public List<GetStoreFileHashResponse> Hashes { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Pagination
+        /// </summary>
+        [DataMember(Name = "pagination", IsRequired = true, EmitDefaultValue = true)]
+        public PaginationResponse Pagination { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -63,8 +76,9 @@ namespace BackendAPI.Model
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("class MessageResponse {\n");
-            sb.Append("  Message: ").Append(Message).Append("\n");
+            sb.Append("class GetStoreFileHashesResponse {\n");
+            sb.Append("  Hashes: ").Append(Hashes).Append("\n");
+            sb.Append("  Pagination: ").Append(Pagination).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -85,15 +99,15 @@ namespace BackendAPI.Model
         /// <returns>Boolean</returns>
         public override bool Equals(object input)
         {
-            return this.Equals(input as MessageResponse);
+            return this.Equals(input as GetStoreFileHashesResponse);
         }
 
         /// <summary>
-        /// Returns true if MessageResponse instances are equal
+        /// Returns true if GetStoreFileHashesResponse instances are equal
         /// </summary>
-        /// <param name="input">Instance of MessageResponse to be compared</param>
+        /// <param name="input">Instance of GetStoreFileHashesResponse to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(MessageResponse input)
+        public bool Equals(GetStoreFileHashesResponse input)
         {
             if (input == null)
             {
@@ -101,9 +115,15 @@ namespace BackendAPI.Model
             }
             return 
                 (
-                    this.Message == input.Message ||
-                    (this.Message != null &&
-                    this.Message.Equals(input.Message))
+                    this.Hashes == input.Hashes ||
+                    this.Hashes != null &&
+                    input.Hashes != null &&
+                    this.Hashes.SequenceEqual(input.Hashes)
+                ) && 
+                (
+                    this.Pagination == input.Pagination ||
+                    (this.Pagination != null &&
+                    this.Pagination.Equals(input.Pagination))
                 );
         }
 
@@ -116,9 +136,13 @@ namespace BackendAPI.Model
             unchecked // Overflow is fine, just wrap
             {
                 int hashCode = 41;
-                if (this.Message != null)
+                if (this.Hashes != null)
                 {
-                    hashCode = (hashCode * 59) + this.Message.GetHashCode();
+                    hashCode = (hashCode * 59) + this.Hashes.GetHashCode();
+                }
+                if (this.Pagination != null)
+                {
+                    hashCode = (hashCode * 59) + this.Pagination.GetHashCode();
                 }
                 return hashCode;
             }

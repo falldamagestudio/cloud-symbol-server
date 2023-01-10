@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Token** | Pointer to **string** | Personal Access Token | [optional] 
+**Token** | **string** | Personal Access Token | 
 
 ## Methods
 
 ### NewCreateTokenResponse
 
-`func NewCreateTokenResponse() *CreateTokenResponse`
+`func NewCreateTokenResponse(token string, ) *CreateTokenResponse`
 
 NewCreateTokenResponse instantiates a new CreateTokenResponse object
 This constructor will assign default values to properties that have it defined,
@@ -44,11 +44,6 @@ and a boolean to check if the value has been set.
 
 SetToken sets Token field to given value.
 
-### HasToken
-
-`func (o *CreateTokenResponse) HasToken() bool`
-
-HasToken returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

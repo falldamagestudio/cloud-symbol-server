@@ -34,9 +34,19 @@ namespace BackendAPI.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateTokenResponse" /> class.
         /// </summary>
-        /// <param name="token">Personal Access Token.</param>
+        [JsonConstructorAttribute]
+        protected CreateTokenResponse() { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreateTokenResponse" /> class.
+        /// </summary>
+        /// <param name="token">Personal Access Token (required).</param>
         public CreateTokenResponse(string token = default(string))
         {
+            // to ensure "token" is required (not null)
+            if (token == null)
+            {
+                throw new ArgumentNullException("token is a required property for CreateTokenResponse and cannot be null");
+            }
             this.Token = token;
         }
 
@@ -44,7 +54,7 @@ namespace BackendAPI.Model
         /// Personal Access Token
         /// </summary>
         /// <value>Personal Access Token</value>
-        [DataMember(Name = "token", EmitDefaultValue = false)]
+        [DataMember(Name = "token", IsRequired = true, EmitDefaultValue = true)]
         public string Token { get; set; }
 
         /// <summary>

@@ -34,24 +34,39 @@ namespace BackendAPI.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateStoreUploadResponse" /> class.
         /// </summary>
-        /// <param name="id">id.</param>
-        /// <param name="files">files.</param>
+        [JsonConstructorAttribute]
+        protected CreateStoreUploadResponse() { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreateStoreUploadResponse" /> class.
+        /// </summary>
+        /// <param name="id">id (required).</param>
+        /// <param name="files">files (required).</param>
         public CreateStoreUploadResponse(string id = default(string), List<UploadFileResponse> files = default(List<UploadFileResponse>))
         {
+            // to ensure "id" is required (not null)
+            if (id == null)
+            {
+                throw new ArgumentNullException("id is a required property for CreateStoreUploadResponse and cannot be null");
+            }
             this.Id = id;
+            // to ensure "files" is required (not null)
+            if (files == null)
+            {
+                throw new ArgumentNullException("files is a required property for CreateStoreUploadResponse and cannot be null");
+            }
             this.Files = files;
         }
 
         /// <summary>
         /// Gets or Sets Id
         /// </summary>
-        [DataMember(Name = "id", EmitDefaultValue = false)]
+        [DataMember(Name = "id", IsRequired = true, EmitDefaultValue = true)]
         public string Id { get; set; }
 
         /// <summary>
         /// Gets or Sets Files
         /// </summary>
-        [DataMember(Name = "files", EmitDefaultValue = false)]
+        [DataMember(Name = "files", IsRequired = true, EmitDefaultValue = true)]
         public List<UploadFileResponse> Files { get; set; }
 
         /// <summary>

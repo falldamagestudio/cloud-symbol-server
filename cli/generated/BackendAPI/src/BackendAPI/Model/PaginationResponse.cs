@@ -34,7 +34,12 @@ namespace BackendAPI.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="PaginationResponse" /> class.
         /// </summary>
-        /// <param name="total">total.</param>
+        [JsonConstructorAttribute]
+        protected PaginationResponse() { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PaginationResponse" /> class.
+        /// </summary>
+        /// <param name="total">total (required).</param>
         public PaginationResponse(int total = default(int))
         {
             this.Total = total;
@@ -43,7 +48,7 @@ namespace BackendAPI.Model
         /// <summary>
         /// Gets or Sets Total
         /// </summary>
-        [DataMember(Name = "total", EmitDefaultValue = false)]
+        [DataMember(Name = "total", IsRequired = true, EmitDefaultValue = true)]
         public int Total { get; set; }
 
         /// <summary>

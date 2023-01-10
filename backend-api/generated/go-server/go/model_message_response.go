@@ -11,11 +11,20 @@ package openapi
 
 type MessageResponse struct {
 
-	Message string `json:"message,omitempty"`
+	Message string `json:"message"`
 }
 
 // AssertMessageResponseRequired checks if the required fields are not zero-ed
 func AssertMessageResponseRequired(obj MessageResponse) error {
+	elements := map[string]interface{}{
+		"message": obj.Message,
+	}
+	for name, el := range elements {
+		if isZero := IsZeroValue(el); isZero {
+			return &RequiredError{Field: name}
+		}
+	}
+
 	return nil
 }
 

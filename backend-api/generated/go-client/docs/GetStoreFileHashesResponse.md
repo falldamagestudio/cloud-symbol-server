@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Hashes** | Pointer to [**[]GetStoreFileHashResponse**](GetStoreFileHashResponse.md) |  | [optional] 
-**Pagination** | Pointer to [**PaginationResponse**](PaginationResponse.md) |  | [optional] 
+**Hashes** | [**[]GetStoreFileHashResponse**](GetStoreFileHashResponse.md) |  | 
+**Pagination** | [**PaginationResponse**](PaginationResponse.md) |  | 
 
 ## Methods
 
 ### NewGetStoreFileHashesResponse
 
-`func NewGetStoreFileHashesResponse() *GetStoreFileHashesResponse`
+`func NewGetStoreFileHashesResponse(hashes []GetStoreFileHashResponse, pagination PaginationResponse, ) *GetStoreFileHashesResponse`
 
 NewGetStoreFileHashesResponse instantiates a new GetStoreFileHashesResponse object
 This constructor will assign default values to properties that have it defined,
@@ -45,11 +45,6 @@ and a boolean to check if the value has been set.
 
 SetHashes sets Hashes field to given value.
 
-### HasHashes
-
-`func (o *GetStoreFileHashesResponse) HasHashes() bool`
-
-HasHashes returns a boolean if a field has been set.
 
 ### GetPagination
 
@@ -70,11 +65,6 @@ and a boolean to check if the value has been set.
 
 SetPagination sets Pagination field to given value.
 
-### HasPagination
-
-`func (o *GetStoreFileHashesResponse) HasPagination() bool`
-
-HasPagination returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

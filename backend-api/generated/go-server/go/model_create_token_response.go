@@ -12,11 +12,20 @@ package openapi
 type CreateTokenResponse struct {
 
 	// Personal Access Token
-	Token string `json:"token,omitempty"`
+	Token string `json:"token"`
 }
 
 // AssertCreateTokenResponseRequired checks if the required fields are not zero-ed
 func AssertCreateTokenResponseRequired(obj CreateTokenResponse) error {
+	elements := map[string]interface{}{
+		"token": obj.Token,
+	}
+	for name, el := range elements {
+		if isZero := IsZeroValue(el); isZero {
+			return &RequiredError{Field: name}
+		}
+	}
+
 	return nil
 }
 

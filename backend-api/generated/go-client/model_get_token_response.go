@@ -17,19 +17,22 @@ import (
 // GetTokenResponse struct for GetTokenResponse
 type GetTokenResponse struct {
 	// Personal Access Token This token can be used for authentication when accessing non-token related APIs
-	Token *string `json:"token,omitempty"`
+	Token string `json:"token"`
 	// Textual description of token Users fill this in to remind themselves the purpose of a token and/or where it is used
-	Description *string `json:"description,omitempty"`
+	Description string `json:"description"`
 	// Creation timestamp, in RFC3339 format
-	CreationTimestamp *string `json:"creationTimestamp,omitempty"`
+	CreationTimestamp string `json:"creationTimestamp"`
 }
 
 // NewGetTokenResponse instantiates a new GetTokenResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetTokenResponse() *GetTokenResponse {
+func NewGetTokenResponse(token string, description string, creationTimestamp string) *GetTokenResponse {
 	this := GetTokenResponse{}
+	this.Token = token
+	this.Description = description
+	this.CreationTimestamp = creationTimestamp
 	return &this
 }
 
@@ -41,111 +44,87 @@ func NewGetTokenResponseWithDefaults() *GetTokenResponse {
 	return &this
 }
 
-// GetToken returns the Token field value if set, zero value otherwise.
+// GetToken returns the Token field value
 func (o *GetTokenResponse) GetToken() string {
-	if o == nil || isNil(o.Token) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Token
+
+	return o.Token
 }
 
-// GetTokenOk returns a tuple with the Token field value if set, nil otherwise
+// GetTokenOk returns a tuple with the Token field value
 // and a boolean to check if the value has been set.
 func (o *GetTokenResponse) GetTokenOk() (*string, bool) {
-	if o == nil || isNil(o.Token) {
+	if o == nil {
     return nil, false
 	}
-	return o.Token, true
+	return &o.Token, true
 }
 
-// HasToken returns a boolean if a field has been set.
-func (o *GetTokenResponse) HasToken() bool {
-	if o != nil && !isNil(o.Token) {
-		return true
-	}
-
-	return false
-}
-
-// SetToken gets a reference to the given string and assigns it to the Token field.
+// SetToken sets field value
 func (o *GetTokenResponse) SetToken(v string) {
-	o.Token = &v
+	o.Token = v
 }
 
-// GetDescription returns the Description field value if set, zero value otherwise.
+// GetDescription returns the Description field value
 func (o *GetTokenResponse) GetDescription() string {
-	if o == nil || isNil(o.Description) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Description
+
+	return o.Description
 }
 
-// GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
+// GetDescriptionOk returns a tuple with the Description field value
 // and a boolean to check if the value has been set.
 func (o *GetTokenResponse) GetDescriptionOk() (*string, bool) {
-	if o == nil || isNil(o.Description) {
+	if o == nil {
     return nil, false
 	}
-	return o.Description, true
+	return &o.Description, true
 }
 
-// HasDescription returns a boolean if a field has been set.
-func (o *GetTokenResponse) HasDescription() bool {
-	if o != nil && !isNil(o.Description) {
-		return true
-	}
-
-	return false
-}
-
-// SetDescription gets a reference to the given string and assigns it to the Description field.
+// SetDescription sets field value
 func (o *GetTokenResponse) SetDescription(v string) {
-	o.Description = &v
+	o.Description = v
 }
 
-// GetCreationTimestamp returns the CreationTimestamp field value if set, zero value otherwise.
+// GetCreationTimestamp returns the CreationTimestamp field value
 func (o *GetTokenResponse) GetCreationTimestamp() string {
-	if o == nil || isNil(o.CreationTimestamp) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.CreationTimestamp
+
+	return o.CreationTimestamp
 }
 
-// GetCreationTimestampOk returns a tuple with the CreationTimestamp field value if set, nil otherwise
+// GetCreationTimestampOk returns a tuple with the CreationTimestamp field value
 // and a boolean to check if the value has been set.
 func (o *GetTokenResponse) GetCreationTimestampOk() (*string, bool) {
-	if o == nil || isNil(o.CreationTimestamp) {
+	if o == nil {
     return nil, false
 	}
-	return o.CreationTimestamp, true
+	return &o.CreationTimestamp, true
 }
 
-// HasCreationTimestamp returns a boolean if a field has been set.
-func (o *GetTokenResponse) HasCreationTimestamp() bool {
-	if o != nil && !isNil(o.CreationTimestamp) {
-		return true
-	}
-
-	return false
-}
-
-// SetCreationTimestamp gets a reference to the given string and assigns it to the CreationTimestamp field.
+// SetCreationTimestamp sets field value
 func (o *GetTokenResponse) SetCreationTimestamp(v string) {
-	o.CreationTimestamp = &v
+	o.CreationTimestamp = v
 }
 
 func (o GetTokenResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if !isNil(o.Token) {
+	if true {
 		toSerialize["token"] = o.Token
 	}
-	if !isNil(o.Description) {
+	if true {
 		toSerialize["description"] = o.Description
 	}
-	if !isNil(o.CreationTimestamp) {
+	if true {
 		toSerialize["creationTimestamp"] = o.CreationTimestamp
 	}
 	return json.Marshal(toSerialize)

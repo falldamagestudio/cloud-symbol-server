@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Files** | Pointer to [**[]UploadFileResponse**](UploadFileResponse.md) |  | [optional] 
+**Id** | **string** |  | 
+**Files** | [**[]UploadFileResponse**](UploadFileResponse.md) |  | 
 
 ## Methods
 
 ### NewCreateStoreUploadResponse
 
-`func NewCreateStoreUploadResponse() *CreateStoreUploadResponse`
+`func NewCreateStoreUploadResponse(id string, files []UploadFileResponse, ) *CreateStoreUploadResponse`
 
 NewCreateStoreUploadResponse instantiates a new CreateStoreUploadResponse object
 This constructor will assign default values to properties that have it defined,
@@ -45,11 +45,6 @@ and a boolean to check if the value has been set.
 
 SetId sets Id field to given value.
 
-### HasId
-
-`func (o *CreateStoreUploadResponse) HasId() bool`
-
-HasId returns a boolean if a field has been set.
 
 ### GetFiles
 
@@ -70,11 +65,6 @@ and a boolean to check if the value has been set.
 
 SetFiles sets Files field to given value.
 
-### HasFiles
-
-`func (o *CreateStoreUploadResponse) HasFiles() bool`
-
-HasFiles returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

@@ -63,13 +63,13 @@ export interface CreateStoreUploadResponse {
      * @type {string}
      * @memberof CreateStoreUploadResponse
      */
-    'id'?: string;
+    'id': string;
     /**
      * 
      * @type {Array<UploadFileResponse>}
      * @memberof CreateStoreUploadResponse
      */
-    'files'?: Array<UploadFileResponse>;
+    'files': Array<UploadFileResponse>;
 }
 /**
  * 
@@ -82,7 +82,7 @@ export interface CreateTokenResponse {
      * @type {string}
      * @memberof CreateTokenResponse
      */
-    'token'?: string;
+    'token': string;
 }
 /**
  * 
@@ -95,19 +95,19 @@ export interface GetFileResponse {
      * @type {string}
      * @memberof GetFileResponse
      */
-    'fileName'?: string;
+    'fileName': string;
     /**
      * 
      * @type {string}
      * @memberof GetFileResponse
      */
-    'hash'?: string;
+    'hash': string;
     /**
      * 
      * @type {string}
      * @memberof GetFileResponse
      */
-    'status'?: GetFileResponseStatusEnum;
+    'status': GetFileResponseStatusEnum;
 }
 
 export const GetFileResponseStatusEnum = {
@@ -124,6 +124,44 @@ export type GetFileResponseStatusEnum = typeof GetFileResponseStatusEnum[keyof t
 /**
  * 
  * @export
+ * @interface GetStoreFileHashResponse
+ */
+export interface GetStoreFileHashResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetStoreFileHashResponse
+     */
+    'hash': string;
+    /**
+     * 
+     * @type {StoreFileHashStatus}
+     * @memberof GetStoreFileHashResponse
+     */
+    'status': StoreFileHashStatus;
+}
+/**
+ * 
+ * @export
+ * @interface GetStoreFileHashesResponse
+ */
+export interface GetStoreFileHashesResponse {
+    /**
+     * 
+     * @type {Array<GetStoreFileHashResponse>}
+     * @memberof GetStoreFileHashesResponse
+     */
+    'hashes': Array<GetStoreFileHashResponse>;
+    /**
+     * 
+     * @type {PaginationResponse}
+     * @memberof GetStoreFileHashesResponse
+     */
+    'pagination': PaginationResponse;
+}
+/**
+ * 
+ * @export
  * @interface GetStoreFilesResponse
  */
 export interface GetStoreFilesResponse {
@@ -132,13 +170,13 @@ export interface GetStoreFilesResponse {
      * @type {Array<string>}
      * @memberof GetStoreFilesResponse
      */
-    'files'?: Array<string>;
+    'files': Array<string>;
     /**
      * 
      * @type {PaginationResponse}
      * @memberof GetStoreFilesResponse
      */
-    'pagination'?: PaginationResponse;
+    'pagination': PaginationResponse;
 }
 /**
  * 
@@ -151,31 +189,31 @@ export interface GetStoreUploadResponse {
      * @type {string}
      * @memberof GetStoreUploadResponse
      */
-    'description'?: string;
+    'description': string;
     /**
      * 
      * @type {string}
      * @memberof GetStoreUploadResponse
      */
-    'buildId'?: string;
+    'buildId': string;
     /**
      * 
      * @type {string}
      * @memberof GetStoreUploadResponse
      */
-    'timestamp'?: string;
+    'timestamp': string;
     /**
      * 
      * @type {Array<GetFileResponse>}
      * @memberof GetStoreUploadResponse
      */
-    'files'?: Array<GetFileResponse>;
+    'files': Array<GetFileResponse>;
     /**
      * 
      * @type {string}
      * @memberof GetStoreUploadResponse
      */
-    'status'?: GetStoreUploadResponseStatusEnum;
+    'status': GetStoreUploadResponseStatusEnum;
 }
 
 export const GetStoreUploadResponseStatusEnum = {
@@ -199,19 +237,19 @@ export interface GetTokenResponse {
      * @type {string}
      * @memberof GetTokenResponse
      */
-    'token'?: string;
+    'token': string;
     /**
      * Textual description of token Users fill this in to remind themselves the purpose of a token and/or where it is used
      * @type {string}
      * @memberof GetTokenResponse
      */
-    'description'?: string;
+    'description': string;
     /**
      * Creation timestamp, in RFC3339 format
      * @type {string}
      * @memberof GetTokenResponse
      */
-    'creationTimestamp'?: string;
+    'creationTimestamp': string;
 }
 /**
  * 
@@ -224,7 +262,7 @@ export interface MessageResponse {
      * @type {string}
      * @memberof MessageResponse
      */
-    'message'?: string;
+    'message': string;
 }
 /**
  * 
@@ -237,8 +275,22 @@ export interface PaginationResponse {
      * @type {number}
      * @memberof PaginationResponse
      */
-    'total'?: number;
+    'total': number;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const StoreFileHashStatus = {
+    Pending: 'pending',
+    Present: 'present'
+} as const;
+
+export type StoreFileHashStatus = typeof StoreFileHashStatus[keyof typeof StoreFileHashStatus];
+
+
 /**
  * 
  * @export
@@ -250,7 +302,7 @@ export interface UpdateTokenRequest {
      * @type {string}
      * @memberof UpdateTokenRequest
      */
-    'description'?: string;
+    'description': string;
 }
 /**
  * 
@@ -263,13 +315,13 @@ export interface UploadFileRequest {
      * @type {string}
      * @memberof UploadFileRequest
      */
-    'fileName'?: string;
+    'fileName': string;
     /**
      * 
      * @type {string}
      * @memberof UploadFileRequest
      */
-    'hash'?: string;
+    'hash': string;
 }
 /**
  * 
@@ -282,13 +334,13 @@ export interface UploadFileResponse {
      * @type {string}
      * @memberof UploadFileResponse
      */
-    'fileName'?: string;
+    'fileName': string;
     /**
      * 
      * @type {string}
      * @memberof UploadFileResponse
      */
-    'hash'?: string;
+    'hash': string;
     /**
      * Short-lived signed URL where the client should upload the file to, or blank if the file already exists in the storage backend
      * @type {string}
@@ -525,6 +577,58 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication emailAndPat required
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Fetch a list of hashes for a specific file in store
+         * @param {string} storeId ID of the store containing the file
+         * @param {string} fileId ID of the file
+         * @param {number} [offset] How many entries to skip (used for pagination of results)
+         * @param {number} [limit] Max number of results to return (used for pagination of results)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getStoreFileHashes: async (storeId: string, fileId: string, offset?: number, limit?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'storeId' is not null or undefined
+            assertParamExists('getStoreFileHashes', 'storeId', storeId)
+            // verify required parameter 'fileId' is not null or undefined
+            assertParamExists('getStoreFileHashes', 'fileId', fileId)
+            const localVarPath = `/stores/{storeId}/files/{fileId}/hashes`
+                .replace(`{${"storeId"}}`, encodeURIComponent(String(storeId)))
+                .replace(`{${"fileId"}}`, encodeURIComponent(String(fileId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication emailAndPat required
+            // http basic authentication required
+            setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
 
 
     
@@ -1024,6 +1128,20 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Fetch a list of hashes for a specific file in store
+         * @param {string} storeId ID of the store containing the file
+         * @param {string} fileId ID of the file
+         * @param {number} [offset] How many entries to skip (used for pagination of results)
+         * @param {number} [limit] Max number of results to return (used for pagination of results)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getStoreFileHashes(storeId: string, fileId: string, offset?: number, limit?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStoreFileHashesResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStoreFileHashes(storeId, fileId, offset, limit, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Fetch a list of files in store
          * @param {string} storeId ID of the store containing the files
          * @param {number} [offset] How many entries to skip (used for pagination of results)
@@ -1208,6 +1326,19 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          */
         expireStoreUpload(uploadId: string, storeId: string, options?: any): AxiosPromise<void> {
             return localVarFp.expireStoreUpload(uploadId, storeId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Fetch a list of hashes for a specific file in store
+         * @param {string} storeId ID of the store containing the file
+         * @param {string} fileId ID of the file
+         * @param {number} [offset] How many entries to skip (used for pagination of results)
+         * @param {number} [limit] Max number of results to return (used for pagination of results)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getStoreFileHashes(storeId: string, fileId: string, offset?: number, limit?: number, options?: any): AxiosPromise<GetStoreFileHashesResponse> {
+            return localVarFp.getStoreFileHashes(storeId, fileId, offset, limit, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1396,6 +1527,21 @@ export class DefaultApi extends BaseAPI {
      */
     public expireStoreUpload(uploadId: string, storeId: string, options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).expireStoreUpload(uploadId, storeId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Fetch a list of hashes for a specific file in store
+     * @param {string} storeId ID of the store containing the file
+     * @param {string} fileId ID of the file
+     * @param {number} [offset] How many entries to skip (used for pagination of results)
+     * @param {number} [limit] Max number of results to return (used for pagination of results)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public getStoreFileHashes(storeId: string, fileId: string, offset?: number, limit?: number, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getStoreFileHashes(storeId, fileId, offset, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

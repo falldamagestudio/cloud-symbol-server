@@ -73,21 +73,46 @@ namespace BackendAPI.Model
         /// <summary>
         /// Gets or Sets Status
         /// </summary>
-        [DataMember(Name = "status", EmitDefaultValue = false)]
-        public StatusEnum? Status { get; set; }
+        [DataMember(Name = "status", IsRequired = true, EmitDefaultValue = true)]
+        public StatusEnum Status { get; set; }
         /// <summary>
         /// Initializes a new instance of the <see cref="GetStoreUploadResponse" /> class.
         /// </summary>
-        /// <param name="description">description.</param>
-        /// <param name="buildId">buildId.</param>
-        /// <param name="timestamp">timestamp.</param>
-        /// <param name="files">files.</param>
-        /// <param name="status">status.</param>
-        public GetStoreUploadResponse(string description = default(string), string buildId = default(string), string timestamp = default(string), List<GetFileResponse> files = default(List<GetFileResponse>), StatusEnum? status = default(StatusEnum?))
+        [JsonConstructorAttribute]
+        protected GetStoreUploadResponse() { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetStoreUploadResponse" /> class.
+        /// </summary>
+        /// <param name="description">description (required).</param>
+        /// <param name="buildId">buildId (required).</param>
+        /// <param name="timestamp">timestamp (required).</param>
+        /// <param name="files">files (required).</param>
+        /// <param name="status">status (required).</param>
+        public GetStoreUploadResponse(string description = default(string), string buildId = default(string), string timestamp = default(string), List<GetFileResponse> files = default(List<GetFileResponse>), StatusEnum status = default(StatusEnum))
         {
+            // to ensure "description" is required (not null)
+            if (description == null)
+            {
+                throw new ArgumentNullException("description is a required property for GetStoreUploadResponse and cannot be null");
+            }
             this.Description = description;
+            // to ensure "buildId" is required (not null)
+            if (buildId == null)
+            {
+                throw new ArgumentNullException("buildId is a required property for GetStoreUploadResponse and cannot be null");
+            }
             this.BuildId = buildId;
+            // to ensure "timestamp" is required (not null)
+            if (timestamp == null)
+            {
+                throw new ArgumentNullException("timestamp is a required property for GetStoreUploadResponse and cannot be null");
+            }
             this.Timestamp = timestamp;
+            // to ensure "files" is required (not null)
+            if (files == null)
+            {
+                throw new ArgumentNullException("files is a required property for GetStoreUploadResponse and cannot be null");
+            }
             this.Files = files;
             this.Status = status;
         }
@@ -95,25 +120,25 @@ namespace BackendAPI.Model
         /// <summary>
         /// Gets or Sets Description
         /// </summary>
-        [DataMember(Name = "description", EmitDefaultValue = false)]
+        [DataMember(Name = "description", IsRequired = true, EmitDefaultValue = true)]
         public string Description { get; set; }
 
         /// <summary>
         /// Gets or Sets BuildId
         /// </summary>
-        [DataMember(Name = "buildId", EmitDefaultValue = false)]
+        [DataMember(Name = "buildId", IsRequired = true, EmitDefaultValue = true)]
         public string BuildId { get; set; }
 
         /// <summary>
         /// Gets or Sets Timestamp
         /// </summary>
-        [DataMember(Name = "timestamp", EmitDefaultValue = false)]
+        [DataMember(Name = "timestamp", IsRequired = true, EmitDefaultValue = true)]
         public string Timestamp { get; set; }
 
         /// <summary>
         /// Gets or Sets Files
         /// </summary>
-        [DataMember(Name = "files", EmitDefaultValue = false)]
+        [DataMember(Name = "files", IsRequired = true, EmitDefaultValue = true)]
         public List<GetFileResponse> Files { get; set; }
 
         /// <summary>

@@ -4,15 +4,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**FileName** | Pointer to **string** |  | [optional] 
-**Hash** | Pointer to **string** |  | [optional] 
-**Status** | Pointer to **string** |  | [optional] 
+**FileName** | **string** |  | 
+**Hash** | **string** |  | 
+**Status** | **string** |  | 
 
 ## Methods
 
 ### NewGetFileResponse
 
-`func NewGetFileResponse() *GetFileResponse`
+`func NewGetFileResponse(fileName string, hash string, status string, ) *GetFileResponse`
 
 NewGetFileResponse instantiates a new GetFileResponse object
 This constructor will assign default values to properties that have it defined,
@@ -46,11 +46,6 @@ and a boolean to check if the value has been set.
 
 SetFileName sets FileName field to given value.
 
-### HasFileName
-
-`func (o *GetFileResponse) HasFileName() bool`
-
-HasFileName returns a boolean if a field has been set.
 
 ### GetHash
 
@@ -71,11 +66,6 @@ and a boolean to check if the value has been set.
 
 SetHash sets Hash field to given value.
 
-### HasHash
-
-`func (o *GetFileResponse) HasHash() bool`
-
-HasHash returns a boolean if a field has been set.
 
 ### GetStatus
 
@@ -96,11 +86,6 @@ and a boolean to check if the value has been set.
 
 SetStatus sets Status field to given value.
 
-### HasStatus
-
-`func (o *GetFileResponse) HasStatus() bool`
-
-HasStatus returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

@@ -82,12 +82,12 @@ func TestGetStoreFilesWithPaginationSucceeds(t *testing.T) {
 
 	files := []openapi_client.UploadFileRequest{
 		{
-			FileName: &fileName1,
-			Hash:     &hash1,
+			FileName: fileName1,
+			Hash:     hash1,
 		},
 		{
-			FileName: &fileName2,
-			Hash:     &hash2,
+			FileName: fileName2,
+			Hash:     hash2,
 		},
 	}
 
@@ -129,15 +129,15 @@ func TestGetStoreFilesWithPaginationSucceeds(t *testing.T) {
 	}
 
 	expectedUploadStatus := "in_progress"
-	if *getStoreUploadResponse.Status != expectedUploadStatus {
-		t.Fatalf("GetStoreUpload should return an upload with status %v, but it has status %v", expectedUploadStatus, *getStoreUploadResponse.Status)
+	if getStoreUploadResponse.Status != expectedUploadStatus {
+		t.Fatalf("GetStoreUpload should return an upload with status %v, but it has status %v", expectedUploadStatus, getStoreUploadResponse.Status)
 	}
 
 	// Ensure file is in "pending" status
 
 	expectedUploadFileStatus := "pending"
-	if *(getStoreUploadResponse.Files)[0].Status != expectedUploadFileStatus {
-		t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, *(getStoreUploadResponse.Files)[0].Status)
+	if getStoreUploadResponse.Files[0].Status != expectedUploadFileStatus {
+		t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, getStoreUploadResponse.Files[0].Status)
 	}
 
 	// Complete upload of first file
@@ -162,15 +162,15 @@ func TestGetStoreFilesWithPaginationSucceeds(t *testing.T) {
 		}
 
 		expectedUploadStatus := "in_progress"
-		if *getStoreUploadResponse.Status != expectedUploadStatus {
-			t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadStatus, *getStoreUploadResponse.Status)
+		if getStoreUploadResponse.Status != expectedUploadStatus {
+			t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadStatus, getStoreUploadResponse.Status)
 		}
 
 		// Ensure file has transitioned to "uploaded" status
 
 		expectedUploadFileStatus := "completed"
-		if *(getStoreUploadResponse.Files)[0].Status != expectedUploadFileStatus {
-			t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, *(getStoreUploadResponse.Files)[0].Status)
+		if getStoreUploadResponse.Files[0].Status != expectedUploadFileStatus {
+			t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, getStoreUploadResponse.Files[0].Status)
 		}
 
 		// Fetch store-file info
@@ -185,8 +185,8 @@ func TestGetStoreFilesWithPaginationSucceeds(t *testing.T) {
 
 		expectedNumResults := 2
 		expectedTotalResults := int32(2)
-		if (len(getStoreFilesResponse.Files) != expectedNumResults) || (*getStoreFilesResponse.Pagination.Total != expectedTotalResults) || ((getStoreFilesResponse.Files)[0] != fileName1) || ((getStoreFilesResponse.Files)[1] != fileName2) {
-			t.Fatalf("GetStoreFiles should show %v file with name %v & %v, and %v total, but shows the following files: %v, and total: %v", expectedNumResults, fileName1, fileName2, expectedTotalResults, getStoreFilesResponse.Files, *getStoreFilesResponse.Pagination.Total)
+		if (len(getStoreFilesResponse.Files) != expectedNumResults) || (getStoreFilesResponse.Pagination.Total != expectedTotalResults) || (getStoreFilesResponse.Files[0] != fileName1) || (getStoreFilesResponse.Files[1] != fileName2) {
+			t.Fatalf("GetStoreFiles should show %v file with name %v & %v, and %v total, but shows the following files: %v, and total: %v", expectedNumResults, fileName1, fileName2, expectedTotalResults, getStoreFilesResponse.Files, getStoreFilesResponse.Pagination.Total)
 		}
 	}
 
@@ -204,8 +204,8 @@ func TestGetStoreFilesWithPaginationSucceeds(t *testing.T) {
 
 		expectedNumResults := 1
 		expectedTotalResults := int32(2)
-		if (len(getStoreFilesResponse.Files) != expectedNumResults) || (*getStoreFilesResponse.Pagination.Total != expectedTotalResults) || ((getStoreFilesResponse.Files)[0] != fileName1) {
-			t.Fatalf("GetStoreFiles should show %v file with name %v, and %v total, but shows the following files: %v, and total: %v", expectedNumResults, fileName1, expectedTotalResults, getStoreFilesResponse.Files, *getStoreFilesResponse.Pagination.Total)
+		if (len(getStoreFilesResponse.Files) != expectedNumResults) || (getStoreFilesResponse.Pagination.Total != expectedTotalResults) || (getStoreFilesResponse.Files[0] != fileName1) {
+			t.Fatalf("GetStoreFiles should show %v file with name %v, and %v total, but shows the following files: %v, and total: %v", expectedNumResults, fileName1, expectedTotalResults, getStoreFilesResponse.Files, getStoreFilesResponse.Pagination.Total)
 		}
 	}
 
@@ -222,8 +222,8 @@ func TestGetStoreFilesWithPaginationSucceeds(t *testing.T) {
 
 		expectedNumResults := 1
 		expectedTotalResults := int32(2)
-		if (len(getStoreFilesResponse.Files) != expectedNumResults) || (*getStoreFilesResponse.Pagination.Total != expectedTotalResults) || ((getStoreFilesResponse.Files)[0] != fileName2) {
-			t.Fatalf("GetStoreFiles should show %v file with name %v, and %v total, but shows the following files: %v, and total: %v", expectedNumResults, fileName2, expectedTotalResults, getStoreFilesResponse.Files, *getStoreFilesResponse.Pagination.Total)
+		if (len(getStoreFilesResponse.Files) != expectedNumResults) || (getStoreFilesResponse.Pagination.Total != expectedTotalResults) || (getStoreFilesResponse.Files[0] != fileName2) {
+			t.Fatalf("GetStoreFiles should show %v file with name %v, and %v total, but shows the following files: %v, and total: %v", expectedNumResults, fileName2, expectedTotalResults, getStoreFilesResponse.Files, getStoreFilesResponse.Pagination.Total)
 		}
 	}
 }

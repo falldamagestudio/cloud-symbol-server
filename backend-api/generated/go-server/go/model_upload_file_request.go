@@ -11,13 +11,23 @@ package openapi
 
 type UploadFileRequest struct {
 
-	FileName string `json:"fileName,omitempty"`
+	FileName string `json:"fileName"`
 
-	Hash string `json:"hash,omitempty"`
+	Hash string `json:"hash"`
 }
 
 // AssertUploadFileRequestRequired checks if the required fields are not zero-ed
 func AssertUploadFileRequestRequired(obj UploadFileRequest) error {
+	elements := map[string]interface{}{
+		"fileName": obj.FileName,
+		"hash": obj.Hash,
+	}
+	for name, el := range elements {
+		if isZero := IsZeroValue(el); isZero {
+			return &RequiredError{Field: name}
+		}
+	}
+
 	return nil
 }
 

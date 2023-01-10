@@ -34,24 +34,39 @@ namespace BackendAPI.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="GetStoreFilesResponse" /> class.
         /// </summary>
-        /// <param name="files">files.</param>
-        /// <param name="pagination">pagination.</param>
+        [JsonConstructorAttribute]
+        protected GetStoreFilesResponse() { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetStoreFilesResponse" /> class.
+        /// </summary>
+        /// <param name="files">files (required).</param>
+        /// <param name="pagination">pagination (required).</param>
         public GetStoreFilesResponse(List<string> files = default(List<string>), PaginationResponse pagination = default(PaginationResponse))
         {
+            // to ensure "files" is required (not null)
+            if (files == null)
+            {
+                throw new ArgumentNullException("files is a required property for GetStoreFilesResponse and cannot be null");
+            }
             this.Files = files;
+            // to ensure "pagination" is required (not null)
+            if (pagination == null)
+            {
+                throw new ArgumentNullException("pagination is a required property for GetStoreFilesResponse and cannot be null");
+            }
             this.Pagination = pagination;
         }
 
         /// <summary>
         /// Gets or Sets Files
         /// </summary>
-        [DataMember(Name = "files", EmitDefaultValue = false)]
+        [DataMember(Name = "files", IsRequired = true, EmitDefaultValue = true)]
         public List<string> Files { get; set; }
 
         /// <summary>
         /// Gets or Sets Pagination
         /// </summary>
-        [DataMember(Name = "pagination", EmitDefaultValue = false)]
+        [DataMember(Name = "pagination", IsRequired = true, EmitDefaultValue = true)]
         public PaginationResponse Pagination { get; set; }
 
         /// <summary>

@@ -11,13 +11,23 @@ package openapi
 
 type GetStoreFileHashResponse struct {
 
-	Hash string `json:"hash,omitempty"`
+	Hash string `json:"hash"`
 
-	Status StoreFileHashStatus `json:"status,omitempty"`
+	Status StoreFileHashStatus `json:"status"`
 }
 
 // AssertGetStoreFileHashResponseRequired checks if the required fields are not zero-ed
 func AssertGetStoreFileHashResponseRequired(obj GetStoreFileHashResponse) error {
+	elements := map[string]interface{}{
+		"hash": obj.Hash,
+		"status": obj.Status,
+	}
+	for name, el := range elements {
+		if isZero := IsZeroValue(el); isZero {
+			return &RequiredError{Field: name}
+		}
+	}
+
 	return nil
 }
 

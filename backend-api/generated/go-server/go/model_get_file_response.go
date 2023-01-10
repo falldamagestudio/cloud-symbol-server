@@ -11,15 +11,26 @@ package openapi
 
 type GetFileResponse struct {
 
-	FileName string `json:"fileName,omitempty"`
+	FileName string `json:"fileName"`
 
-	Hash string `json:"hash,omitempty"`
+	Hash string `json:"hash"`
 
-	Status string `json:"status,omitempty"`
+	Status string `json:"status"`
 }
 
 // AssertGetFileResponseRequired checks if the required fields are not zero-ed
 func AssertGetFileResponseRequired(obj GetFileResponse) error {
+	elements := map[string]interface{}{
+		"fileName": obj.FileName,
+		"hash": obj.Hash,
+		"status": obj.Status,
+	}
+	for name, el := range elements {
+		if isZero := IsZeroValue(el); isZero {
+			return &RequiredError{Field: name}
+		}
+	}
+
 	return nil
 }
 

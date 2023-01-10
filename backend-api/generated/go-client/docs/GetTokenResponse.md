@@ -4,15 +4,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Token** | Pointer to **string** | Personal Access Token This token can be used for authentication when accessing non-token related APIs | [optional] 
-**Description** | Pointer to **string** | Textual description of token Users fill this in to remind themselves the purpose of a token and/or where it is used | [optional] 
-**CreationTimestamp** | Pointer to **string** | Creation timestamp, in RFC3339 format | [optional] 
+**Token** | **string** | Personal Access Token This token can be used for authentication when accessing non-token related APIs | 
+**Description** | **string** | Textual description of token Users fill this in to remind themselves the purpose of a token and/or where it is used | 
+**CreationTimestamp** | **string** | Creation timestamp, in RFC3339 format | 
 
 ## Methods
 
 ### NewGetTokenResponse
 
-`func NewGetTokenResponse() *GetTokenResponse`
+`func NewGetTokenResponse(token string, description string, creationTimestamp string, ) *GetTokenResponse`
 
 NewGetTokenResponse instantiates a new GetTokenResponse object
 This constructor will assign default values to properties that have it defined,
@@ -46,11 +46,6 @@ and a boolean to check if the value has been set.
 
 SetToken sets Token field to given value.
 
-### HasToken
-
-`func (o *GetTokenResponse) HasToken() bool`
-
-HasToken returns a boolean if a field has been set.
 
 ### GetDescription
 
@@ -71,11 +66,6 @@ and a boolean to check if the value has been set.
 
 SetDescription sets Description field to given value.
 
-### HasDescription
-
-`func (o *GetTokenResponse) HasDescription() bool`
-
-HasDescription returns a boolean if a field has been set.
 
 ### GetCreationTimestamp
 
@@ -96,11 +86,6 @@ and a boolean to check if the value has been set.
 
 SetCreationTimestamp sets CreationTimestamp field to given value.
 
-### HasCreationTimestamp
-
-`func (o *GetTokenResponse) HasCreationTimestamp() bool`
-
-HasCreationTimestamp returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

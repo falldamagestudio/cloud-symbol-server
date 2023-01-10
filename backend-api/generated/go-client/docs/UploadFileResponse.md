@@ -4,15 +4,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**FileName** | Pointer to **string** |  | [optional] 
-**Hash** | Pointer to **string** |  | [optional] 
+**FileName** | **string** |  | 
+**Hash** | **string** |  | 
 **Url** | Pointer to **string** | Short-lived signed URL where the client should upload the file to, or blank if the file already exists in the storage backend | [optional] 
 
 ## Methods
 
 ### NewUploadFileResponse
 
-`func NewUploadFileResponse() *UploadFileResponse`
+`func NewUploadFileResponse(fileName string, hash string, ) *UploadFileResponse`
 
 NewUploadFileResponse instantiates a new UploadFileResponse object
 This constructor will assign default values to properties that have it defined,
@@ -46,11 +46,6 @@ and a boolean to check if the value has been set.
 
 SetFileName sets FileName field to given value.
 
-### HasFileName
-
-`func (o *UploadFileResponse) HasFileName() bool`
-
-HasFileName returns a boolean if a field has been set.
 
 ### GetHash
 
@@ -71,11 +66,6 @@ and a boolean to check if the value has been set.
 
 SetHash sets Hash field to given value.
 
-### HasHash
-
-`func (o *UploadFileResponse) HasHash() bool`
-
-HasHash returns a boolean if a field has been set.
 
 ### GetUrl
 

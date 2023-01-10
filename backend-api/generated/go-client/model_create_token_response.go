@@ -17,15 +17,16 @@ import (
 // CreateTokenResponse struct for CreateTokenResponse
 type CreateTokenResponse struct {
 	// Personal Access Token
-	Token *string `json:"token,omitempty"`
+	Token string `json:"token"`
 }
 
 // NewCreateTokenResponse instantiates a new CreateTokenResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCreateTokenResponse() *CreateTokenResponse {
+func NewCreateTokenResponse(token string) *CreateTokenResponse {
 	this := CreateTokenResponse{}
+	this.Token = token
 	return &this
 }
 
@@ -37,41 +38,33 @@ func NewCreateTokenResponseWithDefaults() *CreateTokenResponse {
 	return &this
 }
 
-// GetToken returns the Token field value if set, zero value otherwise.
+// GetToken returns the Token field value
 func (o *CreateTokenResponse) GetToken() string {
-	if o == nil || isNil(o.Token) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Token
+
+	return o.Token
 }
 
-// GetTokenOk returns a tuple with the Token field value if set, nil otherwise
+// GetTokenOk returns a tuple with the Token field value
 // and a boolean to check if the value has been set.
 func (o *CreateTokenResponse) GetTokenOk() (*string, bool) {
-	if o == nil || isNil(o.Token) {
+	if o == nil {
     return nil, false
 	}
-	return o.Token, true
+	return &o.Token, true
 }
 
-// HasToken returns a boolean if a field has been set.
-func (o *CreateTokenResponse) HasToken() bool {
-	if o != nil && !isNil(o.Token) {
-		return true
-	}
-
-	return false
-}
-
-// SetToken gets a reference to the given string and assigns it to the Token field.
+// SetToken sets field value
 func (o *CreateTokenResponse) SetToken(v string) {
-	o.Token = &v
+	o.Token = v
 }
 
 func (o CreateTokenResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if !isNil(o.Token) {
+	if true {
 		toSerialize["token"] = o.Token
 	}
 	return json.Marshal(toSerialize)

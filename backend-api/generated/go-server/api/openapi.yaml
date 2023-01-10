@@ -598,6 +598,8 @@ components:
         message:
           example: Invalid API invocation
           type: string
+      required:
+      - message
       type: object
     getTokensResponse:
       items:
@@ -611,6 +613,8 @@ components:
           description: Personal Access Token
           example: NyXfFDMc3A3KkvVwK5wJcnq9aRqYufgQ
           type: string
+      required:
+      - token
       type: object
     getTokenResponse:
       example:
@@ -632,6 +636,10 @@ components:
           description: "Creation timestamp, in RFC3339 format"
           example: 2019-10-12T07:20:50.52Z
           type: string
+      required:
+      - creationTimestamp
+      - description
+      - token
       type: object
     updateTokenRequest:
       properties:
@@ -640,6 +648,8 @@ components:
             the purpose of a token and/or where it is used
           example: Used for local testing purposes
           type: string
+      required:
+      - description
       type: object
     getStoresResponse:
       items:
@@ -673,6 +683,9 @@ components:
         hash:
           example: 7F416863ABF34C3E894BAD1739BAA5571
           type: string
+      required:
+      - fileName
+      - hash
       type: object
     getStoreUploadIdsResponse:
       items:
@@ -685,6 +698,8 @@ components:
       properties:
         total:
           type: integer
+      required:
+      - total
       type: object
     getStoreFilesResponse:
       example:
@@ -700,6 +715,9 @@ components:
           type: array
         pagination:
           $ref: '#/components/schemas/paginationResponse'
+      required:
+      - files
+      - pagination
       type: object
     getStoreFileHashResponse:
       example:
@@ -711,6 +729,9 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/storeFileHashStatus'
+      required:
+      - hash
+      - status
       type: object
     getStoreFileHashesResponse:
       example:
@@ -728,6 +749,9 @@ components:
           type: array
         pagination:
           $ref: '#/components/schemas/paginationResponse'
+      required:
+      - hashes
+      - pagination
       type: object
     createStoreUploadResponse:
       example:
@@ -747,6 +771,9 @@ components:
           items:
             $ref: '#/components/schemas/uploadFileResponse'
           type: array
+      required:
+      - files
+      - id
       type: object
     uploadFileResponse:
       example:
@@ -765,6 +792,9 @@ components:
             \ file to, or blank if the file already exists in the storage backend"
           example: https://storage.googleapis.com/storage/v1/b/example-bucket/o/stores/default/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
           type: string
+      required:
+      - fileName
+      - hash
       type: object
     getStoreUploadResponse:
       example:
@@ -802,6 +832,12 @@ components:
           - expired
           example: completed
           type: string
+      required:
+      - buildId
+      - description
+      - files
+      - status
+      - timestamp
       type: object
     getFileResponse:
       example:
@@ -825,6 +861,10 @@ components:
           - expired
           example: completed
           type: string
+      required:
+      - fileName
+      - hash
+      - status
       type: object
   securitySchemes:
     emailAndPat:

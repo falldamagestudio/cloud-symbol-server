@@ -16,15 +16,16 @@ import (
 
 // PaginationResponse struct for PaginationResponse
 type PaginationResponse struct {
-	Total *int32 `json:"total,omitempty"`
+	Total int32 `json:"total"`
 }
 
 // NewPaginationResponse instantiates a new PaginationResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPaginationResponse() *PaginationResponse {
+func NewPaginationResponse(total int32) *PaginationResponse {
 	this := PaginationResponse{}
+	this.Total = total
 	return &this
 }
 
@@ -36,41 +37,33 @@ func NewPaginationResponseWithDefaults() *PaginationResponse {
 	return &this
 }
 
-// GetTotal returns the Total field value if set, zero value otherwise.
+// GetTotal returns the Total field value
 func (o *PaginationResponse) GetTotal() int32 {
-	if o == nil || isNil(o.Total) {
+	if o == nil {
 		var ret int32
 		return ret
 	}
-	return *o.Total
+
+	return o.Total
 }
 
-// GetTotalOk returns a tuple with the Total field value if set, nil otherwise
+// GetTotalOk returns a tuple with the Total field value
 // and a boolean to check if the value has been set.
 func (o *PaginationResponse) GetTotalOk() (*int32, bool) {
-	if o == nil || isNil(o.Total) {
+	if o == nil {
     return nil, false
 	}
-	return o.Total, true
+	return &o.Total, true
 }
 
-// HasTotal returns a boolean if a field has been set.
-func (o *PaginationResponse) HasTotal() bool {
-	if o != nil && !isNil(o.Total) {
-		return true
-	}
-
-	return false
-}
-
-// SetTotal gets a reference to the given int32 and assigns it to the Total field.
+// SetTotal sets field value
 func (o *PaginationResponse) SetTotal(v int32) {
-	o.Total = &v
+	o.Total = v
 }
 
 func (o PaginationResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if !isNil(o.Total) {
+	if true {
 		toSerialize["total"] = o.Total
 	}
 	return json.Marshal(toSerialize)

@@ -79,17 +79,32 @@ namespace BackendAPI.Model
         /// <summary>
         /// Gets or Sets Status
         /// </summary>
-        [DataMember(Name = "status", EmitDefaultValue = false)]
-        public StatusEnum? Status { get; set; }
+        [DataMember(Name = "status", IsRequired = true, EmitDefaultValue = true)]
+        public StatusEnum Status { get; set; }
         /// <summary>
         /// Initializes a new instance of the <see cref="GetFileResponse" /> class.
         /// </summary>
-        /// <param name="fileName">fileName.</param>
-        /// <param name="hash">hash.</param>
-        /// <param name="status">status.</param>
-        public GetFileResponse(string fileName = default(string), string hash = default(string), StatusEnum? status = default(StatusEnum?))
+        [JsonConstructorAttribute]
+        protected GetFileResponse() { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetFileResponse" /> class.
+        /// </summary>
+        /// <param name="fileName">fileName (required).</param>
+        /// <param name="hash">hash (required).</param>
+        /// <param name="status">status (required).</param>
+        public GetFileResponse(string fileName = default(string), string hash = default(string), StatusEnum status = default(StatusEnum))
         {
+            // to ensure "fileName" is required (not null)
+            if (fileName == null)
+            {
+                throw new ArgumentNullException("fileName is a required property for GetFileResponse and cannot be null");
+            }
             this.FileName = fileName;
+            // to ensure "hash" is required (not null)
+            if (hash == null)
+            {
+                throw new ArgumentNullException("hash is a required property for GetFileResponse and cannot be null");
+            }
             this.Hash = hash;
             this.Status = status;
         }
@@ -97,13 +112,13 @@ namespace BackendAPI.Model
         /// <summary>
         /// Gets or Sets FileName
         /// </summary>
-        [DataMember(Name = "fileName", EmitDefaultValue = false)]
+        [DataMember(Name = "fileName", IsRequired = true, EmitDefaultValue = true)]
         public string FileName { get; set; }
 
         /// <summary>
         /// Gets or Sets Hash
         /// </summary>
-        [DataMember(Name = "hash", EmitDefaultValue = false)]
+        [DataMember(Name = "hash", IsRequired = true, EmitDefaultValue = true)]
         public string Hash { get; set; }
 
         /// <summary>

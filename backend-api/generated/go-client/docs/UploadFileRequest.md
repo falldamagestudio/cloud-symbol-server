@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**FileName** | Pointer to **string** |  | [optional] 
-**Hash** | Pointer to **string** |  | [optional] 
+**FileName** | **string** |  | 
+**Hash** | **string** |  | 
 
 ## Methods
 
 ### NewUploadFileRequest
 
-`func NewUploadFileRequest() *UploadFileRequest`
+`func NewUploadFileRequest(fileName string, hash string, ) *UploadFileRequest`
 
 NewUploadFileRequest instantiates a new UploadFileRequest object
 This constructor will assign default values to properties that have it defined,
@@ -45,11 +45,6 @@ and a boolean to check if the value has been set.
 
 SetFileName sets FileName field to given value.
 
-### HasFileName
-
-`func (o *UploadFileRequest) HasFileName() bool`
-
-HasFileName returns a boolean if a field has been set.
 
 ### GetHash
 
@@ -70,11 +65,6 @@ and a boolean to check if the value has been set.
 
 SetHash sets Hash field to given value.
 
-### HasHash
-
-`func (o *UploadFileRequest) HasHash() bool`
-
-HasHash returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

@@ -149,6 +149,32 @@ namespace BackendAPI.Api
         /// <returns>ApiResponse of Object(void)</returns>
         ApiResponse<Object> ExpireStoreUploadWithHttpInfo(string uploadId, string storeId, int operationIndex = 0);
         /// <summary>
+        /// Fetch a list of hashes for a specific file in store
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the file</param>
+        /// <param name="fileId">ID of the file</param>
+        /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
+        /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>GetStoreFileHashesResponse</returns>
+        GetStoreFileHashesResponse GetStoreFileHashes(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0);
+
+        /// <summary>
+        /// Fetch a list of hashes for a specific file in store
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the file</param>
+        /// <param name="fileId">ID of the file</param>
+        /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
+        /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of GetStoreFileHashesResponse</returns>
+        ApiResponse<GetStoreFileHashesResponse> GetStoreFileHashesWithHttpInfo(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0);
+        /// <summary>
         /// Fetch a list of files in store
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
@@ -521,6 +547,37 @@ namespace BackendAPI.Api
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
         System.Threading.Tasks.Task<ApiResponse<Object>> ExpireStoreUploadWithHttpInfoAsync(string uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <summary>
+        /// Fetch a list of hashes for a specific file in store
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the file</param>
+        /// <param name="fileId">ID of the file</param>
+        /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
+        /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of GetStoreFileHashesResponse</returns>
+        System.Threading.Tasks.Task<GetStoreFileHashesResponse> GetStoreFileHashesAsync(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <summary>
+        /// Fetch a list of hashes for a specific file in store
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the file</param>
+        /// <param name="fileId">ID of the file</param>
+        /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
+        /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (GetStoreFileHashesResponse)</returns>
+        System.Threading.Tasks.Task<ApiResponse<GetStoreFileHashesResponse>> GetStoreFileHashesWithHttpInfoAsync(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Fetch a list of files in store
         /// </summary>
@@ -1842,6 +1899,204 @@ namespace BackendAPI.Api
             if (this.ExceptionFactory != null)
             {
                 Exception _exception = this.ExceptionFactory("ExpireStoreUpload", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Fetch a list of hashes for a specific file in store 
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the file</param>
+        /// <param name="fileId">ID of the file</param>
+        /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
+        /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>GetStoreFileHashesResponse</returns>
+        public GetStoreFileHashesResponse GetStoreFileHashes(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0)
+        {
+            BackendAPI.Client.ApiResponse<GetStoreFileHashesResponse> localVarResponse = GetStoreFileHashesWithHttpInfo(storeId, fileId, offset, limit);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Fetch a list of hashes for a specific file in store 
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the file</param>
+        /// <param name="fileId">ID of the file</param>
+        /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
+        /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of GetStoreFileHashesResponse</returns>
+        public BackendAPI.Client.ApiResponse<GetStoreFileHashesResponse> GetStoreFileHashesWithHttpInfo(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0)
+        {
+            // verify the required parameter 'storeId' is set
+            if (storeId == null)
+            {
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->GetStoreFileHashes");
+            }
+
+            // verify the required parameter 'fileId' is set
+            if (fileId == null)
+            {
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'fileId' when calling DefaultApi->GetStoreFileHashes");
+            }
+
+            BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = BackendAPI.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = BackendAPI.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
+            localVarRequestOptions.PathParameters.Add("fileId", BackendAPI.Client.ClientUtils.ParameterToString(fileId)); // path parameter
+            if (offset != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "offset", offset));
+            }
+            if (limit != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "limit", limit));
+            }
+
+            localVarRequestOptions.Operation = "DefaultApi.GetStoreFileHashes";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+            // authentication (emailAndPat) required
+            // http basic authentication required
+            if (!string.IsNullOrEmpty(this.Configuration.Username) || !string.IsNullOrEmpty(this.Configuration.Password) && !localVarRequestOptions.HeaderParameters.ContainsKey("Authorization"))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", "Basic " + BackendAPI.Client.ClientUtils.Base64Encode(this.Configuration.Username + ":" + this.Configuration.Password));
+            }
+
+            // make the HTTP request
+            var localVarResponse = this.Client.Get<GetStoreFileHashesResponse>("/stores/{storeId}/files/{fileId}/hashes", localVarRequestOptions, this.Configuration);
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("GetStoreFileHashes", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Fetch a list of hashes for a specific file in store 
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the file</param>
+        /// <param name="fileId">ID of the file</param>
+        /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
+        /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of GetStoreFileHashesResponse</returns>
+        public async System.Threading.Tasks.Task<GetStoreFileHashesResponse> GetStoreFileHashesAsync(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            BackendAPI.Client.ApiResponse<GetStoreFileHashesResponse> localVarResponse = await GetStoreFileHashesWithHttpInfoAsync(storeId, fileId, offset, limit, operationIndex, cancellationToken).ConfigureAwait(false);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Fetch a list of hashes for a specific file in store 
+        /// </summary>
+        /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="storeId">ID of the store containing the file</param>
+        /// <param name="fileId">ID of the file</param>
+        /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
+        /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (GetStoreFileHashesResponse)</returns>
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetStoreFileHashesResponse>> GetStoreFileHashesWithHttpInfoAsync(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            // verify the required parameter 'storeId' is set
+            if (storeId == null)
+            {
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->GetStoreFileHashes");
+            }
+
+            // verify the required parameter 'fileId' is set
+            if (fileId == null)
+            {
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'fileId' when calling DefaultApi->GetStoreFileHashes");
+            }
+
+
+            BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = BackendAPI.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = BackendAPI.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
+            localVarRequestOptions.PathParameters.Add("fileId", BackendAPI.Client.ClientUtils.ParameterToString(fileId)); // path parameter
+            if (offset != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "offset", offset));
+            }
+            if (limit != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "limit", limit));
+            }
+
+            localVarRequestOptions.Operation = "DefaultApi.GetStoreFileHashes";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+            // authentication (emailAndPat) required
+            // http basic authentication required
+            if (!string.IsNullOrEmpty(this.Configuration.Username) || !string.IsNullOrEmpty(this.Configuration.Password) && !localVarRequestOptions.HeaderParameters.ContainsKey("Authorization"))
+            {
+                localVarRequestOptions.HeaderParameters.Add("Authorization", "Basic " + BackendAPI.Client.ClientUtils.Base64Encode(this.Configuration.Username + ":" + this.Configuration.Password));
+            }
+
+            // make the HTTP request
+            var localVarResponse = await this.AsynchronousClient.GetAsync<GetStoreFileHashesResponse>("/stores/{storeId}/files/{fileId}/hashes", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("GetStoreFileHashes", localVarResponse);
                 if (_exception != null)
                 {
                     throw _exception;

@@ -11,13 +11,23 @@ package openapi
 
 type GetStoreFilesResponse struct {
 
-	Files []string `json:"files,omitempty"`
+	Files []string `json:"files"`
 
-	Pagination PaginationResponse `json:"pagination,omitempty"`
+	Pagination PaginationResponse `json:"pagination"`
 }
 
 // AssertGetStoreFilesResponseRequired checks if the required fields are not zero-ed
 func AssertGetStoreFilesResponseRequired(obj GetStoreFilesResponse) error {
+	elements := map[string]interface{}{
+		"files": obj.Files,
+		"pagination": obj.Pagination,
+	}
+	for name, el := range elements {
+		if isZero := IsZeroValue(el); isZero {
+			return &RequiredError{Field: name}
+		}
+	}
+
 	if err := AssertPaginationResponseRequired(obj.Pagination); err != nil {
 		return err
 	}
