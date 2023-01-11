@@ -721,10 +721,10 @@ components:
           type: string
         files:
           items:
-            $ref: '#/components/schemas/uploadFileRequest'
+            $ref: '#/components/schemas/createStoreUploadFileRequest'
           type: array
       type: object
-    uploadFileRequest:
+    createStoreUploadFileRequest:
       properties:
         fileName:
           example: Application.pdb
@@ -894,7 +894,7 @@ components:
           type: string
         files:
           items:
-            $ref: '#/components/schemas/getFileResponse'
+            $ref: '#/components/schemas/getStoreUploadFileResponse'
           type: array
         status:
           $ref: '#/components/schemas/storeUploadStatus'
@@ -905,7 +905,7 @@ components:
       - status
       - timestamp
       type: object
-    getFileResponse:
+    getStoreUploadFileResponse:
       example:
         fileName: Application.pdb
         hash: 7F416863ABF34C3E894BAD1739BAA5571

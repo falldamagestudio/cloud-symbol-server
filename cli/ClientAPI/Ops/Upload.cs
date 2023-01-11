@@ -15,7 +15,7 @@ namespace ClientAPI
                 useProgressApi: true,
                 description: description,
                 buildId: buildId,
-                files: FileWithHash.Select(fileWithHash => new BackendAPI.Model.UploadFileRequest(
+                files: FileWithHash.Select(fileWithHash => new BackendAPI.Model.CreateStoreUploadFileRequest(
                     fileName: fileWithHash.FileWithoutPath,
                     hash: fileWithHash.Hash
                 )).ToList()

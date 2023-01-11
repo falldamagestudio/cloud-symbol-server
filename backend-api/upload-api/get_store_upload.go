@@ -93,7 +93,7 @@ func GetStoreUpload(ctx context.Context, uploadId string, storeId string) (opena
 			status = openapi.StoreUploadFileStatus(file.Status)
 		}
 
-		getStoreUploadResponse.Files = append(getStoreUploadResponse.Files, openapi.GetFileResponse{
+		getStoreUploadResponse.Files = append(getStoreUploadResponse.Files, openapi.GetStoreUploadFileResponse{
 			FileName: file.FileName,
 			Hash:     file.FileHash,
 			Status:   status,

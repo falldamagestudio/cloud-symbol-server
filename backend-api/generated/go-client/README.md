@@ -99,13 +99,14 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [CreateStoreUploadFileRequest](docs/CreateStoreUploadFileRequest.md)
  - [CreateStoreUploadRequest](docs/CreateStoreUploadRequest.md)
  - [CreateStoreUploadResponse](docs/CreateStoreUploadResponse.md)
  - [CreateTokenResponse](docs/CreateTokenResponse.md)
- - [GetFileResponse](docs/GetFileResponse.md)
  - [GetStoreFileHashResponse](docs/GetStoreFileHashResponse.md)
  - [GetStoreFileHashesResponse](docs/GetStoreFileHashesResponse.md)
  - [GetStoreFilesResponse](docs/GetStoreFilesResponse.md)
+ - [GetStoreUploadFileResponse](docs/GetStoreUploadFileResponse.md)
  - [GetStoreUploadResponse](docs/GetStoreUploadResponse.md)
  - [GetStoreUploadsResponse](docs/GetStoreUploadsResponse.md)
  - [GetTokenResponse](docs/GetTokenResponse.md)
@@ -115,7 +116,6 @@ Class | Method | HTTP request | Description
  - [StoreUploadFileStatus](docs/StoreUploadFileStatus.md)
  - [StoreUploadStatus](docs/StoreUploadStatus.md)
  - [UpdateTokenRequest](docs/UpdateTokenRequest.md)
- - [UploadFileRequest](docs/UploadFileRequest.md)
  - [UploadFileResponse](docs/UploadFileResponse.md)
 
 

@@ -20,7 +20,7 @@ type CreateStoreUploadRequest struct {
 	UseProgressApi *bool `json:"useProgressApi,omitempty"`
 	Description *string `json:"description,omitempty"`
 	BuildId *string `json:"buildId,omitempty"`
-	Files []UploadFileRequest `json:"files,omitempty"`
+	Files []CreateStoreUploadFileRequest `json:"files,omitempty"`
 }
 
 // NewCreateStoreUploadRequest instantiates a new CreateStoreUploadRequest object
@@ -137,9 +137,9 @@ func (o *CreateStoreUploadRequest) SetBuildId(v string) {
 }
 
 // GetFiles returns the Files field value if set, zero value otherwise.
-func (o *CreateStoreUploadRequest) GetFiles() []UploadFileRequest {
+func (o *CreateStoreUploadRequest) GetFiles() []CreateStoreUploadFileRequest {
 	if o == nil || isNil(o.Files) {
-		var ret []UploadFileRequest
+		var ret []CreateStoreUploadFileRequest
 		return ret
 	}
 	return o.Files
@@ -147,7 +147,7 @@ func (o *CreateStoreUploadRequest) GetFiles() []UploadFileRequest {
 
 // GetFilesOk returns a tuple with the Files field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *CreateStoreUploadRequest) GetFilesOk() ([]UploadFileRequest, bool) {
+func (o *CreateStoreUploadRequest) GetFilesOk() ([]CreateStoreUploadFileRequest, bool) {
 	if o == nil || isNil(o.Files) {
     return nil, false
 	}
@@ -163,8 +163,8 @@ func (o *CreateStoreUploadRequest) HasFiles() bool {
 	return false
 }
 
-// SetFiles gets a reference to the given []UploadFileRequest and assigns it to the Files field.
-func (o *CreateStoreUploadRequest) SetFiles(v []UploadFileRequest) {
+// SetFiles gets a reference to the given []CreateStoreUploadFileRequest and assigns it to the Files field.
+func (o *CreateStoreUploadRequest) SetFiles(v []CreateStoreUploadFileRequest) {
 	o.Files = v
 }
 

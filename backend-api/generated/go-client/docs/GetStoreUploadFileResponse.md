@@ -1,4 +1,4 @@
-# GetFileResponse
+# GetStoreUploadFileResponse
 
 ## Properties
 
@@ -10,79 +10,79 @@ Name | Type | Description | Notes
 
 ## Methods
 
-### NewGetFileResponse
+### NewGetStoreUploadFileResponse
 
-`func NewGetFileResponse(fileName string, hash string, status StoreUploadFileStatus, ) *GetFileResponse`
+`func NewGetStoreUploadFileResponse(fileName string, hash string, status StoreUploadFileStatus, ) *GetStoreUploadFileResponse`
 
-NewGetFileResponse instantiates a new GetFileResponse object
+NewGetStoreUploadFileResponse instantiates a new GetStoreUploadFileResponse object
 This constructor will assign default values to properties that have it defined,
 and makes sure properties required by API are set, but the set of arguments
 will change when the set of required properties is changed
 
-### NewGetFileResponseWithDefaults
+### NewGetStoreUploadFileResponseWithDefaults
 
-`func NewGetFileResponseWithDefaults() *GetFileResponse`
+`func NewGetStoreUploadFileResponseWithDefaults() *GetStoreUploadFileResponse`
 
-NewGetFileResponseWithDefaults instantiates a new GetFileResponse object
+NewGetStoreUploadFileResponseWithDefaults instantiates a new GetStoreUploadFileResponse object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
 ### GetFileName
 
-`func (o *GetFileResponse) GetFileName() string`
+`func (o *GetStoreUploadFileResponse) GetFileName() string`
 
 GetFileName returns the FileName field if non-nil, zero value otherwise.
 
 ### GetFileNameOk
 
-`func (o *GetFileResponse) GetFileNameOk() (*string, bool)`
+`func (o *GetStoreUploadFileResponse) GetFileNameOk() (*string, bool)`
 
 GetFileNameOk returns a tuple with the FileName field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetFileName
 
-`func (o *GetFileResponse) SetFileName(v string)`
+`func (o *GetStoreUploadFileResponse) SetFileName(v string)`
 
 SetFileName sets FileName field to given value.
 
 
 ### GetHash
 
-`func (o *GetFileResponse) GetHash() string`
+`func (o *GetStoreUploadFileResponse) GetHash() string`
 
 GetHash returns the Hash field if non-nil, zero value otherwise.
 
 ### GetHashOk
 
-`func (o *GetFileResponse) GetHashOk() (*string, bool)`
+`func (o *GetStoreUploadFileResponse) GetHashOk() (*string, bool)`
 
 GetHashOk returns a tuple with the Hash field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetHash
 
-`func (o *GetFileResponse) SetHash(v string)`
+`func (o *GetStoreUploadFileResponse) SetHash(v string)`
 
 SetHash sets Hash field to given value.
 
 
 ### GetStatus
 
-`func (o *GetFileResponse) GetStatus() StoreUploadFileStatus`
+`func (o *GetStoreUploadFileResponse) GetStatus() StoreUploadFileStatus`
 
 GetStatus returns the Status field if non-nil, zero value otherwise.
 
 ### GetStatusOk
 
-`func (o *GetFileResponse) GetStatusOk() (*StoreUploadFileStatus, bool)`
+`func (o *GetStoreUploadFileResponse) GetStatusOk() (*StoreUploadFileStatus, bool)`
 
 GetStatusOk returns a tuple with the Status field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetStatus
 
-`func (o *GetFileResponse) SetStatus(v StoreUploadFileStatus)`
+`func (o *GetStoreUploadFileResponse) SetStatus(v StoreUploadFileStatus)`
 
 SetStatus sets Status field to given value.
 

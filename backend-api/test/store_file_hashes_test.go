@@ -106,7 +106,7 @@ func TestGetStoreFileHashesWithPaginationSucceeds(t *testing.T) {
 	fileName3 := "file2"
 	hash3 := "hash3"
 
-	files := []openapi_client.UploadFileRequest{
+	files := []openapi_client.CreateStoreUploadFileRequest{
 		{
 			FileName: fileName1,
 			Hash:     hash1,

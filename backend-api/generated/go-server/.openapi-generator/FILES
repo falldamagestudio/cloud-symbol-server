@@ -6,13 +6,14 @@ go/error.go
 go/helpers.go
 go/impl.go
 go/logger.go
+go/model_create_store_upload_file_request.go
 go/model_create_store_upload_request.go
 go/model_create_store_upload_response.go
 go/model_create_token_response.go
-go/model_get_file_response.go
 go/model_get_store_file_hash_response.go
 go/model_get_store_file_hashes_response.go
 go/model_get_store_files_response.go
+go/model_get_store_upload_file_response.go
 go/model_get_store_upload_response.go
 go/model_get_store_uploads_response.go
 go/model_get_token_response.go
@@ -22,6 +23,5 @@ go/model_store_file_hash_status.go
 go/model_store_upload_file_status.go
 go/model_store_upload_status.go
 go/model_update_token_request.go
-go/model_upload_file_request.go
 go/model_upload_file_response.go
 go/routers.go

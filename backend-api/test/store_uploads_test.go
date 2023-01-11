@@ -100,7 +100,7 @@ func TestCreateStoreUploadWithoutProgressSucceeds(t *testing.T) {
 	fileName2 := "file2"
 	hash2 := "hash2"
 
-	files := []openapi_client.UploadFileRequest{
+	files := []openapi_client.CreateStoreUploadFileRequest{
 		{
 			FileName: fileName1,
 			Hash:     hash1,
@@ -178,7 +178,7 @@ func TestCreateStoreUploadWithProgressSucceeds(t *testing.T) {
 	fileName2 := "file2"
 	hash2 := "hash2"
 
-	files := []openapi_client.UploadFileRequest{
+	files := []openapi_client.CreateStoreUploadFileRequest{
 		{
 			FileName: fileName1,
 			Hash:     hash1,
@@ -346,7 +346,7 @@ func TestCreateStoreUploadWithProgressAndAbortSucceeds(t *testing.T) {
 	fileName2 := "file2"
 	hash2 := "hash2"
 
-	files := []openapi_client.UploadFileRequest{
+	files := []openapi_client.CreateStoreUploadFileRequest{
 		{
 			FileName: fileName1,
 			Hash:     hash1,

@@ -17,7 +17,7 @@ type GetStoreUploadResponse struct {
 
 	Timestamp string `json:"timestamp"`
 
-	Files []GetFileResponse `json:"files"`
+	Files []GetStoreUploadFileResponse `json:"files"`
 
 	Status StoreUploadStatus `json:"status"`
 }
@@ -38,7 +38,7 @@ func AssertGetStoreUploadResponseRequired(obj GetStoreUploadResponse) error {
 	}
 
 	for _, el := range obj.Files {
-		if err := AssertGetFileResponseRequired(el); err != nil {
+		if err := AssertGetStoreUploadFileResponseRequired(el); err != nil {
 			return err
 		}
 	}

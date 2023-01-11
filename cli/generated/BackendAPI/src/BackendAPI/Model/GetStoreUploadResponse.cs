@@ -50,7 +50,7 @@ namespace BackendAPI.Model
         /// <param name="timestamp">timestamp (required).</param>
         /// <param name="files">files (required).</param>
         /// <param name="status">status (required).</param>
-        public GetStoreUploadResponse(string description = default(string), string buildId = default(string), string timestamp = default(string), List<GetFileResponse> files = default(List<GetFileResponse>), StoreUploadStatus status = default(StoreUploadStatus))
+        public GetStoreUploadResponse(string description = default(string), string buildId = default(string), string timestamp = default(string), List<GetStoreUploadFileResponse> files = default(List<GetStoreUploadFileResponse>), StoreUploadStatus status = default(StoreUploadStatus))
         {
             // to ensure "description" is required (not null)
             if (description == null)
@@ -101,7 +101,7 @@ namespace BackendAPI.Model
         /// Gets or Sets Files
         /// </summary>
         [DataMember(Name = "files", IsRequired = true, EmitDefaultValue = true)]
-        public List<GetFileResponse> Files { get; set; }
+        public List<GetStoreUploadFileResponse> Files { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object

@@ -7,14 +7,14 @@ Name | Type | Description | Notes
 **Description** | **string** |  | 
 **BuildId** | **string** |  | 
 **Timestamp** | **string** |  | 
-**Files** | [**[]GetFileResponse**](GetFileResponse.md) |  | 
+**Files** | [**[]GetStoreUploadFileResponse**](GetStoreUploadFileResponse.md) |  | 
 **Status** | [**StoreUploadStatus**](StoreUploadStatus.md) |  | 
 
 ## Methods
 
 ### NewGetStoreUploadResponse
 
-`func NewGetStoreUploadResponse(description string, buildId string, timestamp string, files []GetFileResponse, status StoreUploadStatus, ) *GetStoreUploadResponse`
+`func NewGetStoreUploadResponse(description string, buildId string, timestamp string, files []GetStoreUploadFileResponse, status StoreUploadStatus, ) *GetStoreUploadResponse`
 
 NewGetStoreUploadResponse instantiates a new GetStoreUploadResponse object
 This constructor will assign default values to properties that have it defined,
@@ -91,20 +91,20 @@ SetTimestamp sets Timestamp field to given value.
 
 ### GetFiles
 
-`func (o *GetStoreUploadResponse) GetFiles() []GetFileResponse`
+`func (o *GetStoreUploadResponse) GetFiles() []GetStoreUploadFileResponse`
 
 GetFiles returns the Files field if non-nil, zero value otherwise.
 
 ### GetFilesOk
 
-`func (o *GetStoreUploadResponse) GetFilesOk() (*[]GetFileResponse, bool)`
+`func (o *GetStoreUploadResponse) GetFilesOk() (*[]GetStoreUploadFileResponse, bool)`
 
 GetFilesOk returns a tuple with the Files field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetFiles
 
-`func (o *GetStoreUploadResponse) SetFiles(v []GetFileResponse)`
+`func (o *GetStoreUploadResponse) SetFiles(v []GetStoreUploadFileResponse)`
 
 SetFiles sets Files field to given value.
 

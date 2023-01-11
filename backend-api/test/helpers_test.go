@@ -165,7 +165,7 @@ func populateTestStore(adminAPIClient *openapi_client.APIClient, authContext con
 		fileName2: content2,
 	}
 
-	files := []openapi_client.UploadFileRequest{
+	files := []openapi_client.CreateStoreUploadFileRequest{
 		{
 			FileName: fileName1,
 			Hash:     hash1,
@@ -270,7 +270,7 @@ var (
 
 func upload(apiClient *openapi_client.APIClient, authContext context.Context, storeId string, testUpload *TestUpload) (string, error) {
 
-	files := make([]openapi_client.UploadFileRequest, len(testUpload.Files))
+	files := make([]openapi_client.CreateStoreUploadFileRequest, len(testUpload.Files))
 
 	useProgressApi := true
 	createStoreUploadRequest := &openapi_client.CreateStoreUploadRequest{

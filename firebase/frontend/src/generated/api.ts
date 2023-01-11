@@ -24,6 +24,25 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
+ * @interface CreateStoreUploadFileRequest
+ */
+export interface CreateStoreUploadFileRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateStoreUploadFileRequest
+     */
+    'fileName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateStoreUploadFileRequest
+     */
+    'hash': string;
+}
+/**
+ * 
+ * @export
  * @interface CreateStoreUploadRequest
  */
 export interface CreateStoreUploadRequest {
@@ -47,10 +66,10 @@ export interface CreateStoreUploadRequest {
     'buildId'?: string;
     /**
      * 
-     * @type {Array<UploadFileRequest>}
+     * @type {Array<CreateStoreUploadFileRequest>}
      * @memberof CreateStoreUploadRequest
      */
-    'files'?: Array<UploadFileRequest>;
+    'files'?: Array<CreateStoreUploadFileRequest>;
 }
 /**
  * 
@@ -83,31 +102,6 @@ export interface CreateTokenResponse {
      * @memberof CreateTokenResponse
      */
     'token': string;
-}
-/**
- * 
- * @export
- * @interface GetFileResponse
- */
-export interface GetFileResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof GetFileResponse
-     */
-    'fileName': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetFileResponse
-     */
-    'hash': string;
-    /**
-     * 
-     * @type {StoreUploadFileStatus}
-     * @memberof GetFileResponse
-     */
-    'status': StoreUploadFileStatus;
 }
 /**
  * 
@@ -169,6 +163,31 @@ export interface GetStoreFilesResponse {
 /**
  * 
  * @export
+ * @interface GetStoreUploadFileResponse
+ */
+export interface GetStoreUploadFileResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetStoreUploadFileResponse
+     */
+    'fileName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetStoreUploadFileResponse
+     */
+    'hash': string;
+    /**
+     * 
+     * @type {StoreUploadFileStatus}
+     * @memberof GetStoreUploadFileResponse
+     */
+    'status': StoreUploadFileStatus;
+}
+/**
+ * 
+ * @export
  * @interface GetStoreUploadResponse
  */
 export interface GetStoreUploadResponse {
@@ -192,10 +211,10 @@ export interface GetStoreUploadResponse {
     'timestamp': string;
     /**
      * 
-     * @type {Array<GetFileResponse>}
+     * @type {Array<GetStoreUploadFileResponse>}
      * @memberof GetStoreUploadResponse
      */
-    'files': Array<GetFileResponse>;
+    'files': Array<GetStoreUploadFileResponse>;
     /**
      * 
      * @type {StoreUploadStatus}
@@ -334,25 +353,6 @@ export interface UpdateTokenRequest {
      * @memberof UpdateTokenRequest
      */
     'description': string;
-}
-/**
- * 
- * @export
- * @interface UploadFileRequest
- */
-export interface UploadFileRequest {
-    /**
-     * 
-     * @type {string}
-     * @memberof UploadFileRequest
-     */
-    'fileName': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UploadFileRequest
-     */
-    'hash': string;
 }
 /**
  * 

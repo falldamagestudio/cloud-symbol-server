@@ -18,13 +18,13 @@ type CreateStoreUploadRequest struct {
 
 	BuildId string `json:"buildId,omitempty"`
 
-	Files []UploadFileRequest `json:"files,omitempty"`
+	Files []CreateStoreUploadFileRequest `json:"files,omitempty"`
 }
 
 // AssertCreateStoreUploadRequestRequired checks if the required fields are not zero-ed
 func AssertCreateStoreUploadRequestRequired(obj CreateStoreUploadRequest) error {
 	for _, el := range obj.Files {
-		if err := AssertUploadFileRequestRequired(el); err != nil {
+		if err := AssertCreateStoreUploadFileRequestRequired(el); err != nil {
 			return err
 		}
 	}

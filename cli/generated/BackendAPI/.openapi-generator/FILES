@@ -1,12 +1,13 @@
 README.md
+docs/CreateStoreUploadFileRequest.md
 docs/CreateStoreUploadRequest.md
 docs/CreateStoreUploadResponse.md
 docs/CreateTokenResponse.md
 docs/DefaultApi.md
-docs/GetFileResponse.md
 docs/GetStoreFileHashResponse.md
 docs/GetStoreFileHashesResponse.md
 docs/GetStoreFilesResponse.md
+docs/GetStoreUploadFileResponse.md
 docs/GetStoreUploadResponse.md
 docs/GetStoreUploadsResponse.md
 docs/GetTokenResponse.md
@@ -16,7 +17,6 @@ docs/StoreFileHashStatus.md
 docs/StoreUploadFileStatus.md
 docs/StoreUploadStatus.md
 docs/UpdateTokenRequest.md
-docs/UploadFileRequest.md
 docs/UploadFileResponse.md
 src/BackendAPI/Api/DefaultApi.cs
 src/BackendAPI/BackendAPI.csproj
@@ -37,13 +37,14 @@ src/BackendAPI/Client/OpenAPIDateConverter.cs
 src/BackendAPI/Client/RequestOptions.cs
 src/BackendAPI/Client/RetryConfiguration.cs
 src/BackendAPI/Model/AbstractOpenAPISchema.cs
+src/BackendAPI/Model/CreateStoreUploadFileRequest.cs
 src/BackendAPI/Model/CreateStoreUploadRequest.cs
 src/BackendAPI/Model/CreateStoreUploadResponse.cs
 src/BackendAPI/Model/CreateTokenResponse.cs
-src/BackendAPI/Model/GetFileResponse.cs
 src/BackendAPI/Model/GetStoreFileHashResponse.cs
 src/BackendAPI/Model/GetStoreFileHashesResponse.cs
 src/BackendAPI/Model/GetStoreFilesResponse.cs
+src/BackendAPI/Model/GetStoreUploadFileResponse.cs
 src/BackendAPI/Model/GetStoreUploadResponse.cs
 src/BackendAPI/Model/GetStoreUploadsResponse.cs
 src/BackendAPI/Model/GetTokenResponse.cs
@@ -53,5 +54,4 @@ src/BackendAPI/Model/StoreFileHashStatus.cs
 src/BackendAPI/Model/StoreUploadFileStatus.cs
 src/BackendAPI/Model/StoreUploadStatus.cs
 src/BackendAPI/Model/UpdateTokenRequest.cs
-src/BackendAPI/Model/UploadFileRequest.cs
 src/BackendAPI/Model/UploadFileResponse.cs

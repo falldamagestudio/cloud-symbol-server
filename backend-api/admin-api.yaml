@@ -672,9 +672,9 @@ components:
         files:
           type: array
           items:
-            $ref: '#/components/schemas/uploadFileRequest'
+            $ref: '#/components/schemas/createStoreUploadFileRequest'
 
-    uploadFileRequest:
+    createStoreUploadFileRequest:
       type: object
       required:
         - fileName
@@ -790,11 +790,11 @@ components:
         files:
           type: array
           items:
-            $ref: '#/components/schemas/getFileResponse'
+            $ref: '#/components/schemas/getStoreUploadFileResponse'
         status:
           $ref: '#/components/schemas/storeUploadStatus'
 
-    getFileResponse:
+    getStoreUploadFileResponse:
       type: object
       required:
         - fileName

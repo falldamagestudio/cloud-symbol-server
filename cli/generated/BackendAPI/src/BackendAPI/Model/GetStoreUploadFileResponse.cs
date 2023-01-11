@@ -26,35 +26,43 @@ using OpenAPIDateConverter = BackendAPI.Client.OpenAPIDateConverter;
 namespace BackendAPI.Model
 {
     /// <summary>
-    /// UploadFileRequest
+    /// GetStoreUploadFileResponse
     /// </summary>
-    [DataContract(Name = "uploadFileRequest")]
-    public partial class UploadFileRequest : IEquatable<UploadFileRequest>, IValidatableObject
+    [DataContract(Name = "getStoreUploadFileResponse")]
+    public partial class GetStoreUploadFileResponse : IEquatable<GetStoreUploadFileResponse>, IValidatableObject
     {
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="UploadFileRequest" /> class.
+        /// Gets or Sets Status
+        /// </summary>
+        [DataMember(Name = "status", IsRequired = true, EmitDefaultValue = true)]
+        public StoreUploadFileStatus Status { get; set; }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetStoreUploadFileResponse" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected UploadFileRequest() { }
+        protected GetStoreUploadFileResponse() { }
         /// <summary>
-        /// Initializes a new instance of the <see cref="UploadFileRequest" /> class.
+        /// Initializes a new instance of the <see cref="GetStoreUploadFileResponse" /> class.
         /// </summary>
         /// <param name="fileName">fileName (required).</param>
         /// <param name="hash">hash (required).</param>
-        public UploadFileRequest(string fileName = default(string), string hash = default(string))
+        /// <param name="status">status (required).</param>
+        public GetStoreUploadFileResponse(string fileName = default(string), string hash = default(string), StoreUploadFileStatus status = default(StoreUploadFileStatus))
         {
             // to ensure "fileName" is required (not null)
             if (fileName == null)
             {
-                throw new ArgumentNullException("fileName is a required property for UploadFileRequest and cannot be null");
+                throw new ArgumentNullException("fileName is a required property for GetStoreUploadFileResponse and cannot be null");
             }
             this.FileName = fileName;
             // to ensure "hash" is required (not null)
             if (hash == null)
             {
-                throw new ArgumentNullException("hash is a required property for UploadFileRequest and cannot be null");
+                throw new ArgumentNullException("hash is a required property for GetStoreUploadFileResponse and cannot be null");
             }
             this.Hash = hash;
+            this.Status = status;
         }
 
         /// <summary>
@@ -76,9 +84,10 @@ namespace BackendAPI.Model
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("class UploadFileRequest {\n");
+            sb.Append("class GetStoreUploadFileResponse {\n");
             sb.Append("  FileName: ").Append(FileName).Append("\n");
             sb.Append("  Hash: ").Append(Hash).Append("\n");
+            sb.Append("  Status: ").Append(Status).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -99,15 +108,15 @@ namespace BackendAPI.Model
         /// <returns>Boolean</returns>
         public override bool Equals(object input)
         {
-            return this.Equals(input as UploadFileRequest);
+            return this.Equals(input as GetStoreUploadFileResponse);
         }
 
         /// <summary>
-        /// Returns true if UploadFileRequest instances are equal
+        /// Returns true if GetStoreUploadFileResponse instances are equal
         /// </summary>
-        /// <param name="input">Instance of UploadFileRequest to be compared</param>
+        /// <param name="input">Instance of GetStoreUploadFileResponse to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(UploadFileRequest input)
+        public bool Equals(GetStoreUploadFileResponse input)
         {
             if (input == null)
             {
@@ -123,6 +132,10 @@ namespace BackendAPI.Model
                     this.Hash == input.Hash ||
                     (this.Hash != null &&
                     this.Hash.Equals(input.Hash))
+                ) && 
+                (
+                    this.Status == input.Status ||
+                    this.Status.Equals(input.Status)
                 );
         }
 
@@ -143,6 +156,7 @@ namespace BackendAPI.Model
                 {
                     hashCode = (hashCode * 59) + this.Hash.GetHashCode();
                 }
+                hashCode = (hashCode * 59) + this.Status.GetHashCode();
                 return hashCode;
             }
         }

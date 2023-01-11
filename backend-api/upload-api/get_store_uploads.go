@@ -100,10 +100,10 @@ func GetStoreUploads(ctx context.Context, storeId string, offset int32, limit in
 	}
 
 	// Create per-upload files result data structures
-	var uploadIdToFiles = map[int][]openapi.GetFileResponse{}
+	var uploadIdToFiles = map[int][]openapi.GetStoreUploadFileResponse{}
 	for uploadId := range uploadIdToFileCount {
 		numFiles := uploadIdToFileCount[uploadId]
-		uploadIdToFiles[uploadId] = make([]openapi.GetFileResponse, numFiles)
+		uploadIdToFiles[uploadId] = make([]openapi.GetStoreUploadFileResponse, numFiles)
 	}
 
 	// Populate per-upload files result data structures
@@ -118,7 +118,7 @@ func GetStoreUploads(ctx context.Context, storeId string, offset int32, limit in
 			status = file.Status
 		}
 
-		uploadIdToFiles[uploadId][uploadFileIndex] = openapi.GetFileResponse{
+		uploadIdToFiles[uploadId][uploadFileIndex] = openapi.GetStoreUploadFileResponse{
 			FileName: file.FileName,
 			Hash: file.FileHash,
 			Status: openapi.StoreUploadFileStatus(status),

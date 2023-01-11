@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **Description** | **string** |  | 
 **BuildId** | **string** |  | 
 **Timestamp** | **string** |  | 
-**Files** | [**List&lt;GetFileResponse&gt;**](GetFileResponse.md) |  | 
+**Files** | [**List&lt;GetStoreUploadFileResponse&gt;**](GetStoreUploadFileResponse.md) |  | 
 **Status** | **StoreUploadStatus** |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

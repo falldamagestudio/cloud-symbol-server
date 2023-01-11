@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **UseProgressApi** | Pointer to **bool** | When present and set to true, the client will provide progress updates; Legacy clients will create an upload, then upload the required files to GCS, without progress/completion callbacks | [optional] 
 **Description** | Pointer to **string** |  | [optional] 
 **BuildId** | Pointer to **string** |  | [optional] 
-**Files** | Pointer to [**[]UploadFileRequest**](UploadFileRequest.md) |  | [optional] 
+**Files** | Pointer to [**[]CreateStoreUploadFileRequest**](CreateStoreUploadFileRequest.md) |  | [optional] 
 
 ## Methods
 
@@ -105,20 +105,20 @@ HasBuildId returns a boolean if a field has been set.
 
 ### GetFiles
 
-`func (o *CreateStoreUploadRequest) GetFiles() []UploadFileRequest`
+`func (o *CreateStoreUploadRequest) GetFiles() []CreateStoreUploadFileRequest`
 
 GetFiles returns the Files field if non-nil, zero value otherwise.
 
 ### GetFilesOk
 
-`func (o *CreateStoreUploadRequest) GetFilesOk() (*[]UploadFileRequest, bool)`
+`func (o *CreateStoreUploadRequest) GetFilesOk() (*[]CreateStoreUploadFileRequest, bool)`
 
 GetFilesOk returns a tuple with the Files field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetFiles
 
-`func (o *CreateStoreUploadRequest) SetFiles(v []UploadFileRequest)`
+`func (o *CreateStoreUploadRequest) SetFiles(v []CreateStoreUploadFileRequest)`
 
 SetFiles sets Files field to given value.
 

@@ -21,8 +21,8 @@ import (
 	postgres "github.com/falldamagestudio/cloud-symbol-server/backend-api/postgres"
 )
 
-func uploadFileRequestToPath(storeId string, uploadFileRequest openapi.UploadFileRequest) string {
-	return fmt.Sprintf("stores/%s/%s/%s/%s", storeId, uploadFileRequest.FileName, uploadFileRequest.Hash, uploadFileRequest.FileName)
+func uploadFileRequestToPath(storeId string, createStoreUploadFileRequest openapi.CreateStoreUploadFileRequest) string {
+	return fmt.Sprintf("stores/%s/%s/%s/%s", storeId, createStoreUploadFileRequest.FileName, createStoreUploadFileRequest.Hash, createStoreUploadFileRequest.FileName)
 }
 
 type FileEntry struct {
@@ -61,14 +61,14 @@ func CreateStoreUpload(context context.Context, storeId string, createStoreUploa
 
 	createStoreUploadResponse := openapi.CreateStoreUploadResponse{}
 
-	for _, uploadFileRequest := range createStoreUploadRequest.Files {
+	for _, createStoreUploadFileRequest := range createStoreUploadRequest.Files {
 
 		objectURL := ""
 
 		// Validate whether object exists in bucket
 		// This will talk to the Cloud Storage APIs
 
-		path := uploadFileRequestToPath(storeId, uploadFileRequest)
+		path := uploadFileRequestToPath(storeId, createStoreUploadFileRequest)
 		log.Printf("Validating whether object %v does exists in bucket %v", path, symbolStoreBucketName)
 		_, err = storageClient.Bucket(symbolStoreBucketName).Object(path).Attrs(context)
 		if err != nil {
@@ -94,8 +94,8 @@ func CreateStoreUpload(context context.Context, storeId string, createStoreUploa
 
 		if includeAlreadyPresentFiles || (objectURL != "") {
 			createStoreUploadResponse.Files = append(createStoreUploadResponse.Files, openapi.UploadFileResponse{
-				FileName: uploadFileRequest.FileName,
-				Hash:     uploadFileRequest.Hash,
+				FileName: createStoreUploadFileRequest.FileName,
+				Hash:     createStoreUploadFileRequest.Hash,
 				Url:      objectURL,
 			})
 		}

@@ -38,7 +38,7 @@ namespace BackendAPI.Model
         /// <param name="description">description.</param>
         /// <param name="buildId">buildId.</param>
         /// <param name="files">files.</param>
-        public CreateStoreUploadRequest(bool useProgressApi = default(bool), string description = default(string), string buildId = default(string), List<UploadFileRequest> files = default(List<UploadFileRequest>))
+        public CreateStoreUploadRequest(bool useProgressApi = default(bool), string description = default(string), string buildId = default(string), List<CreateStoreUploadFileRequest> files = default(List<CreateStoreUploadFileRequest>))
         {
             this.UseProgressApi = useProgressApi;
             this.Description = description;
@@ -69,7 +69,7 @@ namespace BackendAPI.Model
         /// Gets or Sets Files
         /// </summary>
         [DataMember(Name = "files", EmitDefaultValue = false)]
-        public List<UploadFileRequest> Files { get; set; }
+        public List<CreateStoreUploadFileRequest> Files { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object

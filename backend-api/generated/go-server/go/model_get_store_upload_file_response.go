@@ -9,7 +9,7 @@
 
 package openapi
 
-type GetFileResponse struct {
+type GetStoreUploadFileResponse struct {
 
 	FileName string `json:"fileName"`
 
@@ -18,8 +18,8 @@ type GetFileResponse struct {
 	Status StoreUploadFileStatus `json:"status"`
 }
 
-// AssertGetFileResponseRequired checks if the required fields are not zero-ed
-func AssertGetFileResponseRequired(obj GetFileResponse) error {
+// AssertGetStoreUploadFileResponseRequired checks if the required fields are not zero-ed
+func AssertGetStoreUploadFileResponseRequired(obj GetStoreUploadFileResponse) error {
 	elements := map[string]interface{}{
 		"fileName": obj.FileName,
 		"hash": obj.Hash,
@@ -34,14 +34,14 @@ func AssertGetFileResponseRequired(obj GetFileResponse) error {
 	return nil
 }
 
-// AssertRecurseGetFileResponseRequired recursively checks if required fields are not zero-ed in a nested slice.
-// Accepts only nested slice of GetFileResponse (e.g. [][]GetFileResponse), otherwise ErrTypeAssertionError is thrown.
-func AssertRecurseGetFileResponseRequired(objSlice interface{}) error {
+// AssertRecurseGetStoreUploadFileResponseRequired recursively checks if required fields are not zero-ed in a nested slice.
+// Accepts only nested slice of GetStoreUploadFileResponse (e.g. [][]GetStoreUploadFileResponse), otherwise ErrTypeAssertionError is thrown.
+func AssertRecurseGetStoreUploadFileResponseRequired(objSlice interface{}) error {
 	return AssertRecurseInterfaceRequired(objSlice, func(obj interface{}) error {
-		aGetFileResponse, ok := obj.(GetFileResponse)
+		aGetStoreUploadFileResponse, ok := obj.(GetStoreUploadFileResponse)
 		if !ok {
 			return ErrTypeAssertionError
 		}
-		return AssertGetFileResponseRequired(aGetFileResponse)
+		return AssertGetStoreUploadFileResponseRequired(aGetStoreUploadFileResponse)
 	})
 }

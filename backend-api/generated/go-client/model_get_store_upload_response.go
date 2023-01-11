@@ -19,7 +19,7 @@ type GetStoreUploadResponse struct {
 	Description string `json:"description"`
 	BuildId string `json:"buildId"`
 	Timestamp string `json:"timestamp"`
-	Files []GetFileResponse `json:"files"`
+	Files []GetStoreUploadFileResponse `json:"files"`
 	Status StoreUploadStatus `json:"status"`
 }
 
@@ -27,7 +27,7 @@ type GetStoreUploadResponse struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetStoreUploadResponse(description string, buildId string, timestamp string, files []GetFileResponse, status StoreUploadStatus) *GetStoreUploadResponse {
+func NewGetStoreUploadResponse(description string, buildId string, timestamp string, files []GetStoreUploadFileResponse, status StoreUploadStatus) *GetStoreUploadResponse {
 	this := GetStoreUploadResponse{}
 	this.Description = description
 	this.BuildId = buildId
@@ -118,9 +118,9 @@ func (o *GetStoreUploadResponse) SetTimestamp(v string) {
 }
 
 // GetFiles returns the Files field value
-func (o *GetStoreUploadResponse) GetFiles() []GetFileResponse {
+func (o *GetStoreUploadResponse) GetFiles() []GetStoreUploadFileResponse {
 	if o == nil {
-		var ret []GetFileResponse
+		var ret []GetStoreUploadFileResponse
 		return ret
 	}
 
@@ -129,7 +129,7 @@ func (o *GetStoreUploadResponse) GetFiles() []GetFileResponse {
 
 // GetFilesOk returns a tuple with the Files field value
 // and a boolean to check if the value has been set.
-func (o *GetStoreUploadResponse) GetFilesOk() ([]GetFileResponse, bool) {
+func (o *GetStoreUploadResponse) GetFilesOk() ([]GetStoreUploadFileResponse, bool) {
 	if o == nil {
     return nil, false
 	}
@@ -137,7 +137,7 @@ func (o *GetStoreUploadResponse) GetFilesOk() ([]GetFileResponse, bool) {
 }
 
 // SetFiles sets field value
-func (o *GetStoreUploadResponse) SetFiles(v []GetFileResponse) {
+func (o *GetStoreUploadResponse) SetFiles(v []GetStoreUploadFileResponse) {
 	o.Files = v
 }
 

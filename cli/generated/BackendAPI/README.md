@@ -126,13 +126,14 @@ Class | Method | HTTP request | Description
 <a name="documentation-for-models"></a>
 ## Documentation for Models
 
+ - [Model.CreateStoreUploadFileRequest](docs/CreateStoreUploadFileRequest.md)
  - [Model.CreateStoreUploadRequest](docs/CreateStoreUploadRequest.md)
  - [Model.CreateStoreUploadResponse](docs/CreateStoreUploadResponse.md)
  - [Model.CreateTokenResponse](docs/CreateTokenResponse.md)
- - [Model.GetFileResponse](docs/GetFileResponse.md)
  - [Model.GetStoreFileHashResponse](docs/GetStoreFileHashResponse.md)
  - [Model.GetStoreFileHashesResponse](docs/GetStoreFileHashesResponse.md)
  - [Model.GetStoreFilesResponse](docs/GetStoreFilesResponse.md)
+ - [Model.GetStoreUploadFileResponse](docs/GetStoreUploadFileResponse.md)
  - [Model.GetStoreUploadResponse](docs/GetStoreUploadResponse.md)
  - [Model.GetStoreUploadsResponse](docs/GetStoreUploadsResponse.md)
  - [Model.GetTokenResponse](docs/GetTokenResponse.md)
@@ -142,7 +143,6 @@ Class | Method | HTTP request | Description
  - [Model.StoreUploadFileStatus](docs/StoreUploadFileStatus.md)
  - [Model.StoreUploadStatus](docs/StoreUploadStatus.md)
  - [Model.UpdateTokenRequest](docs/UpdateTokenRequest.md)
- - [Model.UploadFileRequest](docs/UploadFileRequest.md)
  - [Model.UploadFileResponse](docs/UploadFileResponse.md)
 
 

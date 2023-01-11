@@ -14,33 +14,33 @@ import (
 	"encoding/json"
 )
 
-// UploadFileRequest struct for UploadFileRequest
-type UploadFileRequest struct {
+// CreateStoreUploadFileRequest struct for CreateStoreUploadFileRequest
+type CreateStoreUploadFileRequest struct {
 	FileName string `json:"fileName"`
 	Hash string `json:"hash"`
 }
 
-// NewUploadFileRequest instantiates a new UploadFileRequest object
+// NewCreateStoreUploadFileRequest instantiates a new CreateStoreUploadFileRequest object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewUploadFileRequest(fileName string, hash string) *UploadFileRequest {
-	this := UploadFileRequest{}
+func NewCreateStoreUploadFileRequest(fileName string, hash string) *CreateStoreUploadFileRequest {
+	this := CreateStoreUploadFileRequest{}
 	this.FileName = fileName
 	this.Hash = hash
 	return &this
 }
 
-// NewUploadFileRequestWithDefaults instantiates a new UploadFileRequest object
+// NewCreateStoreUploadFileRequestWithDefaults instantiates a new CreateStoreUploadFileRequest object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewUploadFileRequestWithDefaults() *UploadFileRequest {
-	this := UploadFileRequest{}
+func NewCreateStoreUploadFileRequestWithDefaults() *CreateStoreUploadFileRequest {
+	this := CreateStoreUploadFileRequest{}
 	return &this
 }
 
 // GetFileName returns the FileName field value
-func (o *UploadFileRequest) GetFileName() string {
+func (o *CreateStoreUploadFileRequest) GetFileName() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -51,7 +51,7 @@ func (o *UploadFileRequest) GetFileName() string {
 
 // GetFileNameOk returns a tuple with the FileName field value
 // and a boolean to check if the value has been set.
-func (o *UploadFileRequest) GetFileNameOk() (*string, bool) {
+func (o *CreateStoreUploadFileRequest) GetFileNameOk() (*string, bool) {
 	if o == nil {
     return nil, false
 	}
@@ -59,12 +59,12 @@ func (o *UploadFileRequest) GetFileNameOk() (*string, bool) {
 }
 
 // SetFileName sets field value
-func (o *UploadFileRequest) SetFileName(v string) {
+func (o *CreateStoreUploadFileRequest) SetFileName(v string) {
 	o.FileName = v
 }
 
 // GetHash returns the Hash field value
-func (o *UploadFileRequest) GetHash() string {
+func (o *CreateStoreUploadFileRequest) GetHash() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -75,7 +75,7 @@ func (o *UploadFileRequest) GetHash() string {
 
 // GetHashOk returns a tuple with the Hash field value
 // and a boolean to check if the value has been set.
-func (o *UploadFileRequest) GetHashOk() (*string, bool) {
+func (o *CreateStoreUploadFileRequest) GetHashOk() (*string, bool) {
 	if o == nil {
     return nil, false
 	}
@@ -83,11 +83,11 @@ func (o *UploadFileRequest) GetHashOk() (*string, bool) {
 }
 
 // SetHash sets field value
-func (o *UploadFileRequest) SetHash(v string) {
+func (o *CreateStoreUploadFileRequest) SetHash(v string) {
 	o.Hash = v
 }
 
-func (o UploadFileRequest) MarshalJSON() ([]byte, error) {
+func (o CreateStoreUploadFileRequest) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
 		toSerialize["fileName"] = o.FileName
@@ -98,38 +98,38 @@ func (o UploadFileRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-type NullableUploadFileRequest struct {
-	value *UploadFileRequest
+type NullableCreateStoreUploadFileRequest struct {
+	value *CreateStoreUploadFileRequest
 	isSet bool
 }
 
-func (v NullableUploadFileRequest) Get() *UploadFileRequest {
+func (v NullableCreateStoreUploadFileRequest) Get() *CreateStoreUploadFileRequest {
 	return v.value
 }
 
-func (v *NullableUploadFileRequest) Set(val *UploadFileRequest) {
+func (v *NullableCreateStoreUploadFileRequest) Set(val *CreateStoreUploadFileRequest) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableUploadFileRequest) IsSet() bool {
+func (v NullableCreateStoreUploadFileRequest) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableUploadFileRequest) Unset() {
+func (v *NullableCreateStoreUploadFileRequest) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableUploadFileRequest(val *UploadFileRequest) *NullableUploadFileRequest {
-	return &NullableUploadFileRequest{value: val, isSet: true}
+func NewNullableCreateStoreUploadFileRequest(val *CreateStoreUploadFileRequest) *NullableCreateStoreUploadFileRequest {
+	return &NullableCreateStoreUploadFileRequest{value: val, isSet: true}
 }
 
-func (v NullableUploadFileRequest) MarshalJSON() ([]byte, error) {
+func (v NullableCreateStoreUploadFileRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableUploadFileRequest) UnmarshalJSON(src []byte) error {
+func (v *NullableCreateStoreUploadFileRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
