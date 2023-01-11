@@ -15,26 +15,27 @@
       <template
         v-slot:item.description="{ item }"
       >
-        {{ item.description }}
+        <router-link :to="{ name: 'storeUpload', params: { store: store, upload: storeUploads.indexOf(item).toString() } }">{{ item.description }}</router-link>
       </template>    
 
       <template
         v-slot:item.buildId="{ item }"
       >
-        {{ item.buildId }}
+        <router-link :to="{ name: 'storeUpload', params: { store: store, upload: storeUploads.indexOf(item).toString() } }">{{ item.buildId }}</router-link>
       </template>    
 
       <template
         v-slot:item.timestamp="{ item }"
       >
-        {{ item.timestamp }}
+        <router-link :to="{ name: 'storeUpload', params: { store: store, upload: storeUploads.indexOf(item).toString() } }">{{ item.timestamp }}</router-link>
       </template>    
 
       <template
         v-slot:item.status="{ item }"
       >
-        {{ item.status }}
+        <router-link :to="{ name: 'storeUpload', params: { store: store, upload: storeUploads.indexOf(item).toString() } }">{{ item.status }}</router-link>
       </template>    
+
 
     </v-data-table>
 
