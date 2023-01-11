@@ -25,7 +25,9 @@
               v-bind:key="store"
             >
               <td>
-                {{store}} - <router-link :to="{ name: 'storeFiles', params: { store: store } }">Files</router-link>
+                {{store}} -
+                <router-link :to="{ name: 'storeFiles', params: { store: store } }">Files</router-link>, 
+                <router-link :to="{ name: 'storeUploads', params: { store: store } }">Uploads</router-link>
               </td>
             </tr>
           </template>

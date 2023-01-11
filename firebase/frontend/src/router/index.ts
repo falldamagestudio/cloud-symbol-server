@@ -5,6 +5,7 @@ import NewPATView from '../views/NewPATView.vue'
 import StoresView from '../views/StoresView.vue'
 import StoreFilesView from '../views/StoreFilesView.vue'
 import StoreFileHashesView from '../views/StoreFileHashesView.vue'
+import StoreUploadsView from '../views/StoreUploadsView.vue'
 
 Vue.use(VueRouter)
 
@@ -37,6 +38,11 @@ const routes: Array<RouteConfig> = [
     path: '/stores/:store/files/:file',
     name: 'storeFileHashes',
     component: StoreFileHashesView
+  },
+  {
+    path: '/stores/:store/uploads',
+    name: 'storeUploads',
+    component: StoreUploadsView
   },
 ]
 
