@@ -13,10 +13,13 @@ docs/GetStoreFileHashResponse.md
 docs/GetStoreFileHashesResponse.md
 docs/GetStoreFilesResponse.md
 docs/GetStoreUploadResponse.md
+docs/GetStoreUploadsResponse.md
 docs/GetTokenResponse.md
 docs/MessageResponse.md
 docs/PaginationResponse.md
 docs/StoreFileHashStatus.md
+docs/StoreUploadFileStatus.md
+docs/StoreUploadStatus.md
 docs/UpdateTokenRequest.md
 docs/UploadFileRequest.md
 docs/UploadFileResponse.md
@@ -28,10 +31,13 @@ model_get_store_file_hash_response.go
 model_get_store_file_hashes_response.go
 model_get_store_files_response.go
 model_get_store_upload_response.go
+model_get_store_uploads_response.go
 model_get_token_response.go
 model_message_response.go
 model_pagination_response.go
 model_store_file_hash_status.go
+model_store_upload_file_status.go
+model_store_upload_status.go
 model_update_token_request.go
 model_upload_file_request.go
 model_upload_file_response.go

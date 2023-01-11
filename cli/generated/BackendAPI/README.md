@@ -113,7 +113,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**GetStoreFileHashes**](docs/DefaultApi.md#getstorefilehashes) | **GET** /stores/{storeId}/files/{fileId}/hashes | Fetch a list of hashes for a specific file in store
 *DefaultApi* | [**GetStoreFiles**](docs/DefaultApi.md#getstorefiles) | **GET** /stores/{storeId}/files | Fetch a list of files in store
 *DefaultApi* | [**GetStoreUpload**](docs/DefaultApi.md#getstoreupload) | **GET** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
-*DefaultApi* | [**GetStoreUploadIds**](docs/DefaultApi.md#getstoreuploadids) | **GET** /stores/{storeId}/uploads | Fetch a list of all uploads in store
+*DefaultApi* | [**GetStoreUploads**](docs/DefaultApi.md#getstoreuploads) | **GET** /stores/{storeId}/uploads | Fetch a list of uploads in store
 *DefaultApi* | [**GetStores**](docs/DefaultApi.md#getstores) | **GET** /stores | Fetch a list of all stores
 *DefaultApi* | [**GetToken**](docs/DefaultApi.md#gettoken) | **GET** /tokens/{token} | Fetch a token for current user
 *DefaultApi* | [**GetTokens**](docs/DefaultApi.md#gettokens) | **GET** /tokens | Fetch a list of all tokens for current user
@@ -134,10 +134,13 @@ Class | Method | HTTP request | Description
  - [Model.GetStoreFileHashesResponse](docs/GetStoreFileHashesResponse.md)
  - [Model.GetStoreFilesResponse](docs/GetStoreFilesResponse.md)
  - [Model.GetStoreUploadResponse](docs/GetStoreUploadResponse.md)
+ - [Model.GetStoreUploadsResponse](docs/GetStoreUploadsResponse.md)
  - [Model.GetTokenResponse](docs/GetTokenResponse.md)
  - [Model.MessageResponse](docs/MessageResponse.md)
  - [Model.PaginationResponse](docs/PaginationResponse.md)
  - [Model.StoreFileHashStatus](docs/StoreFileHashStatus.md)
+ - [Model.StoreUploadFileStatus](docs/StoreUploadFileStatus.md)
+ - [Model.StoreUploadStatus](docs/StoreUploadStatus.md)
  - [Model.UpdateTokenRequest](docs/UpdateTokenRequest.md)
  - [Model.UploadFileRequest](docs/UploadFileRequest.md)
  - [Model.UploadFileResponse](docs/UploadFileResponse.md)

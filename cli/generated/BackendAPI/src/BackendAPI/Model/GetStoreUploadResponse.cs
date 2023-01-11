@@ -31,50 +31,12 @@ namespace BackendAPI.Model
     [DataContract(Name = "getStoreUploadResponse")]
     public partial class GetStoreUploadResponse : IEquatable<GetStoreUploadResponse>, IValidatableObject
     {
-        /// <summary>
-        /// Defines Status
-        /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public enum StatusEnum
-        {
-            /// <summary>
-            /// Enum Unknown for value: unknown
-            /// </summary>
-            [EnumMember(Value = "unknown")]
-            Unknown = 1,
-
-            /// <summary>
-            /// Enum InProgress for value: in_progress
-            /// </summary>
-            [EnumMember(Value = "in_progress")]
-            InProgress = 2,
-
-            /// <summary>
-            /// Enum Completed for value: completed
-            /// </summary>
-            [EnumMember(Value = "completed")]
-            Completed = 3,
-
-            /// <summary>
-            /// Enum Aborted for value: aborted
-            /// </summary>
-            [EnumMember(Value = "aborted")]
-            Aborted = 4,
-
-            /// <summary>
-            /// Enum Expired for value: expired
-            /// </summary>
-            [EnumMember(Value = "expired")]
-            Expired = 5
-
-        }
-
 
         /// <summary>
         /// Gets or Sets Status
         /// </summary>
         [DataMember(Name = "status", IsRequired = true, EmitDefaultValue = true)]
-        public StatusEnum Status { get; set; }
+        public StoreUploadStatus Status { get; set; }
         /// <summary>
         /// Initializes a new instance of the <see cref="GetStoreUploadResponse" /> class.
         /// </summary>
@@ -88,7 +50,7 @@ namespace BackendAPI.Model
         /// <param name="timestamp">timestamp (required).</param>
         /// <param name="files">files (required).</param>
         /// <param name="status">status (required).</param>
-        public GetStoreUploadResponse(string description = default(string), string buildId = default(string), string timestamp = default(string), List<GetFileResponse> files = default(List<GetFileResponse>), StatusEnum status = default(StatusEnum))
+        public GetStoreUploadResponse(string description = default(string), string buildId = default(string), string timestamp = default(string), List<GetFileResponse> files = default(List<GetFileResponse>), StoreUploadStatus status = default(StoreUploadStatus))
         {
             // to ensure "description" is required (not null)
             if (description == null)

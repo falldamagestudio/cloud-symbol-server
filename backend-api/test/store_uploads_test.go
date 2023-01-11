@@ -2,7 +2,6 @@ package backend_api
 
 import (
 	"net/http"
-	"reflect"
 	"testing"
 
 	openapi_client "github.com/falldamagestudio/cloud-symbol-server/backend-api/generated/go-client"
@@ -25,7 +24,7 @@ func TestGetStoreUploadWithInvalidCredentialsFails(t *testing.T) {
 	}
 }
 
-func TestGetStoreUploadIdsForStoreThatDoesNotExistFails(t *testing.T) {
+func TestGetStoreUploadsForStoreThatDoesNotExistFails(t *testing.T) {
 
 	email, pat := getTestEmailAndPat()
 
@@ -33,10 +32,10 @@ func TestGetStoreUploadIdsForStoreThatDoesNotExistFails(t *testing.T) {
 
 	invalidStoreId := "invalidstoreid"
 
-	_, r, err := apiClient.DefaultApi.GetStoreUploadIds(authContext, invalidStoreId).Execute()
+	_, r, err := apiClient.DefaultApi.GetStoreUploads(authContext, invalidStoreId).Execute()
 	desiredStatusCode := http.StatusNotFound
 	if err == nil || desiredStatusCode != r.StatusCode {
-		t.Fatalf("GetStoreUploadIds with invalid store ID is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
+		t.Fatalf("GetStoreUploads with invalid store ID is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
 	}
 }
 
@@ -52,10 +51,10 @@ func TestGetStoreUploadIdsForStoreExistsSucceeds(t *testing.T) {
 		t.Fatalf("ensureTestStoreExists failed: %v", err)
 	}
 
-	_, r, err := apiClient.DefaultApi.GetStoreUploadIds(authContext, storeId).Execute()
+	_, r, err := apiClient.DefaultApi.GetStoreUploads(authContext, storeId).Execute()
 	desiredStatusCode := http.StatusOK
 	if err != nil || desiredStatusCode != r.StatusCode {
-		t.Fatalf("GetStoreUploadIds with valid store ID is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
+		t.Fatalf("GetStoreUploads with valid store ID is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
 	}
 }
 
@@ -127,39 +126,33 @@ func TestCreateStoreUploadWithoutProgressSucceeds(t *testing.T) {
 		t.Fatalf("CreateStoreUpload is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
 	}
 
-	// Ensure this upload exists, and has been assigned ID "0"
+	// Ensure this upload exists
 
-	getStoreUploadIdsResponse, r, err := apiClient.DefaultApi.GetStoreUploadIds(authContext, storeId).Execute()
+	getStoreUploadsResponse, r, err := apiClient.DefaultApi.GetStoreUploads(authContext, storeId).Offset(0).Limit(100).Execute()
 	desiredStatusCode = http.StatusOK
 	if err != nil || desiredStatusCode != r.StatusCode {
-		t.Fatalf("GetStoreUploadIds is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
+		t.Fatalf("GetStoreUploads is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
 	}
 
-	expectedStoreUploadIds := []string{"0"}
-	if !reflect.DeepEqual(expectedStoreUploadIds, getStoreUploadIdsResponse) {
-		t.Fatalf("Expected GetStoreUploadIds is expected to return %v, but returned %v", expectedStoreUploadIds, getStoreUploadIdsResponse)
+	// Ensure there is a single upload
+
+	expectedNumStoreUploads := 1
+	if len(getStoreUploadsResponse.Uploads) != expectedNumStoreUploads {
+		t.Fatalf("Expected GetStoreUploads returns %v results, but returned %v results: %v", expectedNumStoreUploads, len(getStoreUploadsResponse.Uploads), getStoreUploadsResponse)
 	}
 
 	// Ensure upload is in "completed" status
 
-	storeUploadId := "0"
-
-	getStoreUploadResponse, r, err := apiClient.DefaultApi.GetStoreUpload(authContext, storeUploadId, storeId).Execute()
-	desiredStatusCode = http.StatusOK
-	if err != nil || desiredStatusCode != r.StatusCode {
-		t.Fatalf("GetStoreUpload is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
-	}
-
-	expectedUploadStatus := "completed"
-	if getStoreUploadResponse.Status != expectedUploadStatus {
-		t.Fatalf("GetStoreUpload should return an upload with status %v, but it has status %v", expectedUploadStatus, getStoreUploadResponse.Status)
+	expectedUploadStatus := openapi_client.STOREUPLOADSTATUS_COMPLETED
+	if getStoreUploadsResponse.Uploads[0].Status != expectedUploadStatus {
+		t.Fatalf("GetStoreUpload should return an upload with status %v, but it has status %v", expectedUploadStatus, getStoreUploadsResponse.Uploads[0].Status)
 	}
 
 	// Ensure file is in "completed" status
 
-	expectedUploadFileStatus := "completed"
-	if getStoreUploadResponse.Files[0].Status != expectedUploadFileStatus {
-		t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, getStoreUploadResponse.Files[0].Status)
+	expectedUploadFileStatus := openapi_client.STOREUPLOADFILESTATUS_COMPLETED
+	if getStoreUploadsResponse.Uploads[0].Files[0].Status != expectedUploadFileStatus {
+		t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, getStoreUploadsResponse.Uploads[0].Files[0].Status)
 	}
 }
 
@@ -210,44 +203,39 @@ func TestCreateStoreUploadWithProgressSucceeds(t *testing.T) {
 		t.Fatalf("CreateStoreUpload is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
 	}
 
-	// Ensure this upload exists, and has been assigned ID "0"
+	// Ensure this upload exists
 
-	getStoreUploadIdsResponse, r, err := apiClient.DefaultApi.GetStoreUploadIds(authContext, storeId).Execute()
+	getStoreUploadsResponse, r, err := apiClient.DefaultApi.GetStoreUploads(authContext, storeId).Offset(0).Limit(100).Execute()
 	desiredStatusCode = http.StatusOK
 	if err != nil || desiredStatusCode != r.StatusCode {
-		t.Fatalf("GetStoreUploadIds is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
+		t.Fatalf("GetStoreUploads is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
 	}
 
-	expectedStoreUploadIds := []string{"0"}
-	if !reflect.DeepEqual(expectedStoreUploadIds, getStoreUploadIdsResponse) {
-		t.Fatalf("Expected GetStoreUploadIds is expected to return %v, but returned %v", expectedStoreUploadIds, getStoreUploadIdsResponse)
+	// Ensure there is a single upload
+
+	expectedNumStoreUploads := 1
+	if len(getStoreUploadsResponse.Uploads) != expectedNumStoreUploads {
+		t.Fatalf("Expected GetStoreUploads returns %v results, but returned %v results: %v", expectedNumStoreUploads, len(getStoreUploadsResponse.Uploads), getStoreUploadsResponse)
 	}
 
 	// Ensure upload is in "in_progress" status
 
-	storeUploadId := "0"
-
-	getStoreUploadResponse, r, err := apiClient.DefaultApi.GetStoreUpload(authContext, storeUploadId, storeId).Execute()
-	desiredStatusCode = http.StatusOK
-	if err != nil || desiredStatusCode != r.StatusCode {
-		t.Fatalf("GetStoreUpload is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
-	}
-
-	expectedUploadStatus := "in_progress"
-	if getStoreUploadResponse.Status != expectedUploadStatus {
-		t.Fatalf("GetStoreUpload should return an upload with status %v, but it has status %v", expectedUploadStatus, getStoreUploadResponse.Status)
+	expectedUploadStatus := openapi_client.STOREUPLOADSTATUS_IN_PROGRESS
+	if getStoreUploadsResponse.Uploads[0].Status != expectedUploadStatus {
+		t.Fatalf("GetStoreUpload should return an upload with status %v, but it has status %v", expectedUploadStatus, getStoreUploadsResponse.Uploads[0].Status)
 	}
 
 	// Ensure file is in "pending" status
 
-	expectedUploadFileStatus := "pending"
-	if getStoreUploadResponse.Files[0].Status != expectedUploadFileStatus {
-		t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, getStoreUploadResponse.Files[0].Status)
+	expectedUploadFileStatus := openapi_client.STOREUPLOADFILESTATUS_PENDING
+	if getStoreUploadsResponse.Uploads[0].Files[0].Status != expectedUploadFileStatus {
+		t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, getStoreUploadsResponse.Uploads[0].Files[0].Status)
 	}
 
 	// Complete upload of first file
 
 	{
+		storeUploadId := "0"
 		fileId := int32(0)
 
 		r, err = apiClient.DefaultApi.MarkStoreUploadFileUploaded(authContext, storeUploadId, storeId, fileId).Execute()
@@ -258,22 +246,20 @@ func TestCreateStoreUploadWithProgressSucceeds(t *testing.T) {
 
 		// Ensure upload is in "in_progress" status
 
-		storeUploadId := "0"
-
 		getStoreUploadResponse, r, err := apiClient.DefaultApi.GetStoreUpload(authContext, storeUploadId, storeId).Execute()
 		desiredStatusCode = http.StatusOK
 		if err != nil || desiredStatusCode != r.StatusCode {
 			t.Fatalf("GetStoreUpload is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
 		}
 
-		expectedUploadStatus := "in_progress"
+		expectedUploadStatus := openapi_client.STOREUPLOADSTATUS_IN_PROGRESS
 		if getStoreUploadResponse.Status != expectedUploadStatus {
 			t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadStatus, getStoreUploadResponse.Status)
 		}
 
 		// Ensure file has transitioned to "uploaded" status
 
-		expectedUploadFileStatus := "completed"
+		expectedUploadFileStatus := openapi_client.STOREUPLOADFILESTATUS_COMPLETED
 		if getStoreUploadResponse.Files[0].Status != expectedUploadFileStatus {
 			t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, getStoreUploadResponse.Files[0].Status)
 		}
@@ -282,6 +268,7 @@ func TestCreateStoreUploadWithProgressSucceeds(t *testing.T) {
 	// Complete upload of second file
 
 	{
+		storeUploadId := "0"
 		fileId := int32(1)
 
 		r, err = apiClient.DefaultApi.MarkStoreUploadFileUploaded(authContext, storeUploadId, storeId, fileId).Execute()
@@ -292,22 +279,20 @@ func TestCreateStoreUploadWithProgressSucceeds(t *testing.T) {
 
 		// Ensure upload is in "in_progress" status
 
-		storeUploadId := "0"
-
 		getStoreUploadResponse, r, err := apiClient.DefaultApi.GetStoreUpload(authContext, storeUploadId, storeId).Execute()
 		desiredStatusCode = http.StatusOK
 		if err != nil || desiredStatusCode != r.StatusCode {
 			t.Fatalf("GetStoreUpload is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
 		}
 
-		expectedUploadStatus := "in_progress"
+		expectedUploadStatus := openapi_client.STOREUPLOADSTATUS_IN_PROGRESS
 		if getStoreUploadResponse.Status != expectedUploadStatus {
 			t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadStatus, getStoreUploadResponse.Status)
 		}
 
 		// Ensure file has transitioned to "completed" status
 
-		expectedUploadFileStatus := "completed"
+		expectedUploadFileStatus := openapi_client.STOREUPLOADFILESTATUS_COMPLETED
 		if getStoreUploadResponse.Files[0].Status != expectedUploadFileStatus {
 			t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, getStoreUploadResponse.Files[0].Status)
 		}
@@ -316,6 +301,8 @@ func TestCreateStoreUploadWithProgressSucceeds(t *testing.T) {
 	// Complete upload
 
 	{
+		storeUploadId := "0"
+
 		r, err = apiClient.DefaultApi.MarkStoreUploadCompleted(authContext, storeUploadId, storeId).Execute()
 		desiredStatusCode = http.StatusOK
 		if err != nil || desiredStatusCode != r.StatusCode {
@@ -324,15 +311,13 @@ func TestCreateStoreUploadWithProgressSucceeds(t *testing.T) {
 
 		// Ensure upload has transitioned to "completed" status
 
-		storeUploadId := "0"
-
 		getStoreUploadResponse, r, err := apiClient.DefaultApi.GetStoreUpload(authContext, storeUploadId, storeId).Execute()
 		desiredStatusCode = http.StatusOK
 		if err != nil || desiredStatusCode != r.StatusCode {
 			t.Fatalf("GetStoreUpload is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
 		}
 
-		expectedUploadStatus := "completed"
+		expectedUploadStatus := openapi_client.STOREUPLOADSTATUS_COMPLETED
 		if getStoreUploadResponse.Status != expectedUploadStatus {
 			t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadStatus, getStoreUploadResponse.Status)
 		}
@@ -386,44 +371,39 @@ func TestCreateStoreUploadWithProgressAndAbortSucceeds(t *testing.T) {
 		t.Fatalf("CreateStoreUpload is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
 	}
 
-	// Ensure this upload exists, and has been assigned ID "0"
+	// Ensure this upload exists
 
-	getStoreUploadIdsResponse, r, err := apiClient.DefaultApi.GetStoreUploadIds(authContext, storeId).Execute()
+	getStoreUploadsResponse, r, err := apiClient.DefaultApi.GetStoreUploads(authContext, storeId).Offset(0).Limit(100).Execute()
 	desiredStatusCode = http.StatusOK
 	if err != nil || desiredStatusCode != r.StatusCode {
-		t.Fatalf("GetStoreUploadIds is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
+		t.Fatalf("GetStoreUploads is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
 	}
 
-	expectedStoreUploadIds := []string{"0"}
-	if !reflect.DeepEqual(expectedStoreUploadIds, getStoreUploadIdsResponse) {
-		t.Fatalf("Expected GetStoreUploadIds is expected to return %v, but returned %v", expectedStoreUploadIds, getStoreUploadIdsResponse)
+	// Ensure there is a single upload
+
+	expectedNumStoreUploads := 1
+	if len(getStoreUploadsResponse.Uploads) != expectedNumStoreUploads {
+		t.Fatalf("Expected GetStoreUploads returns %v results, but returned %v results: %v", expectedNumStoreUploads, len(getStoreUploadsResponse.Uploads), getStoreUploadsResponse)
 	}
 
 	// Ensure upload is in "in_progress" status
 
-	storeUploadId := "0"
-
-	getStoreUploadResponse, r, err := apiClient.DefaultApi.GetStoreUpload(authContext, storeUploadId, storeId).Execute()
-	desiredStatusCode = http.StatusOK
-	if err != nil || desiredStatusCode != r.StatusCode {
-		t.Fatalf("GetStoreUpload is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
-	}
-
-	expectedUploadStatus := "in_progress"
-	if getStoreUploadResponse.Status != expectedUploadStatus {
-		t.Fatalf("GetStoreUpload should return an upload with status %v, but it has status %v", expectedUploadStatus, getStoreUploadResponse.Status)
+	expectedUploadStatus := openapi_client.STOREUPLOADSTATUS_IN_PROGRESS
+	if getStoreUploadsResponse.Uploads[0].Status != expectedUploadStatus {
+		t.Fatalf("GetStoreUpload should return an upload with status %v, but it has status %v", expectedUploadStatus, getStoreUploadsResponse.Uploads[0].Status)
 	}
 
 	// Ensure file is in "pending" status
 
-	expectedUploadFileStatus := "pending"
-	if getStoreUploadResponse.Files[0].Status != expectedUploadFileStatus {
-		t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, getStoreUploadResponse.Files[0].Status)
+	expectedUploadFileStatus := openapi_client.STOREUPLOADFILESTATUS_PENDING
+	if getStoreUploadsResponse.Uploads[0].Files[0].Status != expectedUploadFileStatus {
+		t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, getStoreUploadsResponse.Uploads[0].Files[0].Status)
 	}
 
 	// Complete upload of first file
 
 	{
+		storeUploadId := "0"
 		fileId := int32(0)
 
 		r, err = apiClient.DefaultApi.MarkStoreUploadFileUploaded(authContext, storeUploadId, storeId, fileId).Execute()
@@ -434,22 +414,20 @@ func TestCreateStoreUploadWithProgressAndAbortSucceeds(t *testing.T) {
 
 		// Ensure upload is in "in_progress" status
 
-		storeUploadId := "0"
-
 		getStoreUploadResponse, r, err := apiClient.DefaultApi.GetStoreUpload(authContext, storeUploadId, storeId).Execute()
 		desiredStatusCode = http.StatusOK
 		if err != nil || desiredStatusCode != r.StatusCode {
 			t.Fatalf("GetStoreUpload is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
 		}
 
-		expectedUploadStatus := "in_progress"
+		expectedUploadStatus := openapi_client.STOREUPLOADSTATUS_IN_PROGRESS
 		if getStoreUploadResponse.Status != expectedUploadStatus {
 			t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadStatus, getStoreUploadResponse.Status)
 		}
 
 		// Ensure file has transitioned to "uploaded" status
 
-		expectedUploadFileStatus := "completed"
+		expectedUploadFileStatus := openapi_client.STOREUPLOADFILESTATUS_COMPLETED
 		if getStoreUploadResponse.Files[0].Status != expectedUploadFileStatus {
 			t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, getStoreUploadResponse.Files[0].Status)
 		}
@@ -458,6 +436,8 @@ func TestCreateStoreUploadWithProgressAndAbortSucceeds(t *testing.T) {
 	// Abort upload
 
 	{
+		storeUploadId := "0"
+
 		r, err = apiClient.DefaultApi.MarkStoreUploadAborted(authContext, storeUploadId, storeId).Execute()
 		desiredStatusCode = http.StatusOK
 		if err != nil || desiredStatusCode != r.StatusCode {
@@ -466,15 +446,13 @@ func TestCreateStoreUploadWithProgressAndAbortSucceeds(t *testing.T) {
 
 		// Ensure upload has transitioned to "aborted" status
 
-		storeUploadId := "0"
-
 		getStoreUploadResponse, r, err := apiClient.DefaultApi.GetStoreUpload(authContext, storeUploadId, storeId).Execute()
 		desiredStatusCode = http.StatusOK
 		if err != nil || desiredStatusCode != r.StatusCode {
 			t.Fatalf("GetStoreUpload is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
 		}
 
-		expectedUploadStatus := "aborted"
+		expectedUploadStatus := openapi_client.STOREUPLOADSTATUS_ABORTED
 		if getStoreUploadResponse.Status != expectedUploadStatus {
 			t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadStatus, getStoreUploadResponse.Status)
 		}
@@ -482,7 +460,7 @@ func TestCreateStoreUploadWithProgressAndAbortSucceeds(t *testing.T) {
 		// Ensure first file has transitioned to "aborted" status
 
 		{
-			expectedUploadFileStatus := "aborted"
+			expectedUploadFileStatus := openapi_client.STOREUPLOADFILESTATUS_ABORTED
 			if getStoreUploadResponse.Files[0].Status != expectedUploadFileStatus {
 				t.Fatalf("GetStoreUpload should return that the first file has status %v, but it has status %v", expectedUploadFileStatus, getStoreUploadResponse.Files[0].Status)
 			}
@@ -491,7 +469,7 @@ func TestCreateStoreUploadWithProgressAndAbortSucceeds(t *testing.T) {
 		// Ensure second file has transitioned to "aborted" status
 
 		{
-			expectedUploadFileStatus := "aborted"
+			expectedUploadFileStatus := openapi_client.STOREUPLOADFILESTATUS_ABORTED
 			if getStoreUploadResponse.Files[1].Status != expectedUploadFileStatus {
 				t.Fatalf("GetStoreUpload should return that the second file has status %v, but it has status %v", expectedUploadFileStatus, getStoreUploadResponse.Files[1].Status)
 			}

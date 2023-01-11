@@ -18,14 +18,14 @@ import (
 type GetFileResponse struct {
 	FileName string `json:"fileName"`
 	Hash string `json:"hash"`
-	Status string `json:"status"`
+	Status StoreUploadFileStatus `json:"status"`
 }
 
 // NewGetFileResponse instantiates a new GetFileResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetFileResponse(fileName string, hash string, status string) *GetFileResponse {
+func NewGetFileResponse(fileName string, hash string, status StoreUploadFileStatus) *GetFileResponse {
 	this := GetFileResponse{}
 	this.FileName = fileName
 	this.Hash = hash
@@ -90,9 +90,9 @@ func (o *GetFileResponse) SetHash(v string) {
 }
 
 // GetStatus returns the Status field value
-func (o *GetFileResponse) GetStatus() string {
+func (o *GetFileResponse) GetStatus() StoreUploadFileStatus {
 	if o == nil {
-		var ret string
+		var ret StoreUploadFileStatus
 		return ret
 	}
 
@@ -101,7 +101,7 @@ func (o *GetFileResponse) GetStatus() string {
 
 // GetStatusOk returns a tuple with the Status field value
 // and a boolean to check if the value has been set.
-func (o *GetFileResponse) GetStatusOk() (*string, bool) {
+func (o *GetFileResponse) GetStatusOk() (*StoreUploadFileStatus, bool) {
 	if o == nil {
     return nil, false
 	}
@@ -109,7 +109,7 @@ func (o *GetFileResponse) GetStatusOk() (*string, bool) {
 }
 
 // SetStatus sets field value
-func (o *GetFileResponse) SetStatus(v string) {
+func (o *GetFileResponse) SetStatus(v StoreUploadFileStatus) {
 	o.Status = v
 }
 

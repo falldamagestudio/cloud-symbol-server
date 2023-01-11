@@ -20,14 +20,14 @@ type GetStoreUploadResponse struct {
 	BuildId string `json:"buildId"`
 	Timestamp string `json:"timestamp"`
 	Files []GetFileResponse `json:"files"`
-	Status string `json:"status"`
+	Status StoreUploadStatus `json:"status"`
 }
 
 // NewGetStoreUploadResponse instantiates a new GetStoreUploadResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetStoreUploadResponse(description string, buildId string, timestamp string, files []GetFileResponse, status string) *GetStoreUploadResponse {
+func NewGetStoreUploadResponse(description string, buildId string, timestamp string, files []GetFileResponse, status StoreUploadStatus) *GetStoreUploadResponse {
 	this := GetStoreUploadResponse{}
 	this.Description = description
 	this.BuildId = buildId
@@ -142,9 +142,9 @@ func (o *GetStoreUploadResponse) SetFiles(v []GetFileResponse) {
 }
 
 // GetStatus returns the Status field value
-func (o *GetStoreUploadResponse) GetStatus() string {
+func (o *GetStoreUploadResponse) GetStatus() StoreUploadStatus {
 	if o == nil {
-		var ret string
+		var ret StoreUploadStatus
 		return ret
 	}
 
@@ -153,7 +153,7 @@ func (o *GetStoreUploadResponse) GetStatus() string {
 
 // GetStatusOk returns a tuple with the Status field value
 // and a boolean to check if the value has been set.
-func (o *GetStoreUploadResponse) GetStatusOk() (*string, bool) {
+func (o *GetStoreUploadResponse) GetStatusOk() (*StoreUploadStatus, bool) {
 	if o == nil {
     return nil, false
 	}
@@ -161,7 +161,7 @@ func (o *GetStoreUploadResponse) GetStatusOk() (*string, bool) {
 }
 
 // SetStatus sets field value
-func (o *GetStoreUploadResponse) SetStatus(v string) {
+func (o *GetStoreUploadResponse) SetStatus(v StoreUploadStatus) {
 	o.Status = v
 }
 

@@ -8,13 +8,13 @@ Name | Type | Description | Notes
 **BuildId** | **string** |  | 
 **Timestamp** | **string** |  | 
 **Files** | [**[]GetFileResponse**](GetFileResponse.md) |  | 
-**Status** | **string** |  | 
+**Status** | [**StoreUploadStatus**](StoreUploadStatus.md) |  | 
 
 ## Methods
 
 ### NewGetStoreUploadResponse
 
-`func NewGetStoreUploadResponse(description string, buildId string, timestamp string, files []GetFileResponse, status string, ) *GetStoreUploadResponse`
+`func NewGetStoreUploadResponse(description string, buildId string, timestamp string, files []GetFileResponse, status StoreUploadStatus, ) *GetStoreUploadResponse`
 
 NewGetStoreUploadResponse instantiates a new GetStoreUploadResponse object
 This constructor will assign default values to properties that have it defined,
@@ -111,20 +111,20 @@ SetFiles sets Files field to given value.
 
 ### GetStatus
 
-`func (o *GetStoreUploadResponse) GetStatus() string`
+`func (o *GetStoreUploadResponse) GetStatus() StoreUploadStatus`
 
 GetStatus returns the Status field if non-nil, zero value otherwise.
 
 ### GetStatusOk
 
-`func (o *GetStoreUploadResponse) GetStatusOk() (*string, bool)`
+`func (o *GetStoreUploadResponse) GetStatusOk() (*StoreUploadStatus, bool)`
 
 GetStatusOk returns a tuple with the Status field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetStatus
 
-`func (o *GetStoreUploadResponse) SetStatus(v string)`
+`func (o *GetStoreUploadResponse) SetStatus(v StoreUploadStatus)`
 
 SetStatus sets Status field to given value.
 

@@ -325,7 +325,7 @@ paths:
       summary: Fetch a list of hashes for a specific file in store
   /stores/{storeId}/uploads:
     get:
-      operationId: getStoreUploadIds
+      operationId: getStoreUploads
       parameters:
       - description: ID of the store containing the uploads
         explode: false
@@ -335,12 +335,33 @@ paths:
         schema:
           type: string
         style: simple
+      - description: How many entries to skip (used for pagination of results)
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: Max number of results to return (used for pagination of results)
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 25
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getStoreUploadIdsResponse'
+                $ref: '#/components/schemas/getStoreUploadsResponse'
           description: Success
         "401":
           content:
@@ -354,7 +375,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/messageResponse'
           description: No such store
-      summary: Fetch a list of all uploads in store
+      summary: Fetch a list of uploads in store
     post:
       operationId: createStoreUpload
       parameters:
@@ -588,6 +609,25 @@ components:
             $ref: '#/components/schemas/messageResponse'
       description: Not authorized
   schemas:
+    storeUploadStatus:
+      enum:
+      - unknown
+      - in_progress
+      - completed
+      - aborted
+      - expired
+      example: completed
+      type: string
+    storeUploadFileStatus:
+      enum:
+      - unknown
+      - already_present
+      - pending
+      - completed
+      - aborted
+      - expired
+      example: completed
+      type: string
     storeFileHashStatus:
       enum:
       - pending
@@ -600,6 +640,15 @@ components:
           type: string
       required:
       - message
+      type: object
+    paginationResponse:
+      example:
+        total: 0
+      properties:
+        total:
+          type: integer
+      required:
+      - total
       type: object
     getTokensResponse:
       items:
@@ -687,19 +736,43 @@ components:
       - fileName
       - hash
       type: object
-    getStoreUploadIdsResponse:
-      items:
-        example: "[\"1\",\"2\",\"3\"]"
-        type: string
-      type: array
-    paginationResponse:
+    getStoreUploadsResponse:
       example:
-        total: 0
+        pagination:
+          total: 0
+        uploads:
+        - description: Example application
+          files:
+          - fileName: Application.pdb
+            hash: 7F416863ABF34C3E894BAD1739BAA5571
+            status: status
+          - fileName: Application.pdb
+            hash: 7F416863ABF34C3E894BAD1739BAA5571
+            status: status
+          buildId: Build 432
+          timestamp: 2019-10-12T07:20:50.52Z
+          status: completed
+        - description: Example application
+          files:
+          - fileName: Application.pdb
+            hash: 7F416863ABF34C3E894BAD1739BAA5571
+            status: status
+          - fileName: Application.pdb
+            hash: 7F416863ABF34C3E894BAD1739BAA5571
+            status: status
+          buildId: Build 432
+          timestamp: 2019-10-12T07:20:50.52Z
+          status: completed
       properties:
-        total:
-          type: integer
+        uploads:
+          items:
+            $ref: '#/components/schemas/getStoreUploadResponse'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/paginationResponse'
       required:
-      - total
+      - pagination
+      - uploads
       type: object
     getStoreFilesResponse:
       example:
@@ -802,10 +875,10 @@ components:
         files:
         - fileName: Application.pdb
           hash: 7F416863ABF34C3E894BAD1739BAA5571
-          status: completed
+          status: status
         - fileName: Application.pdb
           hash: 7F416863ABF34C3E894BAD1739BAA5571
-          status: completed
+          status: status
         buildId: Build 432
         timestamp: 2019-10-12T07:20:50.52Z
         status: completed
@@ -824,14 +897,7 @@ components:
             $ref: '#/components/schemas/getFileResponse'
           type: array
         status:
-          enum:
-          - unknown
-          - in_progress
-          - completed
-          - aborted
-          - expired
-          example: completed
-          type: string
+          $ref: '#/components/schemas/storeUploadStatus'
       required:
       - buildId
       - description
@@ -843,7 +909,7 @@ components:
       example:
         fileName: Application.pdb
         hash: 7F416863ABF34C3E894BAD1739BAA5571
-        status: completed
+        status: status
       properties:
         fileName:
           example: Application.pdb
@@ -852,15 +918,7 @@ components:
           example: 7F416863ABF34C3E894BAD1739BAA5571
           type: string
         status:
-          enum:
-          - unknown
-          - already_present
-          - pending
-          - completed
-          - aborted
-          - expired
-          example: completed
-          type: string
+          $ref: '#/components/schemas/storeUploadFileStatus'
       required:
       - fileName
       - hash

@@ -15,7 +15,7 @@ type GetFileResponse struct {
 
 	Hash string `json:"hash"`
 
-	Status string `json:"status"`
+	Status StoreUploadFileStatus `json:"status"`
 }
 
 // AssertGetFileResponseRequired checks if the required fields are not zero-ed

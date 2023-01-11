@@ -19,7 +19,7 @@ type GetStoreUploadResponse struct {
 
 	Files []GetFileResponse `json:"files"`
 
-	Status string `json:"status"`
+	Status StoreUploadStatus `json:"status"`
 }
 
 // AssertGetStoreUploadResponseRequired checks if the required fields are not zero-ed

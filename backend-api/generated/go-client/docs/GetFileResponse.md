@@ -6,13 +6,13 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **FileName** | **string** |  | 
 **Hash** | **string** |  | 
-**Status** | **string** |  | 
+**Status** | [**StoreUploadFileStatus**](StoreUploadFileStatus.md) |  | 
 
 ## Methods
 
 ### NewGetFileResponse
 
-`func NewGetFileResponse(fileName string, hash string, status string, ) *GetFileResponse`
+`func NewGetFileResponse(fileName string, hash string, status StoreUploadFileStatus, ) *GetFileResponse`
 
 NewGetFileResponse instantiates a new GetFileResponse object
 This constructor will assign default values to properties that have it defined,
@@ -69,20 +69,20 @@ SetHash sets Hash field to given value.
 
 ### GetStatus
 
-`func (o *GetFileResponse) GetStatus() string`
+`func (o *GetFileResponse) GetStatus() StoreUploadFileStatus`
 
 GetStatus returns the Status field if non-nil, zero value otherwise.
 
 ### GetStatusOk
 
-`func (o *GetFileResponse) GetStatusOk() (*string, bool)`
+`func (o *GetFileResponse) GetStatusOk() (*StoreUploadFileStatus, bool)`
 
 GetStatusOk returns a tuple with the Status field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetStatus
 
-`func (o *GetFileResponse) SetStatus(v string)`
+`func (o *GetFileResponse) SetStatus(v StoreUploadFileStatus)`
 
 SetStatus sets Status field to given value.
 

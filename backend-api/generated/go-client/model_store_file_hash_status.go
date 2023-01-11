@@ -20,8 +20,8 @@ type StoreFileHashStatus string
 
 // List of storeFileHashStatus
 const (
-	PENDING StoreFileHashStatus = "pending"
-	PRESENT StoreFileHashStatus = "present"
+	STOREFILEHASHSTATUS_PENDING StoreFileHashStatus = "pending"
+	STOREFILEHASHSTATUS_PRESENT StoreFileHashStatus = "present"
 )
 
 // All allowed values of StoreFileHashStatus enum

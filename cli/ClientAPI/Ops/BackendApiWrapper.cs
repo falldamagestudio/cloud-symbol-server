@@ -122,21 +122,21 @@ namespace ClientAPI
             }
         }
 
-        public class GetStoreUploadIdsException : ClientAPIException
+        public class GetStoreUploadsException : ClientAPIException
         {
-            public GetStoreUploadIdsException(string message) : base(message) { }
+            public GetStoreUploadsException(string message) : base(message) { }
         }
 
-        public async Task<List<string>> GetStoreUploadIdsAsync(string store) {
+        public async Task<BackendAPI.Model.GetStoreUploadsResponse> GetStoreUploadsAsync(string store, int offset, int limit) {
 
             try {
-                BackendAPI.Client.ApiResponse<List<string>> response = await backendApi.GetStoreUploadIdsWithHttpInfoAsync(store);
+                BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreUploadsResponse> response = await backendApi.GetStoreUploadsWithHttpInfoAsync(store, offset, limit);
                 if (response.ErrorText != null)
                     throw new ApiException(response.ErrorText);
                 return response.Data;
             } catch (BackendAPI.Client.ApiException apiException) {
                 if (apiException.ErrorCode == (int)HttpStatusCode.NotFound)
-                    throw new GetStoreUploadIdsException($"Store {store} does not exist");
+                    throw new GetStoreUploadsException($"Store {store} does not exist");
                 else
                     throw;
             }

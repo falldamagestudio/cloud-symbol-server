@@ -13,8 +13,8 @@ type StoreFileHashStatus string
 
 // List of StoreFileHashStatus
 const (
-	PENDING StoreFileHashStatus = "pending"
-	PRESENT StoreFileHashStatus = "present"
+	STOREFILEHASHSTATUS_PENDING StoreFileHashStatus = "pending"
+	STOREFILEHASHSTATUS_PRESENT StoreFileHashStatus = "present"
 )
 
 // AssertStoreFileHashStatusRequired checks if the required fields are not zero-ed

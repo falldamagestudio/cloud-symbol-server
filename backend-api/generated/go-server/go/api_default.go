@@ -105,10 +105,10 @@ func (c *DefaultApiController) Routes() Routes {
 			c.GetStoreUpload,
 		},
 		{
-			"GetStoreUploadIds",
+			"GetStoreUploads",
 			strings.ToUpper("Get"),
 			"/stores/{storeId}/uploads",
-			c.GetStoreUploadIds,
+			c.GetStoreUploads,
 		},
 		{
 			"GetStores",
@@ -335,12 +335,23 @@ func (c *DefaultApiController) GetStoreUpload(w http.ResponseWriter, r *http.Req
 
 }
 
-// GetStoreUploadIds - Fetch a list of all uploads in store
-func (c *DefaultApiController) GetStoreUploadIds(w http.ResponseWriter, r *http.Request) {
+// GetStoreUploads - Fetch a list of uploads in store
+func (c *DefaultApiController) GetStoreUploads(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
+	query := r.URL.Query()
 	storeIdParam := params["storeId"]
 	
-	result, err := c.service.GetStoreUploadIds(r.Context(), storeIdParam)
+	offsetParam, err := parseInt32Parameter(query.Get("offset"), false)
+	if err != nil {
+		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		return
+	}
+	limitParam, err := parseInt32Parameter(query.Get("limit"), false)
+	if err != nil {
+		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		return
+	}
+	result, err := c.service.GetStoreUploads(r.Context(), storeIdParam, offsetParam, limitParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)

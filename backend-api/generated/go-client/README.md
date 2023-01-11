@@ -87,7 +87,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**GetStoreFileHashes**](docs/DefaultApi.md#getstorefilehashes) | **Get** /stores/{storeId}/files/{fileId}/hashes | Fetch a list of hashes for a specific file in store
 *DefaultApi* | [**GetStoreFiles**](docs/DefaultApi.md#getstorefiles) | **Get** /stores/{storeId}/files | Fetch a list of files in store
 *DefaultApi* | [**GetStoreUpload**](docs/DefaultApi.md#getstoreupload) | **Get** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
-*DefaultApi* | [**GetStoreUploadIds**](docs/DefaultApi.md#getstoreuploadids) | **Get** /stores/{storeId}/uploads | Fetch a list of all uploads in store
+*DefaultApi* | [**GetStoreUploads**](docs/DefaultApi.md#getstoreuploads) | **Get** /stores/{storeId}/uploads | Fetch a list of uploads in store
 *DefaultApi* | [**GetStores**](docs/DefaultApi.md#getstores) | **Get** /stores | Fetch a list of all stores
 *DefaultApi* | [**GetToken**](docs/DefaultApi.md#gettoken) | **Get** /tokens/{token} | Fetch a token for current user
 *DefaultApi* | [**GetTokens**](docs/DefaultApi.md#gettokens) | **Get** /tokens | Fetch a list of all tokens for current user
@@ -107,10 +107,13 @@ Class | Method | HTTP request | Description
  - [GetStoreFileHashesResponse](docs/GetStoreFileHashesResponse.md)
  - [GetStoreFilesResponse](docs/GetStoreFilesResponse.md)
  - [GetStoreUploadResponse](docs/GetStoreUploadResponse.md)
+ - [GetStoreUploadsResponse](docs/GetStoreUploadsResponse.md)
  - [GetTokenResponse](docs/GetTokenResponse.md)
  - [MessageResponse](docs/MessageResponse.md)
  - [PaginationResponse](docs/PaginationResponse.md)
  - [StoreFileHashStatus](docs/StoreFileHashStatus.md)
+ - [StoreUploadFileStatus](docs/StoreUploadFileStatus.md)
+ - [StoreUploadStatus](docs/StoreUploadStatus.md)
  - [UpdateTokenRequest](docs/UpdateTokenRequest.md)
  - [UploadFileRequest](docs/UploadFileRequest.md)
  - [UploadFileResponse](docs/UploadFileResponse.md)

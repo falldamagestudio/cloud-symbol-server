@@ -41,8 +41,8 @@ func (s *ApiService) ExpireStoreUpload(ctx context.Context, uploadId string, sto
 	return upload_api.ExpireStoreUpload(ctx, uploadId, storeId)
 }
 
-func (s *ApiService) GetStoreUploadIds(ctx context.Context, storeId string) (openapi.ImplResponse, error) {
-	return upload_api.GetStoreUploadIds(ctx, storeId)
+func (s *ApiService) GetStoreUploads(ctx context.Context, storeId string, offset int32, limit int32) (openapi.ImplResponse, error) {
+	return upload_api.GetStoreUploads(ctx, storeId, offset, limit)
 }
 
 func (s *ApiService) GetStoreUpload(ctx context.Context, uploadId string, storeId string) (openapi.ImplResponse, error) {

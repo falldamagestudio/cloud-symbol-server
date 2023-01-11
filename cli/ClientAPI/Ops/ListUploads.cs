@@ -5,32 +5,11 @@ namespace ClientAPI
 {
     public class ListUploads
     {
-        public class StoreUpload
-        {
-            public string UploadId;
-            public BackendAPI.Model.GetStoreUploadResponse Upload;
-
-            public StoreUpload(string uploadId, BackendAPI.Model.GetStoreUploadResponse upload) {
-                UploadId = uploadId;
-                Upload = upload;
-            }
-        }
-
-        public static async Task<IEnumerable<StoreUpload>> DoListUploads(string ServiceURL, string Email, string PAT, string store) {
+        public static async Task<BackendAPI.Model.GetStoreUploadsResponse> DoListUploads(string ServiceURL, string Email, string PAT, string store, int offset, int limit) {
 
             BackendApiWrapper backendApiWrapper = new BackendApiWrapper(ServiceURL, Email, PAT);
 
-            List<string> getStoreUploadIdsResponse = await backendApiWrapper.GetStoreUploadIdsAsync(store);
-
-            List<StoreUpload> uploads = new List<StoreUpload>();
-
-            foreach (string uploadId in getStoreUploadIdsResponse) {
-                BackendAPI.Model.GetStoreUploadResponse getStoreUploadResponse = await backendApiWrapper.GetStoreUploadAsync(store, uploadId);
-
-                uploads.Add(new StoreUpload(uploadId: uploadId, upload: getStoreUploadResponse));
-            }
-
-            return uploads;
+            return await backendApiWrapper.GetStoreUploadsAsync(store, offset, limit);
         }
     }
 }

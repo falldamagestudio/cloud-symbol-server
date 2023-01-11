@@ -79,18 +79,18 @@ func GetStoreUpload(ctx context.Context, uploadId string, storeId string) (opena
 	// Uploads created before the progress API existed do not have any Status field in the DB
 	// These uploads will be assumed to be completed
 	if upload.Status != "" {
-		getStoreUploadResponse.Status = upload.Status
+		getStoreUploadResponse.Status = openapi.StoreUploadStatus(upload.Status)
 	} else {
-		getStoreUploadResponse.Status = models.StoreUploadStatusCompleted
+		getStoreUploadResponse.Status = openapi.STOREUPLOADSTATUS_COMPLETED
 	}
 
 	for _, file := range uploadFiles {
 
 		// Uploaded files created before the progress API existed do not have any Status field in the DB
 		// These files will be interpreted as being completed
-		status := models.StoreUploadFileStatusCompleted
+		status := openapi.STOREUPLOADFILESTATUS_COMPLETED
 		if file.Status != "" {
-			status = file.Status
+			status = openapi.StoreUploadFileStatus(file.Status)
 		}
 
 		getStoreUploadResponse.Files = append(getStoreUploadResponse.Files, openapi.GetFileResponse{

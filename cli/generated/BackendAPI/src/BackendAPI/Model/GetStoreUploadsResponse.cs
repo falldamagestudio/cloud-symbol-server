@@ -26,56 +26,48 @@ using OpenAPIDateConverter = BackendAPI.Client.OpenAPIDateConverter;
 namespace BackendAPI.Model
 {
     /// <summary>
-    /// GetFileResponse
+    /// GetStoreUploadsResponse
     /// </summary>
-    [DataContract(Name = "getFileResponse")]
-    public partial class GetFileResponse : IEquatable<GetFileResponse>, IValidatableObject
+    [DataContract(Name = "getStoreUploadsResponse")]
+    public partial class GetStoreUploadsResponse : IEquatable<GetStoreUploadsResponse>, IValidatableObject
     {
-
         /// <summary>
-        /// Gets or Sets Status
-        /// </summary>
-        [DataMember(Name = "status", IsRequired = true, EmitDefaultValue = true)]
-        public StoreUploadFileStatus Status { get; set; }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GetFileResponse" /> class.
+        /// Initializes a new instance of the <see cref="GetStoreUploadsResponse" /> class.
         /// </summary>
         [JsonConstructorAttribute]
-        protected GetFileResponse() { }
+        protected GetStoreUploadsResponse() { }
         /// <summary>
-        /// Initializes a new instance of the <see cref="GetFileResponse" /> class.
+        /// Initializes a new instance of the <see cref="GetStoreUploadsResponse" /> class.
         /// </summary>
-        /// <param name="fileName">fileName (required).</param>
-        /// <param name="hash">hash (required).</param>
-        /// <param name="status">status (required).</param>
-        public GetFileResponse(string fileName = default(string), string hash = default(string), StoreUploadFileStatus status = default(StoreUploadFileStatus))
+        /// <param name="uploads">uploads (required).</param>
+        /// <param name="pagination">pagination (required).</param>
+        public GetStoreUploadsResponse(List<GetStoreUploadResponse> uploads = default(List<GetStoreUploadResponse>), PaginationResponse pagination = default(PaginationResponse))
         {
-            // to ensure "fileName" is required (not null)
-            if (fileName == null)
+            // to ensure "uploads" is required (not null)
+            if (uploads == null)
             {
-                throw new ArgumentNullException("fileName is a required property for GetFileResponse and cannot be null");
+                throw new ArgumentNullException("uploads is a required property for GetStoreUploadsResponse and cannot be null");
             }
-            this.FileName = fileName;
-            // to ensure "hash" is required (not null)
-            if (hash == null)
+            this.Uploads = uploads;
+            // to ensure "pagination" is required (not null)
+            if (pagination == null)
             {
-                throw new ArgumentNullException("hash is a required property for GetFileResponse and cannot be null");
+                throw new ArgumentNullException("pagination is a required property for GetStoreUploadsResponse and cannot be null");
             }
-            this.Hash = hash;
-            this.Status = status;
+            this.Pagination = pagination;
         }
 
         /// <summary>
-        /// Gets or Sets FileName
+        /// Gets or Sets Uploads
         /// </summary>
-        [DataMember(Name = "fileName", IsRequired = true, EmitDefaultValue = true)]
-        public string FileName { get; set; }
+        [DataMember(Name = "uploads", IsRequired = true, EmitDefaultValue = true)]
+        public List<GetStoreUploadResponse> Uploads { get; set; }
 
         /// <summary>
-        /// Gets or Sets Hash
+        /// Gets or Sets Pagination
         /// </summary>
-        [DataMember(Name = "hash", IsRequired = true, EmitDefaultValue = true)]
-        public string Hash { get; set; }
+        [DataMember(Name = "pagination", IsRequired = true, EmitDefaultValue = true)]
+        public PaginationResponse Pagination { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -84,10 +76,9 @@ namespace BackendAPI.Model
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("class GetFileResponse {\n");
-            sb.Append("  FileName: ").Append(FileName).Append("\n");
-            sb.Append("  Hash: ").Append(Hash).Append("\n");
-            sb.Append("  Status: ").Append(Status).Append("\n");
+            sb.Append("class GetStoreUploadsResponse {\n");
+            sb.Append("  Uploads: ").Append(Uploads).Append("\n");
+            sb.Append("  Pagination: ").Append(Pagination).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -108,15 +99,15 @@ namespace BackendAPI.Model
         /// <returns>Boolean</returns>
         public override bool Equals(object input)
         {
-            return this.Equals(input as GetFileResponse);
+            return this.Equals(input as GetStoreUploadsResponse);
         }
 
         /// <summary>
-        /// Returns true if GetFileResponse instances are equal
+        /// Returns true if GetStoreUploadsResponse instances are equal
         /// </summary>
-        /// <param name="input">Instance of GetFileResponse to be compared</param>
+        /// <param name="input">Instance of GetStoreUploadsResponse to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(GetFileResponse input)
+        public bool Equals(GetStoreUploadsResponse input)
         {
             if (input == null)
             {
@@ -124,18 +115,15 @@ namespace BackendAPI.Model
             }
             return 
                 (
-                    this.FileName == input.FileName ||
-                    (this.FileName != null &&
-                    this.FileName.Equals(input.FileName))
+                    this.Uploads == input.Uploads ||
+                    this.Uploads != null &&
+                    input.Uploads != null &&
+                    this.Uploads.SequenceEqual(input.Uploads)
                 ) && 
                 (
-                    this.Hash == input.Hash ||
-                    (this.Hash != null &&
-                    this.Hash.Equals(input.Hash))
-                ) && 
-                (
-                    this.Status == input.Status ||
-                    this.Status.Equals(input.Status)
+                    this.Pagination == input.Pagination ||
+                    (this.Pagination != null &&
+                    this.Pagination.Equals(input.Pagination))
                 );
         }
 
@@ -148,15 +136,14 @@ namespace BackendAPI.Model
             unchecked // Overflow is fine, just wrap
             {
                 int hashCode = 41;
-                if (this.FileName != null)
+                if (this.Uploads != null)
                 {
-                    hashCode = (hashCode * 59) + this.FileName.GetHashCode();
+                    hashCode = (hashCode * 59) + this.Uploads.GetHashCode();
                 }
-                if (this.Hash != null)
+                if (this.Pagination != null)
                 {
-                    hashCode = (hashCode * 59) + this.Hash.GetHashCode();
+                    hashCode = (hashCode * 59) + this.Pagination.GetHashCode();
                 }
-                hashCode = (hashCode * 59) + this.Status.GetHashCode();
                 return hashCode;
             }
         }

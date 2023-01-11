@@ -13,7 +13,7 @@ Method | HTTP request | Description
 [**GetStoreFileHashes**](DefaultApi.md#GetStoreFileHashes) | **Get** /stores/{storeId}/files/{fileId}/hashes | Fetch a list of hashes for a specific file in store
 [**GetStoreFiles**](DefaultApi.md#GetStoreFiles) | **Get** /stores/{storeId}/files | Fetch a list of files in store
 [**GetStoreUpload**](DefaultApi.md#GetStoreUpload) | **Get** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
-[**GetStoreUploadIds**](DefaultApi.md#GetStoreUploadIds) | **Get** /stores/{storeId}/uploads | Fetch a list of all uploads in store
+[**GetStoreUploads**](DefaultApi.md#GetStoreUploads) | **Get** /stores/{storeId}/uploads | Fetch a list of uploads in store
 [**GetStores**](DefaultApi.md#GetStores) | **Get** /stores | Fetch a list of all stores
 [**GetToken**](DefaultApi.md#GetToken) | **Get** /tokens/{token} | Fetch a token for current user
 [**GetTokens**](DefaultApi.md#GetTokens) | **Get** /tokens | Fetch a list of all tokens for current user
@@ -638,11 +638,11 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## GetStoreUploadIds
+## GetStoreUploads
 
-> []string GetStoreUploadIds(ctx, storeId).Execute()
+> GetStoreUploadsResponse GetStoreUploads(ctx, storeId).Offset(offset).Limit(limit).Execute()
 
-Fetch a list of all uploads in store
+Fetch a list of uploads in store
 
 ### Example
 
@@ -658,16 +658,18 @@ import (
 
 func main() {
     storeId := "storeId_example" // string | ID of the store containing the uploads
+    offset := int32(56) // int32 | How many entries to skip (used for pagination of results) (optional) (default to 0)
+    limit := int32(56) // int32 | Max number of results to return (used for pagination of results) (optional) (default to 25)
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.DefaultApi.GetStoreUploadIds(context.Background(), storeId).Execute()
+    resp, r, err := apiClient.DefaultApi.GetStoreUploads(context.Background(), storeId).Offset(offset).Limit(limit).Execute()
     if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStoreUploadIds``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStoreUploads``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetStoreUploadIds`: []string
-    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetStoreUploadIds`: %v\n", resp)
+    // response from `GetStoreUploads`: GetStoreUploadsResponse
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetStoreUploads`: %v\n", resp)
 }
 ```
 
@@ -681,16 +683,18 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiGetStoreUploadIdsRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetStoreUploadsRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **offset** | **int32** | How many entries to skip (used for pagination of results) | [default to 0]
+ **limit** | **int32** | Max number of results to return (used for pagination of results) | [default to 25]
 
 ### Return type
 
-**[]string**
+[**GetStoreUploadsResponse**](GetStoreUploadsResponse.md)
 
 ### Authorization
 

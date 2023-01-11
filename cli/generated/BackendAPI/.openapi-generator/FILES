@@ -8,10 +8,13 @@ docs/GetStoreFileHashResponse.md
 docs/GetStoreFileHashesResponse.md
 docs/GetStoreFilesResponse.md
 docs/GetStoreUploadResponse.md
+docs/GetStoreUploadsResponse.md
 docs/GetTokenResponse.md
 docs/MessageResponse.md
 docs/PaginationResponse.md
 docs/StoreFileHashStatus.md
+docs/StoreUploadFileStatus.md
+docs/StoreUploadStatus.md
 docs/UpdateTokenRequest.md
 docs/UploadFileRequest.md
 docs/UploadFileResponse.md
@@ -42,10 +45,13 @@ src/BackendAPI/Model/GetStoreFileHashResponse.cs
 src/BackendAPI/Model/GetStoreFileHashesResponse.cs
 src/BackendAPI/Model/GetStoreFilesResponse.cs
 src/BackendAPI/Model/GetStoreUploadResponse.cs
+src/BackendAPI/Model/GetStoreUploadsResponse.cs
 src/BackendAPI/Model/GetTokenResponse.cs
 src/BackendAPI/Model/MessageResponse.cs
 src/BackendAPI/Model/PaginationResponse.cs
 src/BackendAPI/Model/StoreFileHashStatus.cs
+src/BackendAPI/Model/StoreUploadFileStatus.cs
+src/BackendAPI/Model/StoreUploadStatus.cs
 src/BackendAPI/Model/UpdateTokenRequest.cs
 src/BackendAPI/Model/UploadFileRequest.cs
 src/BackendAPI/Model/UploadFileResponse.cs
