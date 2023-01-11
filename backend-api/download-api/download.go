@@ -43,8 +43,6 @@ func (*DownloadHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: add authentication
-
 	storeIds, err := GetStores(r.Context())
 	if err != nil {
 		log.Printf("Error while decoding local stores configuration: %v", err)
