@@ -36,14 +36,14 @@ public static class Helpers
 
     public const string TestStore = "example";
 
-    public static string GetAdminAPIEndpoint()
+    public static string GetBackendAPIEndpoint()
     {
-        return Environment.GetEnvironmentVariable("ADMIN_API_ENDPOINT");
+        return Environment.GetEnvironmentVariable("BACKEND_API_ENDPOINT");
     }
 
     public static string GetDownloadAPIEndpoint()
     {
-        return Environment.GetEnvironmentVariable("DOWNLOAD_API_ENDPOINT");
+        return Environment.GetEnvironmentVariable("BACKEND_API_ENDPOINT") + "/download";
     }
 
     public static string GetTestEmail()
@@ -80,14 +80,14 @@ public static class Helpers
 
     public static async Task DeleteTestStore(bool ignoreIfNotExists)
     {
-        bool deleted = await ClientAPI.DeleteStore.DoDeleteStore(GetAdminAPIEndpoint(), GetTestEmail(), GetTestPAT(), TestStore);
+        bool deleted = await ClientAPI.DeleteStore.DoDeleteStore(GetBackendAPIEndpoint(), GetTestEmail(), GetTestPAT(), TestStore);
         if (!deleted && !ignoreIfNotExists)
             throw new ApplicationException("Test store did not exist");
     }
 
     public static async Task CreateTestStore(bool ignoreIfAlreadyExists)
     {
-        bool created = await ClientAPI.CreateStore.DoCreateStore(GetAdminAPIEndpoint(), GetTestEmail(), GetTestPAT(), TestStore);
+        bool created = await ClientAPI.CreateStore.DoCreateStore(GetBackendAPIEndpoint(), GetTestEmail(), GetTestPAT(), TestStore);
         if (!created && !ignoreIfAlreadyExists)
             throw new ApplicationException("Test store alredady existed");
     }

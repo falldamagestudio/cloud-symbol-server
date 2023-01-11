@@ -13,7 +13,7 @@ public partial class TestCommands
             await Helpers.EnsureTestStoreDoesNotExist();
 
             Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-                "--service-url", Helpers.GetAdminAPIEndpoint(),
+                "--service-url", Helpers.GetBackendAPIEndpoint(),
                 "--email", Helpers.GetTestEmail(),
                 "--pat", Helpers.GetTestPAT(),
                 "uploads",
@@ -38,7 +38,7 @@ public partial class TestCommands
             await Helpers.EnsureTestStoreExists();
 
             Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-                "--service-url", Helpers.GetAdminAPIEndpoint(),
+                "--service-url", Helpers.GetBackendAPIEndpoint(),
                 "--email", Helpers.GetTestEmail(),
                 "--pat", Helpers.GetTestPAT(),
                 "uploads",
@@ -66,7 +66,7 @@ public partial class TestCommands
             await Helpers.EnsureTestStoreDoesNotExist();
 
             Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-                "--service-url", Helpers.GetAdminAPIEndpoint(),
+                "--service-url", Helpers.GetBackendAPIEndpoint(),
                 "--email", Helpers.GetTestEmail(),
                 "--pat", Helpers.GetTestPAT(),
                 "uploads",
@@ -87,7 +87,7 @@ public partial class TestCommands
             await Helpers.EnsureTestStoreExists();
 
             Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-                "--service-url", Helpers.GetAdminAPIEndpoint(),
+                "--service-url", Helpers.GetBackendAPIEndpoint(),
                 "--email", Helpers.GetTestEmail(),
                 "--pat", Helpers.GetTestPAT(),
                 "uploads",
@@ -111,7 +111,7 @@ public partial class TestCommands
 
             {
                 Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-                    "--service-url", Helpers.GetAdminAPIEndpoint(),
+                    "--service-url", Helpers.GetBackendAPIEndpoint(),
                     "--email", Helpers.GetTestEmail(),
                     "--pat", Helpers.GetTestPAT(),
                     "uploads",
@@ -137,7 +137,7 @@ public partial class TestCommands
 
             {
                 Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-                    "--service-url", Helpers.GetAdminAPIEndpoint(),
+                    "--service-url", Helpers.GetBackendAPIEndpoint(),
                     "--email", Helpers.GetTestEmail(),
                     "--pat", Helpers.GetTestPAT(),
                     "uploads",
@@ -155,7 +155,7 @@ public partial class TestCommands
 
             {
                 Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-                    "--service-url", Helpers.GetAdminAPIEndpoint(),
+                    "--service-url", Helpers.GetBackendAPIEndpoint(),
                     "--email", Helpers.GetTestEmail(),
                     "--pat", Helpers.GetTestPAT(),
                     "uploads",
@@ -173,7 +173,7 @@ public partial class TestCommands
 
             {
                 Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-                    "--service-url", Helpers.GetAdminAPIEndpoint(),
+                    "--service-url", Helpers.GetBackendAPIEndpoint(),
                     "--email", Helpers.GetTestEmail(),
                     "--pat", Helpers.GetTestPAT(),
                     "uploads",
