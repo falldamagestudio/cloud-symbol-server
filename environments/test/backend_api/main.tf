@@ -5,6 +5,7 @@ module "backend_api" {
     project_id = data.terraform_remote_state.core.outputs.project_id
     # database_location = data.terraform_remote_state.core.outputs.database_location
     source_path = "../../../backend-api"
+    source_2_path = "../../../redirect-api"
     source_bucket_name = var.source_bucket_name
     source_bucket_location = var.source_bucket_location
     function_region = var.function_region

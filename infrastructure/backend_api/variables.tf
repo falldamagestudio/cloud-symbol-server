@@ -6,6 +6,10 @@ variable "source_path" {
   type = string
 }
 
+variable "source_2_path" {
+  type = string
+}
+
 variable "source_bucket_name" {
   type = string
 }
