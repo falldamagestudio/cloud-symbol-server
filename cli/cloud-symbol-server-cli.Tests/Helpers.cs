@@ -43,7 +43,7 @@ public static class Helpers
 
     public static string GetDownloadAPIEndpoint()
     {
-        return Environment.GetEnvironmentVariable("BACKEND_API_ENDPOINT") + "/download";
+        return Environment.GetEnvironmentVariable("BACKEND_API_ENDPOINT") + "/httpSymbolStore";
     }
 
     public static string GetTestEmail()

@@ -25,10 +25,10 @@
         <v-card flat>
           <v-card-text>
             <p>To configure Visual Studio to access the symbol server using this PAT, visit <code>Tools | Options... | Debugging | Symbols</code>, and add the following symbol file location:
-              <code>{{symbolServerDownloadAPIEndpoint}}&nbsp;
+              <code>{{symbolServerDownloadEndpoint}}&nbsp;
                 <v-btn
                   icon
-                  @click="copyTextToClipboard(symbolServerDownloadAPIEndpoint)"
+                  @click="copyTextToClipboard(symbolServerDownloadEndpoint)"
                 >
                   <v-icon
                     small
@@ -77,7 +77,7 @@
 
 import { ref } from 'vue'
 
-import { backendAPIEndpoint, downloadAPIEndpoint } from '../appConfig'
+import { backendAPIEndpoint, httpSymbolStoreEndpoint } from '../appConfig'
 import { GetTokenResponse } from '../generated/api'
 
 const props = defineProps<{
@@ -95,7 +95,7 @@ const downloadConfigFileHref = "data:application/json;charset=utf-8," + encodeUR
         'email': props.email,
         'pat': props.pat.token,
       }, null, 2))
-const symbolServerDownloadAPIEndpoint = downloadAPIEndpoint.split('://')[0] + "://" + encodeURIComponent(props.email) + ':' + props.pat.token + '@' + downloadAPIEndpoint.split('://')[1]
+const symbolServerDownloadEndpoint = httpSymbolStoreEndpoint.split('://')[0] + "://" + encodeURIComponent(props.email) + ':' + props.pat.token + '@' + httpSymbolStoreEndpoint.split('://')[1]
 
 function copyTextToClipboard(text: string) {
   navigator.clipboard.writeText(text)

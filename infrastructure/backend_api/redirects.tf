@@ -64,7 +64,7 @@ resource "google_cloudfunctions_function" "function_3" {
   trigger_http          = true
   entry_point           = "RedirectAPI"
   environment_variables = {
-    TARGET_URI = "${google_cloudfunctions_function.function.https_trigger_url}/download"
+    TARGET_URI = "${google_cloudfunctions_function.function.https_trigger_url}/httpSymbolStore"
   }
 }
 

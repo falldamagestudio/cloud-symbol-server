@@ -10,7 +10,7 @@ import (
 	"github.com/rs/cors"
 
 	authentication "github.com/falldamagestudio/cloud-symbol-server/backend-api/authentication"
-	download_api "github.com/falldamagestudio/cloud-symbol-server/backend-api/download-api"
+	http_symbol_store "github.com/falldamagestudio/cloud-symbol-server/backend-api/http-symbol-store"
 	openapi "github.com/falldamagestudio/cloud-symbol-server/backend-api/generated/go-server/go"
 	postgres "github.com/falldamagestudio/cloud-symbol-server/backend-api/postgres"
 )
@@ -23,7 +23,7 @@ var router *mux.Router
 
 const (
 	env_GCP_PROJECT_ID = "GCP_PROJECT_ID"
-	downloadPathPrefix = "/download/"
+	httpSymbolStorePrefix = "/httpSymbolStore/"
 )
 
 func init() {
@@ -72,10 +72,10 @@ func init() {
 
 	router.Use(authenticationMiddleware.Handler)
 
-	// Set up download handler
+	// Set up HTTP Symbol Store handler
 
-	downloadHandler := download_api.CreateDownloader()
-	router.PathPrefix(downloadPathPrefix).Handler(http.StripPrefix(downloadPathPrefix, downloadHandler))
+	httpSymbolStoreHandler := http_symbol_store.CreateHttpSymbolStoreHandler()
+	router.PathPrefix(httpSymbolStorePrefix).Handler(http.StripPrefix(httpSymbolStorePrefix, httpSymbolStoreHandler))
 }
 
 func BackendAPI(w http.ResponseWriter, r *http.Request) {

@@ -13,7 +13,7 @@ import (
 
 func apiRequest(email string, pat string, path string) (*http.Response, error) {
 
-	serviceUrl := getDownloadAPIServiceURL(email, pat)
+	serviceUrl := getHttpSymbolStoreServiceURL(email, pat)
 
 	httpClient := &http.Client{
 		Transport: cleanhttp.DefaultPooledTransport(),

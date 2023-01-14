@@ -1,4 +1,4 @@
-package download_api
+package http_symbol_store
 
 import (
 	"context"
@@ -18,14 +18,14 @@ import (
 	postgres "github.com/falldamagestudio/cloud-symbol-server/backend-api/postgres"
 )
 
-type DownloadHandler struct {
+type HttpSymbolStoreHandler struct {
 }
 
-func CreateDownloader() *DownloadHandler {
-	return &DownloadHandler{}
+func CreateHttpSymbolStoreHandler() *HttpSymbolStoreHandler {
+	return &HttpSymbolStoreHandler{}
 }
 
-func (*DownloadHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (*HttpSymbolStoreHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	signedURLExpirationSeconds := 15 * 60
 

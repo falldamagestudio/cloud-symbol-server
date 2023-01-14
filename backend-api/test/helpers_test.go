@@ -39,18 +39,18 @@ func getBackendAPIEndpoint() string {
 	return backendAPIEndpoint
 }
 
-func getDownloadAPIServiceURL(email string, pat string) string {
+func getHttpSymbolStoreServiceURL(email string, pat string) string {
 
 	backendAPIEndpoint := getBackendAPIEndpoint()
 
-	downloadAPIEndpoint := fmt.Sprintf("%v/download", backendAPIEndpoint)
+	httpSymbolStoreEndpoint := fmt.Sprintf("%v/httpSymbolStore", backendAPIEndpoint)
 
 	serviceUrl := ""
 	if email != "" || pat != "" {
-		parts := strings.Split(downloadAPIEndpoint, "://")
+		parts := strings.Split(httpSymbolStoreEndpoint, "://")
 		serviceUrl = fmt.Sprintf("%s://%s:%s@%s", parts[0], email, pat, parts[1])
 	} else {
-		serviceUrl = downloadAPIEndpoint
+		serviceUrl = httpSymbolStoreEndpoint
 	}
 
 	return serviceUrl
