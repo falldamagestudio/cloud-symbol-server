@@ -18,7 +18,7 @@ import (
 
 func GetStoreUploads(ctx context.Context, storeId string, offset int32, limit int32) (openapi.ImplResponse, error) {
 
-	log.Printf("Getting store uploadss")
+	log.Printf("Getting store uploads for store %v, offset %v, limit %v", storeId, offset, limit)
 
 	tx, err := postgres.BeginDBTransaction(ctx)
 	if err != nil {
@@ -65,6 +65,11 @@ func GetStoreUploads(ctx context.Context, storeId string, offset int32, limit in
 
 	// Fetch all files related to selected uploads
 
+	var uploadIds = make([]interface{}, len(uploads))
+	for uploadIndex, upload := range(uploads) {
+		uploadIds[uploadIndex] = upload.UploadID
+	}
+
 	var uploadFiles []models.StoreUploadFile
 
 	err = models.NewQuery(
@@ -72,8 +77,7 @@ func GetStoreUploads(ctx context.Context, storeId string, offset int32, limit in
 		qm.From("cloud_symbol_server."+models.TableNames.StoreUploads),
 		qm.InnerJoin("cloud_symbol_server."+models.TableNames.StoreUploadFiles+" on "+models.StoreUploadTableColumns.UploadID+" = "+models.StoreUploadFileTableColumns.UploadID),
 		qm.Where(models.StoreUploadTableColumns.StoreID+" = ?", store.StoreID),
-		qm.Offset(int(offset)),
-		qm.Limit(int(limit)),
+		qm.AndIn(models.StoreUploadTableColumns.UploadID+" IN ?", uploadIds...),
 	).Bind(ctx, tx, &uploadFiles)
 	if err != nil {
 		log.Printf("Error while accessing upload-files in store %v : %v", storeId, err)
