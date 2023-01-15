@@ -45,27 +45,27 @@ public partial class TestCommands
     public async Task CreateStoreSucceedsIfStoreDoesNotAlreadyExist()
     {
         await Helpers.EnsureTestStoreDoesNotExist();
-        await TestSpecRunner.RunSpecCommand("../../../../testspecs/CreateStoreSucceedsIfStoreDoesNotAlreadyExist", output);
+        await SpecRunner.RunSpecCommand("../../../../testspecs/CreateStoreSucceedsIfStoreDoesNotAlreadyExist", output);
     }
 
     [Fact]
     public async Task CreateStoreFailsIfStoreAlreadyExists()
     {
         await Helpers.EnsureTestStoreExists();
-        await TestSpecRunner.RunSpecCommand("../../../../testspecs/CreateStoreFailsIfStoreAlreadyExists", output);
+        await SpecRunner.RunSpecCommand("../../../../testspecs/CreateStoreFailsIfStoreAlreadyExists", output);
     }
 
     [Fact]
     public async Task DeleteStoreSucceedsIfStoreAlreadyExists()
     {
         await Helpers.EnsureTestStoreExists();
-        await TestSpecRunner.RunSpecCommand("../../../../testspecs/DeleteStoreSucceedsIfStoreAlreadyExists", output);
+        await SpecRunner.RunSpecCommand("../../../../testspecs/DeleteStoreSucceedsIfStoreAlreadyExists", output);
     }
 
     [Fact]
     public async Task DeleteStoreFailsIfStoreDoesNotAlreadyExist()
     {
         await Helpers.EnsureTestStoreDoesNotExist();
-        await TestSpecRunner.RunSpecCommand("../../../../testspecs/DeleteStoreFailsIfStoreDoesNotAlreadyExist", output);
+        await SpecRunner.RunSpecCommand("../../../../testspecs/DeleteStoreFailsIfStoreDoesNotAlreadyExist", output);
     }
 }

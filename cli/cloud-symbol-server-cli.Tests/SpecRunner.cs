@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 
 namespace cloud_symbol_server_cli.Tests;
 
-public static class TestSpecRunner
+public static class SpecRunner
 {
     private class Spec
     {

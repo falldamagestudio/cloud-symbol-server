@@ -10,14 +10,14 @@ public partial class TestCommands
     public async Task CreateUploadFailsIfStoreDoesNotExist()
     {
         await Helpers.EnsureTestStoreDoesNotExist();
-        await TestSpecRunner.RunSpecCommand("../../../../testspecs/CreateUploadFailsIfStoreDoesNotExist", output);
+        await SpecRunner.RunSpecCommand("../../../../testspecs/CreateUploadFailsIfStoreDoesNotExist", output);
     }
 
     [Fact]
     public async Task CreateUploadSucceedsIfStoreExists()
     {
         await Helpers.EnsureTestStoreExists();
-        await TestSpecRunner.RunSpecCommand("../../../../testspecs/CreateUploadSucceedsIfStoreExists", output);
+        await SpecRunner.RunSpecCommand("../../../../testspecs/CreateUploadSucceedsIfStoreExists", output);
 
         byte[] content = await Helpers.DownloadFile("example.pdb", "7F416863ABF34C3E894BAD1739BAA5571");
         byte[] desiredContent = File.ReadAllBytes("../../../../testdata/example.pdb");
@@ -29,14 +29,14 @@ public partial class TestCommands
     public async Task ListUploadsFailsIfStoreDoesNotExist()
     {
         await Helpers.EnsureTestStoreDoesNotExist();
-        await TestSpecRunner.RunSpecCommand("../../../../testspecs/ListUploadsFailsIfStoreDoesNotExist", output);
+        await SpecRunner.RunSpecCommand("../../../../testspecs/ListUploadsFailsIfStoreDoesNotExist", output);
     }
 
     [Fact]
     public async Task ListUploadsSucceedsIfStoreExists()
     {
         await Helpers.EnsureTestStoreExists();
-        await TestSpecRunner.RunSpecCommand("../../../../testspecs/ListUploadsSucceedsIfStoreExists", output);
+        await SpecRunner.RunSpecCommand("../../../../testspecs/ListUploadsSucceedsIfStoreExists", output);
     }
 
     [Fact]
@@ -46,7 +46,7 @@ public partial class TestCommands
 
         {
             // Upload build
-            await TestSpecRunner.RunSpecCommand("../../../../testspecs/ExpireUploadSucceedsIfUploadExists/1. UploadBuild", output);
+            await SpecRunner.RunSpecCommand("../../../../testspecs/ExpireUploadSucceedsIfUploadExists/1. UploadBuild", output);
 
             byte[] content = await Helpers.DownloadFile("example.pdb", "7F416863ABF34C3E894BAD1739BAA5571");
             byte[] desiredContent = File.ReadAllBytes("../../../../testdata/example.pdb");
@@ -58,15 +58,15 @@ public partial class TestCommands
 
         // Ensure that the upload is not expired
 
-        await TestSpecRunner.RunSpecCommand("../../../../testspecs/ExpireUploadSucceedsIfUploadExists/2. EnsureUploadIsNotExpired", output);
+        await SpecRunner.RunSpecCommand("../../../../testspecs/ExpireUploadSucceedsIfUploadExists/2. EnsureUploadIsNotExpired", output);
 
         // Expire upload
 
-        await TestSpecRunner.RunSpecCommand("../../../../testspecs/ExpireUploadSucceedsIfUploadExists/3. ExpireUpload", output);
+        await SpecRunner.RunSpecCommand("../../../../testspecs/ExpireUploadSucceedsIfUploadExists/3. ExpireUpload", output);
 
         // Ensure that the upload is expired
 
-        await TestSpecRunner.RunSpecCommand("../../../../testspecs/ExpireUploadSucceedsIfUploadExists/4. EnsureUploadIsExpired", output);
+        await SpecRunner.RunSpecCommand("../../../../testspecs/ExpireUploadSucceedsIfUploadExists/4. EnsureUploadIsExpired", output);
     }
 
 

@@ -11,7 +11,7 @@ public partial class TestCommands
         {
             await Helpers.EnsureTestStoreDoesNotExist();
 
-            await TestSpecRunner.RunSpecCommand("../../../../testspecs/TestListFilesFailsIfStoreDoesNotExist", output);
+            await SpecRunner.RunSpecCommand("../../../../testspecs/TestListFilesFailsIfStoreDoesNotExist", output);
         }
     }
 
@@ -22,7 +22,7 @@ public partial class TestCommands
             await Helpers.EnsureTestStoreExists();
             await Helpers.PopulateTestStore();
 
-            await TestSpecRunner.RunSpecCommand("../../../../testspecs/TestListFilesSucceedsIfStoreExists", output);
+            await SpecRunner.RunSpecCommand("../../../../testspecs/TestListFilesSucceedsIfStoreExists", output);
         }
     }
 }

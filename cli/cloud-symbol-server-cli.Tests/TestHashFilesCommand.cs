@@ -10,6 +10,6 @@ public partial class TestCommands
     [Fact]
     public async Task HashFilesSucceedsIfFilesExist()
     {
-        await TestSpecRunner.RunSpecCommand("../../../../testspecs/HashFilesSucceedsIfFilesExist", output);
+        await SpecRunner.RunSpecCommand("../../../../testspecs/HashFilesSucceedsIfFilesExist", output);
     }
 }
