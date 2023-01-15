@@ -1,0 +1,11 @@
+{
+    "CommandArguments": [
+        "uploads",
+        "expire",
+        "example",
+        "0"
+    ],
+    "SkipStdoutLines": 0,
+    "SkipStderrLines": 0,
+    "ExitCode": 0
+}

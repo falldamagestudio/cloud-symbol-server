@@ -7,187 +7,66 @@ namespace cloud_symbol_server_cli.Tests;
 public partial class TestCommands
 {
     [Fact]
-    public async Task TestUploadFailsIfStoreDoesNotExist()
+    public async Task CreateUploadFailsIfStoreDoesNotExist()
     {
-        {
-            await Helpers.EnsureTestStoreDoesNotExist();
-
-            Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-                "--service-url", Helpers.GetBackendAPIEndpoint(),
-                "--email", Helpers.GetTestEmail(),
-                "--pat", Helpers.GetTestPAT(),
-                "uploads",
-                "create",
-                "--description", "testupload",
-                "--build-id", "build 432",
-                Helpers.TestStore,
-                "../../../../testdata/*.pdb",
-                "../../../../testdata/*.exe",
-            });
-
-            Assert.NotEqual("", result.Stderr);
-            Assert.DoesNotContain("Exception", result.Stderr);
-            Assert.Equal(1, result.ExitCode);
-        }
+        await Helpers.EnsureTestStoreDoesNotExist();
+        await TestSpecRunner.RunSpecCommand("../../../../testspecs/CreateUploadFailsIfStoreDoesNotExist", output);
     }
 
     [Fact]
-    public async Task TestUploadSucceedsIfStoreExists()
+    public async Task CreateUploadSucceedsIfStoreExists()
     {
+        await Helpers.EnsureTestStoreExists();
+        await TestSpecRunner.RunSpecCommand("../../../../testspecs/CreateUploadSucceedsIfStoreExists", output);
+
+        byte[] content = await Helpers.DownloadFile("example.pdb", "7F416863ABF34C3E894BAD1739BAA5571");
+        byte[] desiredContent = File.ReadAllBytes("../../../../testdata/example.pdb");
+        Assert.NotNull(content);
+        Assert.Equal(desiredContent, content);
+    }
+
+    [Fact]
+    public async Task ListUploadsFailsIfStoreDoesNotExist()
+    {
+        await Helpers.EnsureTestStoreDoesNotExist();
+        await TestSpecRunner.RunSpecCommand("../../../../testspecs/ListUploadsFailsIfStoreDoesNotExist", output);
+    }
+
+    [Fact]
+    public async Task ListUploadsSucceedsIfStoreExists()
+    {
+        await Helpers.EnsureTestStoreExists();
+        await TestSpecRunner.RunSpecCommand("../../../../testspecs/ListUploadsSucceedsIfStoreExists", output);
+    }
+
+    [Fact]
+    public async Task ExpireUploadSucceedsIfUploadExists()
+    {
+        await Helpers.EnsureTestStoreExists();
+
         {
-            await Helpers.EnsureTestStoreExists();
+            // Upload build
+            await TestSpecRunner.RunSpecCommand("../../../../testspecs/ExpireUploadSucceedsIfUploadExists/1. UploadBuild", output);
 
-            Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-                "--service-url", Helpers.GetBackendAPIEndpoint(),
-                "--email", Helpers.GetTestEmail(),
-                "--pat", Helpers.GetTestPAT(),
-                "uploads",
-                "create",
-                "--description", "testupload",
-                "--build-id", "build 432",
-                Helpers.TestStore,
-                "../../../../testdata/*.pdb",
-                "../../../../testdata/*.exe",
-            });
-
-            Assert.Equal("", result.Stderr);
-            Assert.Equal(0, result.ExitCode);
             byte[] content = await Helpers.DownloadFile("example.pdb", "7F416863ABF34C3E894BAD1739BAA5571");
             byte[] desiredContent = File.ReadAllBytes("../../../../testdata/example.pdb");
             Assert.NotNull(content);
             Assert.Equal(desiredContent, content);
         }
-    }
 
-    [Fact]
-    public async Task TestListUploadsFailsIfStoreDoesNotExist()
-    {
-        {
-            await Helpers.EnsureTestStoreDoesNotExist();
+        string uploadId = "0";
 
-            Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-                "--service-url", Helpers.GetBackendAPIEndpoint(),
-                "--email", Helpers.GetTestEmail(),
-                "--pat", Helpers.GetTestPAT(),
-                "uploads",
-                "list",
-                Helpers.TestStore,
-            });
+        // Ensure that the upload is not expired
 
-            Assert.NotEqual("", result.Stderr);
-            Assert.DoesNotContain("Exception", result.Stderr);
-            Assert.Equal(1, result.ExitCode);
-        }
-    }
+        await TestSpecRunner.RunSpecCommand("../../../../testspecs/ExpireUploadSucceedsIfUploadExists/2. EnsureUploadIsNotExpired", output);
 
-    [Fact]
-    public async Task TestListUploadsSucceedsIfStoreExists()
-    {
-        {
-            await Helpers.EnsureTestStoreExists();
+        // Expire upload
 
-            Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-                "--service-url", Helpers.GetBackendAPIEndpoint(),
-                "--email", Helpers.GetTestEmail(),
-                "--pat", Helpers.GetTestPAT(),
-                "uploads",
-                "list",
-                Helpers.TestStore,
-            });
+        await TestSpecRunner.RunSpecCommand("../../../../testspecs/ExpireUploadSucceedsIfUploadExists/3. ExpireUpload", output);
 
-            Assert.Equal("", result.Stderr);
-            Assert.NotEqual("", result.Stdout);
-            Assert.Equal(0, result.ExitCode);
-        }
-    }
+        // Ensure that the upload is expired
 
-    [Fact]
-    public async Task TestExpireUploadSucceedsIfUploadExists()
-    {
-        {
-            await Helpers.EnsureTestStoreExists();
-
-            // Upload build
-
-            {
-                Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-                    "--service-url", Helpers.GetBackendAPIEndpoint(),
-                    "--email", Helpers.GetTestEmail(),
-                    "--pat", Helpers.GetTestPAT(),
-                    "uploads",
-                    "create",
-                    "--description", "testupload",
-                    "--build-id", "build 432",
-                    Helpers.TestStore,
-                    "../../../../testdata/*.pdb",
-                    "../../../../testdata/*.exe",
-                });
-
-                Assert.Equal("", result.Stderr);
-                Assert.Equal(0, result.ExitCode);
-                byte[] content = await Helpers.DownloadFile("example.pdb", "7F416863ABF34C3E894BAD1739BAA5571");
-                byte[] desiredContent = File.ReadAllBytes("../../../../testdata/example.pdb");
-                Assert.NotNull(content);
-                Assert.Equal(desiredContent, content);
-            }
-
-            string uploadId = "0";
-
-            // Ensure that the upload is not expired
-
-            {
-                Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-                    "--service-url", Helpers.GetBackendAPIEndpoint(),
-                    "--email", Helpers.GetTestEmail(),
-                    "--pat", Helpers.GetTestPAT(),
-                    "uploads",
-                    "list",
-                    Helpers.TestStore
-                });
-
-                Assert.NotEqual("", result.Stdout);
-                Assert.DoesNotContain("Expired", result.Stdout);
-                Assert.Equal("", result.Stderr);
-                Assert.Equal(0, result.ExitCode);
-            }
-
-            // Expire upload
-
-            {
-                Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-                    "--service-url", Helpers.GetBackendAPIEndpoint(),
-                    "--email", Helpers.GetTestEmail(),
-                    "--pat", Helpers.GetTestPAT(),
-                    "uploads",
-                    "expire",
-                    Helpers.TestStore,
-                    uploadId
-                });
-
-                Assert.NotEqual("", result.Stdout);
-                Assert.Equal("", result.Stderr);
-                Assert.Equal(0, result.ExitCode);
-            }
-
-            // Ensure that the upload is expired
-
-            {
-                Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-                    "--service-url", Helpers.GetBackendAPIEndpoint(),
-                    "--email", Helpers.GetTestEmail(),
-                    "--pat", Helpers.GetTestPAT(),
-                    "uploads",
-                    "list",
-                    Helpers.TestStore
-                });
-
-                Assert.NotEqual("", result.Stdout);
-                Assert.Contains("Expired", result.Stdout);
-                Assert.Equal("", result.Stderr);
-                Assert.Equal(0, result.ExitCode);
-            }
-
-        }
+        await TestSpecRunner.RunSpecCommand("../../../../testspecs/ExpireUploadSucceedsIfUploadExists/4. EnsureUploadIsExpired", output);
     }
 
 

@@ -24,7 +24,7 @@ namespace CLI
                 IEnumerable<ClientAPI.HashFiles.FileWithHash> filesWithHashes = ClientAPI.HashFiles.DoHashFiles(files);
                 Console.WriteLine("  Files and hashes:");
                 foreach (ClientAPI.HashFiles.FileWithHash fileWithHash in filesWithHashes) {
-                    Console.WriteLine($"    {fileWithHash.FileWithPath}: {fileWithHash.Hash} ");
+                    Console.WriteLine($"    {fileWithHash.FileWithPath}: {fileWithHash.Hash}");
                 }
             }
 

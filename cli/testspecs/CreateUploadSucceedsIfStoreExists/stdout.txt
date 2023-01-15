@@ -1,0 +1,14 @@
+Uploading to Cloud Symbol Server...
+  Store: example
+  Description: testupload
+  Build ID: build 432
+  Files:
+    {CLI_ROOT}/testdata/example.exe
+    {CLI_ROOT}/testdata/example.pdb
+Progress: LocalValidation 
+Progress: CreatingUploadEntry 
+Progress: UploadingMissingFiles 
+Progress: UploadingMissingFile {CLI_ROOT}/testdata/example.exe
+Progress: UploadingMissingFile {CLI_ROOT}/testdata/example.pdb
+Progress: Done 
+Upload done.

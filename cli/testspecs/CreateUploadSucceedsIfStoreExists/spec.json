@@ -1,0 +1,14 @@
+{
+    "CommandArguments": [
+        "uploads",
+        "create",
+        "--description", "testupload",
+        "--build-id", "build 432",
+        "example",
+        "../../../../testdata/*.pdb",
+        "../../../../testdata/*.exe"
+    ],
+    "SkipStdoutLines": 0,
+    "SkipStderrLines": 0,
+    "ExitCode": 0
+}
