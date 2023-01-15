@@ -22,6 +22,8 @@ namespace CLI
                 return 1;
             }
 
+            // Stores commands
+
             Command createStoreCommand = new Command("create", "Create a new store within Cloud Symbol Server") {
                 new Argument<string>("store", "Name of store to create"),
             };
@@ -45,6 +47,21 @@ namespace CLI
                 listStoresCommand,
             };
             storesCommand.Handler = CommandHandler.Create(() => storesCommand.Invoke("--help"));
+
+            // Files commands
+
+            Command listFilesCommand = new Command("list", "List files present within Cloud Symbol Server") {
+                new Argument<string>("store", "Name of store containing upload"),
+            };
+            listFilesCommand.Handler = CommandHandler.Create(async (GlobalOptions globalOptions, string store)
+                => { return await CLI.ListFiles.DoListFiles(globalOptions, store); });
+
+            Command filesCommand = new Command("files", "Manage files within Cloud Symbol Server") {
+                listFilesCommand,
+            };
+            filesCommand.Handler = CommandHandler.Create(() => filesCommand.Invoke("--help"));
+
+            // Uploads commands
 
             Command createUploadCommand = new Command("create", "Upload files to a store") {
                 new Option<string>("--description", "Textual description of upload"),
@@ -75,15 +92,20 @@ namespace CLI
             };
             uploadsCommand.Handler = CommandHandler.Create(() => uploadsCommand.Invoke("--help"));
 
+            // hash files command
+
             Command hashFilesCommand = new Command("hash", "Compute hashes for files") {
                 new Argument<string>("patterns", "Globbing patterns of files to compute hashes for") { Arity = ArgumentArity.OneOrMore },
             };
             hashFilesCommand.Handler = CommandHandler.Create((string[] patterns)
                 => { return CLI.HashFiles.DoHashFiles(patterns); });
 
+            // Root command
+
             RootCommand rootCommand = new RootCommand("Cloud Symbol Server CLI tool") {
                 storesCommand,
                 uploadsCommand,
+                filesCommand,
                 hashFilesCommand,
 
                 // Global options, available to all subcommands

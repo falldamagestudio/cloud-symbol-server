@@ -199,5 +199,26 @@ namespace ClientAPI
                 throw new ApiException(response.ErrorText);
             return response.Data;
         }
+
+        public class GetStoreFilesException : ClientAPIException
+        {
+            public GetStoreFilesException(string message) : base(message) { }
+        }
+
+        public async Task<BackendAPI.Model.GetStoreFilesResponse> GetStoreFilesAsync(string store, int offset, int limit) {
+
+            try {
+                BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreFilesResponse> response = await backendApi.GetStoreFilesWithHttpInfoAsync(store, offset, limit);
+                if (response.ErrorText != null)
+                    throw new ApiException(response.ErrorText);
+                return response.Data;
+            } catch (BackendAPI.Client.ApiException apiException) {
+                if (apiException.ErrorCode == (int)HttpStatusCode.NotFound)
+                    throw new GetStoreFilesException($"Store {store} does not exist");
+                else
+                    throw;
+            }
+        }
+
     }
 }
