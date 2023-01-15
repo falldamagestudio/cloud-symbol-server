@@ -20,7 +20,7 @@ public partial class TestCommands
             });
 
             Assert.Equal("", result.Stderr);
-            Assert.DoesNotContain(Helpers.TestStore, result.Stdout);
+            Assert.DoesNotContain($"  {Helpers.TestStore}\n", result.Stdout);
             Assert.Equal(0, result.ExitCode);
         }
 
@@ -36,7 +36,7 @@ public partial class TestCommands
             });
 
             Assert.Equal("", result.Stderr);
-            Assert.Contains(Helpers.TestStore, result.Stdout);
+            Assert.Contains($"  {Helpers.TestStore}\n", result.Stdout);
             Assert.Equal(0, result.ExitCode);
         }
     }
