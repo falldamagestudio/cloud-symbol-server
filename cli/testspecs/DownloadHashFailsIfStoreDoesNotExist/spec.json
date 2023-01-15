@@ -1,0 +1,12 @@
+{
+    "CommandArguments": [
+        "file-hashes",
+        "download",
+        "example",
+        "example.pdb",
+        "7F416863ABF34C3E894BAD1739BAA5571"
+    ],
+    "SkipStdoutLines": 0,
+    "SkipStderrLines": 0,
+    "ExitCode": 1
+}

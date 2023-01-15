@@ -76,9 +76,18 @@ namespace CLI
             computeHashesCommand.Handler = CommandHandler.Create((string[] patterns)
                 => { return CLI.ComputeHashes.DoComputeHashes(patterns); });
 
+            Command downloadHashCommand = new Command("download", "Download the content of a particular file-hash") {
+                new Argument<string>("store", "Name of store containing file"),
+                new Argument<string>("file", "Name of file"),
+                new Argument<string>("hash", "Name of hash"),
+            };
+            downloadHashCommand.Handler = CommandHandler.Create((GlobalOptions globalOptions, string store, string file, string hash)
+                => { return CLI.DownloadHash.DoDownloadHash(globalOptions, store, file, hash); });
+
             Command hashesCommand = new Command("file-hashes", "Manage hashes of files within Cloud Symbol Server") {
                 listHashesCommand,
                 computeHashesCommand,
+                downloadHashCommand,
             };
             hashesCommand.Handler = CommandHandler.Create(() => hashesCommand.Invoke("--help"));
 
