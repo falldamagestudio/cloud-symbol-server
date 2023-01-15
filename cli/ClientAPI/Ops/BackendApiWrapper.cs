@@ -220,5 +220,25 @@ namespace ClientAPI
             }
         }
 
+        public class GetStoreFileHashesException : ClientAPIException
+        {
+            public GetStoreFileHashesException(string message) : base(message) { }
+        }
+
+        public async Task<BackendAPI.Model.GetStoreFileHashesResponse> GetStoreFileHashesAsync(string store, string file, int offset, int limit) {
+
+            try {
+                BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreFileHashesResponse> response = await backendApi.GetStoreFileHashesWithHttpInfoAsync(store, file, offset, limit);
+                if (response.ErrorText != null)
+                    throw new ApiException(response.ErrorText);
+                return response.Data;
+            } catch (BackendAPI.Client.ApiException apiException) {
+                if (apiException.ErrorCode == (int)HttpStatusCode.NotFound)
+                    throw new GetStoreFileHashesException($"Store {store} / file {file} does not exist");
+                else
+                    throw;
+            }
+        }
+
     }
 }

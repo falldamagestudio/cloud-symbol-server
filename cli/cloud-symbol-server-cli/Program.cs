@@ -51,7 +51,7 @@ namespace CLI
             // Files commands
 
             Command listFilesCommand = new Command("list", "List files present within Cloud Symbol Server") {
-                new Argument<string>("store", "Name of store containing upload"),
+                new Argument<string>("store", "Name of store containing files"),
             };
             listFilesCommand.Handler = CommandHandler.Create(async (GlobalOptions globalOptions, string store)
                 => { return await CLI.ListFiles.DoListFiles(globalOptions, store); });
@@ -60,6 +60,20 @@ namespace CLI
                 listFilesCommand,
             };
             filesCommand.Handler = CommandHandler.Create(() => filesCommand.Invoke("--help"));
+
+            // Hashes commands
+
+            Command listHashesCommand = new Command("list", "List hashes of files present within Cloud Symbol Server") {
+                new Argument<string>("store", "Name of store containing file"),
+                new Argument<string>("file", "Name of file"),
+            };
+            listHashesCommand.Handler = CommandHandler.Create(async (GlobalOptions globalOptions, string store, string file)
+                => { return await CLI.ListHashes.DoListHashes(globalOptions, store, file); });
+
+            Command hashesCommand = new Command("hashes", "Manage hashes of files within Cloud Symbol Server") {
+                listHashesCommand,
+            };
+            hashesCommand.Handler = CommandHandler.Create(() => hashesCommand.Invoke("--help"));
 
             // Uploads commands
 
@@ -106,6 +120,7 @@ namespace CLI
                 storesCommand,
                 uploadsCommand,
                 filesCommand,
+                hashesCommand,
                 hashFilesCommand,
 
                 // Global options, available to all subcommands
