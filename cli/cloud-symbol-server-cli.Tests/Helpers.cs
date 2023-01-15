@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -101,5 +102,17 @@ public static class Helpers
     {
         await DeleteTestStore(true);
         await CreateTestStore(false);
+    }
+
+    public static async Task PopulateTestStore()
+    {
+        const string description = "Test Upload";
+        const string buildId = "Test build ID";
+        List<string> files = new List<string>{
+            "../../../../testdata/example.exe",
+            "../../../../testdata/example.pdb",
+        };
+
+        await ClientAPI.Ops.Upload(GetBackendAPIEndpoint(), GetTestEmail(), GetTestPAT(), TestStore, description, buildId, files, null);
     }
 }
