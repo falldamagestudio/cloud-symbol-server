@@ -1,0 +1,10 @@
+{
+    "CommandArguments": [
+        "stores",
+        "create",
+        "example"
+    ],
+    "SkipStdoutLines": 0,
+    "SkipStderrLines": 0,
+    "ExitCode": 1
+}

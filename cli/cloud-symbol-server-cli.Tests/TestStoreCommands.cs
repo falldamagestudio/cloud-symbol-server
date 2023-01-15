@@ -45,77 +45,27 @@ public partial class TestCommands
     public async Task CreateStoreSucceedsIfStoreDoesNotAlreadyExist()
     {
         await Helpers.EnsureTestStoreDoesNotExist();
-
-        Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-            "--service-url", Helpers.GetBackendAPIEndpoint(),
-            "--email", Helpers.GetTestEmail(),
-            "--pat", Helpers.GetTestPAT(),
-            "stores",
-            "create",
-            Helpers.TestStore,
-        });
-
-        Assert.Equal("", result.Stderr);
-        Assert.NotEqual("", result.Stdout);
-        Assert.Equal(0, result.ExitCode);
+        await TestSpecRunner.RunSpecCommand("../../../../testspecs/CreateStoreSucceedsIfStoreDoesNotAlreadyExist", output);
     }
 
     [Fact]
     public async Task CreateStoreFailsIfStoreAlreadyExists()
     {
         await Helpers.EnsureTestStoreExists();
-
-        Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-            "--service-url", Helpers.GetBackendAPIEndpoint(),
-            "--email", Helpers.GetTestEmail(),
-            "--pat", Helpers.GetTestPAT(),
-            "stores",
-            "create",
-            Helpers.TestStore,
-        });
-
-        Assert.NotEqual("", result.Stderr);
-        Assert.DoesNotContain("Exception", result.Stderr);
-        Assert.Equal("", result.Stdout);
-        Assert.Equal(1, result.ExitCode);
+        await TestSpecRunner.RunSpecCommand("../../../../testspecs/CreateStoreFailsIfStoreAlreadyExists", output);
     }
 
     [Fact]
     public async Task DeleteStoreSucceedsIfStoreAlreadyExists()
     {
         await Helpers.EnsureTestStoreExists();
-
-        Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-            "--service-url", Helpers.GetBackendAPIEndpoint(),
-            "--email", Helpers.GetTestEmail(),
-            "--pat", Helpers.GetTestPAT(),
-            "stores",
-            "delete",
-            Helpers.TestStore,
-        });
-
-        Assert.Equal("", result.Stderr);
-        Assert.NotEqual("", result.Stdout);
-        Assert.Equal(0, result.ExitCode);
+        await TestSpecRunner.RunSpecCommand("../../../../testspecs/DeleteStoreSucceedsIfStoreAlreadyExists", output);
     }
 
     [Fact]
     public async Task DeleteStoreFailsIfStoreDoesNotAlreadyExist()
     {
         await Helpers.EnsureTestStoreDoesNotExist();
-
-        Helpers.CLICommandResult result = await Helpers.RunCLICommand(new string[]{
-            "--service-url", Helpers.GetBackendAPIEndpoint(),
-            "--email", Helpers.GetTestEmail(),
-            "--pat", Helpers.GetTestPAT(),
-            "stores",
-            "delete",
-            Helpers.TestStore,
-        });
-
-        Assert.NotEqual("", result.Stderr);
-        Assert.DoesNotContain("Exception", result.Stderr);
-        Assert.Equal("", result.Stdout);
-        Assert.Equal(1, result.ExitCode);
+        await TestSpecRunner.RunSpecCommand("../../../../testspecs/DeleteStoreFailsIfStoreDoesNotAlreadyExist", output);
     }
 }
