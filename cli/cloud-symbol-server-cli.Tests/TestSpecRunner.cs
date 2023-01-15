@@ -98,6 +98,13 @@ public static class TestSpecRunner
             output.WriteLine(actualStderrContent);
             output.WriteLine("=================================================");
         }
+        if (expectedExitCode != actualExitCode) {
+            output.WriteLine("========== Expected exitcode ====================");
+            output.WriteLine($"{expectedExitCode}");
+            output.WriteLine("========== Actual exitcode ======================");
+            output.WriteLine($"{actualExitCode}");
+            output.WriteLine("=================================================");
+        }
 
         Assert.Equal(expectedStdoutContent, actualStdoutContent);
         Assert.Equal(expectedStderrContent, actualStderrContent);
