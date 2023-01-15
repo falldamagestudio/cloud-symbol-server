@@ -10,20 +10,26 @@ namespace CLI
             }
 
             try {
-                int offset = 0;
-                int limit = 100;
-                BackendAPI.Model.GetStoreUploadsResponse uploadsResponse = await ClientAPI.ListUploads.DoListUploads(globalOptions.ServiceUrl, globalOptions.Email, globalOptions.Pat, store, offset, limit);
                 Console.WriteLine($"Uploads in store {store}:");
-                int i = offset;
-                foreach (BackendAPI.Model.GetStoreUploadResponse upload in uploadsResponse.Uploads) {
-                    Console.WriteLine($"  Upload {i}:");
-                    Console.WriteLine($"    Status: {upload.Status}");
-                    Console.WriteLine($"    Description: {upload.Description}");
-                    Console.WriteLine($"    Build ID: {upload.BuildId}");
-                    foreach (var uploadFile in upload.Files) {
-                        Console.WriteLine($"      FileName: {uploadFile.FileName}, Hash: {uploadFile.Hash}, Status: {uploadFile.Status}");
+
+                // Request upload info in batches, since the backend API limits max response size
+                const int limit = 100;
+
+                for (int offset = 0; ; offset += limit) {
+                    BackendAPI.Model.GetStoreUploadsResponse uploadsResponse = await ClientAPI.ListUploads.DoListUploads(globalOptions.ServiceUrl, globalOptions.Email, globalOptions.Pat, store, offset, limit);
+                    for (int batchOffset = 0; batchOffset < uploadsResponse.Uploads.Count; batchOffset++) {
+                        BackendAPI.Model.GetStoreUploadResponse upload = uploadsResponse.Uploads[batchOffset];
+                        Console.WriteLine($"  Upload {offset + batchOffset}:");
+                        Console.WriteLine($"    Status: {upload.Status}");
+                        Console.WriteLine($"    Description: {upload.Description}");
+                        Console.WriteLine($"    Build ID: {upload.BuildId}");
+                        foreach (var uploadFile in upload.Files) {
+                            Console.WriteLine($"      FileName: {uploadFile.FileName}, Hash: {uploadFile.Hash}, Status: {uploadFile.Status}");
+                        }
                     }
-                    i++;
+
+                    if (offset + uploadsResponse.Uploads.Count >= uploadsResponse.Pagination.Total)
+                        break;
                 }
             } catch (ClientAPI.ClientAPIException exception) {
                 Console.Error.WriteLine($"Error while listing uploads in store {store}: {exception.Message}");
