@@ -25,4 +25,11 @@ public partial class TestCommands
             await SpecRunner.RunSpecCommand("../../../../testspecs/ListHashesSucceedsIfStoreExists", output);
         }
     }
+
+    [Fact]
+    public async Task ComputeHashesSucceedsIfFilesExist()
+    {
+        await SpecRunner.RunSpecCommand("../../../../testspecs/ComputeHashesSucceedsIfFilesExist", output);
+    }
+
 }

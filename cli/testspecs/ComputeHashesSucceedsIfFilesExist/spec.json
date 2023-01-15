@@ -1,6 +1,7 @@
 {
     "CommandArguments": [
-        "hash",
+        "file-hashes",
+        "compute",
         "../../../../testdata/*.pdb",
         "../../../../testdata/*.exe"
     ],

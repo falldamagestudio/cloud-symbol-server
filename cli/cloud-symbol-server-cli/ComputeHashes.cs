@@ -2,7 +2,7 @@ using Microsoft.Extensions.FileSystemGlobbing;
 
 namespace CLI
 {
-    public static class HashFiles
+    public static class ComputeHashes
     {
         public static IEnumerable<string> FindMatchingFiles(IEnumerable<string> Patterns) {
 
@@ -14,7 +14,7 @@ namespace CLI
             return matcher.GetResultsInFullPath(".");
         }
 
-        public static int DoHashFiles(string[] patterns)
+        public static int DoComputeHashes(string[] patterns)
         {
             IReadOnlyCollection<string> files = FindMatchingFiles(patterns).ToList();
 

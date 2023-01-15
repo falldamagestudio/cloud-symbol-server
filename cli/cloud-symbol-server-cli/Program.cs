@@ -70,8 +70,15 @@ namespace CLI
             listHashesCommand.Handler = CommandHandler.Create(async (GlobalOptions globalOptions, string store, string file)
                 => { return await CLI.ListHashes.DoListHashes(globalOptions, store, file); });
 
+            Command computeHashesCommand = new Command("compute", "Compute hashes for local files") {
+                new Argument<string>("patterns", "Globbing patterns of files to compute hashes for") { Arity = ArgumentArity.OneOrMore },
+            };
+            computeHashesCommand.Handler = CommandHandler.Create((string[] patterns)
+                => { return CLI.ComputeHashes.DoComputeHashes(patterns); });
+
             Command hashesCommand = new Command("file-hashes", "Manage hashes of files within Cloud Symbol Server") {
                 listHashesCommand,
+                computeHashesCommand,
             };
             hashesCommand.Handler = CommandHandler.Create(() => hashesCommand.Invoke("--help"));
 
@@ -106,14 +113,6 @@ namespace CLI
             };
             uploadsCommand.Handler = CommandHandler.Create(() => uploadsCommand.Invoke("--help"));
 
-            // hash files command
-
-            Command hashFilesCommand = new Command("hash", "Compute hashes for files") {
-                new Argument<string>("patterns", "Globbing patterns of files to compute hashes for") { Arity = ArgumentArity.OneOrMore },
-            };
-            hashFilesCommand.Handler = CommandHandler.Create((string[] patterns)
-                => { return CLI.HashFiles.DoHashFiles(patterns); });
-
             // Root command
 
             RootCommand rootCommand = new RootCommand("Cloud Symbol Server CLI tool") {
@@ -121,7 +120,6 @@ namespace CLI
                 uploadsCommand,
                 filesCommand,
                 hashesCommand,
-                hashFilesCommand,
 
                 // Global options, available to all subcommands
                 new Option<string>("--service-url", () => ConfigFile.GetOrDefault("service-url", "")),
