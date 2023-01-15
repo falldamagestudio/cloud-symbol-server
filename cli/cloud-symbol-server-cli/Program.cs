@@ -70,7 +70,7 @@ namespace CLI
             listHashesCommand.Handler = CommandHandler.Create(async (GlobalOptions globalOptions, string store, string file)
                 => { return await CLI.ListHashes.DoListHashes(globalOptions, store, file); });
 
-            Command hashesCommand = new Command("hashes", "Manage hashes of files within Cloud Symbol Server") {
+            Command hashesCommand = new Command("file-hashes", "Manage hashes of files within Cloud Symbol Server") {
                 listHashesCommand,
             };
             hashesCommand.Handler = CommandHandler.Create(() => hashesCommand.Invoke("--help"));
