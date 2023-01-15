@@ -72,13 +72,22 @@ public static class TestSpecRunner
         return source.Substring(position);
     }
 
+    private static string ReplaceRoot(string source)
+    {
+        const string relativeRootLocation = "../../../..";
+        const string rootToken = "{CLI_ROOT}";
+        string absoluteRootLocation = Path.GetFullPath(relativeRootLocation);
+
+        return source.Replace(absoluteRootLocation, rootToken);
+    }
+
     private static void ValidateResult(Spec spec, Helpers.CLICommandResult cliCommandResult, ITestOutputHelper output)
     {
         string expectedStdoutContent = SkipLines(spec.Stdout, spec.SkipStdoutLines);
-        string actualStdoutContent = SkipLines(cliCommandResult.Stdout, spec.SkipStdoutLines);
+        string actualStdoutContent = ReplaceRoot(SkipLines(cliCommandResult.Stdout, spec.SkipStdoutLines));
 
         string expectedStderrContent = SkipLines(spec.Stderr, spec.SkipStderrLines);
-        string actualStderrContent = SkipLines(cliCommandResult.Stderr, spec.SkipStderrLines);
+        string actualStderrContent = ReplaceRoot(SkipLines(cliCommandResult.Stderr, spec.SkipStderrLines));
 
         int expectedExitCode = spec.ExitCode;
         int actualExitCode = cliCommandResult.ExitCode;
