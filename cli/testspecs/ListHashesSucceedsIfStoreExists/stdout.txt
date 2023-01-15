@@ -1,0 +1,2 @@
+Hashes of file example.pdb in store example:
+  Hash 7F416863ABF34C3E894BAD1739BAA5571: Status Present

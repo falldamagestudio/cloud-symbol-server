@@ -19,8 +19,7 @@ namespace CLI
                     BackendAPI.Model.GetStoreFileHashesResponse hashesResponse = await ClientAPI.ListHashes.DoListHashes(globalOptions.ServiceUrl, globalOptions.Email, globalOptions.Pat, store, file, offset, limit);
                     for (int batchOffset = 0; batchOffset < hashesResponse.Hashes.Count; batchOffset++) {
                         BackendAPI.Model.GetStoreFileHashResponse hash = hashesResponse.Hashes[batchOffset];
-                        Console.WriteLine($"  Hash {hash.Hash}:");
-                        Console.WriteLine($"    Status: {hash.Status}");
+                        Console.WriteLine($"  Hash {hash.Hash}: Status {hash.Status}");
                     }
 
                     if (offset + hashesResponse.Hashes.Count >= hashesResponse.Pagination.Total)
