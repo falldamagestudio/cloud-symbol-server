@@ -17,10 +17,21 @@
       >
         {{ item.hash }}
       </template>    
+
       <template
         v-slot:item.status="{ item }"
       >
         {{ item.status }}
+      </template>    
+
+      <template
+        v-slot:item.operations="{ item }"
+      >
+        <v-btn
+          v-on:click="download(item.hash)"
+        >
+          Download
+        </v-btn>
       </template>    
     </v-data-table>
 
@@ -46,7 +57,11 @@ const headers = [
   {
     text: "Status",
     value: "status",
-  }
+  },
+  {
+    text: "Operations",
+    value: "operations",
+  },
 ]
 
 interface StoreFileHashEntry {
@@ -92,6 +107,44 @@ function updatePagination(newOptions: {
   if ((options.page != newOptions.page) || (options.itemsPerPage != newOptions.itemsPerPage)) {
     options = newOptions
     fetch()
+  }
+}
+
+function downloadFileInBrowser(url: string, filename: string) {
+
+  // This is based on https://blog.logrocket.com/programmatic-file-downloads-in-the-browser-9a5186298d5c/
+
+  // Create a new anchor element
+  const a = document.createElement('a')
+
+  // Set the href and download attributes for the anchor element
+  // You can optionally set other attributes like `title`, etc
+  // Especially, if the anchor element will be attached to the DOM
+  a.href = url
+  a.download = filename
+
+  // Click handler that removes the anchor element after the element has been clicked
+  const clickHandler = () => {
+    setTimeout(() => {
+      a.remove()
+    }, 150)
+  };
+
+  // Add the click event listener on the anchor element
+  a.addEventListener('click', clickHandler, false)
+  
+  // Programmatically trigger a click on the anchor element
+  a.click()
+}
+
+async function download(hash: string) {
+
+  try {
+    const getStoreFileHashDownloadUrlResponse = await api.getStoreFileHashDownloadUrl(props.store, props.file, hash)
+
+    downloadFileInBrowser(getStoreFileHashDownloadUrlResponse.data.url, props.file)
+  } catch (error) {
+    console.log(error)
   }
 }
 

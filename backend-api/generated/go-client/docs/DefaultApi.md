@@ -10,6 +10,7 @@ Method | HTTP request | Description
 [**DeleteStore**](DefaultApi.md#DeleteStore) | **Delete** /stores/{storeId} | Delete an existing store
 [**DeleteToken**](DefaultApi.md#DeleteToken) | **Delete** /tokens/{token} | Delete a token for current user
 [**ExpireStoreUpload**](DefaultApi.md#ExpireStoreUpload) | **Post** /stores/{storeId}/uploads/{uploadId}/expire | Expire store upload and consider files for GC
+[**GetStoreFileHashDownloadUrl**](DefaultApi.md#GetStoreFileHashDownloadUrl) | **Get** /stores/{storeId}/files/{fileId}/hashes/{hashId}/getDownloadUrl | Request download URL for the binary blob associated with a particular hash
 [**GetStoreFileHashes**](DefaultApi.md#GetStoreFileHashes) | **Get** /stores/{storeId}/files/{fileId}/hashes | Fetch a list of hashes for a specific file in store
 [**GetStoreFiles**](DefaultApi.md#GetStoreFiles) | **Get** /stores/{storeId}/files | Fetch a list of files in store
 [**GetStoreUpload**](DefaultApi.md#GetStoreUpload) | **Get** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
@@ -405,6 +406,80 @@ Name | Type | Description  | Notes
 ### Return type
 
  (empty response body)
+
+### Authorization
+
+[emailAndPat](../README.md#emailAndPat)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetStoreFileHashDownloadUrl
+
+> GetStoreFileHashDownloadUrlResponse GetStoreFileHashDownloadUrl(ctx, storeId, fileId, hashId).Execute()
+
+Request download URL for the binary blob associated with a particular hash
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    storeId := "storeId_example" // string | ID of the store containing the file
+    fileId := "fileId_example" // string | ID of the file
+    hashId := "hashId_example" // string | ID of the hash
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.DefaultApi.GetStoreFileHashDownloadUrl(context.Background(), storeId, fileId, hashId).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStoreFileHashDownloadUrl``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `GetStoreFileHashDownloadUrl`: GetStoreFileHashDownloadUrlResponse
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetStoreFileHashDownloadUrl`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**storeId** | **string** | ID of the store containing the file | 
+**fileId** | **string** | ID of the file | 
+**hashId** | **string** | ID of the hash | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetStoreFileHashDownloadUrlRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+
+
+### Return type
+
+[**GetStoreFileHashDownloadUrlResponse**](GetStoreFileHashDownloadUrlResponse.md)
 
 ### Authorization
 

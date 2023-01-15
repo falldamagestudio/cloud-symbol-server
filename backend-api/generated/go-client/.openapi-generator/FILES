@@ -9,6 +9,7 @@ docs/CreateStoreUploadRequest.md
 docs/CreateStoreUploadResponse.md
 docs/CreateTokenResponse.md
 docs/DefaultApi.md
+docs/GetStoreFileHashDownloadUrlResponse.md
 docs/GetStoreFileHashResponse.md
 docs/GetStoreFileHashesResponse.md
 docs/GetStoreFilesResponse.md
@@ -27,6 +28,7 @@ model_create_store_upload_file_request.go
 model_create_store_upload_request.go
 model_create_store_upload_response.go
 model_create_token_response.go
+model_get_store_file_hash_download_url_response.go
 model_get_store_file_hash_response.go
 model_get_store_file_hashes_response.go
 model_get_store_files_response.go

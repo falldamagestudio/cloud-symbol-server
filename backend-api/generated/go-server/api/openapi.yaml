@@ -323,6 +323,55 @@ paths:
                 $ref: '#/components/schemas/messageResponse'
           description: No such store
       summary: Fetch a list of hashes for a specific file in store
+  /stores/{storeId}/files/{fileId}/hashes/{hashId}/getDownloadUrl:
+    get:
+      operationId: getStoreFileHashDownloadUrl
+      parameters:
+      - description: ID of the store containing the file
+        explode: false
+        in: path
+        name: storeId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of the file
+        explode: false
+        in: path
+        name: fileId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of the hash
+        explode: false
+        in: path
+        name: hashId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getStoreFileHashDownloadUrlResponse'
+          description: Success
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: Not authorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+          description: No such store
+      summary: Request download URL for the binary blob associated with a particular
+        hash
   /stores/{storeId}/uploads:
     get:
       operationId: getStoreUploads
@@ -609,6 +658,9 @@ components:
             $ref: '#/components/schemas/messageResponse'
       description: Not authorized
   schemas:
+    fileDownload:
+      format: binary
+      type: string
     storeUploadStatus:
       enum:
       - unknown
@@ -825,6 +877,21 @@ components:
       required:
       - hashes
       - pagination
+      type: object
+    getStoreFileHashDownloadUrlResponse:
+      example:
+        method: GET
+        url: https://storage.googleapis.com/test-cloud-symbol-server-symbols/stores/example2/example.exe/61C0D4547000/example.exe?Expires=1673733969&GoogleAccessId=backend-api%40test-cloud-symbol-server.iam.gserviceaccount.com&Signature=AwTZZt0J7bdDFYN7qAEf2H6%2FIWQjynTfMP76JAsVj80hK7NQEXswx68TEXNMhF6GXxgLBRA8hKcBMSIjfVcExUyWzLYl8GqWe4xc8z7TVpExAoQ0surYf6ULZrjP%2FPU62o01giCyAs1ZQtDLx40glG2hJIu0toBckUggT6blmISfZcfRKWvv7zask%2FHpeUPEHwhhooh%2FiyG3JKluB3BvNOnnLCpdOEznFLZLkVQbxASDZhFlM7NIOqQj1tX3v6Z9wNc0XjwTzTd7B4iAQ72JfQPhh%2FXedbqR9Bm0SA5xl4eeqNjZtmlCdqy4r%2BbsyBRnCeITF6u1wOXvw8dSLL4Hag%3D%3D
+      properties:
+        method:
+          example: GET
+          type: string
+        url:
+          example: https://storage.googleapis.com/test-cloud-symbol-server-symbols/stores/example2/example.exe/61C0D4547000/example.exe?Expires=1673733969&GoogleAccessId=backend-api%40test-cloud-symbol-server.iam.gserviceaccount.com&Signature=AwTZZt0J7bdDFYN7qAEf2H6%2FIWQjynTfMP76JAsVj80hK7NQEXswx68TEXNMhF6GXxgLBRA8hKcBMSIjfVcExUyWzLYl8GqWe4xc8z7TVpExAoQ0surYf6ULZrjP%2FPU62o01giCyAs1ZQtDLx40glG2hJIu0toBckUggT6blmISfZcfRKWvv7zask%2FHpeUPEHwhhooh%2FiyG3JKluB3BvNOnnLCpdOEznFLZLkVQbxASDZhFlM7NIOqQj1tX3v6Z9wNc0XjwTzTd7B4iAQ72JfQPhh%2FXedbqR9Bm0SA5xl4eeqNjZtmlCdqy4r%2BbsyBRnCeITF6u1wOXvw8dSLL4Hag%3D%3D
+          type: string
+      required:
+      - method
+      - url
       type: object
     createStoreUploadResponse:
       example:

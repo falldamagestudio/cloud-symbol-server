@@ -106,6 +106,25 @@ export interface CreateTokenResponse {
 /**
  * 
  * @export
+ * @interface GetStoreFileHashDownloadUrlResponse
+ */
+export interface GetStoreFileHashDownloadUrlResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetStoreFileHashDownloadUrlResponse
+     */
+    'method': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetStoreFileHashDownloadUrlResponse
+     */
+    'url': string;
+}
+/**
+ * 
+ * @export
  * @interface GetStoreFileHashResponse
  */
 export interface GetStoreFileHashResponse {
@@ -602,6 +621,52 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             }
 
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication emailAndPat required
+            // http basic authentication required
+            setBasicAuthToObject(localVarRequestOptions, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Request download URL for the binary blob associated with a particular hash
+         * @param {string} storeId ID of the store containing the file
+         * @param {string} fileId ID of the file
+         * @param {string} hashId ID of the hash
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getStoreFileHashDownloadUrl: async (storeId: string, fileId: string, hashId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'storeId' is not null or undefined
+            assertParamExists('getStoreFileHashDownloadUrl', 'storeId', storeId)
+            // verify required parameter 'fileId' is not null or undefined
+            assertParamExists('getStoreFileHashDownloadUrl', 'fileId', fileId)
+            // verify required parameter 'hashId' is not null or undefined
+            assertParamExists('getStoreFileHashDownloadUrl', 'hashId', hashId)
+            const localVarPath = `/stores/{storeId}/files/{fileId}/hashes/{hashId}/getDownloadUrl`
+                .replace(`{${"storeId"}}`, encodeURIComponent(String(storeId)))
+                .replace(`{${"fileId"}}`, encodeURIComponent(String(fileId)))
+                .replace(`{${"hashId"}}`, encodeURIComponent(String(hashId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -1169,6 +1234,19 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Request download URL for the binary blob associated with a particular hash
+         * @param {string} storeId ID of the store containing the file
+         * @param {string} fileId ID of the file
+         * @param {string} hashId ID of the hash
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getStoreFileHashDownloadUrl(storeId: string, fileId: string, hashId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStoreFileHashDownloadUrlResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStoreFileHashDownloadUrl(storeId, fileId, hashId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Fetch a list of hashes for a specific file in store
          * @param {string} storeId ID of the store containing the file
          * @param {string} fileId ID of the file
@@ -1372,6 +1450,18 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Request download URL for the binary blob associated with a particular hash
+         * @param {string} storeId ID of the store containing the file
+         * @param {string} fileId ID of the file
+         * @param {string} hashId ID of the hash
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getStoreFileHashDownloadUrl(storeId: string, fileId: string, hashId: string, options?: any): AxiosPromise<GetStoreFileHashDownloadUrlResponse> {
+            return localVarFp.getStoreFileHashDownloadUrl(storeId, fileId, hashId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Fetch a list of hashes for a specific file in store
          * @param {string} storeId ID of the store containing the file
          * @param {string} fileId ID of the file
@@ -1572,6 +1662,20 @@ export class DefaultApi extends BaseAPI {
      */
     public expireStoreUpload(uploadId: string, storeId: string, options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).expireStoreUpload(uploadId, storeId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Request download URL for the binary blob associated with a particular hash
+     * @param {string} storeId ID of the store containing the file
+     * @param {string} fileId ID of the file
+     * @param {string} hashId ID of the hash
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public getStoreFileHashDownloadUrl(storeId: string, fileId: string, hashId: string, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getStoreFileHashDownloadUrl(storeId, fileId, hashId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

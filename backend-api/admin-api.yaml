@@ -290,6 +290,48 @@ paths:
               schema:
                 $ref: '#/components/schemas/messageResponse'
 
+  /stores/{storeId}/files/{fileId}/hashes/{hashId}/getDownloadUrl:
+    get:
+      summary: Request download URL for the binary blob associated with a particular hash
+      operationId: getStoreFileHashDownloadUrl
+      parameters:
+        - in: path
+          name: storeId
+          schema:
+            type: string
+          required: true
+          description: ID of the store containing the file
+        - in: path
+          name: fileId
+          schema:
+            type: string
+          required: true
+          description: ID of the file
+        - in: path
+          name: hashId
+          schema:
+            type: string
+          required: true
+          description: ID of the hash
+
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getStoreFileHashDownloadUrlResponse'
+
+        401:
+          $ref: '#/components/responses/401'
+
+        404:
+          description: No such store
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/messageResponse'
+
   /stores/{storeId}/uploads:
     get:
       summary: Fetch a list of uploads in store
@@ -547,6 +589,10 @@ components:
 
   schemas:
 
+    fileDownload:
+      type: string
+      format: binary
+
     storeUploadStatus:
       type: string
       example: completed
@@ -737,6 +783,19 @@ components:
             $ref: getStoreFileHashResponse
         pagination:
           $ref: '#/components/schemas/paginationResponse'
+
+    getStoreFileHashDownloadUrlResponse:
+      type: object
+      required:
+        - method
+        - url
+      properties:
+        method:
+          type: string
+          example: GET
+        url:
+          type: string
+          example: https://storage.googleapis.com/test-cloud-symbol-server-symbols/stores/example2/example.exe/61C0D4547000/example.exe?Expires=1673733969&GoogleAccessId=backend-api%40test-cloud-symbol-server.iam.gserviceaccount.com&Signature=AwTZZt0J7bdDFYN7qAEf2H6%2FIWQjynTfMP76JAsVj80hK7NQEXswx68TEXNMhF6GXxgLBRA8hKcBMSIjfVcExUyWzLYl8GqWe4xc8z7TVpExAoQ0surYf6ULZrjP%2FPU62o01giCyAs1ZQtDLx40glG2hJIu0toBckUggT6blmISfZcfRKWvv7zask%2FHpeUPEHwhhooh%2FiyG3JKluB3BvNOnnLCpdOEznFLZLkVQbxASDZhFlM7NIOqQj1tX3v6Z9wNc0XjwTzTd7B4iAQ72JfQPhh%2FXedbqR9Bm0SA5xl4eeqNjZtmlCdqy4r%2BbsyBRnCeITF6u1wOXvw8dSLL4Hag%3D%3D
 
     createStoreUploadResponse:
       type: object

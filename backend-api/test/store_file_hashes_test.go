@@ -1,6 +1,7 @@
 package backend_api
 
 import (
+	"io/ioutil"
 	"net/http"
 	"testing"
 
@@ -79,6 +80,48 @@ func TestGetStoreFileHashesForStoreFileExistsSucceeds(t *testing.T) {
 	desiredStatusCode := http.StatusOK
 	if err != nil || desiredStatusCode != r.StatusCode {
 		t.Fatalf("GetStoreFileHashes with valid file ID is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
+	}
+}
+
+func TestDownloadStoreFileHashForStoreFileHashExistsSucceeds(t *testing.T) {
+
+	email, pat := getTestEmailAndPat()
+
+	authContext, apiClient := getAPIClient(email, pat)
+
+	storeId := "example"
+
+	if err := ensureTestStoreExistsAndIsPopulated(apiClient, authContext, storeId); err != nil {
+		t.Fatalf("ensureTestStoreExistsAndIsPopulated failed: %v", err)
+	}
+
+	fileId := "file1"
+	hashId := "hash1"
+	content1 := "content1"
+
+	getStoreFileHashDownloadUrlResponse, r, err := apiClient.DefaultApi.GetStoreFileHashDownloadUrl(authContext, storeId, fileId, hashId).Execute()
+	desiredStatusCode := http.StatusOK
+	if err != nil && desiredStatusCode != r.StatusCode {
+		t.Fatalf("GetStoreFileHashDownloadUrl with valid file-hash ID is expected to give HTTP status code %v, but gave %v as response (err = %v)", desiredStatusCode, r.StatusCode, err)
+	}
+
+	const desiredMethod = "GET"
+	if getStoreFileHashDownloadUrlResponse.Method != desiredMethod {
+		t.Fatalf("GetStoreFileHashDownloadUrl is expected to return a URL that should be used with %v method, but gave %v method", desiredMethod, getStoreFileHashDownloadUrlResponse.Method)
+	}	
+
+	downloadFileResponse, err := http.Get(getStoreFileHashDownloadUrlResponse.Url)
+	if err != nil {
+		t.Fatalf("Error when downloading content: %v", err)
+	}
+
+	binaryContent, err := ioutil.ReadAll(downloadFileResponse.Body)
+	if err != nil {
+		t.Fatalf("Error while reading response body: %v", err)
+	}
+	content := string(binaryContent)
+	if content1 != content {
+		t.Fatalf("Downloaded file should contain the content '%v', but contains '%v'", content1, content)
 	}
 }
 

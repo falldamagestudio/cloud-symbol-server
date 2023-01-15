@@ -87,6 +87,12 @@ func (c *DefaultApiController) Routes() Routes {
 			c.ExpireStoreUpload,
 		},
 		{
+			"GetStoreFileHashDownloadUrl",
+			strings.ToUpper("Get"),
+			"/stores/{storeId}/files/{fileId}/hashes/{hashId}/getDownloadUrl",
+			c.GetStoreFileHashDownloadUrl,
+		},
+		{
 			"GetStoreFileHashes",
 			strings.ToUpper("Get"),
 			"/stores/{storeId}/files/{fileId}/hashes",
@@ -251,6 +257,26 @@ func (c *DefaultApiController) ExpireStoreUpload(w http.ResponseWriter, r *http.
 	storeIdParam := params["storeId"]
 	
 	result, err := c.service.ExpireStoreUpload(r.Context(), uploadIdParam, storeIdParam)
+	// If an error occurred, encode the error with the status code
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
+	// If no error, encode the body and the result code
+	EncodeJSONResponse(result.Body, &result.Code, w)
+
+}
+
+// GetStoreFileHashDownloadUrl - Request download URL for the binary blob associated with a particular hash
+func (c *DefaultApiController) GetStoreFileHashDownloadUrl(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	storeIdParam := params["storeId"]
+	
+	fileIdParam := params["fileId"]
+	
+	hashIdParam := params["hashId"]
+	
+	result, err := c.service.GetStoreFileHashDownloadUrl(r.Context(), storeIdParam, fileIdParam, hashIdParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)

@@ -31,6 +31,10 @@ func (s *ApiService) GetStoreFileHashes(ctx context.Context, storeId string, fil
 	return store_api.GetStoreFileHashes(ctx, storeId, fileId, offset, limit)
 }
 
+func (s *ApiService) GetStoreFileHashDownloadUrl(ctx context.Context, storeId string, fileId string, hashId string) (openapi.ImplResponse, error) {
+	return store_api.GetStoreFileHashDownloadUrl(ctx, storeId, fileId, hashId)
+}
+
 // Upload API
 
 func (s *ApiService) CreateStoreUpload(ctx context.Context, storeId string, createStoreUploadRequest openapi.CreateStoreUploadRequest) (openapi.ImplResponse, error) {

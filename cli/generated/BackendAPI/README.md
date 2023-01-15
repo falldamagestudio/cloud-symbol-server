@@ -110,6 +110,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**DeleteStore**](docs/DefaultApi.md#deletestore) | **DELETE** /stores/{storeId} | Delete an existing store
 *DefaultApi* | [**DeleteToken**](docs/DefaultApi.md#deletetoken) | **DELETE** /tokens/{token} | Delete a token for current user
 *DefaultApi* | [**ExpireStoreUpload**](docs/DefaultApi.md#expirestoreupload) | **POST** /stores/{storeId}/uploads/{uploadId}/expire | Expire store upload and consider files for GC
+*DefaultApi* | [**GetStoreFileHashDownloadUrl**](docs/DefaultApi.md#getstorefilehashdownloadurl) | **GET** /stores/{storeId}/files/{fileId}/hashes/{hashId}/getDownloadUrl | Request download URL for the binary blob associated with a particular hash
 *DefaultApi* | [**GetStoreFileHashes**](docs/DefaultApi.md#getstorefilehashes) | **GET** /stores/{storeId}/files/{fileId}/hashes | Fetch a list of hashes for a specific file in store
 *DefaultApi* | [**GetStoreFiles**](docs/DefaultApi.md#getstorefiles) | **GET** /stores/{storeId}/files | Fetch a list of files in store
 *DefaultApi* | [**GetStoreUpload**](docs/DefaultApi.md#getstoreupload) | **GET** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
@@ -130,6 +131,7 @@ Class | Method | HTTP request | Description
  - [Model.CreateStoreUploadRequest](docs/CreateStoreUploadRequest.md)
  - [Model.CreateStoreUploadResponse](docs/CreateStoreUploadResponse.md)
  - [Model.CreateTokenResponse](docs/CreateTokenResponse.md)
+ - [Model.GetStoreFileHashDownloadUrlResponse](docs/GetStoreFileHashDownloadUrlResponse.md)
  - [Model.GetStoreFileHashResponse](docs/GetStoreFileHashResponse.md)
  - [Model.GetStoreFileHashesResponse](docs/GetStoreFileHashesResponse.md)
  - [Model.GetStoreFilesResponse](docs/GetStoreFilesResponse.md)

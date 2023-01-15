@@ -4,6 +4,7 @@ docs/CreateStoreUploadRequest.md
 docs/CreateStoreUploadResponse.md
 docs/CreateTokenResponse.md
 docs/DefaultApi.md
+docs/GetStoreFileHashDownloadUrlResponse.md
 docs/GetStoreFileHashResponse.md
 docs/GetStoreFileHashesResponse.md
 docs/GetStoreFilesResponse.md
@@ -41,6 +42,7 @@ src/BackendAPI/Model/CreateStoreUploadFileRequest.cs
 src/BackendAPI/Model/CreateStoreUploadRequest.cs
 src/BackendAPI/Model/CreateStoreUploadResponse.cs
 src/BackendAPI/Model/CreateTokenResponse.cs
+src/BackendAPI/Model/GetStoreFileHashDownloadUrlResponse.cs
 src/BackendAPI/Model/GetStoreFileHashResponse.cs
 src/BackendAPI/Model/GetStoreFileHashesResponse.cs
 src/BackendAPI/Model/GetStoreFilesResponse.cs

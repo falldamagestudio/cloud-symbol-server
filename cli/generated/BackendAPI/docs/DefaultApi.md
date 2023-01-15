@@ -10,6 +10,7 @@ All URIs are relative to *http://localhost*
 | [**DeleteStore**](DefaultApi.md#deletestore) | **DELETE** /stores/{storeId} | Delete an existing store |
 | [**DeleteToken**](DefaultApi.md#deletetoken) | **DELETE** /tokens/{token} | Delete a token for current user |
 | [**ExpireStoreUpload**](DefaultApi.md#expirestoreupload) | **POST** /stores/{storeId}/uploads/{uploadId}/expire | Expire store upload and consider files for GC |
+| [**GetStoreFileHashDownloadUrl**](DefaultApi.md#getstorefilehashdownloadurl) | **GET** /stores/{storeId}/files/{fileId}/hashes/{hashId}/getDownloadUrl | Request download URL for the binary blob associated with a particular hash |
 | [**GetStoreFileHashes**](DefaultApi.md#getstorefilehashes) | **GET** /stores/{storeId}/files/{fileId}/hashes | Fetch a list of hashes for a specific file in store |
 | [**GetStoreFiles**](DefaultApi.md#getstorefiles) | **GET** /stores/{storeId}/files | Fetch a list of files in store |
 | [**GetStoreUpload**](DefaultApi.md#getstoreupload) | **GET** /stores/{storeId}/uploads/{uploadId} | Fetch an upload |
@@ -570,6 +571,105 @@ void (empty response body)
 | **200** | Success |  -  |
 | **401** | Not authorized |  -  |
 | **404** | No such store/upload |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+<a name="getstorefilehashdownloadurl"></a>
+# **GetStoreFileHashDownloadUrl**
+> GetStoreFileHashDownloadUrlResponse GetStoreFileHashDownloadUrl (string storeId, string fileId, string hashId)
+
+Request download URL for the binary blob associated with a particular hash
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using BackendAPI.Api;
+using BackendAPI.Client;
+using BackendAPI.Model;
+
+namespace Example
+{
+    public class GetStoreFileHashDownloadUrlExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "http://localhost";
+            // Configure HTTP basic authorization: emailAndPat
+            config.Username = "YOUR_USERNAME";
+            config.Password = "YOUR_PASSWORD";
+
+            var apiInstance = new DefaultApi(config);
+            var storeId = "storeId_example";  // string | ID of the store containing the file
+            var fileId = "fileId_example";  // string | ID of the file
+            var hashId = "hashId_example";  // string | ID of the hash
+
+            try
+            {
+                // Request download URL for the binary blob associated with a particular hash
+                GetStoreFileHashDownloadUrlResponse result = apiInstance.GetStoreFileHashDownloadUrl(storeId, fileId, hashId);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling DefaultApi.GetStoreFileHashDownloadUrl: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the GetStoreFileHashDownloadUrlWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Request download URL for the binary blob associated with a particular hash
+    ApiResponse<GetStoreFileHashDownloadUrlResponse> response = apiInstance.GetStoreFileHashDownloadUrlWithHttpInfo(storeId, fileId, hashId);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling DefaultApi.GetStoreFileHashDownloadUrlWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **storeId** | **string** | ID of the store containing the file |  |
+| **fileId** | **string** | ID of the file |  |
+| **hashId** | **string** | ID of the hash |  |
+
+### Return type
+
+[**GetStoreFileHashDownloadUrlResponse**](GetStoreFileHashDownloadUrlResponse.md)
+
+### Authorization
+
+[emailAndPat](../README.md#emailAndPat)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **401** | Not authorized |  -  |
+| **404** | No such store |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
