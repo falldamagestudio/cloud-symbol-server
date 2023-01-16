@@ -17,6 +17,8 @@ import (
 // GetStoreFileHashResponse struct for GetStoreFileHashResponse
 type GetStoreFileHashResponse struct {
 	Hash string `json:"hash"`
+	// Upload timestamp, in RFC3339 format
+	UploadTimestamp string `json:"uploadTimestamp"`
 	Status StoreFileHashStatus `json:"status"`
 }
 
@@ -24,9 +26,10 @@ type GetStoreFileHashResponse struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetStoreFileHashResponse(hash string, status StoreFileHashStatus) *GetStoreFileHashResponse {
+func NewGetStoreFileHashResponse(hash string, uploadTimestamp string, status StoreFileHashStatus) *GetStoreFileHashResponse {
 	this := GetStoreFileHashResponse{}
 	this.Hash = hash
+	this.UploadTimestamp = uploadTimestamp
 	this.Status = status
 	return &this
 }
@@ -63,6 +66,30 @@ func (o *GetStoreFileHashResponse) SetHash(v string) {
 	o.Hash = v
 }
 
+// GetUploadTimestamp returns the UploadTimestamp field value
+func (o *GetStoreFileHashResponse) GetUploadTimestamp() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.UploadTimestamp
+}
+
+// GetUploadTimestampOk returns a tuple with the UploadTimestamp field value
+// and a boolean to check if the value has been set.
+func (o *GetStoreFileHashResponse) GetUploadTimestampOk() (*string, bool) {
+	if o == nil {
+    return nil, false
+	}
+	return &o.UploadTimestamp, true
+}
+
+// SetUploadTimestamp sets field value
+func (o *GetStoreFileHashResponse) SetUploadTimestamp(v string) {
+	o.UploadTimestamp = v
+}
+
 // GetStatus returns the Status field value
 func (o *GetStoreFileHashResponse) GetStatus() StoreFileHashStatus {
 	if o == nil {
@@ -91,6 +118,9 @@ func (o GetStoreFileHashResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
 		toSerialize["hash"] = o.Hash
+	}
+	if true {
+		toSerialize["uploadTimestamp"] = o.UploadTimestamp
 	}
 	if true {
 		toSerialize["status"] = o.Status

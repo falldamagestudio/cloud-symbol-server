@@ -185,13 +185,15 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 		return "", err
 	}
 
+	var timestamp = time.Now()
+
 	// Add upload entry to DB
 	var upload = models.StoreUpload{
 		StoreID:          null.IntFrom(store.StoreID),
 		StoreUploadIndex: storeUploadIndex,
 		Description:      storeUploadEntry.Description,
 		Build:            storeUploadEntry.BuildId,
-		Timestamp:        time.Now(),
+		Timestamp:        timestamp,
 		Status:           storeUploadEntry.Status,
 	}
 	err = upload.Insert(ctx, tx, boil.Infer())
@@ -243,9 +245,10 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 			}
 
 			storeFileHash = &models.StoreFileHash{
-				FileID: null.IntFrom(storeFile.FileID),
-				Hash:   file.Hash,
-				Status: fileHashStatus,
+				FileID:          null.IntFrom(storeFile.FileID),
+				Hash:            file.Hash,
+				UploadTimestamp: timestamp,
+				Status:          fileHashStatus,
 			}
 			err = storeFileHash.Insert(ctx, tx, boil.Infer())
 			if err != nil {

@@ -46,8 +46,9 @@ namespace BackendAPI.Model
         /// Initializes a new instance of the <see cref="GetStoreFileHashResponse" /> class.
         /// </summary>
         /// <param name="hash">hash (required).</param>
+        /// <param name="uploadTimestamp">Upload timestamp, in RFC3339 format (required).</param>
         /// <param name="status">status (required).</param>
-        public GetStoreFileHashResponse(string hash = default(string), StoreFileHashStatus status = default(StoreFileHashStatus))
+        public GetStoreFileHashResponse(string hash = default(string), string uploadTimestamp = default(string), StoreFileHashStatus status = default(StoreFileHashStatus))
         {
             // to ensure "hash" is required (not null)
             if (hash == null)
@@ -55,6 +56,12 @@ namespace BackendAPI.Model
                 throw new ArgumentNullException("hash is a required property for GetStoreFileHashResponse and cannot be null");
             }
             this.Hash = hash;
+            // to ensure "uploadTimestamp" is required (not null)
+            if (uploadTimestamp == null)
+            {
+                throw new ArgumentNullException("uploadTimestamp is a required property for GetStoreFileHashResponse and cannot be null");
+            }
+            this.UploadTimestamp = uploadTimestamp;
             this.Status = status;
         }
 
@@ -65,6 +72,13 @@ namespace BackendAPI.Model
         public string Hash { get; set; }
 
         /// <summary>
+        /// Upload timestamp, in RFC3339 format
+        /// </summary>
+        /// <value>Upload timestamp, in RFC3339 format</value>
+        [DataMember(Name = "uploadTimestamp", IsRequired = true, EmitDefaultValue = true)]
+        public string UploadTimestamp { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -73,6 +87,7 @@ namespace BackendAPI.Model
             StringBuilder sb = new StringBuilder();
             sb.Append("class GetStoreFileHashResponse {\n");
             sb.Append("  Hash: ").Append(Hash).Append("\n");
+            sb.Append("  UploadTimestamp: ").Append(UploadTimestamp).Append("\n");
             sb.Append("  Status: ").Append(Status).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -115,6 +130,11 @@ namespace BackendAPI.Model
                     this.Hash.Equals(input.Hash))
                 ) && 
                 (
+                    this.UploadTimestamp == input.UploadTimestamp ||
+                    (this.UploadTimestamp != null &&
+                    this.UploadTimestamp.Equals(input.UploadTimestamp))
+                ) && 
+                (
                     this.Status == input.Status ||
                     this.Status.Equals(input.Status)
                 );
@@ -132,6 +152,10 @@ namespace BackendAPI.Model
                 if (this.Hash != null)
                 {
                     hashCode = (hashCode * 59) + this.Hash.GetHashCode();
+                }
+                if (this.UploadTimestamp != null)
+                {
+                    hashCode = (hashCode * 59) + this.UploadTimestamp.GetHashCode();
                 }
                 hashCode = (hashCode * 59) + this.Status.GetHashCode();
                 return hashCode;

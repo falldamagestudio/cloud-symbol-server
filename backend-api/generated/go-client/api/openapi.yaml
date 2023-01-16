@@ -846,26 +846,34 @@ components:
       type: object
     getStoreFileHashResponse:
       example:
+        uploadTimestamp: 2019-10-12T07:20:50.52Z
         hash: 7F416863ABF34C3E894BAD1739BAA5571
         status: null
       properties:
         hash:
           example: 7F416863ABF34C3E894BAD1739BAA5571
           type: string
+        uploadTimestamp:
+          description: "Upload timestamp, in RFC3339 format"
+          example: 2019-10-12T07:20:50.52Z
+          type: string
         status:
           $ref: '#/components/schemas/storeFileHashStatus'
       required:
       - hash
       - status
+      - uploadTimestamp
       type: object
     getStoreFileHashesResponse:
       example:
         pagination:
           total: 0
         hashes:
-        - hash: 7F416863ABF34C3E894BAD1739BAA5571
+        - uploadTimestamp: 2019-10-12T07:20:50.52Z
+          hash: 7F416863ABF34C3E894BAD1739BAA5571
           status: null
-        - hash: 7F416863ABF34C3E894BAD1739BAA5571
+        - uploadTimestamp: 2019-10-12T07:20:50.52Z
+          hash: 7F416863ABF34C3E894BAD1739BAA5571
           status: null
       properties:
         hashes:

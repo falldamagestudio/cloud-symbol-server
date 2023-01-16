@@ -13,6 +13,9 @@ type GetStoreFileHashResponse struct {
 
 	Hash string `json:"hash"`
 
+	// Upload timestamp, in RFC3339 format
+	UploadTimestamp string `json:"uploadTimestamp"`
+
 	Status StoreFileHashStatus `json:"status"`
 }
 
@@ -20,6 +23,7 @@ type GetStoreFileHashResponse struct {
 func AssertGetStoreFileHashResponseRequired(obj GetStoreFileHashResponse) error {
 	elements := map[string]interface{}{
 		"hash": obj.Hash,
+		"uploadTimestamp": obj.UploadTimestamp,
 		"status": obj.Status,
 	}
 	for name, el := range elements {

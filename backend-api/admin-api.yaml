@@ -763,11 +763,16 @@ components:
       type: object
       required:
         - hash
+        - uploadTimestamp
         - status
       properties:
         hash: 
           type: string
           example: 7F416863ABF34C3E894BAD1739BAA5571
+        uploadTimestamp:
+          type: string
+          description: Upload timestamp, in RFC3339 format
+          example: '2019-10-12T07:20:50.52Z'
         status:
           $ref: '#/components/schemas/storeFileHashStatus'
 

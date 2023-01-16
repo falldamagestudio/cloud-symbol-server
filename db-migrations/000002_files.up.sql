@@ -130,6 +130,10 @@ CREATE TABLE cloud_symbol_server.store_file_hashes (
   -- This is the primary index used in the API for identifying a hash of a file
   hash varchar NOT NULL,
 
+  -- timestamp of upload, in RFC3339 format
+  -- Example: 1985-04-12T23:20:50.52Z
+  upload_timestamp timestamp NOT NULL,
+
   -- The hash status will change over time, based on user actions
   status cloud_symbol_server.store_file_hash_status NOT NULL,
 

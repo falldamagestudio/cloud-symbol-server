@@ -24,37 +24,42 @@ import (
 
 // StoreFileHash is an object representing the database table.
 type StoreFileHash struct {
-	HashID int      `boil:"hash_id" json:"hash_id" toml:"hash_id" yaml:"hash_id"`
-	FileID null.Int `boil:"file_id" json:"file_id,omitempty" toml:"file_id" yaml:"file_id,omitempty"`
-	Hash   string   `boil:"hash" json:"hash" toml:"hash" yaml:"hash"`
-	Status string   `boil:"status" json:"status" toml:"status" yaml:"status"`
+	HashID          int       `boil:"hash_id" json:"hash_id" toml:"hash_id" yaml:"hash_id"`
+	FileID          null.Int  `boil:"file_id" json:"file_id,omitempty" toml:"file_id" yaml:"file_id,omitempty"`
+	Hash            string    `boil:"hash" json:"hash" toml:"hash" yaml:"hash"`
+	UploadTimestamp time.Time `boil:"upload_timestamp" json:"upload_timestamp" toml:"upload_timestamp" yaml:"upload_timestamp"`
+	Status          string    `boil:"status" json:"status" toml:"status" yaml:"status"`
 
 	R *storeFileHashR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L storeFileHashL  `boil:"-" json:"-" toml:"-" yaml:"-"`
 }
 
 var StoreFileHashColumns = struct {
-	HashID string
-	FileID string
-	Hash   string
-	Status string
+	HashID          string
+	FileID          string
+	Hash            string
+	UploadTimestamp string
+	Status          string
 }{
-	HashID: "hash_id",
-	FileID: "file_id",
-	Hash:   "hash",
-	Status: "status",
+	HashID:          "hash_id",
+	FileID:          "file_id",
+	Hash:            "hash",
+	UploadTimestamp: "upload_timestamp",
+	Status:          "status",
 }
 
 var StoreFileHashTableColumns = struct {
-	HashID string
-	FileID string
-	Hash   string
-	Status string
+	HashID          string
+	FileID          string
+	Hash            string
+	UploadTimestamp string
+	Status          string
 }{
-	HashID: "store_file_hashes.hash_id",
-	FileID: "store_file_hashes.file_id",
-	Hash:   "store_file_hashes.hash",
-	Status: "store_file_hashes.status",
+	HashID:          "store_file_hashes.hash_id",
+	FileID:          "store_file_hashes.file_id",
+	Hash:            "store_file_hashes.hash",
+	UploadTimestamp: "store_file_hashes.upload_timestamp",
+	Status:          "store_file_hashes.status",
 }
 
 // Generated where
@@ -98,15 +103,17 @@ func (w whereHelpernull_Int) IsNull() qm.QueryMod    { return qmhelper.WhereIsNu
 func (w whereHelpernull_Int) IsNotNull() qm.QueryMod { return qmhelper.WhereIsNotNull(w.field) }
 
 var StoreFileHashWhere = struct {
-	HashID whereHelperint
-	FileID whereHelpernull_Int
-	Hash   whereHelperstring
-	Status whereHelperstring
+	HashID          whereHelperint
+	FileID          whereHelpernull_Int
+	Hash            whereHelperstring
+	UploadTimestamp whereHelpertime_Time
+	Status          whereHelperstring
 }{
-	HashID: whereHelperint{field: "\"cloud_symbol_server\".\"store_file_hashes\".\"hash_id\""},
-	FileID: whereHelpernull_Int{field: "\"cloud_symbol_server\".\"store_file_hashes\".\"file_id\""},
-	Hash:   whereHelperstring{field: "\"cloud_symbol_server\".\"store_file_hashes\".\"hash\""},
-	Status: whereHelperstring{field: "\"cloud_symbol_server\".\"store_file_hashes\".\"status\""},
+	HashID:          whereHelperint{field: "\"cloud_symbol_server\".\"store_file_hashes\".\"hash_id\""},
+	FileID:          whereHelpernull_Int{field: "\"cloud_symbol_server\".\"store_file_hashes\".\"file_id\""},
+	Hash:            whereHelperstring{field: "\"cloud_symbol_server\".\"store_file_hashes\".\"hash\""},
+	UploadTimestamp: whereHelpertime_Time{field: "\"cloud_symbol_server\".\"store_file_hashes\".\"upload_timestamp\""},
+	Status:          whereHelperstring{field: "\"cloud_symbol_server\".\"store_file_hashes\".\"status\""},
 }
 
 // StoreFileHashRels is where relationship names are stored.
@@ -147,8 +154,8 @@ func (r *storeFileHashR) GetHashStoreUploadFiles() StoreUploadFileSlice {
 type storeFileHashL struct{}
 
 var (
-	storeFileHashAllColumns            = []string{"hash_id", "file_id", "hash", "status"}
-	storeFileHashColumnsWithoutDefault = []string{"hash", "status"}
+	storeFileHashAllColumns            = []string{"hash_id", "file_id", "hash", "upload_timestamp", "status"}
+	storeFileHashColumnsWithoutDefault = []string{"hash", "upload_timestamp", "status"}
 	storeFileHashColumnsWithDefault    = []string{"hash_id", "file_id"}
 	storeFileHashPrimaryKeyColumns     = []string{"hash_id"}
 	storeFileHashGeneratedColumns      = []string{"hash_id"}

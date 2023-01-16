@@ -55,6 +55,10 @@ const headers = [
     value: "name",
   },
   {
+    text: "Uploaded at",
+    value: "uploadTimestamp",
+  },
+  {
     text: "Status",
     value: "status",
   },
@@ -66,6 +70,7 @@ const headers = [
 
 interface StoreFileHashEntry {
   hash: string
+  uploadTimestamp: string
   status: string
 }
 
@@ -86,6 +91,7 @@ async function fetch() {
       for (const hash of storeFileHashesResponse.data.hashes) {
         storeFileHashes.value.push({
           hash: hash.hash,
+          uploadTimestamp: hash.uploadTimestamp,
           status: hash.status,
         })
       }

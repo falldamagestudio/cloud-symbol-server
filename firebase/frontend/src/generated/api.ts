@@ -135,6 +135,12 @@ export interface GetStoreFileHashResponse {
      */
     'hash': string;
     /**
+     * Upload timestamp, in RFC3339 format
+     * @type {string}
+     * @memberof GetStoreFileHashResponse
+     */
+    'uploadTimestamp': string;
+    /**
      * 
      * @type {StoreFileHashStatus}
      * @memberof GetStoreFileHashResponse

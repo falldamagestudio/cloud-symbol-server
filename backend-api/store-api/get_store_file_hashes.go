@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 
@@ -83,8 +84,9 @@ func GetStoreFileHashes(ctx context.Context, storeId string, fileId string, offs
 
 	for index, hash := range hashes {
 		storeFileHashes[index] = openapi.GetStoreFileHashResponse{
-			Hash: hash.Hash,
-			Status: openapi.StoreFileHashStatus(hash.Status),
+			Hash:            hash.Hash,
+			UploadTimestamp: hash.UploadTimestamp.Format(time.RFC3339),
+			Status:          openapi.StoreFileHashStatus(hash.Status),
 		}
 	}
 

@@ -5,13 +5,14 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Hash** | **string** |  | 
+**UploadTimestamp** | **string** | Upload timestamp, in RFC3339 format | 
 **Status** | [**StoreFileHashStatus**](StoreFileHashStatus.md) |  | 
 
 ## Methods
 
 ### NewGetStoreFileHashResponse
 
-`func NewGetStoreFileHashResponse(hash string, status StoreFileHashStatus, ) *GetStoreFileHashResponse`
+`func NewGetStoreFileHashResponse(hash string, uploadTimestamp string, status StoreFileHashStatus, ) *GetStoreFileHashResponse`
 
 NewGetStoreFileHashResponse instantiates a new GetStoreFileHashResponse object
 This constructor will assign default values to properties that have it defined,
@@ -44,6 +45,26 @@ and a boolean to check if the value has been set.
 `func (o *GetStoreFileHashResponse) SetHash(v string)`
 
 SetHash sets Hash field to given value.
+
+
+### GetUploadTimestamp
+
+`func (o *GetStoreFileHashResponse) GetUploadTimestamp() string`
+
+GetUploadTimestamp returns the UploadTimestamp field if non-nil, zero value otherwise.
+
+### GetUploadTimestampOk
+
+`func (o *GetStoreFileHashResponse) GetUploadTimestampOk() (*string, bool)`
+
+GetUploadTimestampOk returns a tuple with the UploadTimestamp field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetUploadTimestamp
+
+`func (o *GetStoreFileHashResponse) SetUploadTimestamp(v string)`
+
+SetUploadTimestamp sets UploadTimestamp field to given value.
 
 
 ### GetStatus
