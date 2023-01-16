@@ -1,11 +1,11 @@
 {
     "configurations": [
         {
-            "name": "download-api: Debug",
+            "name": "backend-api: Debug",
             "type": "go",
             "request": "launch",
             "mode": "debug",
-            "program": "${workspaceFolder}/download-api/cmd/main.go"
+            "program": "${workspaceFolder}/backend-api/cmd/main.go"
         }
     ]
 }
