@@ -19,18 +19,20 @@
 
 interface NavigationDrawerEntry {
   title: string,
-  route: string,
+  route: { 
+    name: string
+  },
 }
 
-const items = [
+const items: NavigationDrawerEntry[] = [
   {
     title: 'Stores',
-    route: {name: 'stores'},
+    route: { name: 'stores' },
   },
   {
     title: 'My Access Tokens',
-    route: {name: 'pats'},
+    route: { name: 'pats' },
   }
-] as NavigationDrawerEntry[]
+]
 
 </script>
