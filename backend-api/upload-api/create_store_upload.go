@@ -230,46 +230,46 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 			return "", err
 		}
 
-		// Create store-file-hash, in case one doesn't exist yet
-		storeFileHash, err := models.StoreFileHashes(
-			qm.Where(models.StoreFileHashColumns.FileID+" = ?", storeFile.FileID),
-			qm.And(models.StoreFileHashColumns.Hash+" = ?", file.Hash),
+		// Create store-file-blob, in case one doesn't exist yet
+		storeFileBlob, err := models.StoreFileBlobs(
+			qm.Where(models.StoreFileBlobColumns.FileID+" = ?", storeFile.FileID),
+			qm.And(models.StoreFileBlobColumns.BlobIdentifier+" = ?", file.Hash),
 		).One(ctx, tx)
 		if err == sql.ErrNoRows {
 
-			// Translate all storefilehash statuses except "pending" to "present"
+			// Translate all storefileblob statuses except "pending" to "present"
 			// We assume that all uploads using non-progression API succeeds
-			fileHashStatus := models.StoreFileHashStatusPresent
+			fileBlobStatus := models.StoreFileBlobStatusPresent
 			if file.Status == models.StoreUploadFileStatusPending {
-				fileHashStatus = models.StoreFileHashStatusPending
+				fileBlobStatus = models.StoreFileBlobStatusPending
 			}
 
-			storeFileHash = &models.StoreFileHash{
+			storeFileBlob = &models.StoreFileBlob{
 				FileID:          null.IntFrom(storeFile.FileID),
-				Hash:            file.Hash,
+				BlobIdentifier:  file.Hash,
 				UploadTimestamp: timestamp,
-				Status:          fileHashStatus,
+				Status:          fileBlobStatus,
 			}
-			err = storeFileHash.Insert(ctx, tx, boil.Infer())
+			err = storeFileBlob.Insert(ctx, tx, boil.Infer())
 			if err != nil {
-				log.Printf("unable to insert file-hash: %v", err)
+				log.Printf("unable to insert file-blob: %v", err)
 				tx.Rollback()
 				return "", err
 			}
 		} else if err != nil {
-			log.Printf("error while locating file-hash: %v", err)
+			log.Printf("error while locating file-blob: %v", err)
 			tx.Rollback()
 			return "", err
 		}
 
 		// Create store-upload-file
 		var uploadFile = models.StoreUploadFile{
-			UploadID:        null.IntFrom(upload.UploadID),
-			HashID:          null.IntFrom(storeFileHash.HashID),
-			UploadFileIndex: uploadFileIndex,
-			Status:          file.Status,
-			FileName:        file.FileName,
-			FileHash:        file.Hash,
+			UploadID:           null.IntFrom(upload.UploadID),
+			BlobID:             null.IntFrom(storeFileBlob.BlobID),
+			UploadFileIndex:    uploadFileIndex,
+			Status:             file.Status,
+			FileName:           file.FileName,
+			FileBlobIdentifier: file.Hash,
 		}
 		err = uploadFile.Insert(ctx, tx, boil.Infer())
 		if err != nil {

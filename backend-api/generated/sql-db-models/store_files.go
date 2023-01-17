@@ -66,17 +66,17 @@ var StoreFileWhere = struct {
 
 // StoreFileRels is where relationship names are stored.
 var StoreFileRels = struct {
-	Store               string
-	FileStoreFileHashes string
+	Store              string
+	FileStoreFileBlobs string
 }{
-	Store:               "Store",
-	FileStoreFileHashes: "FileStoreFileHashes",
+	Store:              "Store",
+	FileStoreFileBlobs: "FileStoreFileBlobs",
 }
 
 // storeFileR is where relationships are stored.
 type storeFileR struct {
-	Store               *Store             `boil:"Store" json:"Store" toml:"Store" yaml:"Store"`
-	FileStoreFileHashes StoreFileHashSlice `boil:"FileStoreFileHashes" json:"FileStoreFileHashes" toml:"FileStoreFileHashes" yaml:"FileStoreFileHashes"`
+	Store              *Store             `boil:"Store" json:"Store" toml:"Store" yaml:"Store"`
+	FileStoreFileBlobs StoreFileBlobSlice `boil:"FileStoreFileBlobs" json:"FileStoreFileBlobs" toml:"FileStoreFileBlobs" yaml:"FileStoreFileBlobs"`
 }
 
 // NewStruct creates a new relationship struct
@@ -91,11 +91,11 @@ func (r *storeFileR) GetStore() *Store {
 	return r.Store
 }
 
-func (r *storeFileR) GetFileStoreFileHashes() StoreFileHashSlice {
+func (r *storeFileR) GetFileStoreFileBlobs() StoreFileBlobSlice {
 	if r == nil {
 		return nil
 	}
-	return r.FileStoreFileHashes
+	return r.FileStoreFileBlobs
 }
 
 // storeFileL is where Load methods for each relationship are stored.
@@ -398,18 +398,18 @@ func (o *StoreFile) Store(mods ...qm.QueryMod) storeQuery {
 	return Stores(queryMods...)
 }
 
-// FileStoreFileHashes retrieves all the store_file_hash's StoreFileHashes with an executor via file_id column.
-func (o *StoreFile) FileStoreFileHashes(mods ...qm.QueryMod) storeFileHashQuery {
+// FileStoreFileBlobs retrieves all the store_file_blob's StoreFileBlobs with an executor via file_id column.
+func (o *StoreFile) FileStoreFileBlobs(mods ...qm.QueryMod) storeFileBlobQuery {
 	var queryMods []qm.QueryMod
 	if len(mods) != 0 {
 		queryMods = append(queryMods, mods...)
 	}
 
 	queryMods = append(queryMods,
-		qm.Where("\"cloud_symbol_server\".\"store_file_hashes\".\"file_id\"=?", o.FileID),
+		qm.Where("\"cloud_symbol_server\".\"store_file_blobs\".\"file_id\"=?", o.FileID),
 	)
 
-	return StoreFileHashes(queryMods...)
+	return StoreFileBlobs(queryMods...)
 }
 
 // LoadStore allows an eager lookup of values, cached into the
@@ -536,9 +536,9 @@ func (storeFileL) LoadStore(ctx context.Context, e boil.ContextExecutor, singula
 	return nil
 }
 
-// LoadFileStoreFileHashes allows an eager lookup of values, cached into the
+// LoadFileStoreFileBlobs allows an eager lookup of values, cached into the
 // loaded structs of the objects. This is for a 1-M or N-M relationship.
-func (storeFileL) LoadFileStoreFileHashes(ctx context.Context, e boil.ContextExecutor, singular bool, maybeStoreFile interface{}, mods queries.Applicator) error {
+func (storeFileL) LoadFileStoreFileBlobs(ctx context.Context, e boil.ContextExecutor, singular bool, maybeStoreFile interface{}, mods queries.Applicator) error {
 	var slice []*StoreFile
 	var object *StoreFile
 
@@ -592,8 +592,8 @@ func (storeFileL) LoadFileStoreFileHashes(ctx context.Context, e boil.ContextExe
 	}
 
 	query := NewQuery(
-		qm.From(`cloud_symbol_server.store_file_hashes`),
-		qm.WhereIn(`cloud_symbol_server.store_file_hashes.file_id in ?`, args...),
+		qm.From(`cloud_symbol_server.store_file_blobs`),
+		qm.WhereIn(`cloud_symbol_server.store_file_blobs.file_id in ?`, args...),
 	)
 	if mods != nil {
 		mods.Apply(query)
@@ -601,22 +601,22 @@ func (storeFileL) LoadFileStoreFileHashes(ctx context.Context, e boil.ContextExe
 
 	results, err := query.QueryContext(ctx, e)
 	if err != nil {
-		return errors.Wrap(err, "failed to eager load store_file_hashes")
+		return errors.Wrap(err, "failed to eager load store_file_blobs")
 	}
 
-	var resultSlice []*StoreFileHash
+	var resultSlice []*StoreFileBlob
 	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice store_file_hashes")
+		return errors.Wrap(err, "failed to bind eager loaded slice store_file_blobs")
 	}
 
 	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results in eager load on store_file_hashes")
+		return errors.Wrap(err, "failed to close results in eager load on store_file_blobs")
 	}
 	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for store_file_hashes")
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for store_file_blobs")
 	}
 
-	if len(storeFileHashAfterSelectHooks) != 0 {
+	if len(storeFileBlobAfterSelectHooks) != 0 {
 		for _, obj := range resultSlice {
 			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
 				return err
@@ -624,10 +624,10 @@ func (storeFileL) LoadFileStoreFileHashes(ctx context.Context, e boil.ContextExe
 		}
 	}
 	if singular {
-		object.R.FileStoreFileHashes = resultSlice
+		object.R.FileStoreFileBlobs = resultSlice
 		for _, foreign := range resultSlice {
 			if foreign.R == nil {
-				foreign.R = &storeFileHashR{}
+				foreign.R = &storeFileBlobR{}
 			}
 			foreign.R.File = object
 		}
@@ -637,9 +637,9 @@ func (storeFileL) LoadFileStoreFileHashes(ctx context.Context, e boil.ContextExe
 	for _, foreign := range resultSlice {
 		for _, local := range slice {
 			if queries.Equal(local.FileID, foreign.FileID) {
-				local.R.FileStoreFileHashes = append(local.R.FileStoreFileHashes, foreign)
+				local.R.FileStoreFileBlobs = append(local.R.FileStoreFileBlobs, foreign)
 				if foreign.R == nil {
-					foreign.R = &storeFileHashR{}
+					foreign.R = &storeFileBlobR{}
 				}
 				foreign.R.File = local
 				break
@@ -730,11 +730,11 @@ func (o *StoreFile) RemoveStore(ctx context.Context, exec boil.ContextExecutor, 
 	return nil
 }
 
-// AddFileStoreFileHashes adds the given related objects to the existing relationships
+// AddFileStoreFileBlobs adds the given related objects to the existing relationships
 // of the store_file, optionally inserting them as new records.
-// Appends related to o.R.FileStoreFileHashes.
+// Appends related to o.R.FileStoreFileBlobs.
 // Sets related.R.File appropriately.
-func (o *StoreFile) AddFileStoreFileHashes(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*StoreFileHash) error {
+func (o *StoreFile) AddFileStoreFileBlobs(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*StoreFileBlob) error {
 	var err error
 	for _, rel := range related {
 		if insert {
@@ -744,11 +744,11 @@ func (o *StoreFile) AddFileStoreFileHashes(ctx context.Context, exec boil.Contex
 			}
 		} else {
 			updateQuery := fmt.Sprintf(
-				"UPDATE \"cloud_symbol_server\".\"store_file_hashes\" SET %s WHERE %s",
+				"UPDATE \"cloud_symbol_server\".\"store_file_blobs\" SET %s WHERE %s",
 				strmangle.SetParamNames("\"", "\"", 1, []string{"file_id"}),
-				strmangle.WhereClause("\"", "\"", 2, storeFileHashPrimaryKeyColumns),
+				strmangle.WhereClause("\"", "\"", 2, storeFileBlobPrimaryKeyColumns),
 			)
-			values := []interface{}{o.FileID, rel.HashID}
+			values := []interface{}{o.FileID, rel.BlobID}
 
 			if boil.IsDebug(ctx) {
 				writer := boil.DebugWriterFrom(ctx)
@@ -765,15 +765,15 @@ func (o *StoreFile) AddFileStoreFileHashes(ctx context.Context, exec boil.Contex
 
 	if o.R == nil {
 		o.R = &storeFileR{
-			FileStoreFileHashes: related,
+			FileStoreFileBlobs: related,
 		}
 	} else {
-		o.R.FileStoreFileHashes = append(o.R.FileStoreFileHashes, related...)
+		o.R.FileStoreFileBlobs = append(o.R.FileStoreFileBlobs, related...)
 	}
 
 	for _, rel := range related {
 		if rel.R == nil {
-			rel.R = &storeFileHashR{
+			rel.R = &storeFileBlobR{
 				File: o,
 			}
 		} else {
@@ -783,14 +783,14 @@ func (o *StoreFile) AddFileStoreFileHashes(ctx context.Context, exec boil.Contex
 	return nil
 }
 
-// SetFileStoreFileHashes removes all previously related items of the
+// SetFileStoreFileBlobs removes all previously related items of the
 // store_file replacing them completely with the passed
 // in related items, optionally inserting them as new records.
-// Sets o.R.File's FileStoreFileHashes accordingly.
-// Replaces o.R.FileStoreFileHashes with related.
-// Sets related.R.File's FileStoreFileHashes accordingly.
-func (o *StoreFile) SetFileStoreFileHashes(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*StoreFileHash) error {
-	query := "update \"cloud_symbol_server\".\"store_file_hashes\" set \"file_id\" = null where \"file_id\" = $1"
+// Sets o.R.File's FileStoreFileBlobs accordingly.
+// Replaces o.R.FileStoreFileBlobs with related.
+// Sets related.R.File's FileStoreFileBlobs accordingly.
+func (o *StoreFile) SetFileStoreFileBlobs(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*StoreFileBlob) error {
+	query := "update \"cloud_symbol_server\".\"store_file_blobs\" set \"file_id\" = null where \"file_id\" = $1"
 	values := []interface{}{o.FileID}
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -803,7 +803,7 @@ func (o *StoreFile) SetFileStoreFileHashes(ctx context.Context, exec boil.Contex
 	}
 
 	if o.R != nil {
-		for _, rel := range o.R.FileStoreFileHashes {
+		for _, rel := range o.R.FileStoreFileBlobs {
 			queries.SetScanner(&rel.FileID, nil)
 			if rel.R == nil {
 				continue
@@ -811,16 +811,16 @@ func (o *StoreFile) SetFileStoreFileHashes(ctx context.Context, exec boil.Contex
 
 			rel.R.File = nil
 		}
-		o.R.FileStoreFileHashes = nil
+		o.R.FileStoreFileBlobs = nil
 	}
 
-	return o.AddFileStoreFileHashes(ctx, exec, insert, related...)
+	return o.AddFileStoreFileBlobs(ctx, exec, insert, related...)
 }
 
-// RemoveFileStoreFileHashes relationships from objects passed in.
-// Removes related items from R.FileStoreFileHashes (uses pointer comparison, removal does not keep order)
+// RemoveFileStoreFileBlobs relationships from objects passed in.
+// Removes related items from R.FileStoreFileBlobs (uses pointer comparison, removal does not keep order)
 // Sets related.R.File.
-func (o *StoreFile) RemoveFileStoreFileHashes(ctx context.Context, exec boil.ContextExecutor, related ...*StoreFileHash) error {
+func (o *StoreFile) RemoveFileStoreFileBlobs(ctx context.Context, exec boil.ContextExecutor, related ...*StoreFileBlob) error {
 	if len(related) == 0 {
 		return nil
 	}
@@ -840,16 +840,16 @@ func (o *StoreFile) RemoveFileStoreFileHashes(ctx context.Context, exec boil.Con
 	}
 
 	for _, rel := range related {
-		for i, ri := range o.R.FileStoreFileHashes {
+		for i, ri := range o.R.FileStoreFileBlobs {
 			if rel != ri {
 				continue
 			}
 
-			ln := len(o.R.FileStoreFileHashes)
+			ln := len(o.R.FileStoreFileBlobs)
 			if ln > 1 && i < ln-1 {
-				o.R.FileStoreFileHashes[i] = o.R.FileStoreFileHashes[ln-1]
+				o.R.FileStoreFileBlobs[i] = o.R.FileStoreFileBlobs[ln-1]
 			}
-			o.R.FileStoreFileHashes = o.R.FileStoreFileHashes[:ln-1]
+			o.R.FileStoreFileBlobs = o.R.FileStoreFileBlobs[:ln-1]
 			break
 		}
 	}

@@ -52,26 +52,26 @@ func MarkStoreUploadFileUploaded(ctx context.Context, uploadId string, storeId s
 		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing upload %v / %v: %v", storeId, uploadId, err)}), err
 	}
 
-	// Mark store-file-hash as present
-	storeFileHash, err := models.StoreFileHashes(
-		qm.InnerJoin("cloud_symbol_server."+models.TableNames.StoreUploadFiles+" on "+models.StoreFileHashTableColumns.HashID+" = "+models.StoreUploadFileTableColumns.HashID),
+	// Mark store-file-blob as present
+	storeFileBlob, err := models.StoreFileBlobs(
+		qm.InnerJoin("cloud_symbol_server."+models.TableNames.StoreUploadFiles+" on "+models.StoreFileBlobTableColumns.BlobID+" = "+models.StoreUploadFileTableColumns.BlobID),
 		qm.Where(models.StoreUploadFileColumns.UploadID+" = ? AND "+models.StoreUploadFileColumns.UploadFileIndex+" = ?", upload.UploadID, fileId),
 		qm.For("update"),
 	).One(ctx, tx)
 	if err == sql.ErrNoRows {
-		log.Printf("File-hash for %v / %v / %v not found", storeId, uploadId, fileId)
+		log.Printf("File-blob for %v / %v / %v not found", storeId, uploadId, fileId)
 		tx.Rollback()
 		return openapi.Response(http.StatusNotFound, openapi.MessageResponse{Message: fmt.Sprintf("File %v / %v / %v not found", storeId, uploadId, fileId)}), err
 	} else if err != nil {
-		log.Printf("error while locating file-hash: %v", err)
+		log.Printf("error while locating file-blob: %v", err)
 		tx.Rollback()
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 
-	storeFileHash.Status = models.StoreFileHashStatusPresent
-	numRowsAffected, err := storeFileHash.Update(ctx, tx, boil.Whitelist(models.StoreFileHashColumns.Status))
+	storeFileBlob.Status = models.StoreFileBlobStatusPresent
+	numRowsAffected, err := storeFileBlob.Update(ctx, tx, boil.Whitelist(models.StoreFileBlobColumns.Status))
 	if (err != nil) || (numRowsAffected != 1) {
-		log.Printf("error while updating file-hash: %v - numRowsAffected: %v", err, numRowsAffected)
+		log.Printf("error while updating file-blob: %v - numRowsAffected: %v", err, numRowsAffected)
 		tx.Rollback()
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}

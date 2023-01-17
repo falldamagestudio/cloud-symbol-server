@@ -109,41 +109,41 @@ GRANT SELECT, INSERT, UPDATE, DELETE
 ON cloud_symbol_server.store_files
 TO cloud_symbol_server_readwrite;
 
-CREATE TYPE cloud_symbol_server.store_file_hash_status AS ENUM (
+CREATE TYPE cloud_symbol_server.store_file_blob_status AS ENUM (
   'pending',
   'present'
 );
 
 GRANT USAGE
-ON TYPE cloud_symbol_server.store_file_hash_status
+ON TYPE cloud_symbol_server.store_file_blob_status
 TO cloud_symbol_server_readwrite;
 
-CREATE TABLE cloud_symbol_server.store_file_hashes (
-  hash_id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+CREATE TABLE cloud_symbol_server.store_file_blobs (
+  blob_id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 
-  -- Reference to the file, which this hash belongs to
+  -- Reference to the file, which this blob belongs to
   file_id integer REFERENCES cloud_symbol_server.store_files,
 
-  -- Hash string for this blob
+  -- Code/debug identifier for this blob
   -- Uppercase vs lowercase varies, depending on type of file
-  --   (exe hash vs pdb has has different rules)
-  -- This is the primary index used in the API for identifying a hash of a file
-  hash varchar NOT NULL,
+  --   (exe identifier vs pdb identifier has different rules)
+  -- This is the primary index used in the API for identifying a blob
+  blob_identifier varchar NOT NULL,
 
   -- timestamp of upload, in RFC3339 format
   -- Example: 1985-04-12T23:20:50.52Z
   upload_timestamp timestamp NOT NULL,
 
-  -- The hash status will change over time, based on user actions
-  status cloud_symbol_server.store_file_hash_status NOT NULL,
+  -- The blob status will change over time, based on user actions
+  status cloud_symbol_server.store_file_blob_status NOT NULL,
 
-  -- Hashes are unique for a file
-  UNIQUE (file_id, hash)
+  -- Blob identifiers are unique for a file
+  UNIQUE (file_id, blob_identifier)
 );
 
 -- Ensure read-write role can access table
 GRANT SELECT, INSERT, UPDATE, DELETE
-ON cloud_symbol_server.store_file_hashes
+ON cloud_symbol_server.store_file_blobs
 TO cloud_symbol_server_readwrite;
 
 CREATE TYPE cloud_symbol_server.store_upload_file_status AS ENUM (
@@ -164,12 +164,12 @@ CREATE TABLE cloud_symbol_server.store_upload_files (
   -- Reference to the upload, which this upload-file belongs to
   upload_id integer REFERENCES cloud_symbol_server.store_uploads,
 
-  -- Reference to the hash, which this upload-file resulted in an upload of
+  -- Reference to the blob, which this upload-file resulted in an upload of
   --   or null, if the upload has been expired
-  hash_id integer REFERENCES cloud_symbol_server.store_file_hashes,
+  blob_id integer REFERENCES cloud_symbol_server.store_file_blobs,
 
   -- Ordinal index of upload-file within upload
-  -- This is the primary index used in the API for identifying an upload-hash within an upload
+  -- This is the primary index used in the API for identifying an upload-file within an upload
   upload_file_index integer NOT NULL,
 
   -- The upload-file status will change over time, based on user actions
@@ -182,13 +182,13 @@ CREATE TABLE cloud_symbol_server.store_upload_files (
   file_name varchar NOT NULL,
 
   -- Hash string for this blob
-  -- Duplicated from store_file_hashes
+  -- Duplicated from store_file_blobes
   --   since this will persist after the upload has been expired
-  --   and the corresponding store_file_hash might have been removed
-  -- This is not named 'hash' as in the original table,
+  --   and the corresponding store_file_blob might have been removed
+  -- This is not named 'blob_identifier' as in the original table,
   --   because SQLBoiler will generate a Hash() method on the corresponding Golang type,
   --   and that method will collide with the type's Hash property
-  file_hash varchar NOT NULL,
+  file_blob_identifier varchar NOT NULL,
 
   -- upload-file-indices are unique for an upload
   UNIQUE (upload_id, upload_file_index)

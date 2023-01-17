@@ -66,7 +66,7 @@ func GetStoreUploads(ctx context.Context, storeId string, offset int32, limit in
 	// Fetch all files related to selected uploads
 
 	var uploadIds = make([]interface{}, len(uploads))
-	for uploadIndex, upload := range(uploads) {
+	for uploadIndex, upload := range uploads {
 		uploadIds[uploadIndex] = upload.UploadID
 	}
 
@@ -96,7 +96,8 @@ func GetStoreUploads(ctx context.Context, storeId string, offset int32, limit in
 			return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing upload-files in store %v : %v", storeId, err)}), err
 		}
 
-		_, ok := uploadIdToFileCount[uploadId]; if !ok {
+		_, ok := uploadIdToFileCount[uploadId]
+		if !ok {
 			uploadIdToFileCount[uploadId] = 0
 		}
 
@@ -124,8 +125,8 @@ func GetStoreUploads(ctx context.Context, storeId string, offset int32, limit in
 
 		uploadIdToFiles[uploadId][uploadFileIndex] = openapi.GetStoreUploadFileResponse{
 			FileName: file.FileName,
-			Hash: file.FileHash,
-			Status: openapi.StoreUploadFileStatus(status),
+			Hash:     file.FileBlobIdentifier,
+			Status:   openapi.StoreUploadFileStatus(status),
 		}
 	}
 
@@ -137,10 +138,10 @@ func GetStoreUploads(ctx context.Context, storeId string, offset int32, limit in
 
 		storeUploads[uploadIndex] = openapi.GetStoreUploadResponse{
 			Description: upload.Description,
-			BuildId: upload.Build,
-			Timestamp: upload.Timestamp.Format(time.RFC3339),
-			Files: files,
-			Status: openapi.StoreUploadStatus(upload.Status),
+			BuildId:     upload.Build,
+			Timestamp:   upload.Timestamp.Format(time.RFC3339),
+			Files:       files,
+			Status:      openapi.StoreUploadStatus(upload.Status),
 		}
 	}
 

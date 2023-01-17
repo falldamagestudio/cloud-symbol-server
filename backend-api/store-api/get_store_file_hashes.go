@@ -57,36 +57,36 @@ func GetStoreFileHashes(ctx context.Context, storeId string, fileId string, offs
 		return openapi.Response(http.StatusInternalServerError, fmt.Sprintf("error while accessing store file : %v", err)), err
 	}
 
-	// Count total number of hashes in file that match filter query, ignoring pagination
-	total, err := models.StoreFileHashes(
-		qm.Distinct(models.StoreFileHashColumns.HashID),
-		qm.Where(models.StoreFileHashTableColumns.FileID+" = ?", file.FileID),
+	// Count total number of blobs in file that match filter query, ignoring pagination
+	total, err := models.StoreFileBlobs(
+		qm.Distinct(models.StoreFileBlobColumns.BlobID),
+		qm.Where(models.StoreFileBlobTableColumns.FileID+" = ?", file.FileID),
 	).Count(ctx, tx)
 	if err != nil {
-		log.Printf("Error while accessing hashes in store-file %v/%v : %v", storeId, fileId, err)
-		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing hashes in store-file %v/%v : %v", storeId, fileId, err)}), err
+		log.Printf("Error while accessing blobs in store-file %v/%v : %v", storeId, fileId, err)
+		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing blobs in store-file %v/%v : %v", storeId, fileId, err)}), err
 	}
 
-	// Fetch all hashes within file
-	hashes, err := models.StoreFileHashes(
-		qm.Where(models.StoreFileHashTableColumns.FileID+" = ?", file.FileID),
-		qm.OrderBy(models.StoreFileHashColumns.HashID),
+	// Fetch all blobs within file
+	blobs, err := models.StoreFileBlobs(
+		qm.Where(models.StoreFileBlobTableColumns.FileID+" = ?", file.FileID),
+		qm.OrderBy(models.StoreFileBlobColumns.BlobID),
 		qm.Offset(int(offset)),
 		qm.Limit(int(limit)),
 	).All(ctx, tx)
 	if err != nil {
-		log.Printf("Error while accessing hashes in store-file %v/%v : %v", storeId, fileId, err)
-		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing hashes in store-file %v/%v : %v", storeId, fileId, err)}), err
+		log.Printf("Error while accessing blobs in store-file %v/%v : %v", storeId, fileId, err)
+		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing blobs in store-file %v/%v : %v", storeId, fileId, err)}), err
 	}
 
 	// Convert DB query result to a plain array of strings
-	var storeFileHashes = make([]openapi.GetStoreFileHashResponse, len(hashes))
+	var storeFileHashes = make([]openapi.GetStoreFileHashResponse, len(blobs))
 
-	for index, hash := range hashes {
+	for index, blob := range blobs {
 		storeFileHashes[index] = openapi.GetStoreFileHashResponse{
-			Hash:            hash.Hash,
-			UploadTimestamp: hash.UploadTimestamp.Format(time.RFC3339),
-			Status:          openapi.StoreFileHashStatus(hash.Status),
+			Hash:            blob.BlobIdentifier,
+			UploadTimestamp: blob.UploadTimestamp.Format(time.RFC3339),
+			Status:          openapi.StoreFileHashStatus(blob.Status),
 		}
 	}
 

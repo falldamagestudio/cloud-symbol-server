@@ -51,16 +51,16 @@ func makeCacheKey(cols boil.Columns, nzDefaults []string) string {
 	return str
 }
 
-// Enum values for StoreFileHashStatus
+// Enum values for StoreFileBlobStatus
 const (
-	StoreFileHashStatusPending string = "pending"
-	StoreFileHashStatusPresent string = "present"
+	StoreFileBlobStatusPending string = "pending"
+	StoreFileBlobStatusPresent string = "present"
 )
 
-func AllStoreFileHashStatus() []string {
+func AllStoreFileBlobStatus() []string {
 	return []string{
-		StoreFileHashStatusPending,
-		StoreFileHashStatusPresent,
+		StoreFileBlobStatusPending,
+		StoreFileBlobStatusPresent,
 	}
 }
 

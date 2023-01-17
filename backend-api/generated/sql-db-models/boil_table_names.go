@@ -5,14 +5,14 @@ package models
 
 var TableNames = struct {
 	PersonalAccessTokens string
-	StoreFileHashes      string
+	StoreFileBlobs       string
 	StoreFiles           string
 	StoreUploadFiles     string
 	StoreUploads         string
 	Stores               string
 }{
 	PersonalAccessTokens: "personal_access_tokens",
-	StoreFileHashes:      "store_file_hashes",
+	StoreFileBlobs:       "store_file_blobs",
 	StoreFiles:           "store_files",
 	StoreUploadFiles:     "store_upload_files",
 	StoreUploads:         "store_uploads",

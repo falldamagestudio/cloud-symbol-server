@@ -75,18 +75,18 @@ func HandleUploadExpiryOrAbort(ctx context.Context, storeId string, uploadId str
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 
-	// Retrieve IDs of all file-hashes referenced by upload
-	var storeFileHashIds []struct {
-		HashID int `boil:"hash_id"`
+	// Retrieve IDs of all file-blobs referenced by upload
+	var storeFileBlobIds []struct {
+		BlobID int `boil:"blob_id"`
 	}
 	err = models.NewQuery(
-		qm.Distinct(models.StoreUploadFileTableColumns.HashID),
+		qm.Distinct(models.StoreUploadFileTableColumns.BlobID),
 		qm.From("cloud_symbol_server."+models.TableNames.StoreUploadFiles),
 		qm.Where(models.StoreUploadFileColumns.UploadID+" = ?", upload.UploadID),
-		qm.And(models.StoreUploadFileColumns.HashID+" IS NOT NULL"),
-	).Bind(ctx, tx, &storeFileHashIds)
+		qm.And(models.StoreUploadFileColumns.BlobID+" IS NOT NULL"),
+	).Bind(ctx, tx, &storeFileBlobIds)
 	if err != nil {
-		log.Printf("error while retrieveing file-hash IDs in upload %v / %v: %v", storeId, uploadId, err)
+		log.Printf("error while retrieveing file-blob IDs in upload %v / %v: %v", storeId, uploadId, err)
 		tx.Rollback()
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
@@ -96,23 +96,23 @@ func HandleUploadExpiryOrAbort(ctx context.Context, storeId string, uploadId str
 		FileID int `boil:"file_id"`
 	}
 	err = models.NewQuery(
-		qm.Distinct(models.StoreFileHashTableColumns.FileID),
+		qm.Distinct(models.StoreFileBlobTableColumns.FileID),
 		qm.From("cloud_symbol_server."+models.TableNames.StoreUploadFiles),
-		qm.InnerJoin("cloud_symbol_server."+models.TableNames.StoreFileHashes+" on "+models.StoreFileHashTableColumns.HashID+" = "+models.StoreUploadFileTableColumns.HashID),
+		qm.InnerJoin("cloud_symbol_server."+models.TableNames.StoreFileBlobs+" on "+models.StoreFileBlobTableColumns.BlobID+" = "+models.StoreUploadFileTableColumns.BlobID),
 		qm.Where(models.StoreUploadFileColumns.UploadID+" = ?", upload.UploadID),
 	).Bind(ctx, tx, &storeFileIds)
 	if err != nil {
-		log.Printf("error while retrieveing file-hash IDs in upload %v / %v: %v", storeId, uploadId, err)
+		log.Printf("error while retrieveing file-blob IDs in upload %v / %v: %v", storeId, uploadId, err)
 		tx.Rollback()
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 
-	// Mark upload-files in upload as expired/aborted, and clear their file IDs & hash IDs
+	// Mark upload-files in upload as expired/aborted, and clear their file IDs & blob IDs
 	_, err = models.StoreUploadFiles(
 		qm.Where(models.StoreUploadFileColumns.UploadID+" = ?", upload.UploadID),
 	).UpdateAll(ctx, tx, models.M{
 		models.StoreUploadFileColumns.Status: desiredStatus,
-		models.StoreUploadFileColumns.HashID: nil,
+		models.StoreUploadFileColumns.BlobID: nil,
 	})
 	if err != nil {
 		log.Printf("error while accessing files in upload %v / %v: %v", storeId, uploadId, err)
@@ -120,58 +120,58 @@ func HandleUploadExpiryOrAbort(ctx context.Context, storeId string, uploadId str
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 
-	// Locate any file-hashes in the previous set that no longer are referenced by any uploads
+	// Locate any file-blobs in the previous set that no longer are referenced by any uploads
 
-	// SELECT store_file_hashes.hash_id
-	// FROM cloud_symbol_server.store_file_hashes
+	// SELECT store_file_blobs.blob_id
+	// FROM cloud_symbol_server.store_file_blobs
 	// LEFT JOIN cloud_symbol_server.store_upload_files
-	// 	ON store_file_hashes.hash_id = store_upload_files.hash_id
-	// WHERE (store_file_hashes.hash_id = ???)
-	// 	AND (store_upload_files.hash_id IS NULL);
+	// 	ON store_file_blobs.blob_id = store_upload_files.blob_id
+	// WHERE (store_file_blobs.blob_id = ???)
+	// 	AND (store_upload_files.blob_id IS NULL);
 
-	storeFileHashIdsArray := make([]interface{}, len(storeFileHashIds))
-	for i := range storeFileHashIds {
-		storeFileHashIdsArray[i] = storeFileHashIds[i].HashID
+	storeFileBlobIdsArray := make([]interface{}, len(storeFileBlobIds))
+	for i := range storeFileBlobIds {
+		storeFileBlobIdsArray[i] = storeFileBlobIds[i].BlobID
 	}
-	storeFileHashIdsToDelete, err := models.StoreFileHashes(
-		qm.Select(models.StoreFileHashTableColumns.HashID+" as "+models.StoreFileHashColumns.HashID),
-		qm.LeftOuterJoin("cloud_symbol_server."+models.TableNames.StoreUploadFiles+" on "+models.StoreFileHashTableColumns.HashID+" = "+models.StoreUploadFileTableColumns.HashID),
-		qm.WhereIn(models.StoreFileHashTableColumns.HashID+" in ?", storeFileHashIdsArray...),
-		qm.And(models.StoreUploadFileTableColumns.HashID+" IS NULL"),
+	storeFileBlobIdsToDelete, err := models.StoreFileBlobs(
+		qm.Select(models.StoreFileBlobTableColumns.BlobID+" as "+models.StoreFileBlobColumns.BlobID),
+		qm.LeftOuterJoin("cloud_symbol_server."+models.TableNames.StoreUploadFiles+" on "+models.StoreFileBlobTableColumns.BlobID+" = "+models.StoreUploadFileTableColumns.BlobID),
+		qm.WhereIn(models.StoreFileBlobTableColumns.BlobID+" in ?", storeFileBlobIdsArray...),
+		qm.And(models.StoreUploadFileTableColumns.BlobID+" IS NULL"),
 	).All(ctx, tx)
 	if err != nil {
-		log.Printf("error while retrieveing IDs for unreferenced file-hashes related to upload %v / %v: %v", storeId, uploadId, err)
+		log.Printf("error while retrieveing IDs for unreferenced file-blobs related to upload %v / %v: %v", storeId, uploadId, err)
 		tx.Rollback()
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 
 	// Create list of objects-to-delete from GCS
 
-	storeFileHashIdsToDeleteArray := make([]interface{}, len(storeFileHashIdsToDelete))
-	for i := range storeFileHashIdsToDelete {
-		storeFileHashIdsToDeleteArray[i] = storeFileHashIdsToDelete[i].HashID
+	storeFileBlobIdsToDeleteArray := make([]interface{}, len(storeFileBlobIdsToDelete))
+	for i := range storeFileBlobIdsToDelete {
+		storeFileBlobIdsToDeleteArray[i] = storeFileBlobIdsToDelete[i].BlobID
 	}
 	var objectsToDelete []struct {
-		FileName string `boil:"file_name"`
-		Hash     string `boil:"hash"`
+		FileName       string `boil:"file_name"`
+		BlobIdentifier string `boil:"blob_identifier"`
 	}
 	err = models.NewQuery(
-		qm.Select(models.StoreFileTableColumns.FileName+" as "+models.StoreFileColumns.FileName, models.StoreFileHashTableColumns.Hash+" as "+models.StoreFileHashColumns.Hash),
-		qm.From("cloud_symbol_server."+models.TableNames.StoreFileHashes),
-		qm.InnerJoin("cloud_symbol_server."+models.TableNames.StoreFiles+" on "+models.StoreFileTableColumns.FileID+" = "+models.StoreFileHashTableColumns.FileID),
-		qm.WhereIn(models.StoreFileHashTableColumns.HashID+" in ?", storeFileHashIdsToDeleteArray...),
+		qm.Select(models.StoreFileTableColumns.FileName+" as "+models.StoreFileColumns.FileName, models.StoreFileBlobTableColumns.BlobIdentifier+" as "+models.StoreFileBlobColumns.BlobIdentifier),
+		qm.From("cloud_symbol_server."+models.TableNames.StoreFileBlobs),
+		qm.InnerJoin("cloud_symbol_server."+models.TableNames.StoreFiles+" on "+models.StoreFileTableColumns.FileID+" = "+models.StoreFileBlobTableColumns.FileID),
+		qm.WhereIn(models.StoreFileBlobTableColumns.BlobID+" in ?", storeFileBlobIdsToDeleteArray...),
 	).Bind(ctx, tx, &objectsToDelete)
 	if err != nil {
-		log.Printf("error while retrieveing file-hashes in upload %v / %v: %v", storeId, uploadId, err)
+		log.Printf("error while retrieveing file-blobs in upload %v / %v: %v", storeId, uploadId, err)
 		tx.Rollback()
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 
-	// Delete unreferenced file-hashes
+	// Delete unreferenced file-blobs
 
-	_, err = storeFileHashIdsToDelete.DeleteAll(ctx, tx)
+	_, err = storeFileBlobIdsToDelete.DeleteAll(ctx, tx)
 	if err != nil {
-		log.Printf("error while deleting unreferenced file-hashes related to upload %v / %v: %v", storeId, uploadId, err)
+		log.Printf("error while deleting unreferenced file-blobs related to upload %v / %v: %v", storeId, uploadId, err)
 		tx.Rollback()
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
@@ -180,10 +180,10 @@ func HandleUploadExpiryOrAbort(ctx context.Context, storeId string, uploadId str
 
 	// SELECT store_files.file_id
 	// FROM cloud_symbol_server.store_files
-	// LEFT JOIN cloud_symbol_server.store_file_hashes
-	// 	ON store_files.file_id = store_file_hashes.file_id
+	// LEFT JOIN cloud_symbol_server.store_file_blobs
+	// 	ON store_files.file_id = store_file_blobs.file_id
 	// WHERE (store_files.file_id = ???)
-	// 	AND (store_file_hashes.file_id IS NULL);
+	// 	AND (store_file_blobs.file_id IS NULL);
 
 	storeFileIdsArray := make([]interface{}, len(storeFileIds))
 	for i := range storeFileIds {
@@ -191,9 +191,9 @@ func HandleUploadExpiryOrAbort(ctx context.Context, storeId string, uploadId str
 	}
 	storeFileIdsToDelete, err := models.StoreFiles(
 		qm.Select(models.StoreFileTableColumns.FileID+" as "+models.StoreFileColumns.FileID),
-		qm.LeftOuterJoin("cloud_symbol_server."+models.TableNames.StoreFileHashes+" on "+models.StoreFileTableColumns.FileID+" = "+models.StoreFileHashTableColumns.FileID),
+		qm.LeftOuterJoin("cloud_symbol_server."+models.TableNames.StoreFileBlobs+" on "+models.StoreFileTableColumns.FileID+" = "+models.StoreFileBlobTableColumns.FileID),
 		qm.WhereIn(models.StoreFileTableColumns.FileID+" in ?", storeFileIdsArray...),
-		qm.And(models.StoreFileHashTableColumns.FileID+" IS NULL"),
+		qm.And(models.StoreFileBlobTableColumns.FileID+" IS NULL"),
 	).All(ctx, tx)
 	if err != nil {
 		log.Printf("error while retrieveing IDs for unreferenced files related to upload %v / %v: %v", storeId, uploadId, err)
@@ -219,15 +219,15 @@ func HandleUploadExpiryOrAbort(ctx context.Context, storeId string, uploadId str
 	log.Printf("Status for %v/%v set to %v", storeId, uploadId, models.StoreUploadStatusExpired)
 
 	for _, objectToDelete := range objectsToDelete {
-		err = cloud_storage.DeleteObjectInStore(ctx, storageClient, storeId, objectToDelete.FileName, objectToDelete.Hash)
+		err = cloud_storage.DeleteObjectInStore(ctx, storageClient, storeId, objectToDelete.FileName, objectToDelete.BlobIdentifier)
 
 		if err == storage.ErrObjectNotExist {
-			log.Printf("file %s/%s/%s/%s not found in store when it was time to delete it", storeId, objectToDelete.FileName, objectToDelete.Hash, objectToDelete.FileName)
+			log.Printf("file %s/%s/%s/%s not found in store when it was time to delete it", storeId, objectToDelete.FileName, objectToDelete.BlobIdentifier, objectToDelete.FileName)
 		} else if err != nil {
-			log.Printf("Error while deleting %s/%s/%s/%s from store; err = %v", storeId, objectToDelete.FileName, objectToDelete.Hash, objectToDelete.FileName, err)
+			log.Printf("Error while deleting %s/%s/%s/%s from store; err = %v", storeId, objectToDelete.FileName, objectToDelete.BlobIdentifier, objectToDelete.FileName, err)
 			return openapi.Response(http.StatusInternalServerError, nil), nil
 		} else {
-			log.Printf("Deleted file %s/%s/%s/%s from store", storeId, objectToDelete.FileName, objectToDelete.Hash, objectToDelete.FileName)
+			log.Printf("Deleted file %s/%s/%s/%s from store", storeId, objectToDelete.FileName, objectToDelete.BlobIdentifier, objectToDelete.FileName)
 		}
 	}
 

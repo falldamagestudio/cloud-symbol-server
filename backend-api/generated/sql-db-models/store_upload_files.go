@@ -24,86 +24,86 @@ import (
 
 // StoreUploadFile is an object representing the database table.
 type StoreUploadFile struct {
-	FileID          int      `boil:"file_id" json:"file_id" toml:"file_id" yaml:"file_id"`
-	UploadID        null.Int `boil:"upload_id" json:"upload_id,omitempty" toml:"upload_id" yaml:"upload_id,omitempty"`
-	HashID          null.Int `boil:"hash_id" json:"hash_id,omitempty" toml:"hash_id" yaml:"hash_id,omitempty"`
-	UploadFileIndex int      `boil:"upload_file_index" json:"upload_file_index" toml:"upload_file_index" yaml:"upload_file_index"`
-	Status          string   `boil:"status" json:"status" toml:"status" yaml:"status"`
-	FileName        string   `boil:"file_name" json:"file_name" toml:"file_name" yaml:"file_name"`
-	FileHash        string   `boil:"file_hash" json:"file_hash" toml:"file_hash" yaml:"file_hash"`
+	FileID             int      `boil:"file_id" json:"file_id" toml:"file_id" yaml:"file_id"`
+	UploadID           null.Int `boil:"upload_id" json:"upload_id,omitempty" toml:"upload_id" yaml:"upload_id,omitempty"`
+	BlobID             null.Int `boil:"blob_id" json:"blob_id,omitempty" toml:"blob_id" yaml:"blob_id,omitempty"`
+	UploadFileIndex    int      `boil:"upload_file_index" json:"upload_file_index" toml:"upload_file_index" yaml:"upload_file_index"`
+	Status             string   `boil:"status" json:"status" toml:"status" yaml:"status"`
+	FileName           string   `boil:"file_name" json:"file_name" toml:"file_name" yaml:"file_name"`
+	FileBlobIdentifier string   `boil:"file_blob_identifier" json:"file_blob_identifier" toml:"file_blob_identifier" yaml:"file_blob_identifier"`
 
 	R *storeUploadFileR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L storeUploadFileL  `boil:"-" json:"-" toml:"-" yaml:"-"`
 }
 
 var StoreUploadFileColumns = struct {
-	FileID          string
-	UploadID        string
-	HashID          string
-	UploadFileIndex string
-	Status          string
-	FileName        string
-	FileHash        string
+	FileID             string
+	UploadID           string
+	BlobID             string
+	UploadFileIndex    string
+	Status             string
+	FileName           string
+	FileBlobIdentifier string
 }{
-	FileID:          "file_id",
-	UploadID:        "upload_id",
-	HashID:          "hash_id",
-	UploadFileIndex: "upload_file_index",
-	Status:          "status",
-	FileName:        "file_name",
-	FileHash:        "file_hash",
+	FileID:             "file_id",
+	UploadID:           "upload_id",
+	BlobID:             "blob_id",
+	UploadFileIndex:    "upload_file_index",
+	Status:             "status",
+	FileName:           "file_name",
+	FileBlobIdentifier: "file_blob_identifier",
 }
 
 var StoreUploadFileTableColumns = struct {
-	FileID          string
-	UploadID        string
-	HashID          string
-	UploadFileIndex string
-	Status          string
-	FileName        string
-	FileHash        string
+	FileID             string
+	UploadID           string
+	BlobID             string
+	UploadFileIndex    string
+	Status             string
+	FileName           string
+	FileBlobIdentifier string
 }{
-	FileID:          "store_upload_files.file_id",
-	UploadID:        "store_upload_files.upload_id",
-	HashID:          "store_upload_files.hash_id",
-	UploadFileIndex: "store_upload_files.upload_file_index",
-	Status:          "store_upload_files.status",
-	FileName:        "store_upload_files.file_name",
-	FileHash:        "store_upload_files.file_hash",
+	FileID:             "store_upload_files.file_id",
+	UploadID:           "store_upload_files.upload_id",
+	BlobID:             "store_upload_files.blob_id",
+	UploadFileIndex:    "store_upload_files.upload_file_index",
+	Status:             "store_upload_files.status",
+	FileName:           "store_upload_files.file_name",
+	FileBlobIdentifier: "store_upload_files.file_blob_identifier",
 }
 
 // Generated where
 
 var StoreUploadFileWhere = struct {
-	FileID          whereHelperint
-	UploadID        whereHelpernull_Int
-	HashID          whereHelpernull_Int
-	UploadFileIndex whereHelperint
-	Status          whereHelperstring
-	FileName        whereHelperstring
-	FileHash        whereHelperstring
+	FileID             whereHelperint
+	UploadID           whereHelpernull_Int
+	BlobID             whereHelpernull_Int
+	UploadFileIndex    whereHelperint
+	Status             whereHelperstring
+	FileName           whereHelperstring
+	FileBlobIdentifier whereHelperstring
 }{
-	FileID:          whereHelperint{field: "\"cloud_symbol_server\".\"store_upload_files\".\"file_id\""},
-	UploadID:        whereHelpernull_Int{field: "\"cloud_symbol_server\".\"store_upload_files\".\"upload_id\""},
-	HashID:          whereHelpernull_Int{field: "\"cloud_symbol_server\".\"store_upload_files\".\"hash_id\""},
-	UploadFileIndex: whereHelperint{field: "\"cloud_symbol_server\".\"store_upload_files\".\"upload_file_index\""},
-	Status:          whereHelperstring{field: "\"cloud_symbol_server\".\"store_upload_files\".\"status\""},
-	FileName:        whereHelperstring{field: "\"cloud_symbol_server\".\"store_upload_files\".\"file_name\""},
-	FileHash:        whereHelperstring{field: "\"cloud_symbol_server\".\"store_upload_files\".\"file_hash\""},
+	FileID:             whereHelperint{field: "\"cloud_symbol_server\".\"store_upload_files\".\"file_id\""},
+	UploadID:           whereHelpernull_Int{field: "\"cloud_symbol_server\".\"store_upload_files\".\"upload_id\""},
+	BlobID:             whereHelpernull_Int{field: "\"cloud_symbol_server\".\"store_upload_files\".\"blob_id\""},
+	UploadFileIndex:    whereHelperint{field: "\"cloud_symbol_server\".\"store_upload_files\".\"upload_file_index\""},
+	Status:             whereHelperstring{field: "\"cloud_symbol_server\".\"store_upload_files\".\"status\""},
+	FileName:           whereHelperstring{field: "\"cloud_symbol_server\".\"store_upload_files\".\"file_name\""},
+	FileBlobIdentifier: whereHelperstring{field: "\"cloud_symbol_server\".\"store_upload_files\".\"file_blob_identifier\""},
 }
 
 // StoreUploadFileRels is where relationship names are stored.
 var StoreUploadFileRels = struct {
-	Hash   string
+	Blob   string
 	Upload string
 }{
-	Hash:   "Hash",
+	Blob:   "Blob",
 	Upload: "Upload",
 }
 
 // storeUploadFileR is where relationships are stored.
 type storeUploadFileR struct {
-	Hash   *StoreFileHash `boil:"Hash" json:"Hash" toml:"Hash" yaml:"Hash"`
+	Blob   *StoreFileBlob `boil:"Blob" json:"Blob" toml:"Blob" yaml:"Blob"`
 	Upload *StoreUpload   `boil:"Upload" json:"Upload" toml:"Upload" yaml:"Upload"`
 }
 
@@ -112,11 +112,11 @@ func (*storeUploadFileR) NewStruct() *storeUploadFileR {
 	return &storeUploadFileR{}
 }
 
-func (r *storeUploadFileR) GetHash() *StoreFileHash {
+func (r *storeUploadFileR) GetBlob() *StoreFileBlob {
 	if r == nil {
 		return nil
 	}
-	return r.Hash
+	return r.Blob
 }
 
 func (r *storeUploadFileR) GetUpload() *StoreUpload {
@@ -130,9 +130,9 @@ func (r *storeUploadFileR) GetUpload() *StoreUpload {
 type storeUploadFileL struct{}
 
 var (
-	storeUploadFileAllColumns            = []string{"file_id", "upload_id", "hash_id", "upload_file_index", "status", "file_name", "file_hash"}
-	storeUploadFileColumnsWithoutDefault = []string{"upload_file_index", "status", "file_name", "file_hash"}
-	storeUploadFileColumnsWithDefault    = []string{"file_id", "upload_id", "hash_id"}
+	storeUploadFileAllColumns            = []string{"file_id", "upload_id", "blob_id", "upload_file_index", "status", "file_name", "file_blob_identifier"}
+	storeUploadFileColumnsWithoutDefault = []string{"upload_file_index", "status", "file_name", "file_blob_identifier"}
+	storeUploadFileColumnsWithDefault    = []string{"file_id", "upload_id", "blob_id"}
 	storeUploadFilePrimaryKeyColumns     = []string{"file_id"}
 	storeUploadFileGeneratedColumns      = []string{"file_id"}
 )
@@ -415,15 +415,15 @@ func (q storeUploadFileQuery) Exists(ctx context.Context, exec boil.ContextExecu
 	return count > 0, nil
 }
 
-// Hash pointed to by the foreign key.
-func (o *StoreUploadFile) Hash(mods ...qm.QueryMod) storeFileHashQuery {
+// Blob pointed to by the foreign key.
+func (o *StoreUploadFile) Blob(mods ...qm.QueryMod) storeFileBlobQuery {
 	queryMods := []qm.QueryMod{
-		qm.Where("\"hash_id\" = ?", o.HashID),
+		qm.Where("\"blob_id\" = ?", o.BlobID),
 	}
 
 	queryMods = append(queryMods, mods...)
 
-	return StoreFileHashes(queryMods...)
+	return StoreFileBlobs(queryMods...)
 }
 
 // Upload pointed to by the foreign key.
@@ -437,9 +437,9 @@ func (o *StoreUploadFile) Upload(mods ...qm.QueryMod) storeUploadQuery {
 	return StoreUploads(queryMods...)
 }
 
-// LoadHash allows an eager lookup of values, cached into the
+// LoadBlob allows an eager lookup of values, cached into the
 // loaded structs of the objects. This is for an N-1 relationship.
-func (storeUploadFileL) LoadHash(ctx context.Context, e boil.ContextExecutor, singular bool, maybeStoreUploadFile interface{}, mods queries.Applicator) error {
+func (storeUploadFileL) LoadBlob(ctx context.Context, e boil.ContextExecutor, singular bool, maybeStoreUploadFile interface{}, mods queries.Applicator) error {
 	var slice []*StoreUploadFile
 	var object *StoreUploadFile
 
@@ -470,8 +470,8 @@ func (storeUploadFileL) LoadHash(ctx context.Context, e boil.ContextExecutor, si
 		if object.R == nil {
 			object.R = &storeUploadFileR{}
 		}
-		if !queries.IsNil(object.HashID) {
-			args = append(args, object.HashID)
+		if !queries.IsNil(object.BlobID) {
+			args = append(args, object.BlobID)
 		}
 
 	} else {
@@ -482,13 +482,13 @@ func (storeUploadFileL) LoadHash(ctx context.Context, e boil.ContextExecutor, si
 			}
 
 			for _, a := range args {
-				if queries.Equal(a, obj.HashID) {
+				if queries.Equal(a, obj.BlobID) {
 					continue Outer
 				}
 			}
 
-			if !queries.IsNil(obj.HashID) {
-				args = append(args, obj.HashID)
+			if !queries.IsNil(obj.BlobID) {
+				args = append(args, obj.BlobID)
 			}
 
 		}
@@ -499,8 +499,8 @@ func (storeUploadFileL) LoadHash(ctx context.Context, e boil.ContextExecutor, si
 	}
 
 	query := NewQuery(
-		qm.From(`cloud_symbol_server.store_file_hashes`),
-		qm.WhereIn(`cloud_symbol_server.store_file_hashes.hash_id in ?`, args...),
+		qm.From(`cloud_symbol_server.store_file_blobs`),
+		qm.WhereIn(`cloud_symbol_server.store_file_blobs.blob_id in ?`, args...),
 	)
 	if mods != nil {
 		mods.Apply(query)
@@ -508,19 +508,19 @@ func (storeUploadFileL) LoadHash(ctx context.Context, e boil.ContextExecutor, si
 
 	results, err := query.QueryContext(ctx, e)
 	if err != nil {
-		return errors.Wrap(err, "failed to eager load StoreFileHash")
+		return errors.Wrap(err, "failed to eager load StoreFileBlob")
 	}
 
-	var resultSlice []*StoreFileHash
+	var resultSlice []*StoreFileBlob
 	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice StoreFileHash")
+		return errors.Wrap(err, "failed to bind eager loaded slice StoreFileBlob")
 	}
 
 	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results of eager load for store_file_hashes")
+		return errors.Wrap(err, "failed to close results of eager load for store_file_blobs")
 	}
 	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for store_file_hashes")
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for store_file_blobs")
 	}
 
 	if len(storeUploadFileAfterSelectHooks) != 0 {
@@ -537,22 +537,22 @@ func (storeUploadFileL) LoadHash(ctx context.Context, e boil.ContextExecutor, si
 
 	if singular {
 		foreign := resultSlice[0]
-		object.R.Hash = foreign
+		object.R.Blob = foreign
 		if foreign.R == nil {
-			foreign.R = &storeFileHashR{}
+			foreign.R = &storeFileBlobR{}
 		}
-		foreign.R.HashStoreUploadFiles = append(foreign.R.HashStoreUploadFiles, object)
+		foreign.R.BlobStoreUploadFiles = append(foreign.R.BlobStoreUploadFiles, object)
 		return nil
 	}
 
 	for _, local := range slice {
 		for _, foreign := range resultSlice {
-			if queries.Equal(local.HashID, foreign.HashID) {
-				local.R.Hash = foreign
+			if queries.Equal(local.BlobID, foreign.BlobID) {
+				local.R.Blob = foreign
 				if foreign.R == nil {
-					foreign.R = &storeFileHashR{}
+					foreign.R = &storeFileBlobR{}
 				}
-				foreign.R.HashStoreUploadFiles = append(foreign.R.HashStoreUploadFiles, local)
+				foreign.R.BlobStoreUploadFiles = append(foreign.R.BlobStoreUploadFiles, local)
 				break
 			}
 		}
@@ -685,10 +685,10 @@ func (storeUploadFileL) LoadUpload(ctx context.Context, e boil.ContextExecutor, 
 	return nil
 }
 
-// SetHash of the storeUploadFile to the related item.
-// Sets o.R.Hash to related.
-// Adds o to related.R.HashStoreUploadFiles.
-func (o *StoreUploadFile) SetHash(ctx context.Context, exec boil.ContextExecutor, insert bool, related *StoreFileHash) error {
+// SetBlob of the storeUploadFile to the related item.
+// Sets o.R.Blob to related.
+// Adds o to related.R.BlobStoreUploadFiles.
+func (o *StoreUploadFile) SetBlob(ctx context.Context, exec boil.ContextExecutor, insert bool, related *StoreFileBlob) error {
 	var err error
 	if insert {
 		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
@@ -698,10 +698,10 @@ func (o *StoreUploadFile) SetHash(ctx context.Context, exec boil.ContextExecutor
 
 	updateQuery := fmt.Sprintf(
 		"UPDATE \"cloud_symbol_server\".\"store_upload_files\" SET %s WHERE %s",
-		strmangle.SetParamNames("\"", "\"", 1, []string{"hash_id"}),
+		strmangle.SetParamNames("\"", "\"", 1, []string{"blob_id"}),
 		strmangle.WhereClause("\"", "\"", 2, storeUploadFilePrimaryKeyColumns),
 	)
-	values := []interface{}{related.HashID, o.FileID}
+	values := []interface{}{related.BlobID, o.FileID}
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -712,54 +712,54 @@ func (o *StoreUploadFile) SetHash(ctx context.Context, exec boil.ContextExecutor
 		return errors.Wrap(err, "failed to update local table")
 	}
 
-	queries.Assign(&o.HashID, related.HashID)
+	queries.Assign(&o.BlobID, related.BlobID)
 	if o.R == nil {
 		o.R = &storeUploadFileR{
-			Hash: related,
+			Blob: related,
 		}
 	} else {
-		o.R.Hash = related
+		o.R.Blob = related
 	}
 
 	if related.R == nil {
-		related.R = &storeFileHashR{
-			HashStoreUploadFiles: StoreUploadFileSlice{o},
+		related.R = &storeFileBlobR{
+			BlobStoreUploadFiles: StoreUploadFileSlice{o},
 		}
 	} else {
-		related.R.HashStoreUploadFiles = append(related.R.HashStoreUploadFiles, o)
+		related.R.BlobStoreUploadFiles = append(related.R.BlobStoreUploadFiles, o)
 	}
 
 	return nil
 }
 
-// RemoveHash relationship.
-// Sets o.R.Hash to nil.
+// RemoveBlob relationship.
+// Sets o.R.Blob to nil.
 // Removes o from all passed in related items' relationships struct.
-func (o *StoreUploadFile) RemoveHash(ctx context.Context, exec boil.ContextExecutor, related *StoreFileHash) error {
+func (o *StoreUploadFile) RemoveBlob(ctx context.Context, exec boil.ContextExecutor, related *StoreFileBlob) error {
 	var err error
 
-	queries.SetScanner(&o.HashID, nil)
-	if _, err = o.Update(ctx, exec, boil.Whitelist("hash_id")); err != nil {
+	queries.SetScanner(&o.BlobID, nil)
+	if _, err = o.Update(ctx, exec, boil.Whitelist("blob_id")); err != nil {
 		return errors.Wrap(err, "failed to update local table")
 	}
 
 	if o.R != nil {
-		o.R.Hash = nil
+		o.R.Blob = nil
 	}
 	if related == nil || related.R == nil {
 		return nil
 	}
 
-	for i, ri := range related.R.HashStoreUploadFiles {
-		if queries.Equal(o.HashID, ri.HashID) {
+	for i, ri := range related.R.BlobStoreUploadFiles {
+		if queries.Equal(o.BlobID, ri.BlobID) {
 			continue
 		}
 
-		ln := len(related.R.HashStoreUploadFiles)
+		ln := len(related.R.BlobStoreUploadFiles)
 		if ln > 1 && i < ln-1 {
-			related.R.HashStoreUploadFiles[i] = related.R.HashStoreUploadFiles[ln-1]
+			related.R.BlobStoreUploadFiles[i] = related.R.BlobStoreUploadFiles[ln-1]
 		}
-		related.R.HashStoreUploadFiles = related.R.HashStoreUploadFiles[:ln-1]
+		related.R.BlobStoreUploadFiles = related.R.BlobStoreUploadFiles[:ln-1]
 		break
 	}
 	return nil
