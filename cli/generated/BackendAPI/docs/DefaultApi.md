@@ -10,8 +10,8 @@ All URIs are relative to *http://localhost*
 | [**DeleteStore**](DefaultApi.md#deletestore) | **DELETE** /stores/{storeId} | Delete an existing store |
 | [**DeleteToken**](DefaultApi.md#deletetoken) | **DELETE** /tokens/{token} | Delete a token for current user |
 | [**ExpireStoreUpload**](DefaultApi.md#expirestoreupload) | **POST** /stores/{storeId}/uploads/{uploadId}/expire | Expire store upload and consider files for GC |
-| [**GetStoreFileHashDownloadUrl**](DefaultApi.md#getstorefilehashdownloadurl) | **GET** /stores/{storeId}/files/{fileId}/hashes/{hashId}/getDownloadUrl | Request download URL for the binary blob associated with a particular hash |
-| [**GetStoreFileHashes**](DefaultApi.md#getstorefilehashes) | **GET** /stores/{storeId}/files/{fileId}/hashes | Fetch a list of hashes for a specific file in store |
+| [**GetStoreFileBlobDownloadUrl**](DefaultApi.md#getstorefileblobdownloadurl) | **GET** /stores/{storeId}/files/{fileId}/blobs/{blobId}/getDownloadUrl | Request download URL for the binary blob associated with a particular store/file/blob-id |
+| [**GetStoreFileBlobs**](DefaultApi.md#getstorefileblobs) | **GET** /stores/{storeId}/files/{fileId}/blobs | Fetch a list of blobs for a specific file in store |
 | [**GetStoreFiles**](DefaultApi.md#getstorefiles) | **GET** /stores/{storeId}/files | Fetch a list of files in store |
 | [**GetStoreUpload**](DefaultApi.md#getstoreupload) | **GET** /stores/{storeId}/uploads/{uploadId} | Fetch an upload |
 | [**GetStoreUploads**](DefaultApi.md#getstoreuploads) | **GET** /stores/{storeId}/uploads | Fetch a list of uploads in store |
@@ -574,11 +574,11 @@ void (empty response body)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-<a name="getstorefilehashdownloadurl"></a>
-# **GetStoreFileHashDownloadUrl**
-> GetStoreFileHashDownloadUrlResponse GetStoreFileHashDownloadUrl (string storeId, string fileId, string hashId)
+<a name="getstorefileblobdownloadurl"></a>
+# **GetStoreFileBlobDownloadUrl**
+> GetStoreFileBlobDownloadUrlResponse GetStoreFileBlobDownloadUrl (string storeId, string fileId, string blobId)
 
-Request download URL for the binary blob associated with a particular hash
+Request download URL for the binary blob associated with a particular store/file/blob-id
 
 ### Example
 ```csharp
@@ -590,7 +590,7 @@ using BackendAPI.Model;
 
 namespace Example
 {
-    public class GetStoreFileHashDownloadUrlExample
+    public class GetStoreFileBlobDownloadUrlExample
     {
         public static void Main()
         {
@@ -603,17 +603,17 @@ namespace Example
             var apiInstance = new DefaultApi(config);
             var storeId = "storeId_example";  // string | ID of the store containing the file
             var fileId = "fileId_example";  // string | ID of the file
-            var hashId = "hashId_example";  // string | ID of the hash
+            var blobId = "blobId_example";  // string | ID of the blob
 
             try
             {
-                // Request download URL for the binary blob associated with a particular hash
-                GetStoreFileHashDownloadUrlResponse result = apiInstance.GetStoreFileHashDownloadUrl(storeId, fileId, hashId);
+                // Request download URL for the binary blob associated with a particular store/file/blob-id
+                GetStoreFileBlobDownloadUrlResponse result = apiInstance.GetStoreFileBlobDownloadUrl(storeId, fileId, blobId);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DefaultApi.GetStoreFileHashDownloadUrl: " + e.Message);
+                Debug.Print("Exception when calling DefaultApi.GetStoreFileBlobDownloadUrl: " + e.Message);
                 Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
@@ -622,21 +622,21 @@ namespace Example
 }
 ```
 
-#### Using the GetStoreFileHashDownloadUrlWithHttpInfo variant
+#### Using the GetStoreFileBlobDownloadUrlWithHttpInfo variant
 This returns an ApiResponse object which contains the response data, status code and headers.
 
 ```csharp
 try
 {
-    // Request download URL for the binary blob associated with a particular hash
-    ApiResponse<GetStoreFileHashDownloadUrlResponse> response = apiInstance.GetStoreFileHashDownloadUrlWithHttpInfo(storeId, fileId, hashId);
+    // Request download URL for the binary blob associated with a particular store/file/blob-id
+    ApiResponse<GetStoreFileBlobDownloadUrlResponse> response = apiInstance.GetStoreFileBlobDownloadUrlWithHttpInfo(storeId, fileId, blobId);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
 }
 catch (ApiException e)
 {
-    Debug.Print("Exception when calling DefaultApi.GetStoreFileHashDownloadUrlWithHttpInfo: " + e.Message);
+    Debug.Print("Exception when calling DefaultApi.GetStoreFileBlobDownloadUrlWithHttpInfo: " + e.Message);
     Debug.Print("Status Code: " + e.ErrorCode);
     Debug.Print(e.StackTrace);
 }
@@ -648,11 +648,11 @@ catch (ApiException e)
 |------|------|-------------|-------|
 | **storeId** | **string** | ID of the store containing the file |  |
 | **fileId** | **string** | ID of the file |  |
-| **hashId** | **string** | ID of the hash |  |
+| **blobId** | **string** | ID of the blob |  |
 
 ### Return type
 
-[**GetStoreFileHashDownloadUrlResponse**](GetStoreFileHashDownloadUrlResponse.md)
+[**GetStoreFileBlobDownloadUrlResponse**](GetStoreFileBlobDownloadUrlResponse.md)
 
 ### Authorization
 
@@ -673,11 +673,11 @@ catch (ApiException e)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-<a name="getstorefilehashes"></a>
-# **GetStoreFileHashes**
-> GetStoreFileHashesResponse GetStoreFileHashes (string storeId, string fileId, int? offset = null, int? limit = null)
+<a name="getstorefileblobs"></a>
+# **GetStoreFileBlobs**
+> GetStoreFileBlobsResponse GetStoreFileBlobs (string storeId, string fileId, int? offset = null, int? limit = null)
 
-Fetch a list of hashes for a specific file in store
+Fetch a list of blobs for a specific file in store
 
 ### Example
 ```csharp
@@ -689,7 +689,7 @@ using BackendAPI.Model;
 
 namespace Example
 {
-    public class GetStoreFileHashesExample
+    public class GetStoreFileBlobsExample
     {
         public static void Main()
         {
@@ -707,13 +707,13 @@ namespace Example
 
             try
             {
-                // Fetch a list of hashes for a specific file in store
-                GetStoreFileHashesResponse result = apiInstance.GetStoreFileHashes(storeId, fileId, offset, limit);
+                // Fetch a list of blobs for a specific file in store
+                GetStoreFileBlobsResponse result = apiInstance.GetStoreFileBlobs(storeId, fileId, offset, limit);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
             {
-                Debug.Print("Exception when calling DefaultApi.GetStoreFileHashes: " + e.Message);
+                Debug.Print("Exception when calling DefaultApi.GetStoreFileBlobs: " + e.Message);
                 Debug.Print("Status Code: " + e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
@@ -722,21 +722,21 @@ namespace Example
 }
 ```
 
-#### Using the GetStoreFileHashesWithHttpInfo variant
+#### Using the GetStoreFileBlobsWithHttpInfo variant
 This returns an ApiResponse object which contains the response data, status code and headers.
 
 ```csharp
 try
 {
-    // Fetch a list of hashes for a specific file in store
-    ApiResponse<GetStoreFileHashesResponse> response = apiInstance.GetStoreFileHashesWithHttpInfo(storeId, fileId, offset, limit);
+    // Fetch a list of blobs for a specific file in store
+    ApiResponse<GetStoreFileBlobsResponse> response = apiInstance.GetStoreFileBlobsWithHttpInfo(storeId, fileId, offset, limit);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
 }
 catch (ApiException e)
 {
-    Debug.Print("Exception when calling DefaultApi.GetStoreFileHashesWithHttpInfo: " + e.Message);
+    Debug.Print("Exception when calling DefaultApi.GetStoreFileBlobsWithHttpInfo: " + e.Message);
     Debug.Print("Status Code: " + e.ErrorCode);
     Debug.Print(e.StackTrace);
 }
@@ -753,7 +753,7 @@ catch (ApiException e)
 
 ### Return type
 
-[**GetStoreFileHashesResponse**](GetStoreFileHashesResponse.md)
+[**GetStoreFileBlobsResponse**](GetStoreFileBlobsResponse.md)
 
 ### Authorization
 

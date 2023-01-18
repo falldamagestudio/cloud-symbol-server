@@ -29,9 +29,9 @@
       </template>    
 
       <template
-        v-slot:item.hash="{ item }"
+        v-slot:item.blobIdentifier="{ item }"
       >
-        {{ item.hash }}
+        {{ item.blobIdentifier }}
       </template>    
 
       <template
@@ -63,8 +63,8 @@ const headers = [
     value: "fileName",
   },
   {
-    text: "Hash",
-    value: "hash",
+    text: "Blob Identifier",
+    value: "blobIdentifier",
   },
   {
     text: "Status",

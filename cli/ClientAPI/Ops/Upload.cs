@@ -17,7 +17,7 @@ namespace ClientAPI
                 buildId: buildId,
                 files: FileWithHash.Select(fileWithHash => new BackendAPI.Model.CreateStoreUploadFileRequest(
                     fileName: fileWithHash.FileWithoutPath,
-                    hash: fileWithHash.Hash
+                    blobIdentifier: fileWithHash.Hash
                 )).ToList()
             );
 
@@ -46,7 +46,7 @@ namespace ClientAPI
                     BackendAPI.Model.UploadFileResponse uploadFileResponse = createStoreUploadResponse.Files[fileId];
 
                     HashFiles.FileWithHash fileWithHash = filesWithHashes.First(fwh => 
-                        fwh.FileWithoutPath == uploadFileResponse.FileName && fwh.Hash == uploadFileResponse.Hash);
+                        fwh.FileWithoutPath == uploadFileResponse.FileName && fwh.Hash == uploadFileResponse.BlobIdentifier);
 
                     if (!string.IsNullOrEmpty(uploadFileResponse.Url)) {
 

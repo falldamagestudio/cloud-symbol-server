@@ -39,9 +39,9 @@ type StoreFileEntry struct {
 	RefCount int64
 }
 
-type StoreFileHashEntry struct {
+type StoreFileBlobEntry struct {
 	RefCount int64
 }
 
-type StoreFileHashUploadEntry struct {
+type StoreFileBlobUploadEntry struct {
 }

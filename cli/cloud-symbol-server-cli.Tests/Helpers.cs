@@ -59,7 +59,7 @@ public static class Helpers
 
     private static HttpClient HttpClient = new HttpClient();
 
-    public static async Task<byte[]> DownloadFile(string fileName, string hash)
+    public static async Task<byte[]> DownloadFile(string fileName, string blobIdentifier)
     {
         string endpoint = GetDownloadAPIEndpoint();
         string email = GetTestEmail();
@@ -67,7 +67,7 @@ public static class Helpers
         string basicAuthString = $"{email}:{pat}";
         HttpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes(basicAuthString)));
 
-        string url = $"{endpoint}/{fileName}/{hash}/{fileName}";
+        string url = $"{endpoint}/{fileName}/{blobIdentifier}/{fileName}";
         try {
             byte[] result = await HttpClient.GetByteArrayAsync(url);
             return result;

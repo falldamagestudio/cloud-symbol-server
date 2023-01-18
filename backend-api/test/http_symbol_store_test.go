@@ -84,7 +84,7 @@ func TestAccessFileThatExists(t *testing.T) {
 		t.Fatalf("Error when creating/populating test store: %v", err)
 	}
 
-	path := "file1/hash1/file1"
+	path := "file1/blobIdentifier1/file1"
 
 	// Request contents of a file that exists
 

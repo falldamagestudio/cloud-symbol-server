@@ -220,41 +220,41 @@ namespace ClientAPI
             }
         }
 
-        public class GetStoreFileHashesException : ClientAPIException
+        public class GetStoreFileBlobsException : ClientAPIException
         {
-            public GetStoreFileHashesException(string message) : base(message) { }
+            public GetStoreFileBlobsException(string message) : base(message) { }
         }
 
-        public async Task<BackendAPI.Model.GetStoreFileHashesResponse> GetStoreFileHashesAsync(string store, string file, int offset, int limit) {
+        public async Task<BackendAPI.Model.GetStoreFileBlobsResponse> GetStoreFileBlobsAsync(string store, string file, int offset, int limit) {
 
             try {
-                BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreFileHashesResponse> response = await backendApi.GetStoreFileHashesWithHttpInfoAsync(store, file, offset, limit);
+                BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreFileBlobsResponse> response = await backendApi.GetStoreFileBlobsWithHttpInfoAsync(store, file, offset, limit);
                 if (response.ErrorText != null)
                     throw new ApiException(response.ErrorText);
                 return response.Data;
             } catch (BackendAPI.Client.ApiException apiException) {
                 if (apiException.ErrorCode == (int)HttpStatusCode.NotFound)
-                    throw new GetStoreFileHashesException($"Store {store} / file {file} does not exist");
+                    throw new GetStoreFileBlobsException($"Store {store} / file {file} does not exist");
                 else
                     throw;
             }
         }
 
-        public class GetStoreFileHashDownloadUrlException : ClientAPIException
+        public class GetStoreFileBlobDownloadUrlException : ClientAPIException
         {
-            public GetStoreFileHashDownloadUrlException(string message) : base(message) { }
+            public GetStoreFileBlobDownloadUrlException(string message) : base(message) { }
         }
 
-        public async Task<BackendAPI.Model.GetStoreFileHashDownloadUrlResponse> GetStoreFileHashDownloadUrlAsync(string store, string file, string hash) {
+        public async Task<BackendAPI.Model.GetStoreFileBlobDownloadUrlResponse> GetStoreFileBlobDownloadUrlAsync(string store, string file, string blob) {
 
             try {
-                BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreFileHashDownloadUrlResponse> response = await backendApi.GetStoreFileHashDownloadUrlWithHttpInfoAsync(store, file, hash);
+                BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreFileBlobDownloadUrlResponse> response = await backendApi.GetStoreFileBlobDownloadUrlWithHttpInfoAsync(store, file, blob);
                 if (response.ErrorText != null)
                     throw new ApiException(response.ErrorText);
                 return response.Data;
             } catch (BackendAPI.Client.ApiException apiException) {
                 if (apiException.ErrorCode == (int)HttpStatusCode.NotFound)
-                    throw new GetStoreFileHashDownloadUrlException($"Store {store} / file {file} / hash {hash} does not exist");
+                    throw new GetStoreFileBlobDownloadUrlException($"Store {store} / file {file} / blob {blob} does not exist");
                 else
                     throw;
             }

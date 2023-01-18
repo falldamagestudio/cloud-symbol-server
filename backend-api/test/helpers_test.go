@@ -154,10 +154,10 @@ func populateTestStore(adminAPIClient *openapi_client.APIClient, authContext con
 	buildId := "test build id"
 
 	fileName1 := "file1"
-	hash1 := "hash1"
+	blobIdentifier1 := "blobIdentifier1"
 	content1 := "content1"
 	fileName2 := "file2"
-	hash2 := "hash2"
+	blobIdentifier2 := "blobIdentifier2"
 	content2 := "content2"
 
 	contentUploads := map[string]string{
@@ -167,12 +167,12 @@ func populateTestStore(adminAPIClient *openapi_client.APIClient, authContext con
 
 	files := []openapi_client.CreateStoreUploadFileRequest{
 		{
-			FileName: fileName1,
-			Hash:     hash1,
+			FileName:       fileName1,
+			BlobIdentifier: blobIdentifier1,
 		},
 		{
-			FileName: fileName2,
-			Hash:     hash2,
+			FileName:       fileName2,
+			BlobIdentifier: blobIdentifier2,
 		},
 	}
 
@@ -227,9 +227,9 @@ type TestUpload struct {
 }
 
 type TestUploadFile struct {
-	FileName string
-	Hash     string
-	Content  string
+	FileName       string
+	BlobIdentifier string
+	Content        string
 }
 
 var (
@@ -238,14 +238,14 @@ var (
 		Description: "example upload description 1",
 		Files: []TestUploadFile{
 			{
-				FileName: "file1",
-				Hash:     "hash1",
-				Content:  "content1",
+				FileName:       "file1",
+				BlobIdentifier: "blobIdentifier1",
+				Content:        "content1",
 			},
 			{
-				FileName: "file2",
-				Hash:     "hash2",
-				Content:  "content2",
+				FileName:       "file2",
+				BlobIdentifier: "blobIdentifier2",
+				Content:        "content2",
 			},
 		},
 	}
@@ -255,14 +255,14 @@ var (
 		Description: "example upload description 2",
 		Files: []TestUploadFile{
 			{
-				FileName: "file1",
-				Hash:     "hash1",
-				Content:  "content1",
+				FileName:       "file1",
+				BlobIdentifier: "blobIdentifier1",
+				Content:        "content1",
 			},
 			{
-				FileName: "file3",
-				Hash:     "hash3",
-				Content:  "content3",
+				FileName:       "file3",
+				BlobIdentifier: "blobIdentifier3",
+				Content:        "content3",
 			},
 		},
 	}
@@ -285,7 +285,7 @@ func upload(apiClient *openapi_client.APIClient, authContext context.Context, st
 		targetFile := &((*createStoreUploadRequest).Files)[fileIndex]
 
 		targetFile.FileName = sourceFile.FileName
-		targetFile.Hash = sourceFile.Hash
+		targetFile.BlobIdentifier = sourceFile.BlobIdentifier
 	}
 
 	createStoreUploadResponse, _, err := apiClient.DefaultApi.CreateStoreUpload(authContext, storeId).CreateStoreUploadRequest(*createStoreUploadRequest).Execute()

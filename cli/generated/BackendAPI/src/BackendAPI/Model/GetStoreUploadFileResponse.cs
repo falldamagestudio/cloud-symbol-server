@@ -46,9 +46,9 @@ namespace BackendAPI.Model
         /// Initializes a new instance of the <see cref="GetStoreUploadFileResponse" /> class.
         /// </summary>
         /// <param name="fileName">fileName (required).</param>
-        /// <param name="hash">hash (required).</param>
+        /// <param name="blobIdentifier">blobIdentifier (required).</param>
         /// <param name="status">status (required).</param>
-        public GetStoreUploadFileResponse(string fileName = default(string), string hash = default(string), StoreUploadFileStatus status = default(StoreUploadFileStatus))
+        public GetStoreUploadFileResponse(string fileName = default(string), string blobIdentifier = default(string), StoreUploadFileStatus status = default(StoreUploadFileStatus))
         {
             // to ensure "fileName" is required (not null)
             if (fileName == null)
@@ -56,12 +56,12 @@ namespace BackendAPI.Model
                 throw new ArgumentNullException("fileName is a required property for GetStoreUploadFileResponse and cannot be null");
             }
             this.FileName = fileName;
-            // to ensure "hash" is required (not null)
-            if (hash == null)
+            // to ensure "blobIdentifier" is required (not null)
+            if (blobIdentifier == null)
             {
-                throw new ArgumentNullException("hash is a required property for GetStoreUploadFileResponse and cannot be null");
+                throw new ArgumentNullException("blobIdentifier is a required property for GetStoreUploadFileResponse and cannot be null");
             }
-            this.Hash = hash;
+            this.BlobIdentifier = blobIdentifier;
             this.Status = status;
         }
 
@@ -72,10 +72,10 @@ namespace BackendAPI.Model
         public string FileName { get; set; }
 
         /// <summary>
-        /// Gets or Sets Hash
+        /// Gets or Sets BlobIdentifier
         /// </summary>
-        [DataMember(Name = "hash", IsRequired = true, EmitDefaultValue = true)]
-        public string Hash { get; set; }
+        [DataMember(Name = "blobIdentifier", IsRequired = true, EmitDefaultValue = true)]
+        public string BlobIdentifier { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -86,7 +86,7 @@ namespace BackendAPI.Model
             StringBuilder sb = new StringBuilder();
             sb.Append("class GetStoreUploadFileResponse {\n");
             sb.Append("  FileName: ").Append(FileName).Append("\n");
-            sb.Append("  Hash: ").Append(Hash).Append("\n");
+            sb.Append("  BlobIdentifier: ").Append(BlobIdentifier).Append("\n");
             sb.Append("  Status: ").Append(Status).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -129,9 +129,9 @@ namespace BackendAPI.Model
                     this.FileName.Equals(input.FileName))
                 ) && 
                 (
-                    this.Hash == input.Hash ||
-                    (this.Hash != null &&
-                    this.Hash.Equals(input.Hash))
+                    this.BlobIdentifier == input.BlobIdentifier ||
+                    (this.BlobIdentifier != null &&
+                    this.BlobIdentifier.Equals(input.BlobIdentifier))
                 ) && 
                 (
                     this.Status == input.Status ||
@@ -152,9 +152,9 @@ namespace BackendAPI.Model
                 {
                     hashCode = (hashCode * 59) + this.FileName.GetHashCode();
                 }
-                if (this.Hash != null)
+                if (this.BlobIdentifier != null)
                 {
-                    hashCode = (hashCode * 59) + this.Hash.GetHashCode();
+                    hashCode = (hashCode * 59) + this.BlobIdentifier.GetHashCode();
                 }
                 hashCode = (hashCode * 59) + this.Status.GetHashCode();
                 return hashCode;

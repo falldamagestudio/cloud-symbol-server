@@ -80,18 +80,18 @@ func DeleteAllObjectsInStore(context context.Context, storageClient *storage.Cli
 	return nil
 }
 
-func storefileNameHashToPath(storeId string, fileName string, hash string) string {
-	return fmt.Sprintf("stores/%s/%s/%s/%s", storeId, fileName, hash, fileName)
+func storefileNameBlobToPath(storeId string, fileName string, blobIdentifier string) string {
+	return fmt.Sprintf("stores/%s/%s/%s/%s", storeId, fileName, blobIdentifier, fileName)
 }
 
-func DeleteObjectInStore(context context.Context, storageClient *storage.Client, storeId string, fileName string, hash string) error {
+func DeleteObjectInStore(context context.Context, storageClient *storage.Client, storeId string, fileName string, blobIdentifier string) error {
 
 	bucketName, err := GetSymbolStoreBucketName()
 	if err != nil {
 		return err
 	}
 
-	path := storefileNameHashToPath(storeId, fileName, hash)
+	path := storefileNameBlobToPath(storeId, fileName, blobIdentifier)
 	err = storageClient.Bucket(bucketName).Object(path).Delete(context)
 	return err
 }

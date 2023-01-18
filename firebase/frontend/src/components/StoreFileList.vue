@@ -15,7 +15,7 @@
       <template
         v-slot:item.name="{ item }"
       >
-        <router-link :to="{ name: 'storeFileHashes', params: { store: store, file: item.name } }">{{ item.name }}</router-link>
+        <router-link :to="{ name: 'storeFileBlobs', params: { store: store, file: item.name } }">{{ item.name }}</router-link>
       </template>    
     </v-data-table>
 

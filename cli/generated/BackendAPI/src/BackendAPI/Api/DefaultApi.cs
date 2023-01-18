@@ -149,18 +149,18 @@ namespace BackendAPI.Api
         /// <returns>ApiResponse of Object(void)</returns>
         ApiResponse<Object> ExpireStoreUploadWithHttpInfo(string uploadId, string storeId, int operationIndex = 0);
         /// <summary>
-        /// Request download URL for the binary blob associated with a particular hash
+        /// Request download URL for the binary blob associated with a particular store/file/blob-id
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the file</param>
         /// <param name="fileId">ID of the file</param>
-        /// <param name="hashId">ID of the hash</param>
+        /// <param name="blobId">ID of the blob</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>GetStoreFileHashDownloadUrlResponse</returns>
-        GetStoreFileHashDownloadUrlResponse GetStoreFileHashDownloadUrl(string storeId, string fileId, string hashId, int operationIndex = 0);
+        /// <returns>GetStoreFileBlobDownloadUrlResponse</returns>
+        GetStoreFileBlobDownloadUrlResponse GetStoreFileBlobDownloadUrl(string storeId, string fileId, string blobId, int operationIndex = 0);
 
         /// <summary>
-        /// Request download URL for the binary blob associated with a particular hash
+        /// Request download URL for the binary blob associated with a particular store/file/blob-id
         /// </summary>
         /// <remarks>
         /// 
@@ -168,12 +168,12 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the file</param>
         /// <param name="fileId">ID of the file</param>
-        /// <param name="hashId">ID of the hash</param>
+        /// <param name="blobId">ID of the blob</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of GetStoreFileHashDownloadUrlResponse</returns>
-        ApiResponse<GetStoreFileHashDownloadUrlResponse> GetStoreFileHashDownloadUrlWithHttpInfo(string storeId, string fileId, string hashId, int operationIndex = 0);
+        /// <returns>ApiResponse of GetStoreFileBlobDownloadUrlResponse</returns>
+        ApiResponse<GetStoreFileBlobDownloadUrlResponse> GetStoreFileBlobDownloadUrlWithHttpInfo(string storeId, string fileId, string blobId, int operationIndex = 0);
         /// <summary>
-        /// Fetch a list of hashes for a specific file in store
+        /// Fetch a list of blobs for a specific file in store
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the file</param>
@@ -181,11 +181,11 @@ namespace BackendAPI.Api
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>GetStoreFileHashesResponse</returns>
-        GetStoreFileHashesResponse GetStoreFileHashes(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0);
+        /// <returns>GetStoreFileBlobsResponse</returns>
+        GetStoreFileBlobsResponse GetStoreFileBlobs(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0);
 
         /// <summary>
-        /// Fetch a list of hashes for a specific file in store
+        /// Fetch a list of blobs for a specific file in store
         /// </summary>
         /// <remarks>
         /// 
@@ -196,8 +196,8 @@ namespace BackendAPI.Api
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of GetStoreFileHashesResponse</returns>
-        ApiResponse<GetStoreFileHashesResponse> GetStoreFileHashesWithHttpInfo(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0);
+        /// <returns>ApiResponse of GetStoreFileBlobsResponse</returns>
+        ApiResponse<GetStoreFileBlobsResponse> GetStoreFileBlobsWithHttpInfo(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0);
         /// <summary>
         /// Fetch a list of files in store
         /// </summary>
@@ -576,7 +576,7 @@ namespace BackendAPI.Api
         /// <returns>Task of ApiResponse</returns>
         System.Threading.Tasks.Task<ApiResponse<Object>> ExpireStoreUploadWithHttpInfoAsync(string uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
-        /// Request download URL for the binary blob associated with a particular hash
+        /// Request download URL for the binary blob associated with a particular store/file/blob-id
         /// </summary>
         /// <remarks>
         /// 
@@ -584,14 +584,14 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the file</param>
         /// <param name="fileId">ID of the file</param>
-        /// <param name="hashId">ID of the hash</param>
+        /// <param name="blobId">ID of the blob</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of GetStoreFileHashDownloadUrlResponse</returns>
-        System.Threading.Tasks.Task<GetStoreFileHashDownloadUrlResponse> GetStoreFileHashDownloadUrlAsync(string storeId, string fileId, string hashId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <returns>Task of GetStoreFileBlobDownloadUrlResponse</returns>
+        System.Threading.Tasks.Task<GetStoreFileBlobDownloadUrlResponse> GetStoreFileBlobDownloadUrlAsync(string storeId, string fileId, string blobId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
-        /// Request download URL for the binary blob associated with a particular hash
+        /// Request download URL for the binary blob associated with a particular store/file/blob-id
         /// </summary>
         /// <remarks>
         /// 
@@ -599,13 +599,13 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the file</param>
         /// <param name="fileId">ID of the file</param>
-        /// <param name="hashId">ID of the hash</param>
+        /// <param name="blobId">ID of the blob</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (GetStoreFileHashDownloadUrlResponse)</returns>
-        System.Threading.Tasks.Task<ApiResponse<GetStoreFileHashDownloadUrlResponse>> GetStoreFileHashDownloadUrlWithHttpInfoAsync(string storeId, string fileId, string hashId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <returns>Task of ApiResponse (GetStoreFileBlobDownloadUrlResponse)</returns>
+        System.Threading.Tasks.Task<ApiResponse<GetStoreFileBlobDownloadUrlResponse>> GetStoreFileBlobDownloadUrlWithHttpInfoAsync(string storeId, string fileId, string blobId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
-        /// Fetch a list of hashes for a specific file in store
+        /// Fetch a list of blobs for a specific file in store
         /// </summary>
         /// <remarks>
         /// 
@@ -617,11 +617,11 @@ namespace BackendAPI.Api
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of GetStoreFileHashesResponse</returns>
-        System.Threading.Tasks.Task<GetStoreFileHashesResponse> GetStoreFileHashesAsync(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <returns>Task of GetStoreFileBlobsResponse</returns>
+        System.Threading.Tasks.Task<GetStoreFileBlobsResponse> GetStoreFileBlobsAsync(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
-        /// Fetch a list of hashes for a specific file in store
+        /// Fetch a list of blobs for a specific file in store
         /// </summary>
         /// <remarks>
         /// 
@@ -633,8 +633,8 @@ namespace BackendAPI.Api
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (GetStoreFileHashesResponse)</returns>
-        System.Threading.Tasks.Task<ApiResponse<GetStoreFileHashesResponse>> GetStoreFileHashesWithHttpInfoAsync(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        /// <returns>Task of ApiResponse (GetStoreFileBlobsResponse)</returns>
+        System.Threading.Tasks.Task<ApiResponse<GetStoreFileBlobsResponse>> GetStoreFileBlobsWithHttpInfoAsync(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Fetch a list of files in store
         /// </summary>
@@ -1970,47 +1970,47 @@ namespace BackendAPI.Api
         }
 
         /// <summary>
-        /// Request download URL for the binary blob associated with a particular hash 
+        /// Request download URL for the binary blob associated with a particular store/file/blob-id 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the file</param>
         /// <param name="fileId">ID of the file</param>
-        /// <param name="hashId">ID of the hash</param>
+        /// <param name="blobId">ID of the blob</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>GetStoreFileHashDownloadUrlResponse</returns>
-        public GetStoreFileHashDownloadUrlResponse GetStoreFileHashDownloadUrl(string storeId, string fileId, string hashId, int operationIndex = 0)
+        /// <returns>GetStoreFileBlobDownloadUrlResponse</returns>
+        public GetStoreFileBlobDownloadUrlResponse GetStoreFileBlobDownloadUrl(string storeId, string fileId, string blobId, int operationIndex = 0)
         {
-            BackendAPI.Client.ApiResponse<GetStoreFileHashDownloadUrlResponse> localVarResponse = GetStoreFileHashDownloadUrlWithHttpInfo(storeId, fileId, hashId);
+            BackendAPI.Client.ApiResponse<GetStoreFileBlobDownloadUrlResponse> localVarResponse = GetStoreFileBlobDownloadUrlWithHttpInfo(storeId, fileId, blobId);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        /// Request download URL for the binary blob associated with a particular hash 
+        /// Request download URL for the binary blob associated with a particular store/file/blob-id 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the file</param>
         /// <param name="fileId">ID of the file</param>
-        /// <param name="hashId">ID of the hash</param>
+        /// <param name="blobId">ID of the blob</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of GetStoreFileHashDownloadUrlResponse</returns>
-        public BackendAPI.Client.ApiResponse<GetStoreFileHashDownloadUrlResponse> GetStoreFileHashDownloadUrlWithHttpInfo(string storeId, string fileId, string hashId, int operationIndex = 0)
+        /// <returns>ApiResponse of GetStoreFileBlobDownloadUrlResponse</returns>
+        public BackendAPI.Client.ApiResponse<GetStoreFileBlobDownloadUrlResponse> GetStoreFileBlobDownloadUrlWithHttpInfo(string storeId, string fileId, string blobId, int operationIndex = 0)
         {
             // verify the required parameter 'storeId' is set
             if (storeId == null)
             {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->GetStoreFileHashDownloadUrl");
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->GetStoreFileBlobDownloadUrl");
             }
 
             // verify the required parameter 'fileId' is set
             if (fileId == null)
             {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'fileId' when calling DefaultApi->GetStoreFileHashDownloadUrl");
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'fileId' when calling DefaultApi->GetStoreFileBlobDownloadUrl");
             }
 
-            // verify the required parameter 'hashId' is set
-            if (hashId == null)
+            // verify the required parameter 'blobId' is set
+            if (blobId == null)
             {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'hashId' when calling DefaultApi->GetStoreFileHashDownloadUrl");
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'blobId' when calling DefaultApi->GetStoreFileBlobDownloadUrl");
             }
 
             BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
@@ -2037,9 +2037,9 @@ namespace BackendAPI.Api
 
             localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
             localVarRequestOptions.PathParameters.Add("fileId", BackendAPI.Client.ClientUtils.ParameterToString(fileId)); // path parameter
-            localVarRequestOptions.PathParameters.Add("hashId", BackendAPI.Client.ClientUtils.ParameterToString(hashId)); // path parameter
+            localVarRequestOptions.PathParameters.Add("blobId", BackendAPI.Client.ClientUtils.ParameterToString(blobId)); // path parameter
 
-            localVarRequestOptions.Operation = "DefaultApi.GetStoreFileHashDownloadUrl";
+            localVarRequestOptions.Operation = "DefaultApi.GetStoreFileBlobDownloadUrl";
             localVarRequestOptions.OperationIndex = operationIndex;
 
             // authentication (emailAndPat) required
@@ -2050,10 +2050,10 @@ namespace BackendAPI.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<GetStoreFileHashDownloadUrlResponse>("/stores/{storeId}/files/{fileId}/hashes/{hashId}/getDownloadUrl", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<GetStoreFileBlobDownloadUrlResponse>("/stores/{storeId}/files/{fileId}/blobs/{blobId}/getDownloadUrl", localVarRequestOptions, this.Configuration);
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("GetStoreFileHashDownloadUrl", localVarResponse);
+                Exception _exception = this.ExceptionFactory("GetStoreFileBlobDownloadUrl", localVarResponse);
                 if (_exception != null)
                 {
                     throw _exception;
@@ -2064,49 +2064,49 @@ namespace BackendAPI.Api
         }
 
         /// <summary>
-        /// Request download URL for the binary blob associated with a particular hash 
+        /// Request download URL for the binary blob associated with a particular store/file/blob-id 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the file</param>
         /// <param name="fileId">ID of the file</param>
-        /// <param name="hashId">ID of the hash</param>
+        /// <param name="blobId">ID of the blob</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of GetStoreFileHashDownloadUrlResponse</returns>
-        public async System.Threading.Tasks.Task<GetStoreFileHashDownloadUrlResponse> GetStoreFileHashDownloadUrlAsync(string storeId, string fileId, string hashId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        /// <returns>Task of GetStoreFileBlobDownloadUrlResponse</returns>
+        public async System.Threading.Tasks.Task<GetStoreFileBlobDownloadUrlResponse> GetStoreFileBlobDownloadUrlAsync(string storeId, string fileId, string blobId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            BackendAPI.Client.ApiResponse<GetStoreFileHashDownloadUrlResponse> localVarResponse = await GetStoreFileHashDownloadUrlWithHttpInfoAsync(storeId, fileId, hashId, operationIndex, cancellationToken).ConfigureAwait(false);
+            BackendAPI.Client.ApiResponse<GetStoreFileBlobDownloadUrlResponse> localVarResponse = await GetStoreFileBlobDownloadUrlWithHttpInfoAsync(storeId, fileId, blobId, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        /// Request download URL for the binary blob associated with a particular hash 
+        /// Request download URL for the binary blob associated with a particular store/file/blob-id 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the file</param>
         /// <param name="fileId">ID of the file</param>
-        /// <param name="hashId">ID of the hash</param>
+        /// <param name="blobId">ID of the blob</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (GetStoreFileHashDownloadUrlResponse)</returns>
-        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetStoreFileHashDownloadUrlResponse>> GetStoreFileHashDownloadUrlWithHttpInfoAsync(string storeId, string fileId, string hashId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        /// <returns>Task of ApiResponse (GetStoreFileBlobDownloadUrlResponse)</returns>
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetStoreFileBlobDownloadUrlResponse>> GetStoreFileBlobDownloadUrlWithHttpInfoAsync(string storeId, string fileId, string blobId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'storeId' is set
             if (storeId == null)
             {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->GetStoreFileHashDownloadUrl");
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->GetStoreFileBlobDownloadUrl");
             }
 
             // verify the required parameter 'fileId' is set
             if (fileId == null)
             {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'fileId' when calling DefaultApi->GetStoreFileHashDownloadUrl");
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'fileId' when calling DefaultApi->GetStoreFileBlobDownloadUrl");
             }
 
-            // verify the required parameter 'hashId' is set
-            if (hashId == null)
+            // verify the required parameter 'blobId' is set
+            if (blobId == null)
             {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'hashId' when calling DefaultApi->GetStoreFileHashDownloadUrl");
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'blobId' when calling DefaultApi->GetStoreFileBlobDownloadUrl");
             }
 
 
@@ -2134,9 +2134,9 @@ namespace BackendAPI.Api
 
             localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
             localVarRequestOptions.PathParameters.Add("fileId", BackendAPI.Client.ClientUtils.ParameterToString(fileId)); // path parameter
-            localVarRequestOptions.PathParameters.Add("hashId", BackendAPI.Client.ClientUtils.ParameterToString(hashId)); // path parameter
+            localVarRequestOptions.PathParameters.Add("blobId", BackendAPI.Client.ClientUtils.ParameterToString(blobId)); // path parameter
 
-            localVarRequestOptions.Operation = "DefaultApi.GetStoreFileHashDownloadUrl";
+            localVarRequestOptions.Operation = "DefaultApi.GetStoreFileBlobDownloadUrl";
             localVarRequestOptions.OperationIndex = operationIndex;
 
             // authentication (emailAndPat) required
@@ -2147,11 +2147,11 @@ namespace BackendAPI.Api
             }
 
             // make the HTTP request
-            var localVarResponse = await this.AsynchronousClient.GetAsync<GetStoreFileHashDownloadUrlResponse>("/stores/{storeId}/files/{fileId}/hashes/{hashId}/getDownloadUrl", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<GetStoreFileBlobDownloadUrlResponse>("/stores/{storeId}/files/{fileId}/blobs/{blobId}/getDownloadUrl", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("GetStoreFileHashDownloadUrl", localVarResponse);
+                Exception _exception = this.ExceptionFactory("GetStoreFileBlobDownloadUrl", localVarResponse);
                 if (_exception != null)
                 {
                     throw _exception;
@@ -2162,7 +2162,7 @@ namespace BackendAPI.Api
         }
 
         /// <summary>
-        /// Fetch a list of hashes for a specific file in store 
+        /// Fetch a list of blobs for a specific file in store 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the file</param>
@@ -2170,15 +2170,15 @@ namespace BackendAPI.Api
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>GetStoreFileHashesResponse</returns>
-        public GetStoreFileHashesResponse GetStoreFileHashes(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0)
+        /// <returns>GetStoreFileBlobsResponse</returns>
+        public GetStoreFileBlobsResponse GetStoreFileBlobs(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0)
         {
-            BackendAPI.Client.ApiResponse<GetStoreFileHashesResponse> localVarResponse = GetStoreFileHashesWithHttpInfo(storeId, fileId, offset, limit);
+            BackendAPI.Client.ApiResponse<GetStoreFileBlobsResponse> localVarResponse = GetStoreFileBlobsWithHttpInfo(storeId, fileId, offset, limit);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        /// Fetch a list of hashes for a specific file in store 
+        /// Fetch a list of blobs for a specific file in store 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the file</param>
@@ -2186,19 +2186,19 @@ namespace BackendAPI.Api
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of GetStoreFileHashesResponse</returns>
-        public BackendAPI.Client.ApiResponse<GetStoreFileHashesResponse> GetStoreFileHashesWithHttpInfo(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0)
+        /// <returns>ApiResponse of GetStoreFileBlobsResponse</returns>
+        public BackendAPI.Client.ApiResponse<GetStoreFileBlobsResponse> GetStoreFileBlobsWithHttpInfo(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0)
         {
             // verify the required parameter 'storeId' is set
             if (storeId == null)
             {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->GetStoreFileHashes");
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->GetStoreFileBlobs");
             }
 
             // verify the required parameter 'fileId' is set
             if (fileId == null)
             {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'fileId' when calling DefaultApi->GetStoreFileHashes");
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'fileId' when calling DefaultApi->GetStoreFileBlobs");
             }
 
             BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
@@ -2234,7 +2234,7 @@ namespace BackendAPI.Api
                 localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "limit", limit));
             }
 
-            localVarRequestOptions.Operation = "DefaultApi.GetStoreFileHashes";
+            localVarRequestOptions.Operation = "DefaultApi.GetStoreFileBlobs";
             localVarRequestOptions.OperationIndex = operationIndex;
 
             // authentication (emailAndPat) required
@@ -2245,10 +2245,10 @@ namespace BackendAPI.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<GetStoreFileHashesResponse>("/stores/{storeId}/files/{fileId}/hashes", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<GetStoreFileBlobsResponse>("/stores/{storeId}/files/{fileId}/blobs", localVarRequestOptions, this.Configuration);
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("GetStoreFileHashes", localVarResponse);
+                Exception _exception = this.ExceptionFactory("GetStoreFileBlobs", localVarResponse);
                 if (_exception != null)
                 {
                     throw _exception;
@@ -2259,7 +2259,7 @@ namespace BackendAPI.Api
         }
 
         /// <summary>
-        /// Fetch a list of hashes for a specific file in store 
+        /// Fetch a list of blobs for a specific file in store 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the file</param>
@@ -2268,15 +2268,15 @@ namespace BackendAPI.Api
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of GetStoreFileHashesResponse</returns>
-        public async System.Threading.Tasks.Task<GetStoreFileHashesResponse> GetStoreFileHashesAsync(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        /// <returns>Task of GetStoreFileBlobsResponse</returns>
+        public async System.Threading.Tasks.Task<GetStoreFileBlobsResponse> GetStoreFileBlobsAsync(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            BackendAPI.Client.ApiResponse<GetStoreFileHashesResponse> localVarResponse = await GetStoreFileHashesWithHttpInfoAsync(storeId, fileId, offset, limit, operationIndex, cancellationToken).ConfigureAwait(false);
+            BackendAPI.Client.ApiResponse<GetStoreFileBlobsResponse> localVarResponse = await GetStoreFileBlobsWithHttpInfoAsync(storeId, fileId, offset, limit, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        /// Fetch a list of hashes for a specific file in store 
+        /// Fetch a list of blobs for a specific file in store 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the file</param>
@@ -2285,19 +2285,19 @@ namespace BackendAPI.Api
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (GetStoreFileHashesResponse)</returns>
-        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetStoreFileHashesResponse>> GetStoreFileHashesWithHttpInfoAsync(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        /// <returns>Task of ApiResponse (GetStoreFileBlobsResponse)</returns>
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetStoreFileBlobsResponse>> GetStoreFileBlobsWithHttpInfoAsync(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'storeId' is set
             if (storeId == null)
             {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->GetStoreFileHashes");
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'storeId' when calling DefaultApi->GetStoreFileBlobs");
             }
 
             // verify the required parameter 'fileId' is set
             if (fileId == null)
             {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'fileId' when calling DefaultApi->GetStoreFileHashes");
+                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'fileId' when calling DefaultApi->GetStoreFileBlobs");
             }
 
 
@@ -2334,7 +2334,7 @@ namespace BackendAPI.Api
                 localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "limit", limit));
             }
 
-            localVarRequestOptions.Operation = "DefaultApi.GetStoreFileHashes";
+            localVarRequestOptions.Operation = "DefaultApi.GetStoreFileBlobs";
             localVarRequestOptions.OperationIndex = operationIndex;
 
             // authentication (emailAndPat) required
@@ -2345,11 +2345,11 @@ namespace BackendAPI.Api
             }
 
             // make the HTTP request
-            var localVarResponse = await this.AsynchronousClient.GetAsync<GetStoreFileHashesResponse>("/stores/{storeId}/files/{fileId}/hashes", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<GetStoreFileBlobsResponse>("/stores/{storeId}/files/{fileId}/blobs", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("GetStoreFileHashes", localVarResponse);
+                Exception _exception = this.ExceptionFactory("GetStoreFileBlobs", localVarResponse);
                 if (_exception != null)
                 {
                     throw _exception;

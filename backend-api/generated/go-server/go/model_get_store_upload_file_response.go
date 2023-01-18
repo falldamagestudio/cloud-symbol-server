@@ -13,7 +13,7 @@ type GetStoreUploadFileResponse struct {
 
 	FileName string `json:"fileName"`
 
-	Hash string `json:"hash"`
+	BlobIdentifier string `json:"blobIdentifier"`
 
 	Status StoreUploadFileStatus `json:"status"`
 }
@@ -22,7 +22,7 @@ type GetStoreUploadFileResponse struct {
 func AssertGetStoreUploadFileResponseRequired(obj GetStoreUploadFileResponse) error {
 	elements := map[string]interface{}{
 		"fileName": obj.FileName,
-		"hash": obj.Hash,
+		"blobIdentifier": obj.BlobIdentifier,
 		"status": obj.Status,
 	}
 	for name, el := range elements {

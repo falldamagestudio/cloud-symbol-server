@@ -96,18 +96,18 @@ func TestCreateStoreUploadWithoutProgressSucceeds(t *testing.T) {
 	buildId := "test build id"
 
 	fileName1 := "file1"
-	hash1 := "hash1"
+	blobIdentifier1 := "blobIdentifier1"
 	fileName2 := "file2"
-	hash2 := "hash2"
+	blobIdentifier2 := "blobIdentifier2"
 
 	files := []openapi_client.CreateStoreUploadFileRequest{
 		{
-			FileName: fileName1,
-			Hash:     hash1,
+			FileName:       fileName1,
+			BlobIdentifier: blobIdentifier1,
 		},
 		{
-			FileName: fileName2,
-			Hash:     hash2,
+			FileName:       fileName2,
+			BlobIdentifier: blobIdentifier2,
 		},
 	}
 
@@ -174,18 +174,18 @@ func TestCreateStoreUploadWithProgressSucceeds(t *testing.T) {
 	buildId := "test build id"
 
 	fileName1 := "file1"
-	hash1 := "hash1"
+	blobIdentifier1 := "blobIdentifier1"
 	fileName2 := "file2"
-	hash2 := "hash2"
+	blobIdentifier2 := "blobIdentifier2"
 
 	files := []openapi_client.CreateStoreUploadFileRequest{
 		{
-			FileName: fileName1,
-			Hash:     hash1,
+			FileName:       fileName1,
+			BlobIdentifier: blobIdentifier1,
 		},
 		{
-			FileName: fileName2,
-			Hash:     hash2,
+			FileName:       fileName2,
+			BlobIdentifier: blobIdentifier2,
 		},
 	}
 
@@ -342,18 +342,18 @@ func TestCreateStoreUploadWithProgressAndAbortSucceeds(t *testing.T) {
 	buildId := "test build id"
 
 	fileName1 := "file1"
-	hash1 := "hash1"
+	blobIdentifier1 := "blobIdentifier1"
 	fileName2 := "file2"
-	hash2 := "hash2"
+	blobIdentifier2 := "blobIdentifier2"
 
 	files := []openapi_client.CreateStoreUploadFileRequest{
 		{
-			FileName: fileName1,
-			Hash:     hash1,
+			FileName:       fileName1,
+			BlobIdentifier: blobIdentifier1,
 		},
 		{
-			FileName: fileName2,
-			Hash:     hash2,
+			FileName:       fileName2,
+			BlobIdentifier: blobIdentifier2,
 		},
 	}
 

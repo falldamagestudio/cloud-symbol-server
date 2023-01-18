@@ -17,7 +17,7 @@ import (
 // GetStoreUploadFileResponse struct for GetStoreUploadFileResponse
 type GetStoreUploadFileResponse struct {
 	FileName string `json:"fileName"`
-	Hash string `json:"hash"`
+	BlobIdentifier string `json:"blobIdentifier"`
 	Status StoreUploadFileStatus `json:"status"`
 }
 
@@ -25,10 +25,10 @@ type GetStoreUploadFileResponse struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetStoreUploadFileResponse(fileName string, hash string, status StoreUploadFileStatus) *GetStoreUploadFileResponse {
+func NewGetStoreUploadFileResponse(fileName string, blobIdentifier string, status StoreUploadFileStatus) *GetStoreUploadFileResponse {
 	this := GetStoreUploadFileResponse{}
 	this.FileName = fileName
-	this.Hash = hash
+	this.BlobIdentifier = blobIdentifier
 	this.Status = status
 	return &this
 }
@@ -65,28 +65,28 @@ func (o *GetStoreUploadFileResponse) SetFileName(v string) {
 	o.FileName = v
 }
 
-// GetHash returns the Hash field value
-func (o *GetStoreUploadFileResponse) GetHash() string {
+// GetBlobIdentifier returns the BlobIdentifier field value
+func (o *GetStoreUploadFileResponse) GetBlobIdentifier() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.Hash
+	return o.BlobIdentifier
 }
 
-// GetHashOk returns a tuple with the Hash field value
+// GetBlobIdentifierOk returns a tuple with the BlobIdentifier field value
 // and a boolean to check if the value has been set.
-func (o *GetStoreUploadFileResponse) GetHashOk() (*string, bool) {
+func (o *GetStoreUploadFileResponse) GetBlobIdentifierOk() (*string, bool) {
 	if o == nil {
     return nil, false
 	}
-	return &o.Hash, true
+	return &o.BlobIdentifier, true
 }
 
-// SetHash sets field value
-func (o *GetStoreUploadFileResponse) SetHash(v string) {
-	o.Hash = v
+// SetBlobIdentifier sets field value
+func (o *GetStoreUploadFileResponse) SetBlobIdentifier(v string) {
+	o.BlobIdentifier = v
 }
 
 // GetStatus returns the Status field value
@@ -119,7 +119,7 @@ func (o GetStoreUploadFileResponse) MarshalJSON() ([]byte, error) {
 		toSerialize["fileName"] = o.FileName
 	}
 	if true {
-		toSerialize["hash"] = o.Hash
+		toSerialize["blobIdentifier"] = o.BlobIdentifier
 	}
 	if true {
 		toSerialize["status"] = o.Status

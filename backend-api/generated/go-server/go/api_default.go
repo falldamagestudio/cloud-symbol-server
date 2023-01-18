@@ -87,16 +87,16 @@ func (c *DefaultApiController) Routes() Routes {
 			c.ExpireStoreUpload,
 		},
 		{
-			"GetStoreFileHashDownloadUrl",
+			"GetStoreFileBlobDownloadUrl",
 			strings.ToUpper("Get"),
-			"/stores/{storeId}/files/{fileId}/hashes/{hashId}/getDownloadUrl",
-			c.GetStoreFileHashDownloadUrl,
+			"/stores/{storeId}/files/{fileId}/blobs/{blobId}/getDownloadUrl",
+			c.GetStoreFileBlobDownloadUrl,
 		},
 		{
-			"GetStoreFileHashes",
+			"GetStoreFileBlobs",
 			strings.ToUpper("Get"),
-			"/stores/{storeId}/files/{fileId}/hashes",
-			c.GetStoreFileHashes,
+			"/stores/{storeId}/files/{fileId}/blobs",
+			c.GetStoreFileBlobs,
 		},
 		{
 			"GetStoreFiles",
@@ -267,16 +267,16 @@ func (c *DefaultApiController) ExpireStoreUpload(w http.ResponseWriter, r *http.
 
 }
 
-// GetStoreFileHashDownloadUrl - Request download URL for the binary blob associated with a particular hash
-func (c *DefaultApiController) GetStoreFileHashDownloadUrl(w http.ResponseWriter, r *http.Request) {
+// GetStoreFileBlobDownloadUrl - Request download URL for the binary blob associated with a particular store/file/blob-id
+func (c *DefaultApiController) GetStoreFileBlobDownloadUrl(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	storeIdParam := params["storeId"]
 	
 	fileIdParam := params["fileId"]
 	
-	hashIdParam := params["hashId"]
+	blobIdParam := params["blobId"]
 	
-	result, err := c.service.GetStoreFileHashDownloadUrl(r.Context(), storeIdParam, fileIdParam, hashIdParam)
+	result, err := c.service.GetStoreFileBlobDownloadUrl(r.Context(), storeIdParam, fileIdParam, blobIdParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)
@@ -287,8 +287,8 @@ func (c *DefaultApiController) GetStoreFileHashDownloadUrl(w http.ResponseWriter
 
 }
 
-// GetStoreFileHashes - Fetch a list of hashes for a specific file in store
-func (c *DefaultApiController) GetStoreFileHashes(w http.ResponseWriter, r *http.Request) {
+// GetStoreFileBlobs - Fetch a list of blobs for a specific file in store
+func (c *DefaultApiController) GetStoreFileBlobs(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	query := r.URL.Query()
 	storeIdParam := params["storeId"]
@@ -305,7 +305,7 @@ func (c *DefaultApiController) GetStoreFileHashes(w http.ResponseWriter, r *http
 		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
 		return
 	}
-	result, err := c.service.GetStoreFileHashes(r.Context(), storeIdParam, fileIdParam, offsetParam, limitParam)
+	result, err := c.service.GetStoreFileBlobs(r.Context(), storeIdParam, fileIdParam, offsetParam, limitParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)

@@ -61,35 +61,35 @@ namespace CLI
             };
             filesCommand.Handler = CommandHandler.Create(() => filesCommand.Invoke("--help"));
 
-            // Hashes commands
+            // Blobs commands
 
-            Command listHashesCommand = new Command("list", "List hashes of files present within Cloud Symbol Server") {
+            Command listBlobsCommand = new Command("list", "List blobs of files present within Cloud Symbol Server") {
                 new Argument<string>("store", "Name of store containing file"),
                 new Argument<string>("file", "Name of file"),
             };
-            listHashesCommand.Handler = CommandHandler.Create(async (GlobalOptions globalOptions, string store, string file)
-                => { return await CLI.ListHashes.DoListHashes(globalOptions, store, file); });
+            listBlobsCommand.Handler = CommandHandler.Create(async (GlobalOptions globalOptions, string store, string file)
+                => { return await CLI.ListBlobs.DoListBlobs(globalOptions, store, file); });
 
-            Command computeHashesCommand = new Command("compute", "Compute hashes for local files") {
-                new Argument<string>("patterns", "Globbing patterns of files to compute hashes for") { Arity = ArgumentArity.OneOrMore },
+            Command computeBlobsCommand = new Command("compute", "Compute blobs for local files") {
+                new Argument<string>("patterns", "Globbing patterns of files to compute blobs for") { Arity = ArgumentArity.OneOrMore },
             };
-            computeHashesCommand.Handler = CommandHandler.Create((string[] patterns)
+            computeBlobsCommand.Handler = CommandHandler.Create((string[] patterns)
                 => { return CLI.ComputeHashes.DoComputeHashes(patterns); });
 
-            Command downloadHashCommand = new Command("download", "Download the content of a particular file-hash") {
+            Command downloadBlobCommand = new Command("download", "Download the content of a particular file-blob") {
                 new Argument<string>("store", "Name of store containing file"),
                 new Argument<string>("file", "Name of file"),
-                new Argument<string>("hash", "Name of hash"),
+                new Argument<string>("blob", "Name of blob"),
             };
-            downloadHashCommand.Handler = CommandHandler.Create((GlobalOptions globalOptions, string store, string file, string hash)
-                => { return CLI.DownloadHash.DoDownloadHash(globalOptions, store, file, hash); });
+            downloadBlobCommand.Handler = CommandHandler.Create((GlobalOptions globalOptions, string store, string file, string blob)
+                => { return CLI.DownloadBlob.DoDownloadBlob(globalOptions, store, file, blob); });
 
-            Command hashesCommand = new Command("file-hashes", "Manage hashes of files within Cloud Symbol Server") {
-                listHashesCommand,
-                computeHashesCommand,
-                downloadHashCommand,
+            Command blobsCommand = new Command("file-blobs", "Manage blobs of files within Cloud Symbol Server") {
+                listBlobsCommand,
+                computeBlobsCommand,
+                downloadBlobCommand,
             };
-            hashesCommand.Handler = CommandHandler.Create(() => hashesCommand.Invoke("--help"));
+            blobsCommand.Handler = CommandHandler.Create(() => blobsCommand.Invoke("--help"));
 
             // Uploads commands
 
@@ -128,7 +128,7 @@ namespace CLI
                 storesCommand,
                 uploadsCommand,
                 filesCommand,
-                hashesCommand,
+                blobsCommand,
 
                 // Global options, available to all subcommands
                 new Option<string>("--service-url", () => ConfigFile.GetOrDefault("service-url", "")),

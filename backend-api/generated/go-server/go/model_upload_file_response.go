@@ -13,7 +13,7 @@ type UploadFileResponse struct {
 
 	FileName string `json:"fileName"`
 
-	Hash string `json:"hash"`
+	BlobIdentifier string `json:"blobIdentifier"`
 
 	// Short-lived signed URL where the client should upload the file to, or blank if the file already exists in the storage backend
 	Url string `json:"url,omitempty"`
@@ -23,7 +23,7 @@ type UploadFileResponse struct {
 func AssertUploadFileResponseRequired(obj UploadFileResponse) error {
 	elements := map[string]interface{}{
 		"fileName": obj.FileName,
-		"hash": obj.Hash,
+		"blobIdentifier": obj.BlobIdentifier,
 	}
 	for name, el := range elements {
 		if isZero := IsZeroValue(el); isZero {

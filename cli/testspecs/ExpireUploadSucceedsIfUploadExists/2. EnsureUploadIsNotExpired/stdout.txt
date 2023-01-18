@@ -3,5 +3,5 @@ Uploads in store example:
     Status: Completed
     Description: testupload
     Build ID: build 432
-      FileName: example.exe, Hash: 61C0D4547000, Status: Completed
-      FileName: example.pdb, Hash: 7F416863ABF34C3E894BAD1739BAA5571, Status: Completed
+      FileName: example.exe, BlobIdentifier: 61C0D4547000, Status: Completed
+      FileName: example.pdb, BlobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571, Status: Completed

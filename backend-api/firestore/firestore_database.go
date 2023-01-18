@@ -16,8 +16,8 @@ const (
 	storesCollectionName               = "stores"
 	storeUploadsCollectionName         = "uploads"
 	storeFilesCollectionName           = "files"
-	storeFileHashesCollectionName      = "hashes"
-	storeFileHashUploadsCollectionName = "uploads"
+	storeFileBlobsCollectionName       = "hashes"
+	storeFileBlobUploadsCollectionName = "uploads"
 )
 
 type ErrFirestore struct {
@@ -200,57 +200,57 @@ func deleteStoreFileEntry(client *firestore.Client, tx *firestore.Transaction, s
 	return err
 }
 
-func getStoreFileHashEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string, hashId string) (*StoreFileHashEntry, error) {
+func getStoreFileBlobEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string, hashId string) (*StoreFileBlobEntry, error) {
 
-	storeFileHashRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileHashesCollectionName).Doc(hashId)
-	storeFileHashDoc, err := tx.Get(storeFileHashRef)
+	storeFileBlobRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileBlobsCollectionName).Doc(hashId)
+	storeFileBlobDoc, err := tx.Get(storeFileBlobRef)
 	if err != nil {
 		return nil, err
 	}
 
-	var storeFileHashEntry StoreFileHashEntry
-	if err = storeFileHashDoc.DataTo(&storeFileHashEntry); err != nil {
+	var storeFileBlobEntry StoreFileBlobEntry
+	if err = storeFileBlobDoc.DataTo(&storeFileBlobEntry); err != nil {
 		return nil, err
 	}
 
-	return &storeFileHashEntry, nil
+	return &storeFileBlobEntry, nil
 }
 
-func updateStoreFileHashEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string, hashId string, content *StoreFileHashEntry) error {
-	storeFileHashDocRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileHashesCollectionName).Doc(hashId)
-	err := tx.Set(storeFileHashDocRef, content)
+func updateStoreFileBlobEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string, hashId string, content *StoreFileBlobEntry) error {
+	storeFileBlobDocRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileBlobsCollectionName).Doc(hashId)
+	err := tx.Set(storeFileBlobDocRef, content)
 	return err
 }
 
-func deleteStoreFileHashEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string, hashId string) error {
-	storeFileHashDocRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileHashesCollectionName).Doc(hashId)
-	err := tx.Delete(storeFileHashDocRef)
+func deleteStoreFileBlobEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string, hashId string) error {
+	storeFileBlobDocRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileBlobsCollectionName).Doc(hashId)
+	err := tx.Delete(storeFileBlobDocRef)
 	return err
 }
 
-func createStoreFileHashUploadEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string, hashId string, uploadId int64, content *StoreFileHashUploadEntry) error {
-	storeFileHashUploadDocRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileHashesCollectionName).Doc(hashId).Collection(storeFileHashUploadsCollectionName).Doc(fmt.Sprint(uploadId))
-	err := tx.Create(storeFileHashUploadDocRef, content)
+func createStoreFileBlobUploadEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string, hashId string, uploadId int64, content *StoreFileBlobUploadEntry) error {
+	storeFileBlobUploadDocRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileBlobsCollectionName).Doc(hashId).Collection(storeFileBlobUploadsCollectionName).Doc(fmt.Sprint(uploadId))
+	err := tx.Create(storeFileBlobUploadDocRef, content)
 	return err
 }
 
-func deleteStoreFileHashUploadEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string, hashId string, uploadId string) error {
-	storeFileHashUploadDocRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileHashesCollectionName).Doc(hashId).Collection(storeFileHashUploadsCollectionName).Doc(uploadId)
-	err := tx.Delete(storeFileHashUploadDocRef)
+func deleteStoreFileBlobUploadEntry(client *firestore.Client, tx *firestore.Transaction, storeId string, fileId string, hashId string, uploadId string) error {
+	storeFileBlobUploadDocRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileBlobsCollectionName).Doc(hashId).Collection(storeFileBlobUploadsCollectionName).Doc(uploadId)
+	err := tx.Delete(storeFileBlobUploadDocRef)
 	return err
 }
 
-func getStoreFileHashUploadIds(ctx context.Context, client *firestore.Client, storeId string, fileId string, hashId string) ([]string, error) {
+func getStoreFileBlobUploadIds(ctx context.Context, client *firestore.Client, storeId string, fileId string, hashId string) ([]string, error) {
 
-	storeFileHashUploadDocSnapshots, err := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileHashesCollectionName).Doc(hashId).Collection(storeFileHashUploadsCollectionName).Documents(ctx).GetAll()
+	storeFileBlobUploadDocSnapshots, err := client.Collection(storesCollectionName).Doc(storeId).Collection(storeFilesCollectionName).Doc(fileId).Collection(storeFileBlobsCollectionName).Doc(hashId).Collection(storeFileBlobUploadsCollectionName).Documents(ctx).GetAll()
 	if err != nil {
 		return nil, err
 	}
 
-	uploadIds := make([]string, len(storeFileHashUploadDocSnapshots))
+	uploadIds := make([]string, len(storeFileBlobUploadDocSnapshots))
 
-	for uploadIndex, storeFileHashUploadDocSnapshot := range storeFileHashUploadDocSnapshots {
-		uploadIds[uploadIndex] = storeFileHashUploadDocSnapshot.Ref.ID
+	for uploadIndex, storeFileBlobUploadDocSnapshot := range storeFileBlobUploadDocSnapshots {
+		uploadIds[uploadIndex] = storeFileBlobUploadDocSnapshot.Ref.ID
 	}
 
 	return uploadIds, nil

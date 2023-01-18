@@ -84,8 +84,8 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**DeleteStore**](docs/DefaultApi.md#deletestore) | **Delete** /stores/{storeId} | Delete an existing store
 *DefaultApi* | [**DeleteToken**](docs/DefaultApi.md#deletetoken) | **Delete** /tokens/{token} | Delete a token for current user
 *DefaultApi* | [**ExpireStoreUpload**](docs/DefaultApi.md#expirestoreupload) | **Post** /stores/{storeId}/uploads/{uploadId}/expire | Expire store upload and consider files for GC
-*DefaultApi* | [**GetStoreFileHashDownloadUrl**](docs/DefaultApi.md#getstorefilehashdownloadurl) | **Get** /stores/{storeId}/files/{fileId}/hashes/{hashId}/getDownloadUrl | Request download URL for the binary blob associated with a particular hash
-*DefaultApi* | [**GetStoreFileHashes**](docs/DefaultApi.md#getstorefilehashes) | **Get** /stores/{storeId}/files/{fileId}/hashes | Fetch a list of hashes for a specific file in store
+*DefaultApi* | [**GetStoreFileBlobDownloadUrl**](docs/DefaultApi.md#getstorefileblobdownloadurl) | **Get** /stores/{storeId}/files/{fileId}/blobs/{blobId}/getDownloadUrl | Request download URL for the binary blob associated with a particular store/file/blob-id
+*DefaultApi* | [**GetStoreFileBlobs**](docs/DefaultApi.md#getstorefileblobs) | **Get** /stores/{storeId}/files/{fileId}/blobs | Fetch a list of blobs for a specific file in store
 *DefaultApi* | [**GetStoreFiles**](docs/DefaultApi.md#getstorefiles) | **Get** /stores/{storeId}/files | Fetch a list of files in store
 *DefaultApi* | [**GetStoreUpload**](docs/DefaultApi.md#getstoreupload) | **Get** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
 *DefaultApi* | [**GetStoreUploads**](docs/DefaultApi.md#getstoreuploads) | **Get** /stores/{storeId}/uploads | Fetch a list of uploads in store
@@ -104,9 +104,9 @@ Class | Method | HTTP request | Description
  - [CreateStoreUploadRequest](docs/CreateStoreUploadRequest.md)
  - [CreateStoreUploadResponse](docs/CreateStoreUploadResponse.md)
  - [CreateTokenResponse](docs/CreateTokenResponse.md)
- - [GetStoreFileHashDownloadUrlResponse](docs/GetStoreFileHashDownloadUrlResponse.md)
- - [GetStoreFileHashResponse](docs/GetStoreFileHashResponse.md)
- - [GetStoreFileHashesResponse](docs/GetStoreFileHashesResponse.md)
+ - [GetStoreFileBlobDownloadUrlResponse](docs/GetStoreFileBlobDownloadUrlResponse.md)
+ - [GetStoreFileBlobResponse](docs/GetStoreFileBlobResponse.md)
+ - [GetStoreFileBlobsResponse](docs/GetStoreFileBlobsResponse.md)
  - [GetStoreFilesResponse](docs/GetStoreFilesResponse.md)
  - [GetStoreUploadFileResponse](docs/GetStoreUploadFileResponse.md)
  - [GetStoreUploadResponse](docs/GetStoreUploadResponse.md)
@@ -114,7 +114,7 @@ Class | Method | HTTP request | Description
  - [GetTokenResponse](docs/GetTokenResponse.md)
  - [MessageResponse](docs/MessageResponse.md)
  - [PaginationResponse](docs/PaginationResponse.md)
- - [StoreFileHashStatus](docs/StoreFileHashStatus.md)
+ - [StoreFileBlobStatus](docs/StoreFileBlobStatus.md)
  - [StoreUploadFileStatus](docs/StoreUploadFileStatus.md)
  - [StoreUploadStatus](docs/StoreUploadStatus.md)
  - [UpdateTokenRequest](docs/UpdateTokenRequest.md)

@@ -5,13 +5,13 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **FileName** | **string** |  | 
-**Hash** | **string** |  | 
+**BlobIdentifier** | **string** |  | 
 
 ## Methods
 
 ### NewCreateStoreUploadFileRequest
 
-`func NewCreateStoreUploadFileRequest(fileName string, hash string, ) *CreateStoreUploadFileRequest`
+`func NewCreateStoreUploadFileRequest(fileName string, blobIdentifier string, ) *CreateStoreUploadFileRequest`
 
 NewCreateStoreUploadFileRequest instantiates a new CreateStoreUploadFileRequest object
 This constructor will assign default values to properties that have it defined,
@@ -46,24 +46,24 @@ and a boolean to check if the value has been set.
 SetFileName sets FileName field to given value.
 
 
-### GetHash
+### GetBlobIdentifier
 
-`func (o *CreateStoreUploadFileRequest) GetHash() string`
+`func (o *CreateStoreUploadFileRequest) GetBlobIdentifier() string`
 
-GetHash returns the Hash field if non-nil, zero value otherwise.
+GetBlobIdentifier returns the BlobIdentifier field if non-nil, zero value otherwise.
 
-### GetHashOk
+### GetBlobIdentifierOk
 
-`func (o *CreateStoreUploadFileRequest) GetHashOk() (*string, bool)`
+`func (o *CreateStoreUploadFileRequest) GetBlobIdentifierOk() (*string, bool)`
 
-GetHashOk returns a tuple with the Hash field if it's non-nil, zero value otherwise
+GetBlobIdentifierOk returns a tuple with the BlobIdentifier field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetHash
+### SetBlobIdentifier
 
-`func (o *CreateStoreUploadFileRequest) SetHash(v string)`
+`func (o *CreateStoreUploadFileRequest) SetBlobIdentifier(v string)`
 
-SetHash sets Hash field to given value.
+SetBlobIdentifier sets BlobIdentifier field to given value.
 
 
 

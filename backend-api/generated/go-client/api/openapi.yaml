@@ -262,9 +262,9 @@ paths:
                 $ref: '#/components/schemas/messageResponse'
           description: No such store
       summary: Fetch a list of files in store
-  /stores/{storeId}/files/{fileId}/hashes:
+  /stores/{storeId}/files/{fileId}/blobs:
     get:
-      operationId: getStoreFileHashes
+      operationId: getStoreFileBlobs
       parameters:
       - description: ID of the store containing the file
         explode: false
@@ -308,7 +308,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getStoreFileHashesResponse'
+                $ref: '#/components/schemas/getStoreFileBlobsResponse'
           description: Success
         "401":
           content:
@@ -322,10 +322,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/messageResponse'
           description: No such store
-      summary: Fetch a list of hashes for a specific file in store
-  /stores/{storeId}/files/{fileId}/hashes/{hashId}/getDownloadUrl:
+      summary: Fetch a list of blobs for a specific file in store
+  /stores/{storeId}/files/{fileId}/blobs/{blobId}/getDownloadUrl:
     get:
-      operationId: getStoreFileHashDownloadUrl
+      operationId: getStoreFileBlobDownloadUrl
       parameters:
       - description: ID of the store containing the file
         explode: false
@@ -343,10 +343,10 @@ paths:
         schema:
           type: string
         style: simple
-      - description: ID of the hash
+      - description: ID of the blob
         explode: false
         in: path
-        name: hashId
+        name: blobId
         required: true
         schema:
           type: string
@@ -356,7 +356,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getStoreFileHashDownloadUrlResponse'
+                $ref: '#/components/schemas/getStoreFileBlobDownloadUrlResponse'
           description: Success
         "401":
           content:
@@ -371,7 +371,7 @@ paths:
                 $ref: '#/components/schemas/messageResponse'
           description: No such store
       summary: Request download URL for the binary blob associated with a particular
-        hash
+        store/file/blob-id
   /stores/{storeId}/uploads:
     get:
       operationId: getStoreUploads
@@ -680,7 +680,7 @@ components:
       - expired
       example: completed
       type: string
-    storeFileHashStatus:
+    storeFileBlobStatus:
       enum:
       - pending
       - present
@@ -781,12 +781,12 @@ components:
         fileName:
           example: Application.pdb
           type: string
-        hash:
+        blobIdentifier:
           example: 7F416863ABF34C3E894BAD1739BAA5571
           type: string
       required:
+      - blobIdentifier
       - fileName
-      - hash
       type: object
     getStoreUploadsResponse:
       example:
@@ -796,10 +796,10 @@ components:
         - description: Example application
           files:
           - fileName: Application.pdb
-            hash: 7F416863ABF34C3E894BAD1739BAA5571
+            blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
             status: status
           - fileName: Application.pdb
-            hash: 7F416863ABF34C3E894BAD1739BAA5571
+            blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
             status: status
           buildId: Build 432
           timestamp: 2019-10-12T07:20:50.52Z
@@ -807,10 +807,10 @@ components:
         - description: Example application
           files:
           - fileName: Application.pdb
-            hash: 7F416863ABF34C3E894BAD1739BAA5571
+            blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
             status: status
           - fileName: Application.pdb
-            hash: 7F416863ABF34C3E894BAD1739BAA5571
+            blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
             status: status
           buildId: Build 432
           timestamp: 2019-10-12T07:20:50.52Z
@@ -844,13 +844,13 @@ components:
       - files
       - pagination
       type: object
-    getStoreFileHashResponse:
+    getStoreFileBlobResponse:
       example:
         uploadTimestamp: 2019-10-12T07:20:50.52Z
-        hash: 7F416863ABF34C3E894BAD1739BAA5571
+        blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
         status: null
       properties:
-        hash:
+        blobIdentifier:
           example: 7F416863ABF34C3E894BAD1739BAA5571
           type: string
         uploadTimestamp:
@@ -858,35 +858,35 @@ components:
           example: 2019-10-12T07:20:50.52Z
           type: string
         status:
-          $ref: '#/components/schemas/storeFileHashStatus'
+          $ref: '#/components/schemas/storeFileBlobStatus'
       required:
-      - hash
+      - blobIdentifier
       - status
       - uploadTimestamp
       type: object
-    getStoreFileHashesResponse:
+    getStoreFileBlobsResponse:
       example:
+        blobs:
+        - uploadTimestamp: 2019-10-12T07:20:50.52Z
+          blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
+          status: null
+        - uploadTimestamp: 2019-10-12T07:20:50.52Z
+          blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
+          status: null
         pagination:
           total: 0
-        hashes:
-        - uploadTimestamp: 2019-10-12T07:20:50.52Z
-          hash: 7F416863ABF34C3E894BAD1739BAA5571
-          status: null
-        - uploadTimestamp: 2019-10-12T07:20:50.52Z
-          hash: 7F416863ABF34C3E894BAD1739BAA5571
-          status: null
       properties:
-        hashes:
+        blobs:
           items:
-            $ref: '#/components/schemas/getStoreFileHashResponse'
+            $ref: '#/components/schemas/getStoreFileBlobResponse'
           type: array
         pagination:
           $ref: '#/components/schemas/paginationResponse'
       required:
-      - hashes
+      - blobs
       - pagination
       type: object
-    getStoreFileHashDownloadUrlResponse:
+    getStoreFileBlobDownloadUrlResponse:
       example:
         method: GET
         url: https://storage.googleapis.com/test-cloud-symbol-server-symbols/stores/example2/example.exe/61C0D4547000/example.exe?Expires=1673733969&GoogleAccessId=backend-api%40test-cloud-symbol-server.iam.gserviceaccount.com&Signature=AwTZZt0J7bdDFYN7qAEf2H6%2FIWQjynTfMP76JAsVj80hK7NQEXswx68TEXNMhF6GXxgLBRA8hKcBMSIjfVcExUyWzLYl8GqWe4xc8z7TVpExAoQ0surYf6ULZrjP%2FPU62o01giCyAs1ZQtDLx40glG2hJIu0toBckUggT6blmISfZcfRKWvv7zask%2FHpeUPEHwhhooh%2FiyG3JKluB3BvNOnnLCpdOEznFLZLkVQbxASDZhFlM7NIOqQj1tX3v6Z9wNc0XjwTzTd7B4iAQ72JfQPhh%2FXedbqR9Bm0SA5xl4eeqNjZtmlCdqy4r%2BbsyBRnCeITF6u1wOXvw8dSLL4Hag%3D%3D
@@ -905,10 +905,10 @@ components:
       example:
         files:
         - fileName: Application.pdb
-          hash: 7F416863ABF34C3E894BAD1739BAA5571
+          blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
           url: https://storage.googleapis.com/storage/v1/b/example-bucket/o/stores/default/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
         - fileName: Application.pdb
-          hash: 7F416863ABF34C3E894BAD1739BAA5571
+          blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
           url: https://storage.googleapis.com/storage/v1/b/example-bucket/o/stores/default/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
         id: s4elWg054qyrpHCsHqLq
       properties:
@@ -926,13 +926,13 @@ components:
     uploadFileResponse:
       example:
         fileName: Application.pdb
-        hash: 7F416863ABF34C3E894BAD1739BAA5571
+        blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
         url: https://storage.googleapis.com/storage/v1/b/example-bucket/o/stores/default/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
       properties:
         fileName:
           example: Application.pdb
           type: string
-        hash:
+        blobIdentifier:
           example: 7F416863ABF34C3E894BAD1739BAA5571
           type: string
         url:
@@ -941,18 +941,18 @@ components:
           example: https://storage.googleapis.com/storage/v1/b/example-bucket/o/stores/default/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
           type: string
       required:
+      - blobIdentifier
       - fileName
-      - hash
       type: object
     getStoreUploadResponse:
       example:
         description: Example application
         files:
         - fileName: Application.pdb
-          hash: 7F416863ABF34C3E894BAD1739BAA5571
+          blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
           status: status
         - fileName: Application.pdb
-          hash: 7F416863ABF34C3E894BAD1739BAA5571
+          blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
           status: status
         buildId: Build 432
         timestamp: 2019-10-12T07:20:50.52Z
@@ -983,20 +983,20 @@ components:
     getStoreUploadFileResponse:
       example:
         fileName: Application.pdb
-        hash: 7F416863ABF34C3E894BAD1739BAA5571
+        blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
         status: status
       properties:
         fileName:
           example: Application.pdb
           type: string
-        hash:
+        blobIdentifier:
           example: 7F416863ABF34C3E894BAD1739BAA5571
           type: string
         status:
           $ref: '#/components/schemas/storeUploadFileStatus'
       required:
+      - blobIdentifier
       - fileName
-      - hash
       - status
       type: object
   securitySchemes:

@@ -237,10 +237,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/messageResponse'
 
-  /stores/{storeId}/files/{fileId}/hashes:
+  /stores/{storeId}/files/{fileId}/blobs:
     get:
-      summary: Fetch a list of hashes for a specific file in store
-      operationId: getStoreFileHashes
+      summary: Fetch a list of blobs for a specific file in store
+      operationId: getStoreFileBlobs
       parameters:
         - in: path
           name: storeId
@@ -278,7 +278,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getStoreFileHashesResponse'
+                $ref: '#/components/schemas/getStoreFileBlobsResponse'
 
         401:
           $ref: '#/components/responses/401'
@@ -290,10 +290,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/messageResponse'
 
-  /stores/{storeId}/files/{fileId}/hashes/{hashId}/getDownloadUrl:
+  /stores/{storeId}/files/{fileId}/blobs/{blobId}/getDownloadUrl:
     get:
-      summary: Request download URL for the binary blob associated with a particular hash
-      operationId: getStoreFileHashDownloadUrl
+      summary: Request download URL for the binary blob associated with a particular store/file/blob-id
+      operationId: getStoreFileBlobDownloadUrl
       parameters:
         - in: path
           name: storeId
@@ -308,11 +308,11 @@ paths:
           required: true
           description: ID of the file
         - in: path
-          name: hashId
+          name: blobId
           schema:
             type: string
           required: true
-          description: ID of the hash
+          description: ID of the blob
 
       responses:
         200:
@@ -320,7 +320,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getStoreFileHashDownloadUrlResponse'
+                $ref: '#/components/schemas/getStoreFileBlobDownloadUrlResponse'
 
         401:
           $ref: '#/components/responses/401'
@@ -614,7 +614,7 @@ components:
         - aborted
         - expired
 
-    storeFileHashStatus:
+    storeFileBlobStatus:
       type: string
       enum:
         - pending
@@ -724,12 +724,12 @@ components:
       type: object
       required:
         - fileName
-        - hash
+        - blobIdentifier
       properties:
         fileName:
           type: string
           example: Application.pdb
-        hash:
+        blobIdentifier:
           type: string
           example: 7F416863ABF34C3E894BAD1739BAA5571
 
@@ -759,14 +759,14 @@ components:
         pagination:
           $ref: '#/components/schemas/paginationResponse'
 
-    getStoreFileHashResponse:
+    getStoreFileBlobResponse:
       type: object
       required:
-        - hash
+        - blobIdentifier
         - uploadTimestamp
         - status
       properties:
-        hash: 
+        blobIdentifier:
           type: string
           example: 7F416863ABF34C3E894BAD1739BAA5571
         uploadTimestamp:
@@ -774,22 +774,22 @@ components:
           description: Upload timestamp, in RFC3339 format
           example: '2019-10-12T07:20:50.52Z'
         status:
-          $ref: '#/components/schemas/storeFileHashStatus'
+          $ref: '#/components/schemas/storeFileBlobStatus'
 
-    getStoreFileHashesResponse:
+    getStoreFileBlobsResponse:
       type: object
       required:
-        - hashes
+        - blobs
         - pagination
       properties:
-        hashes:
+        blobs:
           type: array
           items:
-            $ref: getStoreFileHashResponse
+            $ref: getStoreFileBlobResponse
         pagination:
           $ref: '#/components/schemas/paginationResponse'
 
-    getStoreFileHashDownloadUrlResponse:
+    getStoreFileBlobDownloadUrlResponse:
       type: object
       required:
         - method
@@ -820,12 +820,12 @@ components:
       type: object
       required:
         - fileName
-        - hash
+        - blobIdentifier
       properties:
         fileName:
           type: string
           example: Application.pdb
-        hash:
+        blobIdentifier:
           type: string
           example: 7F416863ABF34C3E894BAD1739BAA5571
         url:
@@ -862,13 +862,13 @@ components:
       type: object
       required:
         - fileName
-        - hash
+        - blobIdentifier
         - status
       properties:
         fileName:
           type: string
           example: Application.pdb
-        hash:
+        blobIdentifier:
           type: string
           example: 7F416863ABF34C3E894BAD1739BAA5571
         status:

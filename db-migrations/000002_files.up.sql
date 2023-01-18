@@ -181,13 +181,13 @@ CREATE TABLE cloud_symbol_server.store_upload_files (
   --   and the corresponding store_file might have been removed
   file_name varchar NOT NULL,
 
-  -- Hash string for this blob
-  -- Duplicated from store_file_blobes
+  -- Identifier string for this blob
+  -- Duplicated from store_file_blobs
   --   since this will persist after the upload has been expired
   --   and the corresponding store_file_blob might have been removed
   -- This is not named 'blob_identifier' as in the original table,
-  --   because SQLBoiler will generate a Hash() method on the corresponding Golang type,
-  --   and that method will collide with the type's Hash property
+  --   because SQLBoiler will generate a BlobIdentifier() method on the corresponding Golang type,
+  --   and that method will collide with the type's BlobIdentifier property
   file_blob_identifier varchar NOT NULL,
 
   -- upload-file-indices are unique for an upload

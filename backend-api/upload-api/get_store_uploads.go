@@ -124,9 +124,9 @@ func GetStoreUploads(ctx context.Context, storeId string, offset int32, limit in
 		}
 
 		uploadIdToFiles[uploadId][uploadFileIndex] = openapi.GetStoreUploadFileResponse{
-			FileName: file.FileName,
-			Hash:     file.FileBlobIdentifier,
-			Status:   openapi.StoreUploadFileStatus(status),
+			FileName:       file.FileName,
+			BlobIdentifier: file.FileBlobIdentifier,
+			Status:         openapi.StoreUploadFileStatus(status),
 		}
 	}
 

@@ -4,9 +4,9 @@ docs/CreateStoreUploadRequest.md
 docs/CreateStoreUploadResponse.md
 docs/CreateTokenResponse.md
 docs/DefaultApi.md
-docs/GetStoreFileHashDownloadUrlResponse.md
-docs/GetStoreFileHashResponse.md
-docs/GetStoreFileHashesResponse.md
+docs/GetStoreFileBlobDownloadUrlResponse.md
+docs/GetStoreFileBlobResponse.md
+docs/GetStoreFileBlobsResponse.md
 docs/GetStoreFilesResponse.md
 docs/GetStoreUploadFileResponse.md
 docs/GetStoreUploadResponse.md
@@ -14,7 +14,7 @@ docs/GetStoreUploadsResponse.md
 docs/GetTokenResponse.md
 docs/MessageResponse.md
 docs/PaginationResponse.md
-docs/StoreFileHashStatus.md
+docs/StoreFileBlobStatus.md
 docs/StoreUploadFileStatus.md
 docs/StoreUploadStatus.md
 docs/UpdateTokenRequest.md
@@ -42,9 +42,9 @@ src/BackendAPI/Model/CreateStoreUploadFileRequest.cs
 src/BackendAPI/Model/CreateStoreUploadRequest.cs
 src/BackendAPI/Model/CreateStoreUploadResponse.cs
 src/BackendAPI/Model/CreateTokenResponse.cs
-src/BackendAPI/Model/GetStoreFileHashDownloadUrlResponse.cs
-src/BackendAPI/Model/GetStoreFileHashResponse.cs
-src/BackendAPI/Model/GetStoreFileHashesResponse.cs
+src/BackendAPI/Model/GetStoreFileBlobDownloadUrlResponse.cs
+src/BackendAPI/Model/GetStoreFileBlobResponse.cs
+src/BackendAPI/Model/GetStoreFileBlobsResponse.cs
 src/BackendAPI/Model/GetStoreFilesResponse.cs
 src/BackendAPI/Model/GetStoreUploadFileResponse.cs
 src/BackendAPI/Model/GetStoreUploadResponse.cs
@@ -52,7 +52,7 @@ src/BackendAPI/Model/GetStoreUploadsResponse.cs
 src/BackendAPI/Model/GetTokenResponse.cs
 src/BackendAPI/Model/MessageResponse.cs
 src/BackendAPI/Model/PaginationResponse.cs
-src/BackendAPI/Model/StoreFileHashStatus.cs
+src/BackendAPI/Model/StoreFileBlobStatus.cs
 src/BackendAPI/Model/StoreUploadFileStatus.cs
 src/BackendAPI/Model/StoreUploadStatus.cs
 src/BackendAPI/Model/UpdateTokenRequest.cs

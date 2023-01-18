@@ -24,7 +24,7 @@ namespace CLI
                         Console.WriteLine($"    Description: {upload.Description}");
                         Console.WriteLine($"    Build ID: {upload.BuildId}");
                         foreach (var uploadFile in upload.Files) {
-                            Console.WriteLine($"      FileName: {uploadFile.FileName}, Hash: {uploadFile.Hash}, Status: {uploadFile.Status}");
+                            Console.WriteLine($"      FileName: {uploadFile.FileName}, BlobIdentifier: {uploadFile.BlobIdentifier}, Status: {uploadFile.Status}");
                         }
                     }
 

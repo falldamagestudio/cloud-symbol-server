@@ -22,13 +22,13 @@ import (
 )
 
 func uploadFileRequestToPath(storeId string, createStoreUploadFileRequest openapi.CreateStoreUploadFileRequest) string {
-	return fmt.Sprintf("stores/%s/%s/%s/%s", storeId, createStoreUploadFileRequest.FileName, createStoreUploadFileRequest.Hash, createStoreUploadFileRequest.FileName)
+	return fmt.Sprintf("stores/%s/%s/%s/%s", storeId, createStoreUploadFileRequest.FileName, createStoreUploadFileRequest.BlobIdentifier, createStoreUploadFileRequest.FileName)
 }
 
 type FileEntry struct {
-	FileName string
-	Hash     string
-	Status   string
+	FileName       string
+	BlobIdentifier string
+	Status         string
 }
 
 type StoreUploadEntry struct {
@@ -94,9 +94,9 @@ func CreateStoreUpload(context context.Context, storeId string, createStoreUploa
 
 		if includeAlreadyPresentFiles || (objectURL != "") {
 			createStoreUploadResponse.Files = append(createStoreUploadResponse.Files, openapi.UploadFileResponse{
-				FileName: createStoreUploadFileRequest.FileName,
-				Hash:     createStoreUploadFileRequest.Hash,
-				Url:      objectURL,
+				FileName:       createStoreUploadFileRequest.FileName,
+				BlobIdentifier: createStoreUploadFileRequest.BlobIdentifier,
+				Url:            objectURL,
 			})
 		}
 	}
@@ -117,9 +117,9 @@ func CreateStoreUpload(context context.Context, storeId string, createStoreUploa
 			}
 		}
 		files = append(files, FileEntry{
-			FileName: file.FileName,
-			Hash:     file.Hash,
-			Status:   status,
+			FileName:       file.FileName,
+			BlobIdentifier: file.BlobIdentifier,
+			Status:         status,
 		})
 	}
 
@@ -233,7 +233,7 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 		// Create store-file-blob, in case one doesn't exist yet
 		storeFileBlob, err := models.StoreFileBlobs(
 			qm.Where(models.StoreFileBlobColumns.FileID+" = ?", storeFile.FileID),
-			qm.And(models.StoreFileBlobColumns.BlobIdentifier+" = ?", file.Hash),
+			qm.And(models.StoreFileBlobColumns.BlobIdentifier+" = ?", file.BlobIdentifier),
 		).One(ctx, tx)
 		if err == sql.ErrNoRows {
 
@@ -246,7 +246,7 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 
 			storeFileBlob = &models.StoreFileBlob{
 				FileID:          null.IntFrom(storeFile.FileID),
-				BlobIdentifier:  file.Hash,
+				BlobIdentifier:  file.BlobIdentifier,
 				UploadTimestamp: timestamp,
 				Status:          fileBlobStatus,
 			}
@@ -269,7 +269,7 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 			UploadFileIndex:    uploadFileIndex,
 			Status:             file.Status,
 			FileName:           file.FileName,
-			FileBlobIdentifier: file.Hash,
+			FileBlobIdentifier: file.BlobIdentifier,
 		}
 		err = uploadFile.Insert(ctx, tx, boil.Infer())
 		if err != nil {

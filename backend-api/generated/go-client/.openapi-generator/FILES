@@ -9,9 +9,9 @@ docs/CreateStoreUploadRequest.md
 docs/CreateStoreUploadResponse.md
 docs/CreateTokenResponse.md
 docs/DefaultApi.md
-docs/GetStoreFileHashDownloadUrlResponse.md
-docs/GetStoreFileHashResponse.md
-docs/GetStoreFileHashesResponse.md
+docs/GetStoreFileBlobDownloadUrlResponse.md
+docs/GetStoreFileBlobResponse.md
+docs/GetStoreFileBlobsResponse.md
 docs/GetStoreFilesResponse.md
 docs/GetStoreUploadFileResponse.md
 docs/GetStoreUploadResponse.md
@@ -19,7 +19,7 @@ docs/GetStoreUploadsResponse.md
 docs/GetTokenResponse.md
 docs/MessageResponse.md
 docs/PaginationResponse.md
-docs/StoreFileHashStatus.md
+docs/StoreFileBlobStatus.md
 docs/StoreUploadFileStatus.md
 docs/StoreUploadStatus.md
 docs/UpdateTokenRequest.md
@@ -28,9 +28,9 @@ model_create_store_upload_file_request.go
 model_create_store_upload_request.go
 model_create_store_upload_response.go
 model_create_token_response.go
-model_get_store_file_hash_download_url_response.go
-model_get_store_file_hash_response.go
-model_get_store_file_hashes_response.go
+model_get_store_file_blob_download_url_response.go
+model_get_store_file_blob_response.go
+model_get_store_file_blobs_response.go
 model_get_store_files_response.go
 model_get_store_upload_file_response.go
 model_get_store_upload_response.go
@@ -38,7 +38,7 @@ model_get_store_uploads_response.go
 model_get_token_response.go
 model_message_response.go
 model_pagination_response.go
-model_store_file_hash_status.go
+model_store_file_blob_status.go
 model_store_upload_file_status.go
 model_store_upload_status.go
 model_update_token_request.go

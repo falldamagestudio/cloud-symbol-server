@@ -700,56 +700,56 @@ func (a *DefaultApiService) ExpireStoreUploadExecute(r ApiExpireStoreUploadReque
 	return localVarHTTPResponse, nil
 }
 
-type ApiGetStoreFileHashDownloadUrlRequest struct {
+type ApiGetStoreFileBlobDownloadUrlRequest struct {
 	ctx context.Context
 	ApiService *DefaultApiService
 	storeId string
 	fileId string
-	hashId string
+	blobId string
 }
 
-func (r ApiGetStoreFileHashDownloadUrlRequest) Execute() (*GetStoreFileHashDownloadUrlResponse, *http.Response, error) {
-	return r.ApiService.GetStoreFileHashDownloadUrlExecute(r)
+func (r ApiGetStoreFileBlobDownloadUrlRequest) Execute() (*GetStoreFileBlobDownloadUrlResponse, *http.Response, error) {
+	return r.ApiService.GetStoreFileBlobDownloadUrlExecute(r)
 }
 
 /*
-GetStoreFileHashDownloadUrl Request download URL for the binary blob associated with a particular hash
+GetStoreFileBlobDownloadUrl Request download URL for the binary blob associated with a particular store/file/blob-id
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param storeId ID of the store containing the file
  @param fileId ID of the file
- @param hashId ID of the hash
- @return ApiGetStoreFileHashDownloadUrlRequest
+ @param blobId ID of the blob
+ @return ApiGetStoreFileBlobDownloadUrlRequest
 */
-func (a *DefaultApiService) GetStoreFileHashDownloadUrl(ctx context.Context, storeId string, fileId string, hashId string) ApiGetStoreFileHashDownloadUrlRequest {
-	return ApiGetStoreFileHashDownloadUrlRequest{
+func (a *DefaultApiService) GetStoreFileBlobDownloadUrl(ctx context.Context, storeId string, fileId string, blobId string) ApiGetStoreFileBlobDownloadUrlRequest {
+	return ApiGetStoreFileBlobDownloadUrlRequest{
 		ApiService: a,
 		ctx: ctx,
 		storeId: storeId,
 		fileId: fileId,
-		hashId: hashId,
+		blobId: blobId,
 	}
 }
 
 // Execute executes the request
-//  @return GetStoreFileHashDownloadUrlResponse
-func (a *DefaultApiService) GetStoreFileHashDownloadUrlExecute(r ApiGetStoreFileHashDownloadUrlRequest) (*GetStoreFileHashDownloadUrlResponse, *http.Response, error) {
+//  @return GetStoreFileBlobDownloadUrlResponse
+func (a *DefaultApiService) GetStoreFileBlobDownloadUrlExecute(r ApiGetStoreFileBlobDownloadUrlRequest) (*GetStoreFileBlobDownloadUrlResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *GetStoreFileHashDownloadUrlResponse
+		localVarReturnValue  *GetStoreFileBlobDownloadUrlResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetStoreFileHashDownloadUrl")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetStoreFileBlobDownloadUrl")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/stores/{storeId}/files/{fileId}/hashes/{hashId}/getDownloadUrl"
+	localVarPath := localBasePath + "/stores/{storeId}/files/{fileId}/blobs/{blobId}/getDownloadUrl"
 	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", url.PathEscape(parameterToString(r.storeId, "")), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"fileId"+"}", url.PathEscape(parameterToString(r.fileId, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"hashId"+"}", url.PathEscape(parameterToString(r.hashId, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"blobId"+"}", url.PathEscape(parameterToString(r.blobId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -830,7 +830,7 @@ func (a *DefaultApiService) GetStoreFileHashDownloadUrlExecute(r ApiGetStoreFile
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiGetStoreFileHashesRequest struct {
+type ApiGetStoreFileBlobsRequest struct {
 	ctx context.Context
 	ApiService *DefaultApiService
 	storeId string
@@ -840,31 +840,31 @@ type ApiGetStoreFileHashesRequest struct {
 }
 
 // How many entries to skip (used for pagination of results)
-func (r ApiGetStoreFileHashesRequest) Offset(offset int32) ApiGetStoreFileHashesRequest {
+func (r ApiGetStoreFileBlobsRequest) Offset(offset int32) ApiGetStoreFileBlobsRequest {
 	r.offset = &offset
 	return r
 }
 
 // Max number of results to return (used for pagination of results)
-func (r ApiGetStoreFileHashesRequest) Limit(limit int32) ApiGetStoreFileHashesRequest {
+func (r ApiGetStoreFileBlobsRequest) Limit(limit int32) ApiGetStoreFileBlobsRequest {
 	r.limit = &limit
 	return r
 }
 
-func (r ApiGetStoreFileHashesRequest) Execute() (*GetStoreFileHashesResponse, *http.Response, error) {
-	return r.ApiService.GetStoreFileHashesExecute(r)
+func (r ApiGetStoreFileBlobsRequest) Execute() (*GetStoreFileBlobsResponse, *http.Response, error) {
+	return r.ApiService.GetStoreFileBlobsExecute(r)
 }
 
 /*
-GetStoreFileHashes Fetch a list of hashes for a specific file in store
+GetStoreFileBlobs Fetch a list of blobs for a specific file in store
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param storeId ID of the store containing the file
  @param fileId ID of the file
- @return ApiGetStoreFileHashesRequest
+ @return ApiGetStoreFileBlobsRequest
 */
-func (a *DefaultApiService) GetStoreFileHashes(ctx context.Context, storeId string, fileId string) ApiGetStoreFileHashesRequest {
-	return ApiGetStoreFileHashesRequest{
+func (a *DefaultApiService) GetStoreFileBlobs(ctx context.Context, storeId string, fileId string) ApiGetStoreFileBlobsRequest {
+	return ApiGetStoreFileBlobsRequest{
 		ApiService: a,
 		ctx: ctx,
 		storeId: storeId,
@@ -873,21 +873,21 @@ func (a *DefaultApiService) GetStoreFileHashes(ctx context.Context, storeId stri
 }
 
 // Execute executes the request
-//  @return GetStoreFileHashesResponse
-func (a *DefaultApiService) GetStoreFileHashesExecute(r ApiGetStoreFileHashesRequest) (*GetStoreFileHashesResponse, *http.Response, error) {
+//  @return GetStoreFileBlobsResponse
+func (a *DefaultApiService) GetStoreFileBlobsExecute(r ApiGetStoreFileBlobsRequest) (*GetStoreFileBlobsResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *GetStoreFileHashesResponse
+		localVarReturnValue  *GetStoreFileBlobsResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetStoreFileHashes")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultApiService.GetStoreFileBlobs")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/stores/{storeId}/files/{fileId}/hashes"
+	localVarPath := localBasePath + "/stores/{storeId}/files/{fileId}/blobs"
 	localVarPath = strings.Replace(localVarPath, "{"+"storeId"+"}", url.PathEscape(parameterToString(r.storeId, "")), -1)
 	localVarPath = strings.Replace(localVarPath, "{"+"fileId"+"}", url.PathEscape(parameterToString(r.fileId, "")), -1)
 

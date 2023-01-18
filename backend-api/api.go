@@ -27,12 +27,12 @@ func (s *ApiService) GetStores(ctx context.Context) (openapi.ImplResponse, error
 	return store_api.GetStores(ctx)
 }
 
-func (s *ApiService) GetStoreFileHashes(ctx context.Context, storeId string, fileId string, offset int32, limit int32) (openapi.ImplResponse, error) {
-	return store_api.GetStoreFileHashes(ctx, storeId, fileId, offset, limit)
+func (s *ApiService) GetStoreFileBlobs(ctx context.Context, storeId string, fileId string, offset int32, limit int32) (openapi.ImplResponse, error) {
+	return store_api.GetStoreFileBlobs(ctx, storeId, fileId, offset, limit)
 }
 
-func (s *ApiService) GetStoreFileHashDownloadUrl(ctx context.Context, storeId string, fileId string, hashId string) (openapi.ImplResponse, error) {
-	return store_api.GetStoreFileHashDownloadUrl(ctx, storeId, fileId, hashId)
+func (s *ApiService) GetStoreFileBlobDownloadUrl(ctx context.Context, storeId string, fileId string, blobId string) (openapi.ImplResponse, error) {
+	return store_api.GetStoreFileBlobDownloadUrl(ctx, storeId, fileId, blobId)
 }
 
 // Upload API

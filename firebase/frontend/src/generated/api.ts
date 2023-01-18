@@ -38,7 +38,7 @@ export interface CreateStoreUploadFileRequest {
      * @type {string}
      * @memberof CreateStoreUploadFileRequest
      */
-    'hash': string;
+    'blobIdentifier': string;
 }
 /**
  * 
@@ -106,63 +106,63 @@ export interface CreateTokenResponse {
 /**
  * 
  * @export
- * @interface GetStoreFileHashDownloadUrlResponse
+ * @interface GetStoreFileBlobDownloadUrlResponse
  */
-export interface GetStoreFileHashDownloadUrlResponse {
+export interface GetStoreFileBlobDownloadUrlResponse {
     /**
      * 
      * @type {string}
-     * @memberof GetStoreFileHashDownloadUrlResponse
+     * @memberof GetStoreFileBlobDownloadUrlResponse
      */
     'method': string;
     /**
      * 
      * @type {string}
-     * @memberof GetStoreFileHashDownloadUrlResponse
+     * @memberof GetStoreFileBlobDownloadUrlResponse
      */
     'url': string;
 }
 /**
  * 
  * @export
- * @interface GetStoreFileHashResponse
+ * @interface GetStoreFileBlobResponse
  */
-export interface GetStoreFileHashResponse {
+export interface GetStoreFileBlobResponse {
     /**
      * 
      * @type {string}
-     * @memberof GetStoreFileHashResponse
+     * @memberof GetStoreFileBlobResponse
      */
-    'hash': string;
+    'blobIdentifier': string;
     /**
      * Upload timestamp, in RFC3339 format
      * @type {string}
-     * @memberof GetStoreFileHashResponse
+     * @memberof GetStoreFileBlobResponse
      */
     'uploadTimestamp': string;
     /**
      * 
-     * @type {StoreFileHashStatus}
-     * @memberof GetStoreFileHashResponse
+     * @type {StoreFileBlobStatus}
+     * @memberof GetStoreFileBlobResponse
      */
-    'status': StoreFileHashStatus;
+    'status': StoreFileBlobStatus;
 }
 /**
  * 
  * @export
- * @interface GetStoreFileHashesResponse
+ * @interface GetStoreFileBlobsResponse
  */
-export interface GetStoreFileHashesResponse {
+export interface GetStoreFileBlobsResponse {
     /**
      * 
-     * @type {Array<GetStoreFileHashResponse>}
-     * @memberof GetStoreFileHashesResponse
+     * @type {Array<GetStoreFileBlobResponse>}
+     * @memberof GetStoreFileBlobsResponse
      */
-    'hashes': Array<GetStoreFileHashResponse>;
+    'blobs': Array<GetStoreFileBlobResponse>;
     /**
      * 
      * @type {PaginationResponse}
-     * @memberof GetStoreFileHashesResponse
+     * @memberof GetStoreFileBlobsResponse
      */
     'pagination': PaginationResponse;
 }
@@ -202,7 +202,7 @@ export interface GetStoreUploadFileResponse {
      * @type {string}
      * @memberof GetStoreUploadFileResponse
      */
-    'hash': string;
+    'blobIdentifier': string;
     /**
      * 
      * @type {StoreUploadFileStatus}
@@ -323,12 +323,12 @@ export interface PaginationResponse {
  * @enum {string}
  */
 
-export const StoreFileHashStatus = {
+export const StoreFileBlobStatus = {
     Pending: 'pending',
     Present: 'present'
 } as const;
 
-export type StoreFileHashStatus = typeof StoreFileHashStatus[keyof typeof StoreFileHashStatus];
+export type StoreFileBlobStatus = typeof StoreFileBlobStatus[keyof typeof StoreFileBlobStatus];
 
 
 /**
@@ -396,7 +396,7 @@ export interface UploadFileResponse {
      * @type {string}
      * @memberof UploadFileResponse
      */
-    'hash': string;
+    'blobIdentifier': string;
     /**
      * Short-lived signed URL where the client should upload the file to, or blank if the file already exists in the storage backend
      * @type {string}
@@ -647,24 +647,24 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Request download URL for the binary blob associated with a particular hash
+         * @summary Request download URL for the binary blob associated with a particular store/file/blob-id
          * @param {string} storeId ID of the store containing the file
          * @param {string} fileId ID of the file
-         * @param {string} hashId ID of the hash
+         * @param {string} blobId ID of the blob
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStoreFileHashDownloadUrl: async (storeId: string, fileId: string, hashId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getStoreFileBlobDownloadUrl: async (storeId: string, fileId: string, blobId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'storeId' is not null or undefined
-            assertParamExists('getStoreFileHashDownloadUrl', 'storeId', storeId)
+            assertParamExists('getStoreFileBlobDownloadUrl', 'storeId', storeId)
             // verify required parameter 'fileId' is not null or undefined
-            assertParamExists('getStoreFileHashDownloadUrl', 'fileId', fileId)
-            // verify required parameter 'hashId' is not null or undefined
-            assertParamExists('getStoreFileHashDownloadUrl', 'hashId', hashId)
-            const localVarPath = `/stores/{storeId}/files/{fileId}/hashes/{hashId}/getDownloadUrl`
+            assertParamExists('getStoreFileBlobDownloadUrl', 'fileId', fileId)
+            // verify required parameter 'blobId' is not null or undefined
+            assertParamExists('getStoreFileBlobDownloadUrl', 'blobId', blobId)
+            const localVarPath = `/stores/{storeId}/files/{fileId}/blobs/{blobId}/getDownloadUrl`
                 .replace(`{${"storeId"}}`, encodeURIComponent(String(storeId)))
                 .replace(`{${"fileId"}}`, encodeURIComponent(String(fileId)))
-                .replace(`{${"hashId"}}`, encodeURIComponent(String(hashId)));
+                .replace(`{${"blobId"}}`, encodeURIComponent(String(blobId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -693,7 +693,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Fetch a list of hashes for a specific file in store
+         * @summary Fetch a list of blobs for a specific file in store
          * @param {string} storeId ID of the store containing the file
          * @param {string} fileId ID of the file
          * @param {number} [offset] How many entries to skip (used for pagination of results)
@@ -701,12 +701,12 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStoreFileHashes: async (storeId: string, fileId: string, offset?: number, limit?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getStoreFileBlobs: async (storeId: string, fileId: string, offset?: number, limit?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'storeId' is not null or undefined
-            assertParamExists('getStoreFileHashes', 'storeId', storeId)
+            assertParamExists('getStoreFileBlobs', 'storeId', storeId)
             // verify required parameter 'fileId' is not null or undefined
-            assertParamExists('getStoreFileHashes', 'fileId', fileId)
-            const localVarPath = `/stores/{storeId}/files/{fileId}/hashes`
+            assertParamExists('getStoreFileBlobs', 'fileId', fileId)
+            const localVarPath = `/stores/{storeId}/files/{fileId}/blobs`
                 .replace(`{${"storeId"}}`, encodeURIComponent(String(storeId)))
                 .replace(`{${"fileId"}}`, encodeURIComponent(String(fileId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1240,20 +1240,20 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Request download URL for the binary blob associated with a particular hash
+         * @summary Request download URL for the binary blob associated with a particular store/file/blob-id
          * @param {string} storeId ID of the store containing the file
          * @param {string} fileId ID of the file
-         * @param {string} hashId ID of the hash
+         * @param {string} blobId ID of the blob
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getStoreFileHashDownloadUrl(storeId: string, fileId: string, hashId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStoreFileHashDownloadUrlResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getStoreFileHashDownloadUrl(storeId, fileId, hashId, options);
+        async getStoreFileBlobDownloadUrl(storeId: string, fileId: string, blobId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStoreFileBlobDownloadUrlResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStoreFileBlobDownloadUrl(storeId, fileId, blobId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
-         * @summary Fetch a list of hashes for a specific file in store
+         * @summary Fetch a list of blobs for a specific file in store
          * @param {string} storeId ID of the store containing the file
          * @param {string} fileId ID of the file
          * @param {number} [offset] How many entries to skip (used for pagination of results)
@@ -1261,8 +1261,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getStoreFileHashes(storeId: string, fileId: string, offset?: number, limit?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStoreFileHashesResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getStoreFileHashes(storeId, fileId, offset, limit, options);
+        async getStoreFileBlobs(storeId: string, fileId: string, offset?: number, limit?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStoreFileBlobsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStoreFileBlobs(storeId, fileId, offset, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1456,19 +1456,19 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Request download URL for the binary blob associated with a particular hash
+         * @summary Request download URL for the binary blob associated with a particular store/file/blob-id
          * @param {string} storeId ID of the store containing the file
          * @param {string} fileId ID of the file
-         * @param {string} hashId ID of the hash
+         * @param {string} blobId ID of the blob
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStoreFileHashDownloadUrl(storeId: string, fileId: string, hashId: string, options?: any): AxiosPromise<GetStoreFileHashDownloadUrlResponse> {
-            return localVarFp.getStoreFileHashDownloadUrl(storeId, fileId, hashId, options).then((request) => request(axios, basePath));
+        getStoreFileBlobDownloadUrl(storeId: string, fileId: string, blobId: string, options?: any): AxiosPromise<GetStoreFileBlobDownloadUrlResponse> {
+            return localVarFp.getStoreFileBlobDownloadUrl(storeId, fileId, blobId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @summary Fetch a list of hashes for a specific file in store
+         * @summary Fetch a list of blobs for a specific file in store
          * @param {string} storeId ID of the store containing the file
          * @param {string} fileId ID of the file
          * @param {number} [offset] How many entries to skip (used for pagination of results)
@@ -1476,8 +1476,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStoreFileHashes(storeId: string, fileId: string, offset?: number, limit?: number, options?: any): AxiosPromise<GetStoreFileHashesResponse> {
-            return localVarFp.getStoreFileHashes(storeId, fileId, offset, limit, options).then((request) => request(axios, basePath));
+        getStoreFileBlobs(storeId: string, fileId: string, offset?: number, limit?: number, options?: any): AxiosPromise<GetStoreFileBlobsResponse> {
+            return localVarFp.getStoreFileBlobs(storeId, fileId, offset, limit, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1672,21 +1672,21 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @summary Request download URL for the binary blob associated with a particular hash
+     * @summary Request download URL for the binary blob associated with a particular store/file/blob-id
      * @param {string} storeId ID of the store containing the file
      * @param {string} fileId ID of the file
-     * @param {string} hashId ID of the hash
+     * @param {string} blobId ID of the blob
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getStoreFileHashDownloadUrl(storeId: string, fileId: string, hashId: string, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).getStoreFileHashDownloadUrl(storeId, fileId, hashId, options).then((request) => request(this.axios, this.basePath));
+    public getStoreFileBlobDownloadUrl(storeId: string, fileId: string, blobId: string, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getStoreFileBlobDownloadUrl(storeId, fileId, blobId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @summary Fetch a list of hashes for a specific file in store
+     * @summary Fetch a list of blobs for a specific file in store
      * @param {string} storeId ID of the store containing the file
      * @param {string} fileId ID of the file
      * @param {number} [offset] How many entries to skip (used for pagination of results)
@@ -1695,8 +1695,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getStoreFileHashes(storeId: string, fileId: string, offset?: number, limit?: number, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).getStoreFileHashes(storeId, fileId, offset, limit, options).then((request) => request(this.axios, this.basePath));
+    public getStoreFileBlobs(storeId: string, fileId: string, offset?: number, limit?: number, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getStoreFileBlobs(storeId, fileId, offset, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

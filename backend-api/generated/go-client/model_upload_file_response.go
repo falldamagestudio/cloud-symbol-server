@@ -17,7 +17,7 @@ import (
 // UploadFileResponse struct for UploadFileResponse
 type UploadFileResponse struct {
 	FileName string `json:"fileName"`
-	Hash string `json:"hash"`
+	BlobIdentifier string `json:"blobIdentifier"`
 	// Short-lived signed URL where the client should upload the file to, or blank if the file already exists in the storage backend
 	Url *string `json:"url,omitempty"`
 }
@@ -26,10 +26,10 @@ type UploadFileResponse struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewUploadFileResponse(fileName string, hash string) *UploadFileResponse {
+func NewUploadFileResponse(fileName string, blobIdentifier string) *UploadFileResponse {
 	this := UploadFileResponse{}
 	this.FileName = fileName
-	this.Hash = hash
+	this.BlobIdentifier = blobIdentifier
 	return &this
 }
 
@@ -65,28 +65,28 @@ func (o *UploadFileResponse) SetFileName(v string) {
 	o.FileName = v
 }
 
-// GetHash returns the Hash field value
-func (o *UploadFileResponse) GetHash() string {
+// GetBlobIdentifier returns the BlobIdentifier field value
+func (o *UploadFileResponse) GetBlobIdentifier() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.Hash
+	return o.BlobIdentifier
 }
 
-// GetHashOk returns a tuple with the Hash field value
+// GetBlobIdentifierOk returns a tuple with the BlobIdentifier field value
 // and a boolean to check if the value has been set.
-func (o *UploadFileResponse) GetHashOk() (*string, bool) {
+func (o *UploadFileResponse) GetBlobIdentifierOk() (*string, bool) {
 	if o == nil {
     return nil, false
 	}
-	return &o.Hash, true
+	return &o.BlobIdentifier, true
 }
 
-// SetHash sets field value
-func (o *UploadFileResponse) SetHash(v string) {
-	o.Hash = v
+// SetBlobIdentifier sets field value
+func (o *UploadFileResponse) SetBlobIdentifier(v string) {
+	o.BlobIdentifier = v
 }
 
 // GetUrl returns the Url field value if set, zero value otherwise.
@@ -127,7 +127,7 @@ func (o UploadFileResponse) MarshalJSON() ([]byte, error) {
 		toSerialize["fileName"] = o.FileName
 	}
 	if true {
-		toSerialize["hash"] = o.Hash
+		toSerialize["blobIdentifier"] = o.BlobIdentifier
 	}
 	if !isNil(o.Url) {
 		toSerialize["url"] = o.Url

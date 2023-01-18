@@ -10,8 +10,8 @@ Method | HTTP request | Description
 [**DeleteStore**](DefaultApi.md#DeleteStore) | **Delete** /stores/{storeId} | Delete an existing store
 [**DeleteToken**](DefaultApi.md#DeleteToken) | **Delete** /tokens/{token} | Delete a token for current user
 [**ExpireStoreUpload**](DefaultApi.md#ExpireStoreUpload) | **Post** /stores/{storeId}/uploads/{uploadId}/expire | Expire store upload and consider files for GC
-[**GetStoreFileHashDownloadUrl**](DefaultApi.md#GetStoreFileHashDownloadUrl) | **Get** /stores/{storeId}/files/{fileId}/hashes/{hashId}/getDownloadUrl | Request download URL for the binary blob associated with a particular hash
-[**GetStoreFileHashes**](DefaultApi.md#GetStoreFileHashes) | **Get** /stores/{storeId}/files/{fileId}/hashes | Fetch a list of hashes for a specific file in store
+[**GetStoreFileBlobDownloadUrl**](DefaultApi.md#GetStoreFileBlobDownloadUrl) | **Get** /stores/{storeId}/files/{fileId}/blobs/{blobId}/getDownloadUrl | Request download URL for the binary blob associated with a particular store/file/blob-id
+[**GetStoreFileBlobs**](DefaultApi.md#GetStoreFileBlobs) | **Get** /stores/{storeId}/files/{fileId}/blobs | Fetch a list of blobs for a specific file in store
 [**GetStoreFiles**](DefaultApi.md#GetStoreFiles) | **Get** /stores/{storeId}/files | Fetch a list of files in store
 [**GetStoreUpload**](DefaultApi.md#GetStoreUpload) | **Get** /stores/{storeId}/uploads/{uploadId} | Fetch an upload
 [**GetStoreUploads**](DefaultApi.md#GetStoreUploads) | **Get** /stores/{storeId}/uploads | Fetch a list of uploads in store
@@ -421,11 +421,11 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## GetStoreFileHashDownloadUrl
+## GetStoreFileBlobDownloadUrl
 
-> GetStoreFileHashDownloadUrlResponse GetStoreFileHashDownloadUrl(ctx, storeId, fileId, hashId).Execute()
+> GetStoreFileBlobDownloadUrlResponse GetStoreFileBlobDownloadUrl(ctx, storeId, fileId, blobId).Execute()
 
-Request download URL for the binary blob associated with a particular hash
+Request download URL for the binary blob associated with a particular store/file/blob-id
 
 ### Example
 
@@ -442,17 +442,17 @@ import (
 func main() {
     storeId := "storeId_example" // string | ID of the store containing the file
     fileId := "fileId_example" // string | ID of the file
-    hashId := "hashId_example" // string | ID of the hash
+    blobId := "blobId_example" // string | ID of the blob
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.DefaultApi.GetStoreFileHashDownloadUrl(context.Background(), storeId, fileId, hashId).Execute()
+    resp, r, err := apiClient.DefaultApi.GetStoreFileBlobDownloadUrl(context.Background(), storeId, fileId, blobId).Execute()
     if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStoreFileHashDownloadUrl``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStoreFileBlobDownloadUrl``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetStoreFileHashDownloadUrl`: GetStoreFileHashDownloadUrlResponse
-    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetStoreFileHashDownloadUrl`: %v\n", resp)
+    // response from `GetStoreFileBlobDownloadUrl`: GetStoreFileBlobDownloadUrlResponse
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetStoreFileBlobDownloadUrl`: %v\n", resp)
 }
 ```
 
@@ -464,11 +464,11 @@ Name | Type | Description  | Notes
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
 **storeId** | **string** | ID of the store containing the file | 
 **fileId** | **string** | ID of the file | 
-**hashId** | **string** | ID of the hash | 
+**blobId** | **string** | ID of the blob | 
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiGetStoreFileHashDownloadUrlRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetStoreFileBlobDownloadUrlRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -479,7 +479,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetStoreFileHashDownloadUrlResponse**](GetStoreFileHashDownloadUrlResponse.md)
+[**GetStoreFileBlobDownloadUrlResponse**](GetStoreFileBlobDownloadUrlResponse.md)
 
 ### Authorization
 
@@ -495,11 +495,11 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## GetStoreFileHashes
+## GetStoreFileBlobs
 
-> GetStoreFileHashesResponse GetStoreFileHashes(ctx, storeId, fileId).Offset(offset).Limit(limit).Execute()
+> GetStoreFileBlobsResponse GetStoreFileBlobs(ctx, storeId, fileId).Offset(offset).Limit(limit).Execute()
 
-Fetch a list of hashes for a specific file in store
+Fetch a list of blobs for a specific file in store
 
 ### Example
 
@@ -521,13 +521,13 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.DefaultApi.GetStoreFileHashes(context.Background(), storeId, fileId).Offset(offset).Limit(limit).Execute()
+    resp, r, err := apiClient.DefaultApi.GetStoreFileBlobs(context.Background(), storeId, fileId).Offset(offset).Limit(limit).Execute()
     if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStoreFileHashes``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStoreFileBlobs``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetStoreFileHashes`: GetStoreFileHashesResponse
-    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetStoreFileHashes`: %v\n", resp)
+    // response from `GetStoreFileBlobs`: GetStoreFileBlobsResponse
+    fmt.Fprintf(os.Stdout, "Response from `DefaultApi.GetStoreFileBlobs`: %v\n", resp)
 }
 ```
 
@@ -542,7 +542,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiGetStoreFileHashesRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetStoreFileBlobsRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -554,7 +554,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetStoreFileHashesResponse**](GetStoreFileHashesResponse.md)
+[**GetStoreFileBlobsResponse**](GetStoreFileBlobsResponse.md)
 
 ### Authorization
 

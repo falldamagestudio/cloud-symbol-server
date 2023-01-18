@@ -5,14 +5,14 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **FileName** | **string** |  | 
-**Hash** | **string** |  | 
+**BlobIdentifier** | **string** |  | 
 **Url** | Pointer to **string** | Short-lived signed URL where the client should upload the file to, or blank if the file already exists in the storage backend | [optional] 
 
 ## Methods
 
 ### NewUploadFileResponse
 
-`func NewUploadFileResponse(fileName string, hash string, ) *UploadFileResponse`
+`func NewUploadFileResponse(fileName string, blobIdentifier string, ) *UploadFileResponse`
 
 NewUploadFileResponse instantiates a new UploadFileResponse object
 This constructor will assign default values to properties that have it defined,
@@ -47,24 +47,24 @@ and a boolean to check if the value has been set.
 SetFileName sets FileName field to given value.
 
 
-### GetHash
+### GetBlobIdentifier
 
-`func (o *UploadFileResponse) GetHash() string`
+`func (o *UploadFileResponse) GetBlobIdentifier() string`
 
-GetHash returns the Hash field if non-nil, zero value otherwise.
+GetBlobIdentifier returns the BlobIdentifier field if non-nil, zero value otherwise.
 
-### GetHashOk
+### GetBlobIdentifierOk
 
-`func (o *UploadFileResponse) GetHashOk() (*string, bool)`
+`func (o *UploadFileResponse) GetBlobIdentifierOk() (*string, bool)`
 
-GetHashOk returns a tuple with the Hash field if it's non-nil, zero value otherwise
+GetBlobIdentifierOk returns a tuple with the BlobIdentifier field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetHash
+### SetBlobIdentifier
 
-`func (o *UploadFileResponse) SetHash(v string)`
+`func (o *UploadFileResponse) SetBlobIdentifier(v string)`
 
-SetHash sets Hash field to given value.
+SetBlobIdentifier sets BlobIdentifier field to given value.
 
 
 ### GetUrl
