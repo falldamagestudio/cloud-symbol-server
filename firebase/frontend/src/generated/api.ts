@@ -97,6 +97,12 @@ export interface CreateStoreUploadRequest {
 export interface CreateStoreUploadResponse {
     /**
      * 
+     * @type {number}
+     * @memberof CreateStoreUploadResponse
+     */
+    'uploadId': number;
+    /**
+     * 
      * @type {string}
      * @memberof CreateStoreUploadResponse
      */
@@ -252,6 +258,12 @@ export interface GetStoreUploadFileResponse {
  * @interface GetStoreUploadResponse
  */
 export interface GetStoreUploadResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof GetStoreUploadResponse
+     */
+    'uploadId': number;
     /**
      * 
      * @type {string}
@@ -657,12 +669,12 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @summary Expire store upload and consider files for GC
-         * @param {string} uploadId ID of the upload to fetch
+         * @param {number} uploadId ID of the upload to fetch
          * @param {string} storeId ID of the store containing the upload
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        expireStoreUpload: async (uploadId: string, storeId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        expireStoreUpload: async (uploadId: number, storeId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'uploadId' is not null or undefined
             assertParamExists('expireStoreUpload', 'uploadId', uploadId)
             // verify required parameter 'storeId' is not null or undefined
@@ -845,12 +857,12 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @summary Fetch an upload
-         * @param {string} uploadId ID of the upload to fetch
+         * @param {number} uploadId ID of the upload to fetch
          * @param {string} storeId ID of the store containing the upload
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStoreUpload: async (uploadId: string, storeId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getStoreUpload: async (uploadId: number, storeId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'uploadId' is not null or undefined
             assertParamExists('getStoreUpload', 'uploadId', uploadId)
             // verify required parameter 'storeId' is not null or undefined
@@ -1041,12 +1053,12 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @summary Mark an upload as aborted
-         * @param {string} uploadId ID of the upload to mark as aborted
+         * @param {number} uploadId ID of the upload to mark as aborted
          * @param {string} storeId ID of the store containing the upload
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        markStoreUploadAborted: async (uploadId: string, storeId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        markStoreUploadAborted: async (uploadId: number, storeId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'uploadId' is not null or undefined
             assertParamExists('markStoreUploadAborted', 'uploadId', uploadId)
             // verify required parameter 'storeId' is not null or undefined
@@ -1083,12 +1095,12 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @summary Mark an upload as completed
-         * @param {string} uploadId ID of the upload to fetch
+         * @param {number} uploadId ID of the upload to fetch
          * @param {string} storeId ID of the store containing the upload
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        markStoreUploadCompleted: async (uploadId: string, storeId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        markStoreUploadCompleted: async (uploadId: number, storeId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'uploadId' is not null or undefined
             assertParamExists('markStoreUploadCompleted', 'uploadId', uploadId)
             // verify required parameter 'storeId' is not null or undefined
@@ -1125,13 +1137,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @summary Mark a file within an upload as uploaded
-         * @param {string} uploadId ID of the upload to fetch
+         * @param {number} uploadId ID of the upload to fetch
          * @param {string} storeId ID of the store containing the upload
          * @param {number} fileId Index of the file within the upload that should be marked as uploaded
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        markStoreUploadFileUploaded: async (uploadId: string, storeId: string, fileId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        markStoreUploadFileUploaded: async (uploadId: number, storeId: string, fileId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'uploadId' is not null or undefined
             assertParamExists('markStoreUploadFileUploaded', 'uploadId', uploadId)
             // verify required parameter 'storeId' is not null or undefined
@@ -1280,12 +1292,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Expire store upload and consider files for GC
-         * @param {string} uploadId ID of the upload to fetch
+         * @param {number} uploadId ID of the upload to fetch
          * @param {string} storeId ID of the store containing the upload
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async expireStoreUpload(uploadId: string, storeId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async expireStoreUpload(uploadId: number, storeId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.expireStoreUpload(uploadId, storeId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1332,12 +1344,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Fetch an upload
-         * @param {string} uploadId ID of the upload to fetch
+         * @param {number} uploadId ID of the upload to fetch
          * @param {string} storeId ID of the store containing the upload
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getStoreUpload(uploadId: string, storeId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStoreUploadResponse>> {
+        async getStoreUpload(uploadId: number, storeId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStoreUploadResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getStoreUpload(uploadId, storeId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1388,37 +1400,37 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Mark an upload as aborted
-         * @param {string} uploadId ID of the upload to mark as aborted
+         * @param {number} uploadId ID of the upload to mark as aborted
          * @param {string} storeId ID of the store containing the upload
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async markStoreUploadAborted(uploadId: string, storeId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async markStoreUploadAborted(uploadId: number, storeId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.markStoreUploadAborted(uploadId, storeId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
          * @summary Mark an upload as completed
-         * @param {string} uploadId ID of the upload to fetch
+         * @param {number} uploadId ID of the upload to fetch
          * @param {string} storeId ID of the store containing the upload
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async markStoreUploadCompleted(uploadId: string, storeId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async markStoreUploadCompleted(uploadId: number, storeId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.markStoreUploadCompleted(uploadId, storeId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
          * @summary Mark a file within an upload as uploaded
-         * @param {string} uploadId ID of the upload to fetch
+         * @param {number} uploadId ID of the upload to fetch
          * @param {string} storeId ID of the store containing the upload
          * @param {number} fileId Index of the file within the upload that should be marked as uploaded
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async markStoreUploadFileUploaded(uploadId: string, storeId: string, fileId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async markStoreUploadFileUploaded(uploadId: number, storeId: string, fileId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.markStoreUploadFileUploaded(uploadId, storeId, fileId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -1497,12 +1509,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @summary Expire store upload and consider files for GC
-         * @param {string} uploadId ID of the upload to fetch
+         * @param {number} uploadId ID of the upload to fetch
          * @param {string} storeId ID of the store containing the upload
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        expireStoreUpload(uploadId: string, storeId: string, options?: any): AxiosPromise<void> {
+        expireStoreUpload(uploadId: number, storeId: string, options?: any): AxiosPromise<void> {
             return localVarFp.expireStoreUpload(uploadId, storeId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1545,12 +1557,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @summary Fetch an upload
-         * @param {string} uploadId ID of the upload to fetch
+         * @param {number} uploadId ID of the upload to fetch
          * @param {string} storeId ID of the store containing the upload
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStoreUpload(uploadId: string, storeId: string, options?: any): AxiosPromise<GetStoreUploadResponse> {
+        getStoreUpload(uploadId: number, storeId: string, options?: any): AxiosPromise<GetStoreUploadResponse> {
             return localVarFp.getStoreUpload(uploadId, storeId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1596,35 +1608,35 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @summary Mark an upload as aborted
-         * @param {string} uploadId ID of the upload to mark as aborted
+         * @param {number} uploadId ID of the upload to mark as aborted
          * @param {string} storeId ID of the store containing the upload
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        markStoreUploadAborted(uploadId: string, storeId: string, options?: any): AxiosPromise<void> {
+        markStoreUploadAborted(uploadId: number, storeId: string, options?: any): AxiosPromise<void> {
             return localVarFp.markStoreUploadAborted(uploadId, storeId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Mark an upload as completed
-         * @param {string} uploadId ID of the upload to fetch
+         * @param {number} uploadId ID of the upload to fetch
          * @param {string} storeId ID of the store containing the upload
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        markStoreUploadCompleted(uploadId: string, storeId: string, options?: any): AxiosPromise<void> {
+        markStoreUploadCompleted(uploadId: number, storeId: string, options?: any): AxiosPromise<void> {
             return localVarFp.markStoreUploadCompleted(uploadId, storeId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Mark a file within an upload as uploaded
-         * @param {string} uploadId ID of the upload to fetch
+         * @param {number} uploadId ID of the upload to fetch
          * @param {string} storeId ID of the store containing the upload
          * @param {number} fileId Index of the file within the upload that should be marked as uploaded
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        markStoreUploadFileUploaded(uploadId: string, storeId: string, fileId: number, options?: any): AxiosPromise<void> {
+        markStoreUploadFileUploaded(uploadId: number, storeId: string, fileId: number, options?: any): AxiosPromise<void> {
             return localVarFp.markStoreUploadFileUploaded(uploadId, storeId, fileId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1711,13 +1723,13 @@ export class DefaultApi extends BaseAPI {
     /**
      * 
      * @summary Expire store upload and consider files for GC
-     * @param {string} uploadId ID of the upload to fetch
+     * @param {number} uploadId ID of the upload to fetch
      * @param {string} storeId ID of the store containing the upload
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public expireStoreUpload(uploadId: string, storeId: string, options?: AxiosRequestConfig) {
+    public expireStoreUpload(uploadId: number, storeId: string, options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).expireStoreUpload(uploadId, storeId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1767,13 +1779,13 @@ export class DefaultApi extends BaseAPI {
     /**
      * 
      * @summary Fetch an upload
-     * @param {string} uploadId ID of the upload to fetch
+     * @param {number} uploadId ID of the upload to fetch
      * @param {string} storeId ID of the store containing the upload
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getStoreUpload(uploadId: string, storeId: string, options?: AxiosRequestConfig) {
+    public getStoreUpload(uploadId: number, storeId: string, options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).getStoreUpload(uploadId, storeId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1828,40 +1840,40 @@ export class DefaultApi extends BaseAPI {
     /**
      * 
      * @summary Mark an upload as aborted
-     * @param {string} uploadId ID of the upload to mark as aborted
+     * @param {number} uploadId ID of the upload to mark as aborted
      * @param {string} storeId ID of the store containing the upload
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public markStoreUploadAborted(uploadId: string, storeId: string, options?: AxiosRequestConfig) {
+    public markStoreUploadAborted(uploadId: number, storeId: string, options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).markStoreUploadAborted(uploadId, storeId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Mark an upload as completed
-     * @param {string} uploadId ID of the upload to fetch
+     * @param {number} uploadId ID of the upload to fetch
      * @param {string} storeId ID of the store containing the upload
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public markStoreUploadCompleted(uploadId: string, storeId: string, options?: AxiosRequestConfig) {
+    public markStoreUploadCompleted(uploadId: number, storeId: string, options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).markStoreUploadCompleted(uploadId, storeId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Mark a file within an upload as uploaded
-     * @param {string} uploadId ID of the upload to fetch
+     * @param {number} uploadId ID of the upload to fetch
      * @param {string} storeId ID of the store containing the upload
      * @param {number} fileId Index of the file within the upload that should be marked as uploaded
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public markStoreUploadFileUploaded(uploadId: string, storeId: string, fileId: number, options?: AxiosRequestConfig) {
+    public markStoreUploadFileUploaded(uploadId: number, storeId: string, fileId: number, options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).markStoreUploadFileUploaded(uploadId, storeId, fileId, options).then((request) => request(this.axios, this.basePath));
     }
 

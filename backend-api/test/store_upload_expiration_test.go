@@ -37,7 +37,7 @@ func TestExpireFailsIfUploadDoesNotExist(t *testing.T) {
 	authContext, apiClient := getAPIClient(email, pat)
 
 	storeId := "example"
-	invalidUploadId := "999999999"
+	invalidUploadId := int32(999999999)
 
 	if err := ensureTestStoreExists(apiClient, authContext, storeId); err != nil {
 		t.Fatalf("ensureTestStoreExists failed: %v", err)

@@ -47,7 +47,7 @@ namespace ClientAPI
             public MarkStoreUploadCompletedException(string message) : base(message) { }
         }
 
-        public async Task MarkStoreUploadCompletedAsync(string store, string uploadId) {
+        public async Task MarkStoreUploadCompletedAsync(string store, int uploadId) {
 
             try {
                 BackendAPI.Client.ApiResponse<object> response = await backendApi.MarkStoreUploadCompletedWithHttpInfoAsync(uploadId, store);
@@ -67,7 +67,7 @@ namespace ClientAPI
             public MarkStoreUploadAbortedException(string message) : base(message) { }
         }
 
-        public async Task MarkStoreUploadAbortedAsync(string store, string uploadId) {
+        public async Task MarkStoreUploadAbortedAsync(string store, int uploadId) {
 
             try {
                 BackendAPI.Client.ApiResponse<object> response = await backendApi.MarkStoreUploadAbortedWithHttpInfoAsync(uploadId, store);
@@ -87,7 +87,7 @@ namespace ClientAPI
             public MarkStoreUploadFileUploadedException(string message) : base(message) { }
         }
 
-        public async Task MarkStoreUploadFileUploadedAsync(string store, string uploadId, int fileId) {
+        public async Task MarkStoreUploadFileUploadedAsync(string store, int uploadId, int fileId) {
 
             try {
                 BackendAPI.Client.ApiResponse<object> response = await backendApi.MarkStoreUploadFileUploadedWithHttpInfoAsync(uploadId, store, fileId);
@@ -107,7 +107,7 @@ namespace ClientAPI
             public ExpireStoreUploadException(string message) : base(message) { }
         }
 
-        public async Task ExpireStoreUploadAsync(string store, string uploadId) {
+        public async Task ExpireStoreUploadAsync(string store, int uploadId) {
 
             try {
                 BackendAPI.Client.ApiResponse<object> response = await backendApi.ExpireStoreUploadWithHttpInfoAsync(uploadId, store);
@@ -147,7 +147,7 @@ namespace ClientAPI
             public GetStoreUploadException(string message) : base(message) { }
         }
 
-        public async Task<BackendAPI.Model.GetStoreUploadResponse> GetStoreUploadAsync(string store, string uploadId) {
+        public async Task<BackendAPI.Model.GetStoreUploadResponse> GetStoreUploadAsync(string store, int uploadId) {
 
             try {
                 BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreUploadResponse> response = await backendApi.GetStoreUploadWithHttpInfoAsync(uploadId, store);

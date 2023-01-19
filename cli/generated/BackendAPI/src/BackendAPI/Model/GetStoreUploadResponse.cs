@@ -45,13 +45,15 @@ namespace BackendAPI.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="GetStoreUploadResponse" /> class.
         /// </summary>
+        /// <param name="uploadId">uploadId (required).</param>
         /// <param name="description">description (required).</param>
         /// <param name="buildId">buildId (required).</param>
         /// <param name="timestamp">timestamp (required).</param>
         /// <param name="files">files (required).</param>
         /// <param name="status">status (required).</param>
-        public GetStoreUploadResponse(string description = default(string), string buildId = default(string), string timestamp = default(string), List<GetStoreUploadFileResponse> files = default(List<GetStoreUploadFileResponse>), StoreUploadStatus status = default(StoreUploadStatus))
+        public GetStoreUploadResponse(int uploadId = default(int), string description = default(string), string buildId = default(string), string timestamp = default(string), List<GetStoreUploadFileResponse> files = default(List<GetStoreUploadFileResponse>), StoreUploadStatus status = default(StoreUploadStatus))
         {
+            this.UploadId = uploadId;
             // to ensure "description" is required (not null)
             if (description == null)
             {
@@ -78,6 +80,12 @@ namespace BackendAPI.Model
             this.Files = files;
             this.Status = status;
         }
+
+        /// <summary>
+        /// Gets or Sets UploadId
+        /// </summary>
+        [DataMember(Name = "uploadId", IsRequired = true, EmitDefaultValue = true)]
+        public int UploadId { get; set; }
 
         /// <summary>
         /// Gets or Sets Description
@@ -111,6 +119,7 @@ namespace BackendAPI.Model
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("class GetStoreUploadResponse {\n");
+            sb.Append("  UploadId: ").Append(UploadId).Append("\n");
             sb.Append("  Description: ").Append(Description).Append("\n");
             sb.Append("  BuildId: ").Append(BuildId).Append("\n");
             sb.Append("  Timestamp: ").Append(Timestamp).Append("\n");
@@ -152,6 +161,10 @@ namespace BackendAPI.Model
             }
             return 
                 (
+                    this.UploadId == input.UploadId ||
+                    this.UploadId.Equals(input.UploadId)
+                ) && 
+                (
                     this.Description == input.Description ||
                     (this.Description != null &&
                     this.Description.Equals(input.Description))
@@ -187,6 +200,7 @@ namespace BackendAPI.Model
             unchecked // Overflow is fine, just wrap
             {
                 int hashCode = 41;
+                hashCode = (hashCode * 59) + this.UploadId.GetHashCode();
                 if (this.Description != null)
                 {
                     hashCode = (hashCode * 59) + this.Description.GetHashCode();

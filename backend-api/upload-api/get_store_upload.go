@@ -16,7 +16,7 @@ import (
 	postgres "github.com/falldamagestudio/cloud-symbol-server/backend-api/postgres"
 )
 
-func GetStoreUpload(ctx context.Context, uploadId string, storeId string) (openapi.ImplResponse, error) {
+func GetStoreUpload(ctx context.Context, uploadId int32, storeId string) (openapi.ImplResponse, error) {
 
 	log.Printf("Getting store upload")
 

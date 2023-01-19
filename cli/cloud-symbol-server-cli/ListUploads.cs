@@ -19,7 +19,7 @@ namespace CLI
                     BackendAPI.Model.GetStoreUploadsResponse uploadsResponse = await ClientAPI.ListUploads.DoListUploads(globalOptions.ServiceUrl, globalOptions.Email, globalOptions.Pat, store, offset, limit);
                     for (int batchOffset = 0; batchOffset < uploadsResponse.Uploads.Count; batchOffset++) {
                         BackendAPI.Model.GetStoreUploadResponse upload = uploadsResponse.Uploads[batchOffset];
-                        Console.WriteLine($"  Upload {offset + batchOffset}:");
+                        Console.WriteLine($"  Upload {upload.UploadId}:");
                         Console.WriteLine($"    Status: {upload.Status}");
                         Console.WriteLine($"    Description: {upload.Description}");
                         Console.WriteLine($"    Build ID: {upload.BuildId}");

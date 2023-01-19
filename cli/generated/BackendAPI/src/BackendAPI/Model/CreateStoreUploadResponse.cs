@@ -39,10 +39,12 @@ namespace BackendAPI.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateStoreUploadResponse" /> class.
         /// </summary>
+        /// <param name="uploadId">uploadId (required).</param>
         /// <param name="id">id (required).</param>
         /// <param name="files">files (required).</param>
-        public CreateStoreUploadResponse(string id = default(string), List<UploadFileResponse> files = default(List<UploadFileResponse>))
+        public CreateStoreUploadResponse(int uploadId = default(int), string id = default(string), List<UploadFileResponse> files = default(List<UploadFileResponse>))
         {
+            this.UploadId = uploadId;
             // to ensure "id" is required (not null)
             if (id == null)
             {
@@ -56,6 +58,12 @@ namespace BackendAPI.Model
             }
             this.Files = files;
         }
+
+        /// <summary>
+        /// Gets or Sets UploadId
+        /// </summary>
+        [DataMember(Name = "uploadId", IsRequired = true, EmitDefaultValue = true)]
+        public int UploadId { get; set; }
 
         /// <summary>
         /// Gets or Sets Id
@@ -77,6 +85,7 @@ namespace BackendAPI.Model
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("class CreateStoreUploadResponse {\n");
+            sb.Append("  UploadId: ").Append(UploadId).Append("\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
             sb.Append("  Files: ").Append(Files).Append("\n");
             sb.Append("}\n");
@@ -115,6 +124,10 @@ namespace BackendAPI.Model
             }
             return 
                 (
+                    this.UploadId == input.UploadId ||
+                    this.UploadId.Equals(input.UploadId)
+                ) && 
+                (
                     this.Id == input.Id ||
                     (this.Id != null &&
                     this.Id.Equals(input.Id))
@@ -136,6 +149,7 @@ namespace BackendAPI.Model
             unchecked // Overflow is fine, just wrap
             {
                 int hashCode = 41;
+                hashCode = (hashCode * 59) + this.UploadId.GetHashCode();
                 if (this.Id != null)
                 {
                     hashCode = (hashCode * 59) + this.Id.GetHashCode();

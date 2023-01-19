@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**UploadId** | **int32** |  | 
 **Id** | **string** |  | 
 **Files** | [**[]UploadFileResponse**](UploadFileResponse.md) |  | 
 
@@ -11,7 +12,7 @@ Name | Type | Description | Notes
 
 ### NewCreateStoreUploadResponse
 
-`func NewCreateStoreUploadResponse(id string, files []UploadFileResponse, ) *CreateStoreUploadResponse`
+`func NewCreateStoreUploadResponse(uploadId int32, id string, files []UploadFileResponse, ) *CreateStoreUploadResponse`
 
 NewCreateStoreUploadResponse instantiates a new CreateStoreUploadResponse object
 This constructor will assign default values to properties that have it defined,
@@ -25,6 +26,26 @@ will change when the set of required properties is changed
 NewCreateStoreUploadResponseWithDefaults instantiates a new CreateStoreUploadResponse object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetUploadId
+
+`func (o *CreateStoreUploadResponse) GetUploadId() int32`
+
+GetUploadId returns the UploadId field if non-nil, zero value otherwise.
+
+### GetUploadIdOk
+
+`func (o *CreateStoreUploadResponse) GetUploadIdOk() (*int32, bool)`
+
+GetUploadIdOk returns a tuple with the UploadId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetUploadId
+
+`func (o *CreateStoreUploadResponse) SetUploadId(v int32)`
+
+SetUploadId sets UploadId field to given value.
+
 
 ### GetId
 

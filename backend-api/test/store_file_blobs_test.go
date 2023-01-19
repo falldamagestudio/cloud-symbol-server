@@ -230,7 +230,7 @@ func TestGetStoreFileBlobsWithPaginationSucceeds(t *testing.T) {
 	// Complete upload of first file
 
 	{
-		storeUploadId := "0"
+		storeUploadId := int32(0)
 		fileId := int32(0)
 
 		r, err = apiClient.DefaultApi.MarkStoreUploadFileUploaded(authContext, storeUploadId, storeId, fileId).Execute()

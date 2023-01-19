@@ -11,6 +11,8 @@ package openapi
 
 type GetStoreUploadResponse struct {
 
+	UploadId int32 `json:"uploadId"`
+
 	Description string `json:"description"`
 
 	BuildId string `json:"buildId"`
@@ -25,6 +27,7 @@ type GetStoreUploadResponse struct {
 // AssertGetStoreUploadResponseRequired checks if the required fields are not zero-ed
 func AssertGetStoreUploadResponseRequired(obj GetStoreUploadResponse) error {
 	elements := map[string]interface{}{
+		"uploadId": obj.UploadId,
 		"description": obj.Description,
 		"buildId": obj.BuildId,
 		"timestamp": obj.Timestamp,

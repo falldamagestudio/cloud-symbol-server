@@ -2,7 +2,7 @@ namespace CLI
 {
     public static class ExpireStoreUpload
     {
-        public static async Task<int> DoExpireStoreUpload(GlobalOptions globalOptions, string store, string uploadId)
+        public static async Task<int> DoExpireStoreUpload(GlobalOptions globalOptions, string store, int uploadId)
         {
             if (!globalOptions.Validate()) {
                 Console.Error.WriteLine("Please set service-url, email and pat via config.json or commandline options");

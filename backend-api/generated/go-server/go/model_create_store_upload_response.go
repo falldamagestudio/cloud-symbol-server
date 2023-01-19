@@ -11,6 +11,8 @@ package openapi
 
 type CreateStoreUploadResponse struct {
 
+	UploadId int32 `json:"uploadId"`
+
 	Id string `json:"id"`
 
 	Files []UploadFileResponse `json:"files"`
@@ -19,6 +21,7 @@ type CreateStoreUploadResponse struct {
 // AssertCreateStoreUploadResponseRequired checks if the required fields are not zero-ed
 func AssertCreateStoreUploadResponseRequired(obj CreateStoreUploadResponse) error {
 	elements := map[string]interface{}{
+		"uploadId": obj.UploadId,
 		"id": obj.Id,
 		"files": obj.Files,
 	}

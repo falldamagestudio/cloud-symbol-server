@@ -252,8 +252,12 @@ func (c *DefaultApiController) DeleteToken(w http.ResponseWriter, r *http.Reques
 // ExpireStoreUpload - Expire store upload and consider files for GC
 func (c *DefaultApiController) ExpireStoreUpload(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	uploadIdParam := params["uploadId"]
-	
+	uploadIdParam, err := parseInt32Parameter(params["uploadId"], true)
+	if err != nil {
+		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		return
+	}
+
 	storeIdParam := params["storeId"]
 	
 	result, err := c.service.ExpireStoreUpload(r.Context(), uploadIdParam, storeIdParam)
@@ -346,8 +350,12 @@ func (c *DefaultApiController) GetStoreFiles(w http.ResponseWriter, r *http.Requ
 // GetStoreUpload - Fetch an upload
 func (c *DefaultApiController) GetStoreUpload(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	uploadIdParam := params["uploadId"]
-	
+	uploadIdParam, err := parseInt32Parameter(params["uploadId"], true)
+	if err != nil {
+		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		return
+	}
+
 	storeIdParam := params["storeId"]
 	
 	result, err := c.service.GetStoreUpload(r.Context(), uploadIdParam, storeIdParam)
@@ -433,8 +441,12 @@ func (c *DefaultApiController) GetTokens(w http.ResponseWriter, r *http.Request)
 // MarkStoreUploadAborted - Mark an upload as aborted
 func (c *DefaultApiController) MarkStoreUploadAborted(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	uploadIdParam := params["uploadId"]
-	
+	uploadIdParam, err := parseInt32Parameter(params["uploadId"], true)
+	if err != nil {
+		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		return
+	}
+
 	storeIdParam := params["storeId"]
 	
 	result, err := c.service.MarkStoreUploadAborted(r.Context(), uploadIdParam, storeIdParam)
@@ -451,8 +463,12 @@ func (c *DefaultApiController) MarkStoreUploadAborted(w http.ResponseWriter, r *
 // MarkStoreUploadCompleted - Mark an upload as completed
 func (c *DefaultApiController) MarkStoreUploadCompleted(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	uploadIdParam := params["uploadId"]
-	
+	uploadIdParam, err := parseInt32Parameter(params["uploadId"], true)
+	if err != nil {
+		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		return
+	}
+
 	storeIdParam := params["storeId"]
 	
 	result, err := c.service.MarkStoreUploadCompleted(r.Context(), uploadIdParam, storeIdParam)
@@ -469,8 +485,12 @@ func (c *DefaultApiController) MarkStoreUploadCompleted(w http.ResponseWriter, r
 // MarkStoreUploadFileUploaded - Mark a file within an upload as uploaded
 func (c *DefaultApiController) MarkStoreUploadFileUploaded(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	uploadIdParam := params["uploadId"]
-	
+	uploadIdParam, err := parseInt32Parameter(params["uploadId"], true)
+	if err != nil {
+		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		return
+	}
+
 	storeIdParam := params["storeId"]
 	
 	fileIdParam, err := parseInt32Parameter(params["fileId"], true)

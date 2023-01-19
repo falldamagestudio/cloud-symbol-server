@@ -104,9 +104,9 @@ namespace CLI
 
             Command expireUploadCommand = new Command("expire", "expire an upload and its files") {
                 new Argument<string>("store", "Name of store containing upload"),
-                new Argument<string>("upload-id", "upload ID to expire"),
+                new Argument<int>("upload-id", "upload ID to expire"),
             };
-            expireUploadCommand.Handler = CommandHandler.Create(async (GlobalOptions globalOptions, string store, string uploadId)
+            expireUploadCommand.Handler = CommandHandler.Create(async (GlobalOptions globalOptions, string store, int uploadId)
                 => { return await CLI.ExpireStoreUpload.DoExpireStoreUpload(globalOptions, store, uploadId); });
 
             Command listUploadsCommand = new Command("list", "List existing uploads within a store") {

@@ -483,7 +483,7 @@ void (empty response body)
 
 <a name="expirestoreupload"></a>
 # **ExpireStoreUpload**
-> void ExpireStoreUpload (string uploadId, string storeId)
+> void ExpireStoreUpload (int uploadId, string storeId)
 
 Expire store upload and consider files for GC
 
@@ -508,7 +508,7 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var uploadId = "uploadId_example";  // string | ID of the upload to fetch
+            var uploadId = 56;  // int | ID of the upload to fetch
             var storeId = "storeId_example";  // string | ID of the store containing the upload
 
             try
@@ -548,7 +548,7 @@ catch (ApiException e)
 
 | Name | Type | Description | Notes |
 |------|------|-------------|-------|
-| **uploadId** | **string** | ID of the upload to fetch |  |
+| **uploadId** | **int** | ID of the upload to fetch |  |
 | **storeId** | **string** | ID of the store containing the upload |  |
 
 ### Return type
@@ -875,7 +875,7 @@ catch (ApiException e)
 
 <a name="getstoreupload"></a>
 # **GetStoreUpload**
-> GetStoreUploadResponse GetStoreUpload (string uploadId, string storeId)
+> GetStoreUploadResponse GetStoreUpload (int uploadId, string storeId)
 
 Fetch an upload
 
@@ -900,7 +900,7 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var uploadId = "uploadId_example";  // string | ID of the upload to fetch
+            var uploadId = 56;  // int | ID of the upload to fetch
             var storeId = "storeId_example";  // string | ID of the store containing the upload
 
             try
@@ -944,7 +944,7 @@ catch (ApiException e)
 
 | Name | Type | Description | Notes |
 |------|------|-------------|-------|
-| **uploadId** | **string** | ID of the upload to fetch |  |
+| **uploadId** | **int** | ID of the upload to fetch |  |
 | **storeId** | **string** | ID of the store containing the upload |  |
 
 ### Return type
@@ -1344,7 +1344,7 @@ This endpoint does not need any parameter.
 
 <a name="markstoreuploadaborted"></a>
 # **MarkStoreUploadAborted**
-> void MarkStoreUploadAborted (string uploadId, string storeId)
+> void MarkStoreUploadAborted (int uploadId, string storeId)
 
 Mark an upload as aborted
 
@@ -1369,7 +1369,7 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var uploadId = "uploadId_example";  // string | ID of the upload to mark as aborted
+            var uploadId = 56;  // int | ID of the upload to mark as aborted
             var storeId = "storeId_example";  // string | ID of the store containing the upload
 
             try
@@ -1409,7 +1409,7 @@ catch (ApiException e)
 
 | Name | Type | Description | Notes |
 |------|------|-------------|-------|
-| **uploadId** | **string** | ID of the upload to mark as aborted |  |
+| **uploadId** | **int** | ID of the upload to mark as aborted |  |
 | **storeId** | **string** | ID of the store containing the upload |  |
 
 ### Return type
@@ -1437,7 +1437,7 @@ void (empty response body)
 
 <a name="markstoreuploadcompleted"></a>
 # **MarkStoreUploadCompleted**
-> void MarkStoreUploadCompleted (string uploadId, string storeId)
+> void MarkStoreUploadCompleted (int uploadId, string storeId)
 
 Mark an upload as completed
 
@@ -1462,7 +1462,7 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var uploadId = "uploadId_example";  // string | ID of the upload to fetch
+            var uploadId = 56;  // int | ID of the upload to fetch
             var storeId = "storeId_example";  // string | ID of the store containing the upload
 
             try
@@ -1502,7 +1502,7 @@ catch (ApiException e)
 
 | Name | Type | Description | Notes |
 |------|------|-------------|-------|
-| **uploadId** | **string** | ID of the upload to fetch |  |
+| **uploadId** | **int** | ID of the upload to fetch |  |
 | **storeId** | **string** | ID of the store containing the upload |  |
 
 ### Return type
@@ -1530,7 +1530,7 @@ void (empty response body)
 
 <a name="markstoreuploadfileuploaded"></a>
 # **MarkStoreUploadFileUploaded**
-> void MarkStoreUploadFileUploaded (string uploadId, string storeId, int fileId)
+> void MarkStoreUploadFileUploaded (int uploadId, string storeId, int fileId)
 
 Mark a file within an upload as uploaded
 
@@ -1555,7 +1555,7 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
-            var uploadId = "uploadId_example";  // string | ID of the upload to fetch
+            var uploadId = 56;  // int | ID of the upload to fetch
             var storeId = "storeId_example";  // string | ID of the store containing the upload
             var fileId = 56;  // int | Index of the file within the upload that should be marked as uploaded
 
@@ -1596,7 +1596,7 @@ catch (ApiException e)
 
 | Name | Type | Description | Notes |
 |------|------|-------------|-------|
-| **uploadId** | **string** | ID of the upload to fetch |  |
+| **uploadId** | **int** | ID of the upload to fetch |  |
 | **storeId** | **string** | ID of the store containing the upload |  |
 | **fileId** | **int** | Index of the file within the upload that should be marked as uploaded |  |
 

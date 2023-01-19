@@ -154,20 +154,21 @@ func CreateStoreUpload(context context.Context, storeId string, createStoreUploa
 		}
 	}
 
-	createStoreUploadResponse.Id = uploadId
+	createStoreUploadResponse.Id = fmt.Sprint(uploadId)
+	createStoreUploadResponse.UploadId = int32(uploadId)
 
 	log.Printf("Response: %v", createStoreUploadResponse)
 
 	return openapi.Response(http.StatusOK, createStoreUploadResponse), nil
 }
 
-func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUploadEntry) (string, error) {
+func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUploadEntry) (int, error) {
 
 	log.Printf("Writing upload to database: %v", storeUploadEntry)
 
 	tx, err := postgres.BeginDBTransaction(ctx)
 	if err != nil {
-		return "", err
+		return 0, err
 	}
 
 	// Locate store in DB, and ensure store remains throughout entire txn
@@ -178,7 +179,7 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 	if err != nil {
 		log.Printf("error while accessing store: %v", err)
 		tx.Rollback()
-		return "", err
+		return 0, err
 	}
 
 	var storeUploadIndex = store.NextStoreUploadIndex
@@ -190,7 +191,7 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 	if err != nil {
 		log.Printf("error while updating store: %v", err)
 		tx.Rollback()
-		return "", err
+		return 0, err
 	}
 
 	var timestamp = time.Now()
@@ -208,7 +209,7 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 	if err != nil {
 		log.Printf("unable to insert upload: %v", err)
 		tx.Rollback()
-		return "", err
+		return 0, err
 	}
 
 	var uploadFileIndex = 0
@@ -230,12 +231,12 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 			if err != nil {
 				log.Printf("unable to insert file: %v", err)
 				tx.Rollback()
-				return "", err
+				return 0, err
 			}
 		} else if err != nil {
 			log.Printf("error while locating store-file: %v", err)
 			tx.Rollback()
-			return "", err
+			return 0, err
 		}
 
 		// Create store-file-blob, in case one doesn't exist yet
@@ -265,12 +266,12 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 			if err != nil {
 				log.Printf("unable to insert file-blob: %v", err)
 				tx.Rollback()
-				return "", err
+				return 0, err
 			}
 		} else if err != nil {
 			log.Printf("error while locating file-blob: %v", err)
 			tx.Rollback()
-			return "", err
+			return 0, err
 		}
 
 		// Create store-upload-file
@@ -286,7 +287,7 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 		if err != nil {
 			log.Printf("unable to insert upload-file: %v", err)
 			tx.Rollback()
-			return "", err
+			return 0, err
 		}
 
 		uploadFileIndex++
@@ -295,10 +296,10 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 	err = tx.Commit()
 	if err != nil {
 		log.Printf("unable to commit transaction: %v", err)
-		return "", err
+		return 0, err
 	}
 
 	log.Printf("Upload is given ID %v", storeUploadIndex)
 
-	return fmt.Sprint(storeUploadIndex), nil
+	return storeUploadIndex, nil
 }

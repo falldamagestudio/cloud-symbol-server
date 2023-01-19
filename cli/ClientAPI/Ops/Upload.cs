@@ -64,7 +64,7 @@ namespace ClientAPI
                             throw new UploadException($"Upload failed with status code {response.StatusCode}; content = {response.Content}");
                         }
 
-                        string uploadId = createStoreUploadResponse.Id;
+                        int uploadId = createStoreUploadResponse.UploadId;
 
                         await backendApiWrapper.MarkStoreUploadFileUploadedAsync(store, uploadId, fileId);
 
@@ -98,7 +98,7 @@ namespace ClientAPI
             BackendAPI.Model.CreateStoreUploadResponse createStoreUploadResponse;
             createStoreUploadResponse = await backendApiWrapper.CreateStoreUploadAsync(store, createStoreUploadRequest);
 
-            string uploadId = createStoreUploadResponse.Id;
+            int uploadId = createStoreUploadResponse.UploadId;
 
             try {
 

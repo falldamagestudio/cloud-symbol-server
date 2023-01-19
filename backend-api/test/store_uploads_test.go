@@ -15,7 +15,7 @@ func TestGetStoreUploadWithInvalidCredentialsFails(t *testing.T) {
 	authContext, apiClient := getAPIClient(email, pat)
 
 	storeId := "example"
-	uploadId := "999999999"
+	uploadId := int32(999999999)
 
 	_, r, err := apiClient.DefaultApi.GetStoreUpload(authContext, uploadId, storeId).Execute()
 	desiredStatusCode := http.StatusUnauthorized
@@ -65,7 +65,7 @@ func TestGetStoreUploadThatDoesNotExistFails(t *testing.T) {
 	authContext, apiClient := getAPIClient(email, pat)
 
 	storeId := "example"
-	uploadId := "999999999"
+	uploadId := int32(999999999)
 
 	if err := ensureTestStoreExists(apiClient, authContext, storeId); err != nil {
 		t.Fatalf("ensureTestStoreExists failed: %v", err)
@@ -247,7 +247,7 @@ func TestCreateStoreUploadWithProgressSucceeds(t *testing.T) {
 	// Complete upload of first file
 
 	{
-		storeUploadId := "0"
+		storeUploadId := int32(0)
 		fileId := int32(0)
 
 		r, err = apiClient.DefaultApi.MarkStoreUploadFileUploaded(authContext, storeUploadId, storeId, fileId).Execute()
@@ -280,7 +280,7 @@ func TestCreateStoreUploadWithProgressSucceeds(t *testing.T) {
 	// Complete upload of second file
 
 	{
-		storeUploadId := "0"
+		storeUploadId := int32(0)
 		fileId := int32(1)
 
 		r, err = apiClient.DefaultApi.MarkStoreUploadFileUploaded(authContext, storeUploadId, storeId, fileId).Execute()
@@ -313,7 +313,7 @@ func TestCreateStoreUploadWithProgressSucceeds(t *testing.T) {
 	// Complete upload
 
 	{
-		storeUploadId := "0"
+		storeUploadId := int32(0)
 
 		r, err = apiClient.DefaultApi.MarkStoreUploadCompleted(authContext, storeUploadId, storeId).Execute()
 		desiredStatusCode = http.StatusOK
@@ -427,7 +427,7 @@ func TestCreateStoreUploadWithProgressAndAbortSucceeds(t *testing.T) {
 	// Complete upload of first file
 
 	{
-		storeUploadId := "0"
+		storeUploadId := int32(0)
 		fileId := int32(0)
 
 		r, err = apiClient.DefaultApi.MarkStoreUploadFileUploaded(authContext, storeUploadId, storeId, fileId).Execute()
@@ -460,7 +460,7 @@ func TestCreateStoreUploadWithProgressAndAbortSucceeds(t *testing.T) {
 	// Abort upload
 
 	{
-		storeUploadId := "0"
+		storeUploadId := int32(0)
 
 		r, err = apiClient.DefaultApi.MarkStoreUploadAborted(authContext, storeUploadId, storeId).Execute()
 		desiredStatusCode = http.StatusOK

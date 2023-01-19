@@ -8,7 +8,7 @@ import (
 	models "github.com/falldamagestudio/cloud-symbol-server/backend-api/generated/sql-db-models"
 )
 
-func ExpireStoreUpload(ctx context.Context, uploadId string, storeId string) (openapi.ImplResponse, error) {
+func ExpireStoreUpload(ctx context.Context, uploadId int32, storeId string) (openapi.ImplResponse, error) {
 
 	log.Printf("Expiring upload %v/%v", storeId, uploadId)
 	response, err := HandleUploadExpiryOrAbort(ctx, storeId, uploadId, models.StoreUploadStatusExpired)

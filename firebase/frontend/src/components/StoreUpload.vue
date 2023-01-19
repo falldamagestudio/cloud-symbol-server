@@ -3,6 +3,9 @@
 
     <td>
       <tr>
+        Upload ID: {{ storeUpload?.uploadId }}
+      </tr>
+      <tr>
         Description: {{ storeUpload?.description }}
       </tr>
       <tr>

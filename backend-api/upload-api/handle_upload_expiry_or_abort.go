@@ -17,7 +17,7 @@ import (
 	postgres "github.com/falldamagestudio/cloud-symbol-server/backend-api/postgres"
 )
 
-func HandleUploadExpiryOrAbort(ctx context.Context, storeId string, uploadId string, desiredStatus string) (openapi.ImplResponse, error) {
+func HandleUploadExpiryOrAbort(ctx context.Context, storeId string, uploadId int32, desiredStatus string) (openapi.ImplResponse, error) {
 
 	storageClient, err := cloud_storage.GetStorageClient(ctx)
 	if err != nil {

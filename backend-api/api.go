@@ -41,7 +41,7 @@ func (s *ApiService) CreateStoreUpload(ctx context.Context, storeId string, crea
 	return upload_api.CreateStoreUpload(ctx, storeId, createStoreUploadRequest)
 }
 
-func (s *ApiService) ExpireStoreUpload(ctx context.Context, uploadId string, storeId string) (openapi.ImplResponse, error) {
+func (s *ApiService) ExpireStoreUpload(ctx context.Context, uploadId int32, storeId string) (openapi.ImplResponse, error) {
 	return upload_api.ExpireStoreUpload(ctx, uploadId, storeId)
 }
 
@@ -49,19 +49,19 @@ func (s *ApiService) GetStoreUploads(ctx context.Context, storeId string, offset
 	return upload_api.GetStoreUploads(ctx, storeId, offset, limit)
 }
 
-func (s *ApiService) GetStoreUpload(ctx context.Context, uploadId string, storeId string) (openapi.ImplResponse, error) {
+func (s *ApiService) GetStoreUpload(ctx context.Context, uploadId int32, storeId string) (openapi.ImplResponse, error) {
 	return upload_api.GetStoreUpload(ctx, uploadId, storeId)
 }
 
-func (s *ApiService) MarkStoreUploadAborted(ctx context.Context, uploadId string, storeId string) (openapi.ImplResponse, error) {
+func (s *ApiService) MarkStoreUploadAborted(ctx context.Context, uploadId int32, storeId string) (openapi.ImplResponse, error) {
 	return upload_api.MarkStoreUploadAborted(ctx, uploadId, storeId)
 }
 
-func (s *ApiService) MarkStoreUploadCompleted(ctx context.Context, uploadId string, storeId string) (openapi.ImplResponse, error) {
+func (s *ApiService) MarkStoreUploadCompleted(ctx context.Context, uploadId int32, storeId string) (openapi.ImplResponse, error) {
 	return upload_api.MarkStoreUploadCompleted(ctx, uploadId, storeId)
 }
 
-func (s *ApiService) MarkStoreUploadFileUploaded(ctx context.Context, uploadId string, storeId string, fileId int32) (openapi.ImplResponse, error) {
+func (s *ApiService) MarkStoreUploadFileUploaded(ctx context.Context, uploadId int32, storeId string, fileId int32) (openapi.ImplResponse, error) {
 	return upload_api.MarkStoreUploadFileUploaded(ctx, uploadId, storeId, fileId)
 }
 

@@ -16,6 +16,7 @@ import (
 
 // GetStoreUploadResponse struct for GetStoreUploadResponse
 type GetStoreUploadResponse struct {
+	UploadId int32 `json:"uploadId"`
 	Description string `json:"description"`
 	BuildId string `json:"buildId"`
 	Timestamp string `json:"timestamp"`
@@ -27,8 +28,9 @@ type GetStoreUploadResponse struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetStoreUploadResponse(description string, buildId string, timestamp string, files []GetStoreUploadFileResponse, status StoreUploadStatus) *GetStoreUploadResponse {
+func NewGetStoreUploadResponse(uploadId int32, description string, buildId string, timestamp string, files []GetStoreUploadFileResponse, status StoreUploadStatus) *GetStoreUploadResponse {
 	this := GetStoreUploadResponse{}
+	this.UploadId = uploadId
 	this.Description = description
 	this.BuildId = buildId
 	this.Timestamp = timestamp
@@ -43,6 +45,30 @@ func NewGetStoreUploadResponse(description string, buildId string, timestamp str
 func NewGetStoreUploadResponseWithDefaults() *GetStoreUploadResponse {
 	this := GetStoreUploadResponse{}
 	return &this
+}
+
+// GetUploadId returns the UploadId field value
+func (o *GetStoreUploadResponse) GetUploadId() int32 {
+	if o == nil {
+		var ret int32
+		return ret
+	}
+
+	return o.UploadId
+}
+
+// GetUploadIdOk returns a tuple with the UploadId field value
+// and a boolean to check if the value has been set.
+func (o *GetStoreUploadResponse) GetUploadIdOk() (*int32, bool) {
+	if o == nil {
+    return nil, false
+	}
+	return &o.UploadId, true
+}
+
+// SetUploadId sets field value
+func (o *GetStoreUploadResponse) SetUploadId(v int32) {
+	o.UploadId = v
 }
 
 // GetDescription returns the Description field value
@@ -167,6 +193,9 @@ func (o *GetStoreUploadResponse) SetStatus(v StoreUploadStatus) {
 
 func (o GetStoreUploadResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
+	if true {
+		toSerialize["uploadId"] = o.UploadId
+	}
 	if true {
 		toSerialize["description"] = o.Description
 	}

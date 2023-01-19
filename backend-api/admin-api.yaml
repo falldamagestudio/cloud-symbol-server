@@ -415,7 +415,7 @@ paths:
         - in: path
           name: uploadId
           schema:
-            type: string
+            type: integer
           required: true
           description: ID of the upload to fetch
         - in: path
@@ -451,7 +451,7 @@ paths:
         - in: path
           name: uploadId
           schema:
-            type: string
+            type: integer
           required: true
           description: ID of the upload to fetch
         - in: path
@@ -483,7 +483,7 @@ paths:
         - in: path
           name: uploadId
           schema:
-            type: string
+            type: integer
           required: true
           description: ID of the upload to mark as aborted
         - in: path
@@ -515,7 +515,7 @@ paths:
         - in: path
           name: uploadId
           schema:
-            type: string
+            type: integer
           required: true
           description: ID of the upload to fetch
         - in: path
@@ -547,7 +547,7 @@ paths:
         - in: path
           name: uploadId
           schema:
-            type: string
+            type: integer
           required: true
           description: ID of the upload to fetch
         - in: path
@@ -842,9 +842,14 @@ components:
     createStoreUploadResponse:
       type: object
       required:
+        - uploadId
         - id
         - files
       properties:
+        uploadId:
+          type: integer
+          example: 129
+        # id is present for legacy (0.x) API users
         id:
           type: string
           example: s4elWg054qyrpHCsHqLq
@@ -873,12 +878,16 @@ components:
     getStoreUploadResponse:
       type: object
       required:
+        - uploadId
         - description
         - buildId
         - timestamp
         - files
         - status
       properties:
+        uploadId:
+          type: integer
+          example: 129
         description:
           type: string
           example: Example application

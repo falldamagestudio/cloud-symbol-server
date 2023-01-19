@@ -466,7 +466,7 @@ paths:
         name: uploadId
         required: true
         schema:
-          type: string
+          type: integer
         style: simple
       - description: ID of the store containing the upload
         explode: false
@@ -506,7 +506,7 @@ paths:
         name: uploadId
         required: true
         schema:
-          type: string
+          type: integer
         style: simple
       - description: ID of the store containing the upload
         explode: false
@@ -542,7 +542,7 @@ paths:
         name: uploadId
         required: true
         schema:
-          type: string
+          type: integer
         style: simple
       - description: ID of the store containing the upload
         explode: false
@@ -578,7 +578,7 @@ paths:
         name: uploadId
         required: true
         schema:
-          type: string
+          type: integer
         style: simple
       - description: ID of the store containing the upload
         explode: false
@@ -614,7 +614,7 @@ paths:
         name: uploadId
         required: true
         schema:
-          type: string
+          type: integer
         style: simple
       - description: ID of the store containing the upload
         explode: false
@@ -808,7 +808,8 @@ components:
         pagination:
           total: 0
         uploads:
-        - description: Example application
+        - uploadId: 129
+          description: Example application
           files:
           - fileName: Application.pdb
             blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
@@ -819,7 +820,8 @@ components:
           buildId: Build 432
           timestamp: 2019-10-12T07:20:50.52Z
           status: completed
-        - description: Example application
+        - uploadId: 129
+          description: Example application
           files:
           - fileName: Application.pdb
             blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
@@ -936,6 +938,7 @@ components:
       type: object
     createStoreUploadResponse:
       example:
+        uploadId: 129
         files:
         - fileName: Application.pdb
           blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
@@ -945,6 +948,9 @@ components:
           url: https://storage.googleapis.com/storage/v1/b/example-bucket/o/stores/default/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
         id: s4elWg054qyrpHCsHqLq
       properties:
+        uploadId:
+          example: 129
+          type: integer
         id:
           example: s4elWg054qyrpHCsHqLq
           type: string
@@ -955,6 +961,7 @@ components:
       required:
       - files
       - id
+      - uploadId
       type: object
     uploadFileResponse:
       example:
@@ -979,6 +986,7 @@ components:
       type: object
     getStoreUploadResponse:
       example:
+        uploadId: 129
         description: Example application
         files:
         - fileName: Application.pdb
@@ -991,6 +999,9 @@ components:
         timestamp: 2019-10-12T07:20:50.52Z
         status: completed
       properties:
+        uploadId:
+          example: 129
+          type: integer
         description:
           example: Example application
           type: string
@@ -1012,6 +1023,7 @@ components:
       - files
       - status
       - timestamp
+      - uploadId
       type: object
     getStoreUploadFileResponse:
       example:

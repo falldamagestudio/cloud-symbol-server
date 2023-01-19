@@ -16,7 +16,7 @@ import (
 	postgres "github.com/falldamagestudio/cloud-symbol-server/backend-api/postgres"
 )
 
-func MarkStoreUploadFileUploaded(ctx context.Context, uploadId string, storeId string, fileId int32) (openapi.ImplResponse, error) {
+func MarkStoreUploadFileUploaded(ctx context.Context, uploadId int32, storeId string, fileId int32) (openapi.ImplResponse, error) {
 
 	tx, err := postgres.BeginDBTransaction(ctx)
 	if err != nil {

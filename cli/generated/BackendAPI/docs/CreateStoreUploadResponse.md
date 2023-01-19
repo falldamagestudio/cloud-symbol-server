@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**UploadId** | **int** |  | 
 **Id** | **string** |  | 
 **Files** | [**List&lt;UploadFileResponse&gt;**](UploadFileResponse.md) |  | 
 

@@ -371,7 +371,7 @@ import (
 )
 
 func main() {
-    uploadId := "uploadId_example" // string | ID of the upload to fetch
+    uploadId := int32(56) // int32 | ID of the upload to fetch
     storeId := "storeId_example" // string | ID of the store containing the upload
 
     configuration := openapiclient.NewConfiguration()
@@ -390,7 +390,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**uploadId** | **string** | ID of the upload to fetch | 
+**uploadId** | **int32** | ID of the upload to fetch | 
 **storeId** | **string** | ID of the store containing the upload | 
 
 ### Other Parameters
@@ -661,7 +661,7 @@ import (
 )
 
 func main() {
-    uploadId := "uploadId_example" // string | ID of the upload to fetch
+    uploadId := int32(56) // int32 | ID of the upload to fetch
     storeId := "storeId_example" // string | ID of the store containing the upload
 
     configuration := openapiclient.NewConfiguration()
@@ -682,7 +682,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**uploadId** | **string** | ID of the upload to fetch | 
+**uploadId** | **int32** | ID of the upload to fetch | 
 **storeId** | **string** | ID of the store containing the upload | 
 
 ### Other Parameters
@@ -990,7 +990,7 @@ import (
 )
 
 func main() {
-    uploadId := "uploadId_example" // string | ID of the upload to mark as aborted
+    uploadId := int32(56) // int32 | ID of the upload to mark as aborted
     storeId := "storeId_example" // string | ID of the store containing the upload
 
     configuration := openapiclient.NewConfiguration()
@@ -1009,7 +1009,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**uploadId** | **string** | ID of the upload to mark as aborted | 
+**uploadId** | **int32** | ID of the upload to mark as aborted | 
 **storeId** | **string** | ID of the store containing the upload | 
 
 ### Other Parameters
@@ -1059,7 +1059,7 @@ import (
 )
 
 func main() {
-    uploadId := "uploadId_example" // string | ID of the upload to fetch
+    uploadId := int32(56) // int32 | ID of the upload to fetch
     storeId := "storeId_example" // string | ID of the store containing the upload
 
     configuration := openapiclient.NewConfiguration()
@@ -1078,7 +1078,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**uploadId** | **string** | ID of the upload to fetch | 
+**uploadId** | **int32** | ID of the upload to fetch | 
 **storeId** | **string** | ID of the store containing the upload | 
 
 ### Other Parameters
@@ -1128,7 +1128,7 @@ import (
 )
 
 func main() {
-    uploadId := "uploadId_example" // string | ID of the upload to fetch
+    uploadId := int32(56) // int32 | ID of the upload to fetch
     storeId := "storeId_example" // string | ID of the store containing the upload
     fileId := int32(56) // int32 | Index of the file within the upload that should be marked as uploaded
 
@@ -1148,7 +1148,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**uploadId** | **string** | ID of the upload to fetch | 
+**uploadId** | **int32** | ID of the upload to fetch | 
 **storeId** | **string** | ID of the store containing the upload | 
 **fileId** | **int32** | Index of the file within the upload that should be marked as uploaded | 
 

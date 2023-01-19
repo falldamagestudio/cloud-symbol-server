@@ -16,6 +16,7 @@ import (
 
 // CreateStoreUploadResponse struct for CreateStoreUploadResponse
 type CreateStoreUploadResponse struct {
+	UploadId int32 `json:"uploadId"`
 	Id string `json:"id"`
 	Files []UploadFileResponse `json:"files"`
 }
@@ -24,8 +25,9 @@ type CreateStoreUploadResponse struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCreateStoreUploadResponse(id string, files []UploadFileResponse) *CreateStoreUploadResponse {
+func NewCreateStoreUploadResponse(uploadId int32, id string, files []UploadFileResponse) *CreateStoreUploadResponse {
 	this := CreateStoreUploadResponse{}
+	this.UploadId = uploadId
 	this.Id = id
 	this.Files = files
 	return &this
@@ -37,6 +39,30 @@ func NewCreateStoreUploadResponse(id string, files []UploadFileResponse) *Create
 func NewCreateStoreUploadResponseWithDefaults() *CreateStoreUploadResponse {
 	this := CreateStoreUploadResponse{}
 	return &this
+}
+
+// GetUploadId returns the UploadId field value
+func (o *CreateStoreUploadResponse) GetUploadId() int32 {
+	if o == nil {
+		var ret int32
+		return ret
+	}
+
+	return o.UploadId
+}
+
+// GetUploadIdOk returns a tuple with the UploadId field value
+// and a boolean to check if the value has been set.
+func (o *CreateStoreUploadResponse) GetUploadIdOk() (*int32, bool) {
+	if o == nil {
+    return nil, false
+	}
+	return &o.UploadId, true
+}
+
+// SetUploadId sets field value
+func (o *CreateStoreUploadResponse) SetUploadId(v int32) {
+	o.UploadId = v
 }
 
 // GetId returns the Id field value
@@ -89,6 +115,9 @@ func (o *CreateStoreUploadResponse) SetFiles(v []UploadFileResponse) {
 
 func (o CreateStoreUploadResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
+	if true {
+		toSerialize["uploadId"] = o.UploadId
+	}
 	if true {
 		toSerialize["id"] = o.Id
 	}

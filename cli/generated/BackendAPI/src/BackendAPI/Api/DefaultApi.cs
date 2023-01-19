@@ -134,7 +134,7 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the upload</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns></returns>
-        void ExpireStoreUpload(string uploadId, string storeId, int operationIndex = 0);
+        void ExpireStoreUpload(int uploadId, string storeId, int operationIndex = 0);
 
         /// <summary>
         /// Expire store upload and consider files for GC
@@ -147,7 +147,7 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the upload</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> ExpireStoreUploadWithHttpInfo(string uploadId, string storeId, int operationIndex = 0);
+        ApiResponse<Object> ExpireStoreUploadWithHttpInfo(int uploadId, string storeId, int operationIndex = 0);
         /// <summary>
         /// Request download URL for the binary blob associated with a particular store/file/blob-id
         /// </summary>
@@ -230,7 +230,7 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the upload</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>GetStoreUploadResponse</returns>
-        GetStoreUploadResponse GetStoreUpload(string uploadId, string storeId, int operationIndex = 0);
+        GetStoreUploadResponse GetStoreUpload(int uploadId, string storeId, int operationIndex = 0);
 
         /// <summary>
         /// Fetch an upload
@@ -243,7 +243,7 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the upload</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of GetStoreUploadResponse</returns>
-        ApiResponse<GetStoreUploadResponse> GetStoreUploadWithHttpInfo(string uploadId, string storeId, int operationIndex = 0);
+        ApiResponse<GetStoreUploadResponse> GetStoreUploadWithHttpInfo(int uploadId, string storeId, int operationIndex = 0);
         /// <summary>
         /// Fetch a list of uploads in store
         /// </summary>
@@ -332,7 +332,7 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the upload</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns></returns>
-        void MarkStoreUploadAborted(string uploadId, string storeId, int operationIndex = 0);
+        void MarkStoreUploadAborted(int uploadId, string storeId, int operationIndex = 0);
 
         /// <summary>
         /// Mark an upload as aborted
@@ -345,7 +345,7 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the upload</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> MarkStoreUploadAbortedWithHttpInfo(string uploadId, string storeId, int operationIndex = 0);
+        ApiResponse<Object> MarkStoreUploadAbortedWithHttpInfo(int uploadId, string storeId, int operationIndex = 0);
         /// <summary>
         /// Mark an upload as completed
         /// </summary>
@@ -354,7 +354,7 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the upload</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns></returns>
-        void MarkStoreUploadCompleted(string uploadId, string storeId, int operationIndex = 0);
+        void MarkStoreUploadCompleted(int uploadId, string storeId, int operationIndex = 0);
 
         /// <summary>
         /// Mark an upload as completed
@@ -367,7 +367,7 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the upload</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> MarkStoreUploadCompletedWithHttpInfo(string uploadId, string storeId, int operationIndex = 0);
+        ApiResponse<Object> MarkStoreUploadCompletedWithHttpInfo(int uploadId, string storeId, int operationIndex = 0);
         /// <summary>
         /// Mark a file within an upload as uploaded
         /// </summary>
@@ -377,7 +377,7 @@ namespace BackendAPI.Api
         /// <param name="fileId">Index of the file within the upload that should be marked as uploaded</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns></returns>
-        void MarkStoreUploadFileUploaded(string uploadId, string storeId, int fileId, int operationIndex = 0);
+        void MarkStoreUploadFileUploaded(int uploadId, string storeId, int fileId, int operationIndex = 0);
 
         /// <summary>
         /// Mark a file within an upload as uploaded
@@ -391,7 +391,7 @@ namespace BackendAPI.Api
         /// <param name="fileId">Index of the file within the upload that should be marked as uploaded</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> MarkStoreUploadFileUploadedWithHttpInfo(string uploadId, string storeId, int fileId, int operationIndex = 0);
+        ApiResponse<Object> MarkStoreUploadFileUploadedWithHttpInfo(int uploadId, string storeId, int fileId, int operationIndex = 0);
         /// <summary>
         /// Update details of a token for current user
         /// </summary>
@@ -560,7 +560,7 @@ namespace BackendAPI.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task ExpireStoreUploadAsync(string uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task ExpireStoreUploadAsync(int uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// Expire store upload and consider files for GC
@@ -574,7 +574,7 @@ namespace BackendAPI.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> ExpireStoreUploadWithHttpInfoAsync(string uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<ApiResponse<Object>> ExpireStoreUploadWithHttpInfoAsync(int uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Request download URL for the binary blob associated with a particular store/file/blob-id
         /// </summary>
@@ -676,7 +676,7 @@ namespace BackendAPI.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of GetStoreUploadResponse</returns>
-        System.Threading.Tasks.Task<GetStoreUploadResponse> GetStoreUploadAsync(string uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<GetStoreUploadResponse> GetStoreUploadAsync(int uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// Fetch an upload
@@ -690,7 +690,7 @@ namespace BackendAPI.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (GetStoreUploadResponse)</returns>
-        System.Threading.Tasks.Task<ApiResponse<GetStoreUploadResponse>> GetStoreUploadWithHttpInfoAsync(string uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<ApiResponse<GetStoreUploadResponse>> GetStoreUploadWithHttpInfoAsync(int uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Fetch a list of uploads in store
         /// </summary>
@@ -803,7 +803,7 @@ namespace BackendAPI.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task MarkStoreUploadAbortedAsync(string uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task MarkStoreUploadAbortedAsync(int uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// Mark an upload as aborted
@@ -817,7 +817,7 @@ namespace BackendAPI.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> MarkStoreUploadAbortedWithHttpInfoAsync(string uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<ApiResponse<Object>> MarkStoreUploadAbortedWithHttpInfoAsync(int uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Mark an upload as completed
         /// </summary>
@@ -830,7 +830,7 @@ namespace BackendAPI.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task MarkStoreUploadCompletedAsync(string uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task MarkStoreUploadCompletedAsync(int uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// Mark an upload as completed
@@ -844,7 +844,7 @@ namespace BackendAPI.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> MarkStoreUploadCompletedWithHttpInfoAsync(string uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<ApiResponse<Object>> MarkStoreUploadCompletedWithHttpInfoAsync(int uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Mark a file within an upload as uploaded
         /// </summary>
@@ -858,7 +858,7 @@ namespace BackendAPI.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task MarkStoreUploadFileUploadedAsync(string uploadId, string storeId, int fileId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task MarkStoreUploadFileUploadedAsync(int uploadId, string storeId, int fileId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// Mark a file within an upload as uploaded
@@ -873,7 +873,7 @@ namespace BackendAPI.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> MarkStoreUploadFileUploadedWithHttpInfoAsync(string uploadId, string storeId, int fileId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<ApiResponse<Object>> MarkStoreUploadFileUploadedWithHttpInfoAsync(int uploadId, string storeId, int fileId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Update details of a token for current user
         /// </summary>
@@ -1805,7 +1805,7 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the upload</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns></returns>
-        public void ExpireStoreUpload(string uploadId, string storeId, int operationIndex = 0)
+        public void ExpireStoreUpload(int uploadId, string storeId, int operationIndex = 0)
         {
             ExpireStoreUploadWithHttpInfo(uploadId, storeId);
         }
@@ -1818,14 +1818,8 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the upload</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        public BackendAPI.Client.ApiResponse<Object> ExpireStoreUploadWithHttpInfo(string uploadId, string storeId, int operationIndex = 0)
+        public BackendAPI.Client.ApiResponse<Object> ExpireStoreUploadWithHttpInfo(int uploadId, string storeId, int operationIndex = 0)
         {
-            // verify the required parameter 'uploadId' is set
-            if (uploadId == null)
-            {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'uploadId' when calling DefaultApi->ExpireStoreUpload");
-            }
-
             // verify the required parameter 'storeId' is set
             if (storeId == null)
             {
@@ -1890,7 +1884,7 @@ namespace BackendAPI.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        public async System.Threading.Tasks.Task ExpireStoreUploadAsync(string uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task ExpireStoreUploadAsync(int uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             await ExpireStoreUploadWithHttpInfoAsync(uploadId, storeId, operationIndex, cancellationToken).ConfigureAwait(false);
         }
@@ -1904,14 +1898,8 @@ namespace BackendAPI.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<Object>> ExpireStoreUploadWithHttpInfoAsync(string uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<Object>> ExpireStoreUploadWithHttpInfoAsync(int uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            // verify the required parameter 'uploadId' is set
-            if (uploadId == null)
-            {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'uploadId' when calling DefaultApi->ExpireStoreUpload");
-            }
-
             // verify the required parameter 'storeId' is set
             if (storeId == null)
             {
@@ -2547,7 +2535,7 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the upload</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>GetStoreUploadResponse</returns>
-        public GetStoreUploadResponse GetStoreUpload(string uploadId, string storeId, int operationIndex = 0)
+        public GetStoreUploadResponse GetStoreUpload(int uploadId, string storeId, int operationIndex = 0)
         {
             BackendAPI.Client.ApiResponse<GetStoreUploadResponse> localVarResponse = GetStoreUploadWithHttpInfo(uploadId, storeId);
             return localVarResponse.Data;
@@ -2561,14 +2549,8 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the upload</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of GetStoreUploadResponse</returns>
-        public BackendAPI.Client.ApiResponse<GetStoreUploadResponse> GetStoreUploadWithHttpInfo(string uploadId, string storeId, int operationIndex = 0)
+        public BackendAPI.Client.ApiResponse<GetStoreUploadResponse> GetStoreUploadWithHttpInfo(int uploadId, string storeId, int operationIndex = 0)
         {
-            // verify the required parameter 'uploadId' is set
-            if (uploadId == null)
-            {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'uploadId' when calling DefaultApi->GetStoreUpload");
-            }
-
             // verify the required parameter 'storeId' is set
             if (storeId == null)
             {
@@ -2633,7 +2615,7 @@ namespace BackendAPI.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of GetStoreUploadResponse</returns>
-        public async System.Threading.Tasks.Task<GetStoreUploadResponse> GetStoreUploadAsync(string uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<GetStoreUploadResponse> GetStoreUploadAsync(int uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             BackendAPI.Client.ApiResponse<GetStoreUploadResponse> localVarResponse = await GetStoreUploadWithHttpInfoAsync(uploadId, storeId, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
@@ -2648,14 +2630,8 @@ namespace BackendAPI.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (GetStoreUploadResponse)</returns>
-        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetStoreUploadResponse>> GetStoreUploadWithHttpInfoAsync(string uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetStoreUploadResponse>> GetStoreUploadWithHttpInfoAsync(int uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            // verify the required parameter 'uploadId' is set
-            if (uploadId == null)
-            {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'uploadId' when calling DefaultApi->GetStoreUpload");
-            }
-
             // verify the required parameter 'storeId' is set
             if (storeId == null)
             {
@@ -3333,7 +3309,7 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the upload</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns></returns>
-        public void MarkStoreUploadAborted(string uploadId, string storeId, int operationIndex = 0)
+        public void MarkStoreUploadAborted(int uploadId, string storeId, int operationIndex = 0)
         {
             MarkStoreUploadAbortedWithHttpInfo(uploadId, storeId);
         }
@@ -3346,14 +3322,8 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the upload</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        public BackendAPI.Client.ApiResponse<Object> MarkStoreUploadAbortedWithHttpInfo(string uploadId, string storeId, int operationIndex = 0)
+        public BackendAPI.Client.ApiResponse<Object> MarkStoreUploadAbortedWithHttpInfo(int uploadId, string storeId, int operationIndex = 0)
         {
-            // verify the required parameter 'uploadId' is set
-            if (uploadId == null)
-            {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'uploadId' when calling DefaultApi->MarkStoreUploadAborted");
-            }
-
             // verify the required parameter 'storeId' is set
             if (storeId == null)
             {
@@ -3418,7 +3388,7 @@ namespace BackendAPI.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        public async System.Threading.Tasks.Task MarkStoreUploadAbortedAsync(string uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task MarkStoreUploadAbortedAsync(int uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             await MarkStoreUploadAbortedWithHttpInfoAsync(uploadId, storeId, operationIndex, cancellationToken).ConfigureAwait(false);
         }
@@ -3432,14 +3402,8 @@ namespace BackendAPI.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<Object>> MarkStoreUploadAbortedWithHttpInfoAsync(string uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<Object>> MarkStoreUploadAbortedWithHttpInfoAsync(int uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            // verify the required parameter 'uploadId' is set
-            if (uploadId == null)
-            {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'uploadId' when calling DefaultApi->MarkStoreUploadAborted");
-            }
-
             // verify the required parameter 'storeId' is set
             if (storeId == null)
             {
@@ -3505,7 +3469,7 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the upload</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns></returns>
-        public void MarkStoreUploadCompleted(string uploadId, string storeId, int operationIndex = 0)
+        public void MarkStoreUploadCompleted(int uploadId, string storeId, int operationIndex = 0)
         {
             MarkStoreUploadCompletedWithHttpInfo(uploadId, storeId);
         }
@@ -3518,14 +3482,8 @@ namespace BackendAPI.Api
         /// <param name="storeId">ID of the store containing the upload</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        public BackendAPI.Client.ApiResponse<Object> MarkStoreUploadCompletedWithHttpInfo(string uploadId, string storeId, int operationIndex = 0)
+        public BackendAPI.Client.ApiResponse<Object> MarkStoreUploadCompletedWithHttpInfo(int uploadId, string storeId, int operationIndex = 0)
         {
-            // verify the required parameter 'uploadId' is set
-            if (uploadId == null)
-            {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'uploadId' when calling DefaultApi->MarkStoreUploadCompleted");
-            }
-
             // verify the required parameter 'storeId' is set
             if (storeId == null)
             {
@@ -3590,7 +3548,7 @@ namespace BackendAPI.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        public async System.Threading.Tasks.Task MarkStoreUploadCompletedAsync(string uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task MarkStoreUploadCompletedAsync(int uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             await MarkStoreUploadCompletedWithHttpInfoAsync(uploadId, storeId, operationIndex, cancellationToken).ConfigureAwait(false);
         }
@@ -3604,14 +3562,8 @@ namespace BackendAPI.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<Object>> MarkStoreUploadCompletedWithHttpInfoAsync(string uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<Object>> MarkStoreUploadCompletedWithHttpInfoAsync(int uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            // verify the required parameter 'uploadId' is set
-            if (uploadId == null)
-            {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'uploadId' when calling DefaultApi->MarkStoreUploadCompleted");
-            }
-
             // verify the required parameter 'storeId' is set
             if (storeId == null)
             {
@@ -3678,7 +3630,7 @@ namespace BackendAPI.Api
         /// <param name="fileId">Index of the file within the upload that should be marked as uploaded</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns></returns>
-        public void MarkStoreUploadFileUploaded(string uploadId, string storeId, int fileId, int operationIndex = 0)
+        public void MarkStoreUploadFileUploaded(int uploadId, string storeId, int fileId, int operationIndex = 0)
         {
             MarkStoreUploadFileUploadedWithHttpInfo(uploadId, storeId, fileId);
         }
@@ -3692,14 +3644,8 @@ namespace BackendAPI.Api
         /// <param name="fileId">Index of the file within the upload that should be marked as uploaded</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        public BackendAPI.Client.ApiResponse<Object> MarkStoreUploadFileUploadedWithHttpInfo(string uploadId, string storeId, int fileId, int operationIndex = 0)
+        public BackendAPI.Client.ApiResponse<Object> MarkStoreUploadFileUploadedWithHttpInfo(int uploadId, string storeId, int fileId, int operationIndex = 0)
         {
-            // verify the required parameter 'uploadId' is set
-            if (uploadId == null)
-            {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'uploadId' when calling DefaultApi->MarkStoreUploadFileUploaded");
-            }
-
             // verify the required parameter 'storeId' is set
             if (storeId == null)
             {
@@ -3766,7 +3712,7 @@ namespace BackendAPI.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        public async System.Threading.Tasks.Task MarkStoreUploadFileUploadedAsync(string uploadId, string storeId, int fileId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task MarkStoreUploadFileUploadedAsync(int uploadId, string storeId, int fileId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             await MarkStoreUploadFileUploadedWithHttpInfoAsync(uploadId, storeId, fileId, operationIndex, cancellationToken).ConfigureAwait(false);
         }
@@ -3781,14 +3727,8 @@ namespace BackendAPI.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<Object>> MarkStoreUploadFileUploadedWithHttpInfoAsync(string uploadId, string storeId, int fileId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<Object>> MarkStoreUploadFileUploadedWithHttpInfoAsync(int uploadId, string storeId, int fileId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            // verify the required parameter 'uploadId' is set
-            if (uploadId == null)
-            {
-                throw new BackendAPI.Client.ApiException(400, "Missing required parameter 'uploadId' when calling DefaultApi->MarkStoreUploadFileUploaded");
-            }
-
             // verify the required parameter 'storeId' is set
             if (storeId == null)
             {

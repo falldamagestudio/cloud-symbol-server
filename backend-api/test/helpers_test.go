@@ -268,7 +268,7 @@ var (
 	}
 )
 
-func upload(apiClient *openapi_client.APIClient, authContext context.Context, storeId string, testUpload *TestUpload) (string, error) {
+func upload(apiClient *openapi_client.APIClient, authContext context.Context, storeId string, testUpload *TestUpload) (int32, error) {
 
 	files := make([]openapi_client.CreateStoreUploadFileRequest, len(testUpload.Files))
 
@@ -290,12 +290,12 @@ func upload(apiClient *openapi_client.APIClient, authContext context.Context, st
 
 	createStoreUploadResponse, _, err := apiClient.DefaultApi.CreateStoreUpload(authContext, storeId).CreateStoreUploadRequest(*createStoreUploadRequest).Execute()
 	if err != nil {
-		return "", err
+		return 0, err
 	}
 
 	// Upload individual files, and mark them as uploaded
 
-	storeUploadId := createStoreUploadResponse.Id
+	storeUploadId := createStoreUploadResponse.UploadId
 
 	for fileIndex := range createStoreUploadRequest.Files {
 
@@ -311,26 +311,26 @@ func upload(apiClient *openapi_client.APIClient, authContext context.Context, st
 
 			uploadRequest, err := http.NewRequest(http.MethodPut, uploadUrl, bytes.NewReader(content))
 			if err != nil {
-				return "", err
+				return 0, err
 			}
 
 			client := http.Client{}
 			uploadResponse, err := client.Do(uploadRequest)
 			if err != nil {
-				return "", err
+				return 0, err
 			}
 
 			defer uploadResponse.Body.Close()
 			_, err = io.ReadAll(uploadResponse.Body)
 			if err != nil {
-				return "", err
+				return 0, err
 			}
 
 			// Mark file as uploaded
 
 			_, err = apiClient.DefaultApi.MarkStoreUploadFileUploaded(authContext, storeUploadId, storeId, int32(fileIndex)).Execute()
 			if err != nil {
-				return "", err
+				return 0, err
 			}
 		}
 	}
@@ -340,7 +340,7 @@ func upload(apiClient *openapi_client.APIClient, authContext context.Context, st
 	{
 		_, err = apiClient.DefaultApi.MarkStoreUploadCompleted(authContext, storeUploadId, storeId).Execute()
 		if err != nil {
-			return "", err
+			return 0, err
 		}
 	}
 

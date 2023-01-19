@@ -588,7 +588,7 @@ func (a *DefaultApiService) DeleteTokenExecute(r ApiDeleteTokenRequest) (*http.R
 type ApiExpireStoreUploadRequest struct {
 	ctx context.Context
 	ApiService *DefaultApiService
-	uploadId string
+	uploadId int32
 	storeId string
 }
 
@@ -604,7 +604,7 @@ ExpireStoreUpload Expire store upload and consider files for GC
  @param storeId ID of the store containing the upload
  @return ApiExpireStoreUploadRequest
 */
-func (a *DefaultApiService) ExpireStoreUpload(ctx context.Context, uploadId string, storeId string) ApiExpireStoreUploadRequest {
+func (a *DefaultApiService) ExpireStoreUpload(ctx context.Context, uploadId int32, storeId string) ApiExpireStoreUploadRequest {
 	return ApiExpireStoreUploadRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1121,7 +1121,7 @@ func (a *DefaultApiService) GetStoreFilesExecute(r ApiGetStoreFilesRequest) (*Ge
 type ApiGetStoreUploadRequest struct {
 	ctx context.Context
 	ApiService *DefaultApiService
-	uploadId string
+	uploadId int32
 	storeId string
 }
 
@@ -1137,7 +1137,7 @@ GetStoreUpload Fetch an upload
  @param storeId ID of the store containing the upload
  @return ApiGetStoreUploadRequest
 */
-func (a *DefaultApiService) GetStoreUpload(ctx context.Context, uploadId string, storeId string) ApiGetStoreUploadRequest {
+func (a *DefaultApiService) GetStoreUpload(ctx context.Context, uploadId int32, storeId string) ApiGetStoreUploadRequest {
 	return ApiGetStoreUploadRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1725,7 +1725,7 @@ func (a *DefaultApiService) GetTokensExecute(r ApiGetTokensRequest) ([]GetTokenR
 type ApiMarkStoreUploadAbortedRequest struct {
 	ctx context.Context
 	ApiService *DefaultApiService
-	uploadId string
+	uploadId int32
 	storeId string
 }
 
@@ -1741,7 +1741,7 @@ MarkStoreUploadAborted Mark an upload as aborted
  @param storeId ID of the store containing the upload
  @return ApiMarkStoreUploadAbortedRequest
 */
-func (a *DefaultApiService) MarkStoreUploadAborted(ctx context.Context, uploadId string, storeId string) ApiMarkStoreUploadAbortedRequest {
+func (a *DefaultApiService) MarkStoreUploadAborted(ctx context.Context, uploadId int32, storeId string) ApiMarkStoreUploadAbortedRequest {
 	return ApiMarkStoreUploadAbortedRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1840,7 +1840,7 @@ func (a *DefaultApiService) MarkStoreUploadAbortedExecute(r ApiMarkStoreUploadAb
 type ApiMarkStoreUploadCompletedRequest struct {
 	ctx context.Context
 	ApiService *DefaultApiService
-	uploadId string
+	uploadId int32
 	storeId string
 }
 
@@ -1856,7 +1856,7 @@ MarkStoreUploadCompleted Mark an upload as completed
  @param storeId ID of the store containing the upload
  @return ApiMarkStoreUploadCompletedRequest
 */
-func (a *DefaultApiService) MarkStoreUploadCompleted(ctx context.Context, uploadId string, storeId string) ApiMarkStoreUploadCompletedRequest {
+func (a *DefaultApiService) MarkStoreUploadCompleted(ctx context.Context, uploadId int32, storeId string) ApiMarkStoreUploadCompletedRequest {
 	return ApiMarkStoreUploadCompletedRequest{
 		ApiService: a,
 		ctx: ctx,
@@ -1955,7 +1955,7 @@ func (a *DefaultApiService) MarkStoreUploadCompletedExecute(r ApiMarkStoreUpload
 type ApiMarkStoreUploadFileUploadedRequest struct {
 	ctx context.Context
 	ApiService *DefaultApiService
-	uploadId string
+	uploadId int32
 	storeId string
 	fileId int32
 }
@@ -1973,7 +1973,7 @@ MarkStoreUploadFileUploaded Mark a file within an upload as uploaded
  @param fileId Index of the file within the upload that should be marked as uploaded
  @return ApiMarkStoreUploadFileUploadedRequest
 */
-func (a *DefaultApiService) MarkStoreUploadFileUploaded(ctx context.Context, uploadId string, storeId string, fileId int32) ApiMarkStoreUploadFileUploadedRequest {
+func (a *DefaultApiService) MarkStoreUploadFileUploaded(ctx context.Context, uploadId int32, storeId string, fileId int32) ApiMarkStoreUploadFileUploadedRequest {
 	return ApiMarkStoreUploadFileUploadedRequest{
 		ApiService: a,
 		ctx: ctx,

@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**UploadId** | **int** |  | 
 **Description** | **string** |  | 
 **BuildId** | **string** |  | 
 **Timestamp** | **string** |  | 

@@ -137,6 +137,7 @@ func GetStoreUploads(ctx context.Context, storeId string, offset int32, limit in
 		var files = uploadIdToFiles[upload.UploadID]
 
 		storeUploads[uploadIndex] = openapi.GetStoreUploadResponse{
+			UploadId:    int32(upload.StoreUploadIndex),
 			Description: upload.Description,
 			BuildId:     upload.Build,
 			Timestamp:   upload.Timestamp.Format(time.RFC3339),
