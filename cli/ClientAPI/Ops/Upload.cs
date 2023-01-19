@@ -9,15 +9,18 @@ namespace ClientAPI
 {
     public class Ops
     {
-        private static BackendAPI.Model.CreateStoreUploadRequest CreateStoreUploadRequest(string description, string buildId, IEnumerable<HashFiles.FileWithHash> FileWithHash)
+        private static BackendAPI.Model.CreateStoreUploadRequest CreateStoreUploadRequest(string description, string buildId, IEnumerable<ComputeFileMetadata.FileWithMetadata> FileWithMetadata)
         {
             BackendAPI.Model.CreateStoreUploadRequest request = new BackendAPI.Model.CreateStoreUploadRequest(
                 useProgressApi: true,
                 description: description,
                 buildId: buildId,
-                files: FileWithHash.Select(fileWithHash => new BackendAPI.Model.CreateStoreUploadFileRequest(
-                    fileName: fileWithHash.FileWithoutPath,
-                    blobIdentifier: fileWithHash.Hash
+                files: FileWithMetadata.Select(fileWithMetadata => new BackendAPI.Model.CreateStoreUploadFileRequest(
+                    fileName: fileWithMetadata.FileWithoutPath,
+                    blobIdentifier: fileWithMetadata.BlobIdentifier,
+                    type: fileWithMetadata.Type,
+                    size: fileWithMetadata.Size,
+                    contentHash: fileWithMetadata.ContentHash
                 )).ToList()
             );
 
@@ -38,22 +41,22 @@ namespace ClientAPI
 
         private static HttpClient HttpClient = new HttpClient();
 
-        private static async Task UploadMissingFiles(BackendApiWrapper backendApiWrapper, string store, BackendAPI.Model.CreateStoreUploadResponse createStoreUploadResponse, IEnumerable<HashFiles.FileWithHash> filesWithHashes, IProgress<UploadProgress> progress)
+        private static async Task UploadMissingFiles(BackendApiWrapper backendApiWrapper, string store, BackendAPI.Model.CreateStoreUploadResponse createStoreUploadResponse, IEnumerable<ComputeFileMetadata.FileWithMetadata> filesWithMetadata, IProgress<UploadProgress> progress)
         {
             if (createStoreUploadResponse.Files != null) {
 
                 for (int fileId = 0; fileId < createStoreUploadResponse.Files.Count; fileId++) {
                     BackendAPI.Model.UploadFileResponse uploadFileResponse = createStoreUploadResponse.Files[fileId];
 
-                    HashFiles.FileWithHash fileWithHash = filesWithHashes.First(fwh => 
-                        fwh.FileWithoutPath == uploadFileResponse.FileName && fwh.Hash == uploadFileResponse.BlobIdentifier);
+                    ComputeFileMetadata.FileWithMetadata fileWithMetadata = filesWithMetadata.First(fwh => 
+                        fwh.FileWithoutPath == uploadFileResponse.FileName && fwh.BlobIdentifier == uploadFileResponse.BlobIdentifier);
 
                     if (!string.IsNullOrEmpty(uploadFileResponse.Url)) {
 
                         if (progress != null)
-                            progress.Report(new UploadProgress { State = UploadProgress.StateEnum.UploadingMissingFile, FileName = fileWithHash.FileWithPath });
+                            progress.Report(new UploadProgress { State = UploadProgress.StateEnum.UploadingMissingFile, FileName = fileWithMetadata.FileWithPath });
 
-                        byte[] content = File.ReadAllBytes(fileWithHash.FileWithPath);
+                        byte[] content = File.ReadAllBytes(fileWithMetadata.FileWithPath);
 
                         HttpResponseMessage response = await HttpClient.PutAsync(uploadFileResponse.Url, new ByteArrayContent(content));
 
@@ -68,7 +71,7 @@ namespace ClientAPI
                     } else {
 
                         if (progress != null)
-                            progress.Report(new UploadProgress { State = UploadProgress.StateEnum.FileAlreadyPresent, FileName = fileWithHash.FileWithPath });
+                            progress.Report(new UploadProgress { State = UploadProgress.StateEnum.FileAlreadyPresent, FileName = fileWithMetadata.FileWithPath });
                     }
                 }
             }
@@ -85,13 +88,13 @@ namespace ClientAPI
 
             BackendApiWrapper backendApiWrapper = new BackendApiWrapper(ServiceURL, Email, PAT);
 
-            IEnumerable<HashFiles.FileWithHash> filesWithHashes = HashFiles.GetFilesWithHashes(Files);
+            IEnumerable<ComputeFileMetadata.FileWithMetadata> filesWithMetadata = ComputeFileMetadata.DoComputeFileMedatadata(Files);
 
             if (progress != null)
                 progress.Report(new UploadProgress { State = UploadProgress.StateEnum.CreatingUploadEntry });
 
 
-            BackendAPI.Model.CreateStoreUploadRequest createStoreUploadRequest = CreateStoreUploadRequest(description, buildId, filesWithHashes);
+            BackendAPI.Model.CreateStoreUploadRequest createStoreUploadRequest = CreateStoreUploadRequest(description, buildId, filesWithMetadata);
             BackendAPI.Model.CreateStoreUploadResponse createStoreUploadResponse;
             createStoreUploadResponse = await backendApiWrapper.CreateStoreUploadAsync(store, createStoreUploadRequest);
 
@@ -102,7 +105,7 @@ namespace ClientAPI
                 if (progress != null)
                     progress.Report(new UploadProgress { State = UploadProgress.StateEnum.UploadingMissingFiles });
 
-                await UploadMissingFiles(backendApiWrapper, store, createStoreUploadResponse, filesWithHashes, progress);
+                await UploadMissingFiles(backendApiWrapper, store, createStoreUploadResponse, filesWithMetadata, progress);
 
                 if (progress != null)
                     progress.Report(new UploadProgress { State = UploadProgress.StateEnum.Done });

@@ -118,6 +118,16 @@ GRANT USAGE
 ON TYPE cloud_symbol_server.store_file_blob_status
 TO cloud_symbol_server_readwrite;
 
+CREATE TYPE cloud_symbol_server.store_file_blob_type AS ENUM (
+  'unknown',
+  'pe',
+  'pdb'
+);
+
+GRANT USAGE
+ON TYPE cloud_symbol_server.store_file_blob_type
+TO cloud_symbol_server_readwrite;
+
 CREATE TABLE cloud_symbol_server.store_file_blobs (
   blob_id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 
@@ -133,6 +143,18 @@ CREATE TABLE cloud_symbol_server.store_file_blobs (
   -- timestamp of upload, in RFC3339 format
   -- Example: 1985-04-12T23:20:50.52Z
   upload_timestamp timestamp NOT NULL,
+
+  -- Type of binary -- Windows PE executable, Windows PDB debug database, etc
+  type cloud_symbol_server.store_file_blob_type NOT NULL,
+
+  -- Size of blob, in bytes
+  size bigint NOT NULL,
+
+  -- Hash of content in blob
+  -- The primary purpose of this is to allow answering the question,
+  --   "does blob X in the store match file Y on my local disk?" by
+  --   using standard OS tools
+  content_hash varchar NOT NULL,
 
   -- The blob status will change over time, based on user actions
   status cloud_symbol_server.store_file_blob_status NOT NULL,

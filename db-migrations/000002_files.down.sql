@@ -5,6 +5,7 @@ DROP TYPE cloud_symbol_server.store_upload_file_status;
 
 DROP TABLE cloud_symbol_server.store_file_blobs;
 DROP TYPE cloud_symbol_server.store_file_blob_status;
+DROP TYPE cloud_symbol_server.store_file_blob_type;
 
 DROP TABLE cloud_symbol_server.store_files;
 

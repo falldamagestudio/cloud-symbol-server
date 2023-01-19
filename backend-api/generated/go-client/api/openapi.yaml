@@ -680,6 +680,12 @@ components:
       - expired
       example: completed
       type: string
+    storeFileBlobType:
+      enum:
+      - unknown
+      - pe
+      - pdb
+      type: string
     storeFileBlobStatus:
       enum:
       - pending
@@ -784,6 +790,15 @@ components:
         blobIdentifier:
           example: 7F416863ABF34C3E894BAD1739BAA5571
           type: string
+        type:
+          $ref: '#/components/schemas/storeFileBlobType'
+        size:
+          example: 127123006
+          format: int64
+          type: integer
+        contentHash:
+          example: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
+          type: string
       required:
       - blobIdentifier
       - fileName
@@ -846,8 +861,11 @@ components:
       type: object
     getStoreFileBlobResponse:
       example:
+        size: 127123006
         uploadTimestamp: 2019-10-12T07:20:50.52Z
+        type: null
         blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
+        contentHash: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
         status: null
       properties:
         blobIdentifier:
@@ -856,6 +874,15 @@ components:
         uploadTimestamp:
           description: "Upload timestamp, in RFC3339 format"
           example: 2019-10-12T07:20:50.52Z
+          type: string
+        type:
+          $ref: '#/components/schemas/storeFileBlobType'
+        size:
+          example: 127123006
+          format: int64
+          type: integer
+        contentHash:
+          example: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
           type: string
         status:
           $ref: '#/components/schemas/storeFileBlobStatus'
@@ -867,11 +894,17 @@ components:
     getStoreFileBlobsResponse:
       example:
         blobs:
-        - uploadTimestamp: 2019-10-12T07:20:50.52Z
+        - size: 127123006
+          uploadTimestamp: 2019-10-12T07:20:50.52Z
+          type: null
           blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
+          contentHash: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
           status: null
-        - uploadTimestamp: 2019-10-12T07:20:50.52Z
+        - size: 127123006
+          uploadTimestamp: 2019-10-12T07:20:50.52Z
+          type: null
           blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
+          contentHash: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
           status: null
         pagination:
           total: 0

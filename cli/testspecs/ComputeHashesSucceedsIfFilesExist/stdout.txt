@@ -1,3 +1,0 @@
-  Files and hashes:
-    {CLI_ROOT}/testdata/example.exe: 61C0D4547000
-    {CLI_ROOT}/testdata/example.pdb: 7F416863ABF34C3E894BAD1739BAA5571

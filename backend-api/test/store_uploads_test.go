@@ -175,17 +175,29 @@ func TestCreateStoreUploadWithProgressSucceeds(t *testing.T) {
 
 	fileName1 := "file1"
 	blobIdentifier1 := "blobIdentifier1"
+	type1 := openapi_client.StoreFileBlobType("pe")
+	size1 := int64(8)
+	contentHash1 := "d0b425e00e15a0d36b9b361f02bab63563aed6cb4665083905386c55d5b679fa" // SHA256 hash of "content1"
 	fileName2 := "file2"
 	blobIdentifier2 := "blobIdentifier2"
+	type2 := openapi_client.StoreFileBlobType("pdb")
+	size2 := int64(9)
+	contentHash2 := "35c6a7f16428d39c386bd4ebb4c9e0d256bae81634acdf8e65e21bc0abebd0d5" // SHA256 hash of "content2_"
 
 	files := []openapi_client.CreateStoreUploadFileRequest{
 		{
 			FileName:       fileName1,
 			BlobIdentifier: blobIdentifier1,
+			Type:           &type1,
+			Size:           &size1,
+			ContentHash:    &contentHash1,
 		},
 		{
 			FileName:       fileName2,
 			BlobIdentifier: blobIdentifier2,
+			Type:           &type2,
+			Size:           &size2,
+			ContentHash:    &contentHash2,
 		},
 	}
 
@@ -343,17 +355,29 @@ func TestCreateStoreUploadWithProgressAndAbortSucceeds(t *testing.T) {
 
 	fileName1 := "file1"
 	blobIdentifier1 := "blobIdentifier1"
+	type1 := openapi_client.StoreFileBlobType("pe")
+	size1 := int64(8)
+	contentHash1 := "d0b425e00e15a0d36b9b361f02bab63563aed6cb4665083905386c55d5b679fa" // SHA256 hash of "content1"
 	fileName2 := "file2"
 	blobIdentifier2 := "blobIdentifier2"
+	type2 := openapi_client.StoreFileBlobType("pdb")
+	size2 := int64(9)
+	contentHash2 := "35c6a7f16428d39c386bd4ebb4c9e0d256bae81634acdf8e65e21bc0abebd0d5" // SHA256 hash of "content2_"
 
 	files := []openapi_client.CreateStoreUploadFileRequest{
 		{
 			FileName:       fileName1,
 			BlobIdentifier: blobIdentifier1,
+			Type:           &type1,
+			Size:           &size1,
+			ContentHash:    &contentHash1,
 		},
 		{
 			FileName:       fileName2,
 			BlobIdentifier: blobIdentifier2,
+			Type:           &type2,
+			Size:           &size2,
+			ContentHash:    &contentHash2,
 		},
 	}
 

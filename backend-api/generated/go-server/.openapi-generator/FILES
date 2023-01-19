@@ -21,6 +21,7 @@ go/model_get_token_response.go
 go/model_message_response.go
 go/model_pagination_response.go
 go/model_store_file_blob_status.go
+go/model_store_file_blob_type.go
 go/model_store_upload_file_status.go
 go/model_store_upload_status.go
 go/model_update_token_request.go

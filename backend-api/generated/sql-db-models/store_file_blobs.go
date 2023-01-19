@@ -28,6 +28,9 @@ type StoreFileBlob struct {
 	FileID          null.Int  `boil:"file_id" json:"file_id,omitempty" toml:"file_id" yaml:"file_id,omitempty"`
 	BlobIdentifier  string    `boil:"blob_identifier" json:"blob_identifier" toml:"blob_identifier" yaml:"blob_identifier"`
 	UploadTimestamp time.Time `boil:"upload_timestamp" json:"upload_timestamp" toml:"upload_timestamp" yaml:"upload_timestamp"`
+	Type            string    `boil:"type" json:"type" toml:"type" yaml:"type"`
+	Size            int64     `boil:"size" json:"size" toml:"size" yaml:"size"`
+	ContentHash     string    `boil:"content_hash" json:"content_hash" toml:"content_hash" yaml:"content_hash"`
 	Status          string    `boil:"status" json:"status" toml:"status" yaml:"status"`
 
 	R *storeFileBlobR `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -39,12 +42,18 @@ var StoreFileBlobColumns = struct {
 	FileID          string
 	BlobIdentifier  string
 	UploadTimestamp string
+	Type            string
+	Size            string
+	ContentHash     string
 	Status          string
 }{
 	BlobID:          "blob_id",
 	FileID:          "file_id",
 	BlobIdentifier:  "blob_identifier",
 	UploadTimestamp: "upload_timestamp",
+	Type:            "type",
+	Size:            "size",
+	ContentHash:     "content_hash",
 	Status:          "status",
 }
 
@@ -53,12 +62,18 @@ var StoreFileBlobTableColumns = struct {
 	FileID          string
 	BlobIdentifier  string
 	UploadTimestamp string
+	Type            string
+	Size            string
+	ContentHash     string
 	Status          string
 }{
 	BlobID:          "store_file_blobs.blob_id",
 	FileID:          "store_file_blobs.file_id",
 	BlobIdentifier:  "store_file_blobs.blob_identifier",
 	UploadTimestamp: "store_file_blobs.upload_timestamp",
+	Type:            "store_file_blobs.type",
+	Size:            "store_file_blobs.size",
+	ContentHash:     "store_file_blobs.content_hash",
 	Status:          "store_file_blobs.status",
 }
 
@@ -102,17 +117,46 @@ func (w whereHelpernull_Int) NIN(slice []int) qm.QueryMod {
 func (w whereHelpernull_Int) IsNull() qm.QueryMod    { return qmhelper.WhereIsNull(w.field) }
 func (w whereHelpernull_Int) IsNotNull() qm.QueryMod { return qmhelper.WhereIsNotNull(w.field) }
 
+type whereHelperint64 struct{ field string }
+
+func (w whereHelperint64) EQ(x int64) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.EQ, x) }
+func (w whereHelperint64) NEQ(x int64) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.NEQ, x) }
+func (w whereHelperint64) LT(x int64) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.LT, x) }
+func (w whereHelperint64) LTE(x int64) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.LTE, x) }
+func (w whereHelperint64) GT(x int64) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.GT, x) }
+func (w whereHelperint64) GTE(x int64) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.GTE, x) }
+func (w whereHelperint64) IN(slice []int64) qm.QueryMod {
+	values := make([]interface{}, 0, len(slice))
+	for _, value := range slice {
+		values = append(values, value)
+	}
+	return qm.WhereIn(fmt.Sprintf("%s IN ?", w.field), values...)
+}
+func (w whereHelperint64) NIN(slice []int64) qm.QueryMod {
+	values := make([]interface{}, 0, len(slice))
+	for _, value := range slice {
+		values = append(values, value)
+	}
+	return qm.WhereNotIn(fmt.Sprintf("%s NOT IN ?", w.field), values...)
+}
+
 var StoreFileBlobWhere = struct {
 	BlobID          whereHelperint
 	FileID          whereHelpernull_Int
 	BlobIdentifier  whereHelperstring
 	UploadTimestamp whereHelpertime_Time
+	Type            whereHelperstring
+	Size            whereHelperint64
+	ContentHash     whereHelperstring
 	Status          whereHelperstring
 }{
 	BlobID:          whereHelperint{field: "\"cloud_symbol_server\".\"store_file_blobs\".\"blob_id\""},
 	FileID:          whereHelpernull_Int{field: "\"cloud_symbol_server\".\"store_file_blobs\".\"file_id\""},
 	BlobIdentifier:  whereHelperstring{field: "\"cloud_symbol_server\".\"store_file_blobs\".\"blob_identifier\""},
 	UploadTimestamp: whereHelpertime_Time{field: "\"cloud_symbol_server\".\"store_file_blobs\".\"upload_timestamp\""},
+	Type:            whereHelperstring{field: "\"cloud_symbol_server\".\"store_file_blobs\".\"type\""},
+	Size:            whereHelperint64{field: "\"cloud_symbol_server\".\"store_file_blobs\".\"size\""},
+	ContentHash:     whereHelperstring{field: "\"cloud_symbol_server\".\"store_file_blobs\".\"content_hash\""},
 	Status:          whereHelperstring{field: "\"cloud_symbol_server\".\"store_file_blobs\".\"status\""},
 }
 
@@ -154,8 +198,8 @@ func (r *storeFileBlobR) GetBlobStoreUploadFiles() StoreUploadFileSlice {
 type storeFileBlobL struct{}
 
 var (
-	storeFileBlobAllColumns            = []string{"blob_id", "file_id", "blob_identifier", "upload_timestamp", "status"}
-	storeFileBlobColumnsWithoutDefault = []string{"blob_identifier", "upload_timestamp", "status"}
+	storeFileBlobAllColumns            = []string{"blob_id", "file_id", "blob_identifier", "upload_timestamp", "type", "size", "content_hash", "status"}
+	storeFileBlobColumnsWithoutDefault = []string{"blob_identifier", "upload_timestamp", "type", "size", "content_hash", "status"}
 	storeFileBlobColumnsWithDefault    = []string{"blob_id", "file_id"}
 	storeFileBlobPrimaryKeyColumns     = []string{"blob_id"}
 	storeFileBlobGeneratedColumns      = []string{"blob_id"}

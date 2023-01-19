@@ -70,11 +70,11 @@ namespace CLI
             listBlobsCommand.Handler = CommandHandler.Create(async (GlobalOptions globalOptions, string store, string file)
                 => { return await CLI.ListBlobs.DoListBlobs(globalOptions, store, file); });
 
-            Command computeBlobsCommand = new Command("compute", "Compute blobs for local files") {
-                new Argument<string>("patterns", "Globbing patterns of files to compute blobs for") { Arity = ArgumentArity.OneOrMore },
+            Command computeBlobsMetadataCommand = new Command("compute-metadata", "Compute blob metadata for local files") {
+                new Argument<string>("patterns", "Globbing patterns of files to compute blob metadata for") { Arity = ArgumentArity.OneOrMore },
             };
-            computeBlobsCommand.Handler = CommandHandler.Create((string[] patterns)
-                => { return CLI.ComputeHashes.DoComputeHashes(patterns); });
+            computeBlobsMetadataCommand.Handler = CommandHandler.Create((string[] patterns)
+                => { return CLI.ComputeFileMetadata.DoComputeFileMetadata(patterns); });
 
             Command downloadBlobCommand = new Command("download", "Download the content of a particular file-blob") {
                 new Argument<string>("store", "Name of store containing file"),
@@ -86,7 +86,7 @@ namespace CLI
 
             Command blobsCommand = new Command("file-blobs", "Manage blobs of files within Cloud Symbol Server") {
                 listBlobsCommand,
-                computeBlobsCommand,
+                computeBlobsMetadataCommand,
                 downloadBlobCommand,
             };
             blobsCommand.Handler = CommandHandler.Create(() => blobsCommand.Invoke("--help"));

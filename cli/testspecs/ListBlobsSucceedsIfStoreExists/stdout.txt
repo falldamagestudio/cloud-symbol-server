@@ -1,2 +1,6 @@
 Blobs of file example.pdb in store example:
-  BlobIdentifier 7F416863ABF34C3E894BAD1739BAA5571: Status Present
+  BlobIdentifier 7F416863ABF34C3E894BAD1739BAA5571:
+    Type: Pdb
+    Size 380928
+    Content SHA256 Hash: 91cb867f00b5b61fa2454f5534babcd0c41f54e26139ae2b6e0bacef7a0967b9
+    Status: Present

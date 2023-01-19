@@ -27,7 +27,7 @@
       <template
         v-slot:item.timestamp="{ item }"
       >
-        <router-link :to="{ name: 'storeUpload', params: { store: store, upload: storeUploads.indexOf(item).toString() } }">{{ item.timestamp }}</router-link>
+        <router-link :to="{ name: 'storeUpload', params: { store: store, upload: storeUploads.indexOf(item).toString() } }">{{ timestampToDisplayString(item.timestamp) }}</router-link>
       </template>    
 
       <template
@@ -45,6 +45,7 @@
 <script setup lang="ts">
 
 import { computed, ref, watch } from 'vue'
+import dayjs from 'dayjs'
 
 import { api } from '../adminApi'
 import { GetStoreUploadResponse } from '../generated/api'
@@ -79,6 +80,10 @@ let options = {
 
 const storeUploads = ref([] as GetStoreUploadResponse[])
 const total = ref(1)
+
+function timestampToDisplayString(timestamp: string): string {
+  return dayjs(timestamp).format('YYYY-MM-DD HH:mm')
+}
 
 async function fetch() {
 

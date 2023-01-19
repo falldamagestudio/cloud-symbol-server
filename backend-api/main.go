@@ -10,8 +10,8 @@ import (
 	"github.com/rs/cors"
 
 	authentication "github.com/falldamagestudio/cloud-symbol-server/backend-api/authentication"
-	http_symbol_store "github.com/falldamagestudio/cloud-symbol-server/backend-api/http-symbol-store"
 	openapi "github.com/falldamagestudio/cloud-symbol-server/backend-api/generated/go-server/go"
+	http_symbol_store "github.com/falldamagestudio/cloud-symbol-server/backend-api/http-symbol-store"
 	postgres "github.com/falldamagestudio/cloud-symbol-server/backend-api/postgres"
 )
 
@@ -22,7 +22,7 @@ var corsHandler *cors.Cors
 var router *mux.Router
 
 const (
-	env_GCP_PROJECT_ID = "GCP_PROJECT_ID"
+	env_GCP_PROJECT_ID    = "GCP_PROJECT_ID"
 	httpSymbolStorePrefix = "/httpSymbolStore/"
 )
 

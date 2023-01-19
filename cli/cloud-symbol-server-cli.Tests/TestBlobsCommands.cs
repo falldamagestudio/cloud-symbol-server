@@ -27,9 +27,9 @@ public partial class TestCommands
     }
 
     [Fact]
-    public async Task ComputeHashesSucceedsIfFilesExist()
+    public async Task ComputeMetadataSucceedsIfFilesExist()
     {
-        await SpecRunner.RunSpecCommand("../../../../testspecs/ComputeHashesSucceedsIfFilesExist", output);
+        await SpecRunner.RunSpecCommand("../../../../testspecs/ComputeMetadataSucceedsIfFilesExist", output);
     }
 
     [Fact]

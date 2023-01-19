@@ -115,6 +115,7 @@ Class | Method | HTTP request | Description
  - [MessageResponse](docs/MessageResponse.md)
  - [PaginationResponse](docs/PaginationResponse.md)
  - [StoreFileBlobStatus](docs/StoreFileBlobStatus.md)
+ - [StoreFileBlobType](docs/StoreFileBlobType.md)
  - [StoreUploadFileStatus](docs/StoreUploadFileStatus.md)
  - [StoreUploadStatus](docs/StoreUploadStatus.md)
  - [UpdateTokenRequest](docs/UpdateTokenRequest.md)

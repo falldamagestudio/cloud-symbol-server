@@ -19,7 +19,11 @@ namespace CLI
                     BackendAPI.Model.GetStoreFileBlobsResponse blobsResponse = await ClientAPI.ListBlobs.DoListBlobs(globalOptions.ServiceUrl, globalOptions.Email, globalOptions.Pat, store, file, offset, limit);
                     for (int batchOffset = 0; batchOffset < blobsResponse.Blobs.Count; batchOffset++) {
                         BackendAPI.Model.GetStoreFileBlobResponse blob = blobsResponse.Blobs[batchOffset];
-                        Console.WriteLine($"  BlobIdentifier {blob.BlobIdentifier}: Status {blob.Status}");
+                        Console.WriteLine($"  BlobIdentifier {blob.BlobIdentifier}:");
+                        Console.WriteLine($"    Type: {blob.Type}");
+                        Console.WriteLine($"    Size {blob.Size}");
+                        Console.WriteLine($"    Content SHA256 Hash: {blob.ContentHash}");
+                        Console.WriteLine($"    Status: {blob.Status}");
                     }
 
                     if (offset + blobsResponse.Blobs.Count >= blobsResponse.Pagination.Total)

@@ -1,14 +1,9 @@
-# BackendAPI.Model.CreateStoreUploadFileRequest
+# BackendAPI.Model.StoreFileBlobType
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**FileName** | **string** |  | 
-**BlobIdentifier** | **string** |  | 
-**Type** | **StoreFileBlobType** |  | [optional] 
-**Size** | **long** |  | [optional] 
-**ContentHash** | **string** |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

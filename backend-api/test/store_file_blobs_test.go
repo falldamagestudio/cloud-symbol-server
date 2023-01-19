@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	openapi_client "github.com/falldamagestudio/cloud-symbol-server/backend-api/generated/go-client"
 )
 
@@ -144,23 +146,41 @@ func TestGetStoreFileBlobsWithPaginationSucceeds(t *testing.T) {
 
 	fileName1 := "file1"
 	blobIdentifier1 := "blobIdentifier1"
+	type1 := openapi_client.StoreFileBlobType("pe")
+	size1 := int64(8)
+	contentHash1 := "d0b425e00e15a0d36b9b361f02bab63563aed6cb4665083905386c55d5b679fa" // SHA256 hash of "content1"
 	fileName2 := "file1"
 	blobIdentifier2 := "blobIdentifier2"
+	type2 := openapi_client.StoreFileBlobType("pdb")
+	size2 := int64(9)
+	contentHash2 := "35c6a7f16428d39c386bd4ebb4c9e0d256bae81634acdf8e65e21bc0abebd0d5" // SHA256 hash of "content2_"
 	fileName3 := "file2"
 	blobIdentifier3 := "blobIdentifier3"
+	type3 := openapi_client.StoreFileBlobType("pdb")
+	size3 := int64(9)
+	contentHash3 := "a722ad33c435a5d321f89b00e2bc019fcb758384fddc896877cfb19eca65b6d0" // SHA256 hash of "content3_"
 
 	files := []openapi_client.CreateStoreUploadFileRequest{
 		{
 			FileName:       fileName1,
 			BlobIdentifier: blobIdentifier1,
+			Type:           &type1,
+			Size:           &size1,
+			ContentHash:    &contentHash1,
 		},
 		{
 			FileName:       fileName2,
 			BlobIdentifier: blobIdentifier2,
+			Type:           &type2,
+			Size:           &size2,
+			ContentHash:    &contentHash2,
 		},
 		{
 			FileName:       fileName3,
 			BlobIdentifier: blobIdentifier3,
+			Type:           &type3,
+			Size:           &size3,
+			ContentHash:    &contentHash3,
 		},
 	}
 
@@ -254,6 +274,19 @@ func TestGetStoreFileBlobsWithPaginationSucceeds(t *testing.T) {
 		if (len(getStoreFileBlobsResponse.Blobs) != expectedNumResults) || (getStoreFileBlobsResponse.Pagination.Total != expectedTotalResults) || (getStoreFileBlobsResponse.Blobs[0].BlobIdentifier != blobIdentifier1) || ((getStoreFileBlobsResponse.Blobs)[1].BlobIdentifier != blobIdentifier2) {
 			t.Fatalf("GetStoreFileBlobs should show %v results with blobs %v & %v, and %v total, but shows the following blobs: %v, and total: %v", expectedNumResults, blobIdentifier1, blobIdentifier2, expectedTotalResults, getStoreFileBlobsResponse.Blobs, getStoreFileBlobsResponse.Pagination.Total)
 		}
+
+		// Ensure blob metadata is correct
+
+		require.Equal(t, blobIdentifier1, getStoreFileBlobsResponse.Blobs[0].BlobIdentifier)
+		require.Equal(t, type1, *getStoreFileBlobsResponse.Blobs[0].Type)
+		require.Equal(t, size1, *getStoreFileBlobsResponse.Blobs[0].Size)
+		require.Equal(t, contentHash1, *getStoreFileBlobsResponse.Blobs[0].ContentHash)
+
+		require.Equal(t, blobIdentifier2, getStoreFileBlobsResponse.Blobs[1].BlobIdentifier)
+		require.Equal(t, type2, *getStoreFileBlobsResponse.Blobs[1].Type)
+		require.Equal(t, size2, *getStoreFileBlobsResponse.Blobs[1].Size)
+		require.Equal(t, contentHash2, *getStoreFileBlobsResponse.Blobs[1].ContentHash)
+
 	}
 
 	// Try some pagination

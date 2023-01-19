@@ -10,7 +10,7 @@ namespace ClientAPI
         // Compute hash for Windows Portable Executable files
         // Specification here: https://github.com/dotnet/symstore/blob/main/docs/specs/SSQP_Key_Conventions.md#pe-timestamp-filesize
 
-        public static string GetHash(string pePath)
+        public static string GetCodeIdentifier(string pePath)
         {
             using (Stream stream = new FileStream(pePath, FileMode.Open))
             {

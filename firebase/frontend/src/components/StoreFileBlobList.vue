@@ -16,6 +16,55 @@
         v-slot:item.blobIdentifier="{ item }"
       >
         {{ item.blobIdentifier }}
+
+        <!-- Shortcut for copying identifier to clipboard -->
+        <v-btn
+          icon
+          @click="copyTextToClipboard(item.blobIdentifier)"
+        >
+          <v-icon
+            small
+          >
+            mdi-content-copy
+          </v-icon>
+        </v-btn>
+      </template>    
+
+      <template
+        v-slot:item.uploadTimestamp="{ item }"
+      >
+        {{ timestampToDisplayString(item.uploadTimestamp) }}
+      </template>    
+
+      <template
+        v-slot:item.type="{ item }"
+      >
+        {{ item.type }}
+      </template>    
+
+      <template
+        v-slot:item.size="{ item }"
+      >
+        {{ item.size }}
+      </template>    
+
+      <template
+        v-slot:item.contentHash="{ item }"
+      >
+        {{ abbreviateHash(item.contentHash) }}
+
+        <!-- Shortcut for copying full hash to clipboard -->
+        <v-btn
+          icon
+          @click="copyTextToClipboard(item.contentHash)"
+        >
+          <v-icon
+            small
+          >
+            mdi-content-copy
+          </v-icon>
+        </v-btn>
+
       </template>    
 
       <template
@@ -41,6 +90,7 @@
 <script setup lang="ts">
 
 import { computed, ref, watch } from 'vue'
+import dayjs from 'dayjs'
 
 import { api } from '../adminApi'
 
@@ -59,6 +109,18 @@ const headers = [
     value: "uploadTimestamp",
   },
   {
+    text: "Type",
+    value: "type",
+  },
+  {
+    text: "Size",
+    value: "size",
+  },
+  {
+    text: "Content SHA256 Hash",
+    value: "contentHash",
+  },
+  {
     text: "Status",
     value: "status",
   },
@@ -71,6 +133,9 @@ const headers = [
 interface StoreFileBlobEntry {
   blobIdentifier: string
   uploadTimestamp: string
+  type: string,
+  size: string,
+  contentHash: string,
   status: string
 }
 
@@ -82,6 +147,28 @@ let options = {
 const storeFileBlobs = ref([] as StoreFileBlobEntry[])
 const total = ref(1)
 
+function translateBlobType(blobType: string | undefined): string {
+  if (blobType == 'pdb') {
+    return 'PDB'
+  } else if (blobType == 'pe') {
+    return 'PE'
+  } else {
+    return "Undefined"
+  }
+}
+
+function abbreviateHash(hash: string): string {
+  return `${hash.slice(0, 4)}...${hash.slice(-4)}`
+}
+
+function timestampToDisplayString(timestamp: string): string {
+  return dayjs(timestamp).format('YYYY-MM-DD HH:mm')
+}
+
+function copyTextToClipboard(text: string) {
+  navigator.clipboard.writeText(text)
+}
+
 async function fetch() {
 
   try {
@@ -89,9 +176,13 @@ async function fetch() {
     storeFileBlobs.value.length = 0
     if (storeFileBlobsResponse.data.blobs) {
       for (const blob of storeFileBlobsResponse.data.blobs) {
+        const size = blob.size ?? 0
         storeFileBlobs.value.push({
           blobIdentifier: blob.blobIdentifier,
           uploadTimestamp: blob.uploadTimestamp,
+          type: translateBlobType(blob.type),
+          size: (size ? size.toString() : "Unknown"),
+          contentHash: blob.contentHash ?? "Unknown",
           status: blob.status,
         })
       }

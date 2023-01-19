@@ -20,6 +20,7 @@ docs/GetTokenResponse.md
 docs/MessageResponse.md
 docs/PaginationResponse.md
 docs/StoreFileBlobStatus.md
+docs/StoreFileBlobType.md
 docs/StoreUploadFileStatus.md
 docs/StoreUploadStatus.md
 docs/UpdateTokenRequest.md
@@ -39,6 +40,7 @@ model_get_token_response.go
 model_message_response.go
 model_pagination_response.go
 model_store_file_blob_status.go
+model_store_file_blob_type.go
 model_store_upload_file_status.go
 model_store_upload_status.go
 model_update_token_request.go

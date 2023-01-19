@@ -128,17 +128,17 @@ namespace ClientAPI.Tests
         }
 
        [Fact]
-        public void GetHashSucceedsForMSF7File()
+        public void GetDebugIdentifierSucceedsForMSF7File()
         {
-            string hash = PDBParser.GetHash("../../../../testdata/example.pdb");
-            string expectedHash = "7F416863ABF34C3E894BAD1739BAA5571";
-            Assert.Equal(expectedHash, hash);
+            string hash = PDBParser.GetDebugIdentifier("../../../../testdata/example.pdb");
+            string expectedDebugIdentifier = "7F416863ABF34C3E894BAD1739BAA5571";
+            Assert.Equal(expectedDebugIdentifier, hash);
         }
 
        [Fact]
-        public void GetHashFailsForNonMSF7File()
+        public void GetDebugIdentifierFailsForNonMSF7File()
         {
-            string hash = PDBParser.GetHash("../../../../testdata/example.exe");
+            string hash = PDBParser.GetDebugIdentifier("../../../../testdata/example.exe");
             Assert.Null(hash);
         }
     }

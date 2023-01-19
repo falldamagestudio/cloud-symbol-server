@@ -28,6 +28,9 @@ func uploadFileRequestToPath(storeId string, createStoreUploadFileRequest openap
 type FileEntry struct {
 	FileName       string
 	BlobIdentifier string
+	Type           string
+	Size           int64
+	ContentHash    string
 	Status         string
 }
 
@@ -60,6 +63,8 @@ func CreateStoreUpload(context context.Context, storeId string, createStoreUploa
 	includeAlreadyPresentFiles := createStoreUploadRequest.UseProgressApi
 
 	createStoreUploadResponse := openapi.CreateStoreUploadResponse{}
+
+	logFiles := make([]FileEntry, 0)
 
 	for _, createStoreUploadFileRequest := range createStoreUploadRequest.Files {
 
@@ -98,29 +103,32 @@ func CreateStoreUpload(context context.Context, storeId string, createStoreUploa
 				BlobIdentifier: createStoreUploadFileRequest.BlobIdentifier,
 				Url:            objectURL,
 			})
-		}
-	}
 
-	// Log upload to database
-
-	files := make([]FileEntry, 0)
-
-	for _, file := range createStoreUploadResponse.Files {
-		status := models.StoreUploadFileStatusAlreadyPresent
-		if file.Url != "" {
-			// Legacy API users will not report completion of individual file upload; therefore the file's stats will be assumed to be completed immediately
-			// For those that use the progress API, however, we can say for sure that the file is pending upload at this point
-			if createStoreUploadRequest.UseProgressApi {
-				status = models.StoreUploadFileStatusPending
-			} else {
-				status = models.StoreUploadFileStatusCompleted
+			logStatus := models.StoreUploadFileStatusAlreadyPresent
+			if objectURL != "" {
+				// Legacy API users will not report completion of individual file upload; therefore the file's stats will be assumed to be completed immediately
+				// For those that use the progress API, however, we can say for sure that the file is pending upload at this point
+				if createStoreUploadRequest.UseProgressApi {
+					logStatus = models.StoreUploadFileStatusPending
+				} else {
+					logStatus = models.StoreUploadFileStatusCompleted
+				}
 			}
+
+			logType := models.StoreFileBlobTypeUnknown
+			if createStoreUploadFileRequest.Type != "" {
+				logType = string(createStoreUploadFileRequest.Type)
+			}
+
+			logFiles = append(logFiles, FileEntry{
+				FileName:       createStoreUploadFileRequest.FileName,
+				BlobIdentifier: createStoreUploadFileRequest.BlobIdentifier,
+				Type:           logType,
+				Size:           createStoreUploadFileRequest.Size,
+				ContentHash:    createStoreUploadFileRequest.ContentHash,
+				Status:         logStatus,
+			})
 		}
-		files = append(files, FileEntry{
-			FileName:       file.FileName,
-			BlobIdentifier: file.BlobIdentifier,
-			Status:         status,
-		})
 	}
 
 	// Legacy API users will not report completion/abortion of the upload operation; therefore the upload's state will be assumed to be completed immediately
@@ -133,7 +141,7 @@ func CreateStoreUpload(context context.Context, storeId string, createStoreUploa
 	uploadContent := StoreUploadEntry{
 		Description: createStoreUploadRequest.Description,
 		BuildId:     createStoreUploadRequest.BuildId,
-		Files:       files,
+		Files:       logFiles,
 		Status:      uploadStatus,
 	}
 
@@ -248,6 +256,9 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 				FileID:          null.IntFrom(storeFile.FileID),
 				BlobIdentifier:  file.BlobIdentifier,
 				UploadTimestamp: timestamp,
+				Type:            file.Type,
+				Size:            file.Size,
+				ContentHash:     file.ContentHash,
 				Status:          fileBlobStatus,
 			}
 			err = storeFileBlob.Insert(ctx, tx, boil.Infer())

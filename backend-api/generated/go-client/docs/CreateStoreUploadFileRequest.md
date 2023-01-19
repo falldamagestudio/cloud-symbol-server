@@ -6,6 +6,9 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **FileName** | **string** |  | 
 **BlobIdentifier** | **string** |  | 
+**Type** | Pointer to [**StoreFileBlobType**](StoreFileBlobType.md) |  | [optional] 
+**Size** | Pointer to **int64** |  | [optional] 
+**ContentHash** | Pointer to **string** |  | [optional] 
 
 ## Methods
 
@@ -65,6 +68,81 @@ and a boolean to check if the value has been set.
 
 SetBlobIdentifier sets BlobIdentifier field to given value.
 
+
+### GetType
+
+`func (o *CreateStoreUploadFileRequest) GetType() StoreFileBlobType`
+
+GetType returns the Type field if non-nil, zero value otherwise.
+
+### GetTypeOk
+
+`func (o *CreateStoreUploadFileRequest) GetTypeOk() (*StoreFileBlobType, bool)`
+
+GetTypeOk returns a tuple with the Type field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetType
+
+`func (o *CreateStoreUploadFileRequest) SetType(v StoreFileBlobType)`
+
+SetType sets Type field to given value.
+
+### HasType
+
+`func (o *CreateStoreUploadFileRequest) HasType() bool`
+
+HasType returns a boolean if a field has been set.
+
+### GetSize
+
+`func (o *CreateStoreUploadFileRequest) GetSize() int64`
+
+GetSize returns the Size field if non-nil, zero value otherwise.
+
+### GetSizeOk
+
+`func (o *CreateStoreUploadFileRequest) GetSizeOk() (*int64, bool)`
+
+GetSizeOk returns a tuple with the Size field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSize
+
+`func (o *CreateStoreUploadFileRequest) SetSize(v int64)`
+
+SetSize sets Size field to given value.
+
+### HasSize
+
+`func (o *CreateStoreUploadFileRequest) HasSize() bool`
+
+HasSize returns a boolean if a field has been set.
+
+### GetContentHash
+
+`func (o *CreateStoreUploadFileRequest) GetContentHash() string`
+
+GetContentHash returns the ContentHash field if non-nil, zero value otherwise.
+
+### GetContentHashOk
+
+`func (o *CreateStoreUploadFileRequest) GetContentHashOk() (*string, bool)`
+
+GetContentHashOk returns a tuple with the ContentHash field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetContentHash
+
+`func (o *CreateStoreUploadFileRequest) SetContentHash(v string)`
+
+SetContentHash sets ContentHash field to given value.
+
+### HasContentHash
+
+`func (o *CreateStoreUploadFileRequest) HasContentHash() bool`
+
+HasContentHash returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

@@ -51,6 +51,21 @@ func makeCacheKey(cols boil.Columns, nzDefaults []string) string {
 	return str
 }
 
+// Enum values for StoreFileBlobType
+const (
+	StoreFileBlobTypeUnknown string = "unknown"
+	StoreFileBlobTypePe      string = "pe"
+	StoreFileBlobTypePDB     string = "pdb"
+)
+
+func AllStoreFileBlobType() []string {
+	return []string{
+		StoreFileBlobTypeUnknown,
+		StoreFileBlobTypePe,
+		StoreFileBlobTypePDB,
+	}
+}
+
 // Enum values for StoreFileBlobStatus
 const (
 	StoreFileBlobStatusPending string = "pending"

@@ -86,6 +86,9 @@ func GetStoreFileBlobs(ctx context.Context, storeId string, fileId string, offse
 		storeFileBlobs[index] = openapi.GetStoreFileBlobResponse{
 			BlobIdentifier:  blob.BlobIdentifier,
 			UploadTimestamp: blob.UploadTimestamp.Format(time.RFC3339),
+			Type:            openapi.StoreFileBlobType(blob.Type),
+			Size:            blob.Size,
+			ContentHash:     blob.ContentHash,
 			Status:          openapi.StoreFileBlobStatus(blob.Status),
 		}
 	}

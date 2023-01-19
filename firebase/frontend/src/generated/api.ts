@@ -39,6 +39,24 @@ export interface CreateStoreUploadFileRequest {
      * @memberof CreateStoreUploadFileRequest
      */
     'blobIdentifier': string;
+    /**
+     * 
+     * @type {StoreFileBlobType}
+     * @memberof CreateStoreUploadFileRequest
+     */
+    'type'?: StoreFileBlobType;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateStoreUploadFileRequest
+     */
+    'size'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateStoreUploadFileRequest
+     */
+    'contentHash'?: string;
 }
 /**
  * 
@@ -140,6 +158,24 @@ export interface GetStoreFileBlobResponse {
      * @memberof GetStoreFileBlobResponse
      */
     'uploadTimestamp': string;
+    /**
+     * 
+     * @type {StoreFileBlobType}
+     * @memberof GetStoreFileBlobResponse
+     */
+    'type'?: StoreFileBlobType;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetStoreFileBlobResponse
+     */
+    'size'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetStoreFileBlobResponse
+     */
+    'contentHash'?: string;
     /**
      * 
      * @type {StoreFileBlobStatus}
@@ -329,6 +365,21 @@ export const StoreFileBlobStatus = {
 } as const;
 
 export type StoreFileBlobStatus = typeof StoreFileBlobStatus[keyof typeof StoreFileBlobStatus];
+
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const StoreFileBlobType = {
+    Unknown: 'unknown',
+    Pe: 'pe',
+    Pdb: 'pdb'
+} as const;
+
+export type StoreFileBlobType = typeof StoreFileBlobType[keyof typeof StoreFileBlobType];
 
 
 /**

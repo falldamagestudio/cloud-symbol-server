@@ -14,6 +14,12 @@ type CreateStoreUploadFileRequest struct {
 	FileName string `json:"fileName"`
 
 	BlobIdentifier string `json:"blobIdentifier"`
+
+	Type StoreFileBlobType `json:"type,omitempty"`
+
+	Size int64 `json:"size,omitempty"`
+
+	ContentHash string `json:"contentHash,omitempty"`
 }
 
 // AssertCreateStoreUploadFileRequestRequired checks if the required fields are not zero-ed

@@ -272,7 +272,7 @@ namespace ClientAPI
                 return pdbStreamHeader;
             }
 
-            public static string GetHash(Stream stream)
+            public static string GetDebugIdentifier(Stream stream)
             {
                 SuperBlock superBlock = ReadSuperBlock(stream);
 
@@ -295,12 +295,12 @@ namespace ClientAPI
 
         }
 
-        public static string GetHash(string pdbPath)
+        public static string GetDebugIdentifier(string pdbPath)
         {
             using (Stream stream = new FileStream(pdbPath, FileMode.Open))
             {
                 if (MSF7Parser.IsValid(stream)) {
-                    return MSF7Parser.GetHash(stream);
+                    return MSF7Parser.GetDebugIdentifier(stream);
                 } else {
                     return null;
                 }

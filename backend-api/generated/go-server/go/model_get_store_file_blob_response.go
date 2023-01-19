@@ -16,6 +16,12 @@ type GetStoreFileBlobResponse struct {
 	// Upload timestamp, in RFC3339 format
 	UploadTimestamp string `json:"uploadTimestamp"`
 
+	Type StoreFileBlobType `json:"type,omitempty"`
+
+	Size int64 `json:"size,omitempty"`
+
+	ContentHash string `json:"contentHash,omitempty"`
+
 	Status StoreFileBlobStatus `json:"status"`
 }
 

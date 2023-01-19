@@ -142,6 +142,7 @@ Class | Method | HTTP request | Description
  - [Model.MessageResponse](docs/MessageResponse.md)
  - [Model.PaginationResponse](docs/PaginationResponse.md)
  - [Model.StoreFileBlobStatus](docs/StoreFileBlobStatus.md)
+ - [Model.StoreFileBlobType](docs/StoreFileBlobType.md)
  - [Model.StoreUploadFileStatus](docs/StoreUploadFileStatus.md)
  - [Model.StoreUploadStatus](docs/StoreUploadStatus.md)
  - [Model.UpdateTokenRequest](docs/UpdateTokenRequest.md)

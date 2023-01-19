@@ -1,7 +1,7 @@
 {
     "CommandArguments": [
         "file-blobs",
-        "compute",
+        "compute-metadata",
         "../../../../testdata/*.pdb",
         "../../../../testdata/*.exe"
     ],

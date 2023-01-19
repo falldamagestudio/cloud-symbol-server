@@ -12,17 +12,17 @@ namespace ClientAPI.Tests
     public class PEParserTests
     {
         [Fact]
-        public void GetHashSucceedsForExe()
+        public void GetCodeIdentifierSucceedsForExe()
         {
-            string hash = PEParser.GetHash("../../../../testdata/example.exe");
-            string expectedHash = "61C0D4547000";
-            Assert.Equal(expectedHash, hash);
+            string hash = PEParser.GetCodeIdentifier("../../../../testdata/example.exe");
+            string expectedCodeIdentifier = "61C0D4547000";
+            Assert.Equal(expectedCodeIdentifier, hash);
         }
 
         [Fact]
-        public void GetHashFailsForNonExe()
+        public void GetCodeIdentifierFailsForNonExe()
         {
-            string hash = PEParser.GetHash("../../../../testdata/example.pdb");
+            string hash = PEParser.GetCodeIdentifier("../../../../testdata/example.pdb");
             Assert.Null(hash);
         }
     }

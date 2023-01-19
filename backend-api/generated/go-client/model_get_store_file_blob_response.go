@@ -19,6 +19,9 @@ type GetStoreFileBlobResponse struct {
 	BlobIdentifier string `json:"blobIdentifier"`
 	// Upload timestamp, in RFC3339 format
 	UploadTimestamp string `json:"uploadTimestamp"`
+	Type *StoreFileBlobType `json:"type,omitempty"`
+	Size *int64 `json:"size,omitempty"`
+	ContentHash *string `json:"contentHash,omitempty"`
 	Status StoreFileBlobStatus `json:"status"`
 }
 
@@ -90,6 +93,102 @@ func (o *GetStoreFileBlobResponse) SetUploadTimestamp(v string) {
 	o.UploadTimestamp = v
 }
 
+// GetType returns the Type field value if set, zero value otherwise.
+func (o *GetStoreFileBlobResponse) GetType() StoreFileBlobType {
+	if o == nil || isNil(o.Type) {
+		var ret StoreFileBlobType
+		return ret
+	}
+	return *o.Type
+}
+
+// GetTypeOk returns a tuple with the Type field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *GetStoreFileBlobResponse) GetTypeOk() (*StoreFileBlobType, bool) {
+	if o == nil || isNil(o.Type) {
+    return nil, false
+	}
+	return o.Type, true
+}
+
+// HasType returns a boolean if a field has been set.
+func (o *GetStoreFileBlobResponse) HasType() bool {
+	if o != nil && !isNil(o.Type) {
+		return true
+	}
+
+	return false
+}
+
+// SetType gets a reference to the given StoreFileBlobType and assigns it to the Type field.
+func (o *GetStoreFileBlobResponse) SetType(v StoreFileBlobType) {
+	o.Type = &v
+}
+
+// GetSize returns the Size field value if set, zero value otherwise.
+func (o *GetStoreFileBlobResponse) GetSize() int64 {
+	if o == nil || isNil(o.Size) {
+		var ret int64
+		return ret
+	}
+	return *o.Size
+}
+
+// GetSizeOk returns a tuple with the Size field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *GetStoreFileBlobResponse) GetSizeOk() (*int64, bool) {
+	if o == nil || isNil(o.Size) {
+    return nil, false
+	}
+	return o.Size, true
+}
+
+// HasSize returns a boolean if a field has been set.
+func (o *GetStoreFileBlobResponse) HasSize() bool {
+	if o != nil && !isNil(o.Size) {
+		return true
+	}
+
+	return false
+}
+
+// SetSize gets a reference to the given int64 and assigns it to the Size field.
+func (o *GetStoreFileBlobResponse) SetSize(v int64) {
+	o.Size = &v
+}
+
+// GetContentHash returns the ContentHash field value if set, zero value otherwise.
+func (o *GetStoreFileBlobResponse) GetContentHash() string {
+	if o == nil || isNil(o.ContentHash) {
+		var ret string
+		return ret
+	}
+	return *o.ContentHash
+}
+
+// GetContentHashOk returns a tuple with the ContentHash field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *GetStoreFileBlobResponse) GetContentHashOk() (*string, bool) {
+	if o == nil || isNil(o.ContentHash) {
+    return nil, false
+	}
+	return o.ContentHash, true
+}
+
+// HasContentHash returns a boolean if a field has been set.
+func (o *GetStoreFileBlobResponse) HasContentHash() bool {
+	if o != nil && !isNil(o.ContentHash) {
+		return true
+	}
+
+	return false
+}
+
+// SetContentHash gets a reference to the given string and assigns it to the ContentHash field.
+func (o *GetStoreFileBlobResponse) SetContentHash(v string) {
+	o.ContentHash = &v
+}
+
 // GetStatus returns the Status field value
 func (o *GetStoreFileBlobResponse) GetStatus() StoreFileBlobStatus {
 	if o == nil {
@@ -121,6 +220,15 @@ func (o GetStoreFileBlobResponse) MarshalJSON() ([]byte, error) {
 	}
 	if true {
 		toSerialize["uploadTimestamp"] = o.UploadTimestamp
+	}
+	if !isNil(o.Type) {
+		toSerialize["type"] = o.Type
+	}
+	if !isNil(o.Size) {
+		toSerialize["size"] = o.Size
+	}
+	if !isNil(o.ContentHash) {
+		toSerialize["contentHash"] = o.ContentHash
 	}
 	if true {
 		toSerialize["status"] = o.Status

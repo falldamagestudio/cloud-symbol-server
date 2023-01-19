@@ -15,6 +15,7 @@ docs/GetTokenResponse.md
 docs/MessageResponse.md
 docs/PaginationResponse.md
 docs/StoreFileBlobStatus.md
+docs/StoreFileBlobType.md
 docs/StoreUploadFileStatus.md
 docs/StoreUploadStatus.md
 docs/UpdateTokenRequest.md
@@ -53,6 +54,7 @@ src/BackendAPI/Model/GetTokenResponse.cs
 src/BackendAPI/Model/MessageResponse.cs
 src/BackendAPI/Model/PaginationResponse.cs
 src/BackendAPI/Model/StoreFileBlobStatus.cs
+src/BackendAPI/Model/StoreFileBlobType.cs
 src/BackendAPI/Model/StoreUploadFileStatus.cs
 src/BackendAPI/Model/StoreUploadStatus.cs
 src/BackendAPI/Model/UpdateTokenRequest.cs

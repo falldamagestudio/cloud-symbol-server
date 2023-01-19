@@ -6,6 +6,9 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **BlobIdentifier** | **string** |  | 
 **UploadTimestamp** | **string** | Upload timestamp, in RFC3339 format | 
+**Type** | Pointer to [**StoreFileBlobType**](StoreFileBlobType.md) |  | [optional] 
+**Size** | Pointer to **int64** |  | [optional] 
+**ContentHash** | Pointer to **string** |  | [optional] 
 **Status** | [**StoreFileBlobStatus**](StoreFileBlobStatus.md) |  | 
 
 ## Methods
@@ -66,6 +69,81 @@ and a boolean to check if the value has been set.
 
 SetUploadTimestamp sets UploadTimestamp field to given value.
 
+
+### GetType
+
+`func (o *GetStoreFileBlobResponse) GetType() StoreFileBlobType`
+
+GetType returns the Type field if non-nil, zero value otherwise.
+
+### GetTypeOk
+
+`func (o *GetStoreFileBlobResponse) GetTypeOk() (*StoreFileBlobType, bool)`
+
+GetTypeOk returns a tuple with the Type field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetType
+
+`func (o *GetStoreFileBlobResponse) SetType(v StoreFileBlobType)`
+
+SetType sets Type field to given value.
+
+### HasType
+
+`func (o *GetStoreFileBlobResponse) HasType() bool`
+
+HasType returns a boolean if a field has been set.
+
+### GetSize
+
+`func (o *GetStoreFileBlobResponse) GetSize() int64`
+
+GetSize returns the Size field if non-nil, zero value otherwise.
+
+### GetSizeOk
+
+`func (o *GetStoreFileBlobResponse) GetSizeOk() (*int64, bool)`
+
+GetSizeOk returns a tuple with the Size field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSize
+
+`func (o *GetStoreFileBlobResponse) SetSize(v int64)`
+
+SetSize sets Size field to given value.
+
+### HasSize
+
+`func (o *GetStoreFileBlobResponse) HasSize() bool`
+
+HasSize returns a boolean if a field has been set.
+
+### GetContentHash
+
+`func (o *GetStoreFileBlobResponse) GetContentHash() string`
+
+GetContentHash returns the ContentHash field if non-nil, zero value otherwise.
+
+### GetContentHashOk
+
+`func (o *GetStoreFileBlobResponse) GetContentHashOk() (*string, bool)`
+
+GetContentHashOk returns a tuple with the ContentHash field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetContentHash
+
+`func (o *GetStoreFileBlobResponse) SetContentHash(v string)`
+
+SetContentHash sets ContentHash field to given value.
+
+### HasContentHash
+
+`func (o *GetStoreFileBlobResponse) HasContentHash() bool`
+
+HasContentHash returns a boolean if a field has been set.
 
 ### GetStatus
 

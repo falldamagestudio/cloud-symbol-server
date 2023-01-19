@@ -33,6 +33,12 @@ namespace BackendAPI.Model
     {
 
         /// <summary>
+        /// Gets or Sets Type
+        /// </summary>
+        [DataMember(Name = "type", EmitDefaultValue = false)]
+        public StoreFileBlobType? Type { get; set; }
+
+        /// <summary>
         /// Gets or Sets Status
         /// </summary>
         [DataMember(Name = "status", IsRequired = true, EmitDefaultValue = true)]
@@ -47,8 +53,11 @@ namespace BackendAPI.Model
         /// </summary>
         /// <param name="blobIdentifier">blobIdentifier (required).</param>
         /// <param name="uploadTimestamp">Upload timestamp, in RFC3339 format (required).</param>
+        /// <param name="type">type.</param>
+        /// <param name="size">size.</param>
+        /// <param name="contentHash">contentHash.</param>
         /// <param name="status">status (required).</param>
-        public GetStoreFileBlobResponse(string blobIdentifier = default(string), string uploadTimestamp = default(string), StoreFileBlobStatus status = default(StoreFileBlobStatus))
+        public GetStoreFileBlobResponse(string blobIdentifier = default(string), string uploadTimestamp = default(string), StoreFileBlobType? type = default(StoreFileBlobType?), long size = default(long), string contentHash = default(string), StoreFileBlobStatus status = default(StoreFileBlobStatus))
         {
             // to ensure "blobIdentifier" is required (not null)
             if (blobIdentifier == null)
@@ -63,6 +72,9 @@ namespace BackendAPI.Model
             }
             this.UploadTimestamp = uploadTimestamp;
             this.Status = status;
+            this.Type = type;
+            this.Size = size;
+            this.ContentHash = contentHash;
         }
 
         /// <summary>
@@ -79,6 +91,18 @@ namespace BackendAPI.Model
         public string UploadTimestamp { get; set; }
 
         /// <summary>
+        /// Gets or Sets Size
+        /// </summary>
+        [DataMember(Name = "size", EmitDefaultValue = false)]
+        public long Size { get; set; }
+
+        /// <summary>
+        /// Gets or Sets ContentHash
+        /// </summary>
+        [DataMember(Name = "contentHash", EmitDefaultValue = false)]
+        public string ContentHash { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -88,6 +112,9 @@ namespace BackendAPI.Model
             sb.Append("class GetStoreFileBlobResponse {\n");
             sb.Append("  BlobIdentifier: ").Append(BlobIdentifier).Append("\n");
             sb.Append("  UploadTimestamp: ").Append(UploadTimestamp).Append("\n");
+            sb.Append("  Type: ").Append(Type).Append("\n");
+            sb.Append("  Size: ").Append(Size).Append("\n");
+            sb.Append("  ContentHash: ").Append(ContentHash).Append("\n");
             sb.Append("  Status: ").Append(Status).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -135,6 +162,19 @@ namespace BackendAPI.Model
                     this.UploadTimestamp.Equals(input.UploadTimestamp))
                 ) && 
                 (
+                    this.Type == input.Type ||
+                    this.Type.Equals(input.Type)
+                ) && 
+                (
+                    this.Size == input.Size ||
+                    this.Size.Equals(input.Size)
+                ) && 
+                (
+                    this.ContentHash == input.ContentHash ||
+                    (this.ContentHash != null &&
+                    this.ContentHash.Equals(input.ContentHash))
+                ) && 
+                (
                     this.Status == input.Status ||
                     this.Status.Equals(input.Status)
                 );
@@ -156,6 +196,12 @@ namespace BackendAPI.Model
                 if (this.UploadTimestamp != null)
                 {
                     hashCode = (hashCode * 59) + this.UploadTimestamp.GetHashCode();
+                }
+                hashCode = (hashCode * 59) + this.Type.GetHashCode();
+                hashCode = (hashCode * 59) + this.Size.GetHashCode();
+                if (this.ContentHash != null)
+                {
+                    hashCode = (hashCode * 59) + this.ContentHash.GetHashCode();
                 }
                 hashCode = (hashCode * 59) + this.Status.GetHashCode();
                 return hashCode;

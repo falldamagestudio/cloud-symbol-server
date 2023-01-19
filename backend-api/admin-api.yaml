@@ -614,6 +614,13 @@ components:
         - aborted
         - expired
 
+    storeFileBlobType:
+      type: string
+      enum:
+        - unknown
+        - pe
+        - pdb
+
     storeFileBlobStatus:
       type: string
       enum:
@@ -725,6 +732,12 @@ components:
       required:
         - fileName
         - blobIdentifier
+        # This API call will continue to be used by legacy clients for some time. Those
+        #  may pass only some of these parameters. Therefore we leave some parameters here as
+        #  optional for the time being.
+        # - type
+        # - size
+        # - contentHash
       properties:
         fileName:
           type: string
@@ -732,6 +745,15 @@ components:
         blobIdentifier:
           type: string
           example: 7F416863ABF34C3E894BAD1739BAA5571
+        type:
+          $ref: '#/components/schemas/storeFileBlobType'
+        size:
+          type: integer
+          format: int64
+          example: 127123006
+        contentHash:
+          type: string
+          example: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
 
     getStoreUploadsResponse:
       type: object
@@ -765,6 +787,12 @@ components:
         - blobIdentifier
         - uploadTimestamp
         - status
+        # This API call will continue to be used by legacy clients for some time. Those
+        #  may pass only some of these parameters. Therefore we leave some parameters here as
+        #  optional for the time being.
+        # - type
+        # - size
+        # - contentHash
       properties:
         blobIdentifier:
           type: string
@@ -773,6 +801,15 @@ components:
           type: string
           description: Upload timestamp, in RFC3339 format
           example: '2019-10-12T07:20:50.52Z'
+        type:
+          $ref: '#/components/schemas/storeFileBlobType'
+        size:
+          type: integer
+          format: int64
+          example: 127123006
+        contentHash:
+          type: string
+          example: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
         status:
           $ref: '#/components/schemas/storeFileBlobStatus'
 
