@@ -1,4 +1,4 @@
-package firestore
+package firestore2
 
 import (
 	"context"
@@ -153,6 +153,22 @@ func getStoreUploadEntry(client *firestore.Client, tx *firestore.Transaction, st
 
 	storeUploadRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Doc(uploadId)
 	storeUploadDoc, err := tx.Get(storeUploadRef)
+	if err != nil {
+		return nil, err
+	}
+
+	var storeUploadEntry StoreUploadEntry
+	if err = storeUploadDoc.DataTo(&storeUploadEntry); err != nil {
+		return nil, err
+	}
+
+	return &storeUploadEntry, nil
+}
+
+func GetStoreUploadEntry(ctx context.Context, client *firestore.Client, storeId string, uploadId string) (*StoreUploadEntry, error) {
+
+	storeUploadRef := client.Collection(storesCollectionName).Doc(storeId).Collection(storeUploadsCollectionName).Doc(uploadId)
+	storeUploadDoc, err := storeUploadRef.Get(ctx)
 	if err != nil {
 		return nil, err
 	}
