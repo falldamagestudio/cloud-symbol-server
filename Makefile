@@ -161,6 +161,10 @@ generate-db-models:
 	# The user should have the SQL Auth proxy running (via `make run-local-sql-auth-proxy`) first
 	sqlboiler psql --output backend-api/generated/sql-db-models --wipe
 
+	# This will connect to the SQL db
+	# The user should have the SQL Auth proxy running (via `make run-local-sql-auth-proxy`) first
+	sqlboiler psql --output migrate-firestore-to-postgres/generated/sql-db-models --wipe
+
 #########################################################
 # API regeneration commands
 #########################################################
