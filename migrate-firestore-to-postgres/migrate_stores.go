@@ -21,80 +21,103 @@ const (
 	uploadsCollectionName = "uploads"
 )
 
-func MigrateStore(ctx context.Context, firestoreClient *firestore.Client, storeId string) error {
+func deleteOldStore(ctx context.Context, tx *sql.Tx, storeName string) error {
 
-	log.Printf("Migrating store %v", storeId)
+	// Retrieve ID of store
 
-	storeDocRef := firestoreClient.Collection(storesCollectionName).Doc(storeId)
-	_, err := storeDocRef.Get(ctx)
-	if err != nil {
-		log.Printf("Get store doc %v failed: %v", storeId, err)
-		return err
-	}
-
-	tx, err := postgres.BeginDBTransaction(ctx)
-	if err != nil {
-		log.Printf("Error when beginning DB transaction: %v", err)
-		return err
-	}
-
-	// Delete old store in postgres
-
-	toBeDeletedStore, err := models.Stores(
-		qm.Where(models.StoreTableColumns.Name+" = ?", storeId),
+	store, err := models.Stores(
+		qm.Where(models.StoreTableColumns.Name+" = ?", storeName),
 	).One(ctx, tx)
-	if (err != nil) && (err != sql.ErrNoRows) {
-		log.Printf("Error when locating store %v: %v", storeId, err)
-		tx.Rollback()
+
+	if err == sql.ErrNoRows {
+		// Store does not exist; do nothing
+		return nil
+	} else if err != nil {
+		log.Printf("Error when locating store %v: %v", storeName, err)
 		return err
 	}
 
-	if err != sql.ErrNoRows {
+	storeId := store.StoreID
 
-		toBeDeletedStoreId := toBeDeletedStore.StoreID
+	// Delete upload-files referencing uploads in to-be-deleted store
 
-		// // Delete upload-files referencing uploads in to-be-deleted store
-
-		// _, err = models.StoreUploadFiles(
-		// 	qm.Where(models.StoreUploadTableColumns.StoreID+" = ?", toBeDeletedStoreId),
-		// ).DeleteAll(ctx, tx)
-		// if (err != nil) && (err != sql.ErrNoRows) {
-		// 	log.Printf("Error when deleting all uploads referencing storeId %v: %v", toBeDeletedStoreId, err)
-		// 	tx.Rollback()
-		// 	return err
-		// }
-
-		// Delete uploads referencing to-be-deleted store
-
-		_, err = models.StoreUploads(
-			qm.Where(models.StoreUploadTableColumns.StoreID+" = ?", toBeDeletedStoreId),
-		).DeleteAll(ctx, tx)
-		if (err != nil) && (err != sql.ErrNoRows) {
-			log.Printf("Error when deleting all uploads referencing storeId %v: %v", toBeDeletedStoreId, err)
-			tx.Rollback()
-			return err
-		}
-			
-		// Delete already-existing store
-
-		_, err = models.Stores(
-			qm.Where(models.StoreTableColumns.StoreID+" = ?", toBeDeletedStoreId),
-		).DeleteAll(ctx, tx)
-		if (err != nil) && (err != sql.ErrNoRows) {
-			log.Printf("Error when deleting store %v: %v", storeId, err)
-			tx.Rollback()
-			return err
-		}
+	storeUploadFiles, err := models.StoreUploadFiles(
+		qm.InnerJoin("cloud_symbol_server."+models.TableNames.StoreUploads+" on "+models.StoreUploadTableColumns.UploadID+" = "+models.StoreUploadFileTableColumns.UploadID),
+		qm.Where(models.StoreUploadTableColumns.StoreID+" = ?", storeId),
+		qm.For("update"),
+		).All(ctx, tx)
+	if (err != nil) && (err != sql.ErrNoRows) {
+		log.Printf("Error when finding all upload-files referencing store %v: %v", storeName, err)
+		return err
+	}
+	_, err = storeUploadFiles.DeleteAll(ctx, tx)
+	if err != nil {
+		log.Printf("error while deleting all upload-files in store %v: %v", storeName, err)
+		return err
 	}
 
+	// Delete uploads referencing to-be-deleted store
+
+	_, err = models.StoreUploads(
+		qm.Where(models.StoreUploadTableColumns.StoreID+" = ?", storeId),
+	).DeleteAll(ctx, tx)
+	if (err != nil) && (err != sql.ErrNoRows) {
+		log.Printf("Error when deleting all uploads referencing store %v: %v", storeName, err)
+		return err
+	}
+
+	// Delete all file-blobs in store
+	storeFileBlobs, err := models.StoreFileBlobs(
+		qm.InnerJoin("cloud_symbol_server."+models.TableNames.StoreFiles+" on "+models.StoreFileTableColumns.FileID+" = "+models.StoreFileBlobTableColumns.FileID),
+		qm.Where(models.StoreFileTableColumns.StoreID+" = ?", store.StoreID),
+		qm.For("update"),
+	).All(ctx, tx)
+	if err != nil {
+		log.Printf("error while deleting all file-blobs in store %v: %v", storeName, err)
+		return err
+	}
+	_, err = storeFileBlobs.DeleteAll(ctx, tx)
+	if err != nil {
+		log.Printf("error while deleting all file-blobs in store %v: %v", storeName, err)
+		return err
+	}
+
+	// Delete all store-files in store
+	storeFiles, err := models.StoreFiles(
+		qm.Where(models.StoreFileTableColumns.StoreID+" = ?", store.StoreID),
+		qm.For("update"),
+	).All(ctx, tx)
+	if err != nil {
+		log.Printf("error while deleting all store-files in store %v: %v", storeName, err)
+		return err
+	}
+	_, err = storeFiles.DeleteAll(ctx, tx)
+	if err != nil {
+		log.Printf("error while deleting all store-files in store %v: %v", storeName, err)
+		return err
+	}
+
+	// Delete already-existing store
+
+	_, err = models.Stores(
+		qm.Where(models.StoreTableColumns.StoreID+" = ?", storeId),
+	).DeleteAll(ctx, tx)
+	if (err != nil) && (err != sql.ErrNoRows) {
+		log.Printf("Error when deleting store %v: %v", storeName, err)
+		return err
+	}
+
+	return nil
+}
+
+func replicateStoreFromFirestoreToPostgres(ctx context.Context, firestoreClient *firestore.Client, tx *sql.Tx, storeName string) error {
 
 	// Count number of uploads in store
 
-	uploadDocRefIter := firestoreClient.Collection(storesCollectionName).Doc(storeId).Collection(uploadsCollectionName).DocumentRefs(ctx)
+	uploadDocRefIter := firestoreClient.Collection(storesCollectionName).Doc(storeName).Collection(uploadsCollectionName).DocumentRefs(ctx)
 	uploadDocRefs, err := uploadDocRefIter.GetAll()
 	if err != nil {
-		log.Printf("Get all upload doc refs in store %v failed: %v", storeId, err)
-		tx.Rollback()
+		log.Printf("Get all upload doc refs in store %v failed: %v", storeName, err)
 		return err
 	}
 
@@ -102,13 +125,12 @@ func MigrateStore(ctx context.Context, firestoreClient *firestore.Client, storeI
 
 	var numUploads = len(uploadDocRefs)
 	var newStore models.Store
-	newStore.Name = storeId
+	newStore.Name = storeName
 	newStore.NextStoreUploadIndex = numUploads
 
 	err = newStore.Insert(ctx, tx, boil.Infer())
 	if err != nil {
-		log.Printf("Error when inserting new store %v: %v", storeId, err)
-		tx.Rollback()
+		log.Printf("Error when inserting new store %v: %v", storeName, err)
 		return err
 	}
 
@@ -121,10 +143,9 @@ func MigrateStore(ctx context.Context, firestoreClient *firestore.Client, storeI
 
 		// Create upload entry
 
-		oldUpload, err := firestore2.GetStoreUploadEntry(ctx, firestoreClient, storeId, uploadId)
+		oldUpload, err := firestore2.GetStoreUploadEntry(ctx, firestoreClient, storeName, uploadId)
 		if err != nil {
-			log.Printf("Failed fetching store / upload %v / %v: %v", storeId, uploadId, err)
-			tx.Rollback()
+			log.Printf("Failed fetching store / upload %v / %v: %v", storeName, uploadId, err)
 			return err
 		}
 
@@ -132,8 +153,7 @@ func MigrateStore(ctx context.Context, firestoreClient *firestore.Client, storeI
 
 		timestamp, err := time.Parse(time.RFC3339, oldUpload.Timestamp)
 		if err != nil {
-			log.Printf("Unable to parse timestamp %v in store / upload %v / %v: %v", oldUpload.Timestamp, storeId, uploadId, err)
-			tx.Rollback()
+			log.Printf("Unable to parse timestamp %v in store / upload %v / %v: %v", oldUpload.Timestamp, storeName, uploadId, err)
 			return err
 		}
 
@@ -163,9 +183,43 @@ func MigrateStore(ctx context.Context, firestoreClient *firestore.Client, storeI
 		}
 	}
 
+	return nil
+}
+
+func MigrateStore(ctx context.Context, firestoreClient *firestore.Client, storeName string) error {
+
+	log.Printf("Migrating store %v", storeName)
+
+	storeDocRef := firestoreClient.Collection(storesCollectionName).Doc(storeName)
+	_, err := storeDocRef.Get(ctx)
+	if err != nil {
+		log.Printf("Get store %v doc failed: %v", storeName, err)
+		return err
+	}
+
+	tx, err := postgres.BeginDBTransaction(ctx)
+	if err != nil {
+		log.Printf("Error when beginning DB transaction: %v", err)
+		return err
+	}
+
+	// Delete old store in postgres
+
+	if err = deleteOldStore(ctx, tx, storeName); err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// Replicate store from Firestore to Postgres
+
+	if err = replicateStoreFromFirestoreToPostgres(ctx, firestoreClient, tx, storeName); err != nil {
+		tx.Rollback()
+		return err		
+	}
+
 	tx.Commit()
 
-	log.Printf("Migrating store %v done", storeId)
+	log.Printf("Migrating store %v done", storeName)
 
 	return nil
 }
@@ -181,9 +235,9 @@ func MigrateStores(ctx context.Context, firestoreClient *firestore.Client) error
 	}
 
 	for _, storeDocRef := range(storeDocRefs) {
-		storeId := storeDocRef.ID
+		storeName := storeDocRef.ID
 
-		err = MigrateStore(ctx, firestoreClient, storeId)
+		err = MigrateStore(ctx, firestoreClient, storeName)
 		if err != nil {
 			return err
 		}
