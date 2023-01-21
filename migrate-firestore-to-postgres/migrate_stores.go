@@ -305,12 +305,16 @@ func MigrateStore(ctx context.Context, firestoreClient *firestore.Client, storeN
 
 	// Delete old store in postgres
 
+	log.Printf("Deleting store %v from Postgres if it exists", storeName)
+
 	if err = deleteOldStore(ctx, tx, storeName); err != nil {
 		tx.Rollback()
 		return err
 	}
 
 	// Replicate store from Firestore to Postgres
+
+	log.Printf("Replicating store %v from Firebase to Postgres", storeName)
 
 	if err = replicateStoreFromFirestoreToPostgres(ctx, firestoreClient, tx, storeName); err != nil {
 		tx.Rollback()
