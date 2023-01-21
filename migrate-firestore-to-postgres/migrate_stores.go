@@ -281,6 +281,8 @@ func replicateStoreFromFirestoreToPostgres(ctx context.Context, firestoreClient 
 
 			newUploadFile.Insert(ctx, tx, boil.Infer())
 		}
+
+		break
 	}
 
 	return nil
@@ -321,7 +323,10 @@ func MigrateStore(ctx context.Context, firestoreClient *firestore.Client, storeN
 		return err		
 	}
 
-	tx.Commit()
+	if err = tx.Commit(); err != nil {
+		log.Printf("Committing transaction for replicating store %v failed: %v", storeName, err)
+		return err
+	}
 
 	log.Printf("Migrating store %v done", storeName)
 
