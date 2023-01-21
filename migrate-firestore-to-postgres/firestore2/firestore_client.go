@@ -12,29 +12,29 @@ import (
 const (
 	// GCP project ID containing Firestore DB
 	// Example: test-cloud-symbol-server
-	env_SOURCE_GCP_PROJECT_ID = "SOURCE_GCP_PROJECT_ID"
+	env_GCP_PROJECT_ID = "GCP_PROJECT_ID"
 )
 
-func getSourceGCPProjectID() (string, error) {
+func getGCPProjectID() (string, error) {
 
-	sourceGcpProjectId := os.Getenv(env_SOURCE_GCP_PROJECT_ID)
-	if sourceGcpProjectId == "" {
-		return "", &ErrSourceGCPProjectID{}
+	gcpProjectId := os.Getenv(env_GCP_PROJECT_ID)
+	if gcpProjectId == "" {
+		return "", &ErrGCPProjectID{}
 	}
 
-	return sourceGcpProjectId, nil
+	return gcpProjectId, nil
 }
 
-type ErrSourceGCPProjectID struct {
+type ErrGCPProjectID struct {
 }
 
-func (err ErrSourceGCPProjectID) Error() string {
-	return "No source GCP project ID configured"
+func (err ErrGCPProjectID) Error() string {
+	return "No GCP project ID configured"
 }
 
 func FirestoreClient(context context.Context) (*firestore.Client, error) {
 
-	gcpProjectId, err := getSourceGCPProjectID()
+	gcpProjectId, err := getGCPProjectID()
 	if err != nil {
 		return nil, err
 	}
