@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"log"
+	"strings"
 	"time"
 
 	"cloud.google.com/go/firestore"
@@ -112,6 +113,17 @@ func deleteOldStore(ctx context.Context, tx *sql.Tx, storeName string) error {
 
 func replicateStoreFromFirestoreToPostgres(ctx context.Context, firestoreClient *firestore.Client, tx *sql.Tx, storeName string) error {
 
+	type StoreFileBlobEntry struct {
+		StoreFileBlobId int
+	}
+
+	type StoreFileEntry struct {
+		StoreFileId int
+		Blobs map[string]StoreFileBlobEntry
+	}
+
+	storeFileMap := map[string]StoreFileEntry{}
+
 	// Count number of uploads in store
 
 	uploadDocRefIter := firestoreClient.Collection(storesCollectionName).Doc(storeName).Collection(uploadsCollectionName).DocumentRefs(ctx)
@@ -134,14 +146,14 @@ func replicateStoreFromFirestoreToPostgres(ctx context.Context, firestoreClient 
 		return err
 	}
 
-	// Create new uploads in store in postgres
+	// Create new files & uploads in store in postgres
 
 	for uploadDocIndex, uploadDocRef := range(uploadDocRefs) {
 		uploadId := uploadDocRef.ID
 
 		log.Printf("Processing upload %v", uploadId)
 
-		// Create upload entry
+		// Fetch previous upload entry
 
 		oldUpload, err := firestore2.GetStoreUploadEntry(ctx, firestoreClient, storeName, uploadId)
 		if err != nil {
@@ -149,13 +161,76 @@ func replicateStoreFromFirestoreToPostgres(ctx context.Context, firestoreClient 
 			return err
 		}
 
-		var newUpload models.StoreUpload
-
 		timestamp, err := time.Parse(time.RFC3339, oldUpload.Timestamp)
 		if err != nil {
 			log.Printf("Unable to parse timestamp %v in store / upload %v / %v: %v", oldUpload.Timestamp, storeName, uploadId, err)
 			return err
 		}
+
+		// Create files & file-blobs for any files still present
+
+		for _, oldFile := range(oldUpload.Files) {
+			if (oldFile.Status == firestore2.FileDBEntry_Status_AlreadyPresent) ||
+				(oldFile.Status == firestore2.FileDBEntry_Status_Uploaded) {
+				
+				// Create file if it doesn't already exist
+
+				if _, ok := storeFileMap[oldFile.FileName]; !ok {
+
+					// Create entry in DB
+
+					var newFile models.StoreFile
+					newFile.StoreID = null.IntFrom(newStore.StoreID)
+					newFile.FileName = oldFile.FileName
+					newFile.Insert(ctx, tx, boil.Infer())
+
+					// Track entry in in-memory datastructure
+
+					storeFileMap[oldFile.FileName] = StoreFileEntry{
+						StoreFileId: newFile.FileID,
+						Blobs: map[string]StoreFileBlobEntry{},
+					}
+				}
+
+				// Create blob if it doesn't already exist
+
+				if _, ok := storeFileMap[oldFile.FileName].Blobs[oldFile.Hash]; !ok {
+
+					// Create entry in DB
+
+					// Look at file name suffix to guess whether files are PE or PDB type
+					blobType := models.StoreFileBlobTypeUnknown
+					if strings.HasSuffix(oldFile.FileName, "pdb") {
+						blobType = models.StoreFileBlobTypePDB
+					} else if (strings.HasSuffix(oldFile.FileName, "exe")) || (strings.HasSuffix(oldFile.FileName, "dll")) {
+						blobType = models.StoreFileBlobTypePe
+					}
+
+					blobStatus := models.StoreFileBlobStatusPresent
+					if oldFile.Status == firestore2.FileDBEntry_Status_Pending {
+						blobStatus = models.StoreFileBlobStatusPending
+					}
+
+					var newBlob models.StoreFileBlob
+					newBlob.FileID = null.IntFrom(storeFileMap[oldFile.FileName].StoreFileId)
+					newBlob.BlobIdentifier = oldFile.Hash
+					newBlob.UploadTimestamp = timestamp
+					newBlob.Type = blobType
+					newBlob.Status = blobStatus
+					newBlob.Insert(ctx, tx, boil.Infer())
+
+					// Track entry in in-memory datastructure
+
+					storeFileMap[oldFile.FileName].Blobs[newBlob.BlobIdentifier] = StoreFileBlobEntry{
+						StoreFileBlobId: newBlob.BlobID,
+					}
+				}
+			}
+		}
+
+		// Create new upload
+
+		var newUpload models.StoreUpload
 
 		newUpload.StoreID = null.IntFrom(newStore.StoreID)
 		newUpload.StoreUploadIndex = uploadDocIndex
@@ -172,8 +247,10 @@ func replicateStoreFromFirestoreToPostgres(ctx context.Context, firestoreClient 
 			var newUploadFile models.StoreUploadFile
 
 			newUploadFile.UploadID = null.IntFrom(newUpload.UploadID)
-			// TODO: assign blob ID for those uploads that were successful, and have not yet been expired
-			// newUploadFile.BlobID = ...
+			if (oldUploadFile.Status == firestore2.FileDBEntry_Status_AlreadyPresent) ||
+				(oldUploadFile.Status == firestore2.FileDBEntry_Status_Uploaded) {
+					newUploadFile.BlobID = null.IntFrom(storeFileMap[oldUploadFile.FileName].Blobs[oldUploadFile.Hash].StoreFileBlobId)
+			}
 			newUploadFile.UploadFileIndex = oldUploadFileIndex
 			newUploadFile.Status = oldUploadFile.Status
 			newUploadFile.FileName = oldUploadFile.FileName
