@@ -3,7 +3,10 @@ package migrate_firestore_to_postgres
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log"
+	"sort"
+	"strconv"
 	"strings"
 	"time"
 
@@ -111,6 +114,22 @@ func deleteOldStore(ctx context.Context, tx *sql.Tx, storeName string) error {
 	return nil
 }
 
+func sortUploadDocRefs(uploadDocRefs []*firestore.DocumentRef) {
+
+	sort.Slice(uploadDocRefs, func(i, j int) bool {
+		id1, err1 := strconv.Atoi(uploadDocRefs[i].ID)
+		id2, err2 := strconv.Atoi(uploadDocRefs[j].ID)
+		if err1 != nil {
+			panic(fmt.Sprintf("Unable to convert %v to integer: %v", uploadDocRefs[i].ID, err1))
+		}
+		if err2 != nil {
+			panic(fmt.Sprintf("Unable to convert %v to integer: %v", uploadDocRefs[j].ID, err2))
+		}
+		return id1 < id2
+	})
+}
+
+
 func replicateStoreFromFirestoreToPostgres(ctx context.Context, firestoreClient *firestore.Client, tx *sql.Tx, storeName string) error {
 
 	type StoreFileBlobEntry struct {
@@ -145,6 +164,10 @@ func replicateStoreFromFirestoreToPostgres(ctx context.Context, firestoreClient 
 		log.Printf("Error when inserting new store %v: %v", storeName, err)
 		return err
 	}
+
+	// Ensure document refs will be processed in numeric order
+
+	sortUploadDocRefs(uploadDocRefs)
 
 	// Create new files & uploads in store in postgres
 
