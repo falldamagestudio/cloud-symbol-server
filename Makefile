@@ -7,6 +7,8 @@
 .PHONY: run-local-backend-api
 .PHONY: test-local test-local-backend-api test-local-cli
 
+.PHONY: run-migrate-firestore-to-postgres
+
 .PHONY: generate-db-models
 .PHONY: generate-apis generate-go-server-api generate-go-client-api generate-csharp-client-api generate-typescript-client-api
 
@@ -151,6 +153,18 @@ test-local-cli:
 		dotnet test
 
 test-local: test-local-backend-api test-local-cli
+
+#########################################################
+# Firestore => Postgres migration commands
+#########################################################
+
+run-migrate-firestore-to-postgres:
+	cd migrate-firestore-to-postgres/cmd \
+	&&	GCP_PROJECT_ID=test-cloud-symbol-server \
+		CLOUD_SQL_INSTANCE="$(shell jq -r ".cloudSQLInstance" < $(ENV)/config.json)" \
+		CLOUD_SQL_USER="$(shell jq -r ".cloudSQLAdminUser" < $(ENV)/config.json)" \
+		GOOGLE_APPLICATION_CREDENTIALS="../../environments/local/backend_api/google_application_credentials.json" \
+		go run main.go
 
 #########################################################
 # DB model regeneration commands
