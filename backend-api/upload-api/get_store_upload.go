@@ -73,6 +73,7 @@ func GetStoreUpload(ctx context.Context, uploadId int32, storeId string) (openap
 	}
 
 	getStoreUploadResponse := openapi.GetStoreUploadResponse{}
+	getStoreUploadResponse.UploadId = int32(upload.StoreUploadIndex)
 	getStoreUploadResponse.Description = upload.Description
 	getStoreUploadResponse.BuildId = upload.Build
 	getStoreUploadResponse.Timestamp = upload.Timestamp.Format(time.RFC3339)
