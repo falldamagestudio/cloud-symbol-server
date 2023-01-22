@@ -10,6 +10,15 @@
       :options="options"
       :page="options.page"
       :items-per-page="options.itemsPerPage"
+      :footer-props="{
+        showCurrentPage: true,
+        showFirstLastPage: true,
+        itemsPerPageOptions: [
+          10,
+          25,
+          100,
+        ],
+      }"
       @pagination="updatePagination"
     >
       <template
@@ -141,7 +150,7 @@ interface StoreFileBlobEntry {
 
 let options = {
   page: 1,
-  itemsPerPage: 5,
+  itemsPerPage: 25,
 }
 
 const storeFileBlobs = ref([] as StoreFileBlobEntry[])
