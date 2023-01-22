@@ -193,7 +193,8 @@ func replicateStoreFromFirestoreToPostgres(ctx context.Context, firestoreClient 
 		// Create files & file-blobs for any files still present
 
 		for _, oldFile := range(oldUpload.Files) {
-			if (oldFile.Status == firestore2.FileDBEntry_Status_AlreadyPresent) ||
+			if (oldFile.Status == "") ||
+				(oldFile.Status == firestore2.FileDBEntry_Status_AlreadyPresent) ||
 				(oldFile.Status == firestore2.FileDBEntry_Status_Uploaded) {
 				
 				// Create file if it doesn't already exist
@@ -261,12 +262,18 @@ func replicateStoreFromFirestoreToPostgres(ctx context.Context, firestoreClient 
 
 		var newUpload models.StoreUpload
 
+		// Support uploads created without any status
+		newUploadStatus := models.StoreUploadStatusCompleted
+		if oldUpload.Status != "" {
+			newUploadStatus = oldUpload.Status
+		}
+
 		newUpload.StoreID = null.IntFrom(newStore.StoreID)
 		newUpload.StoreUploadIndex = uploadDocIndex
 		newUpload.Description = oldUpload.Description
 		newUpload.Build = oldUpload.BuildId
 		newUpload.Timestamp = timestamp
-		newUpload.Status = oldUpload.Status
+		newUpload.Status = newUploadStatus
 
 		if err = newUpload.Insert(ctx, tx, boil.Infer()); err != nil {
 			log.Printf("Unable to insert store-upload %v / %v: %v", storeName, uploadDocIndex, err)
@@ -278,13 +285,22 @@ func replicateStoreFromFirestoreToPostgres(ctx context.Context, firestoreClient 
 		for oldUploadFileIndex, oldUploadFile := range(oldUpload.Files) {
 			var newUploadFile models.StoreUploadFile
 
-			newUploadFile.UploadID = null.IntFrom(newUpload.UploadID)
+			newUploadFileBlobId := null.Int{}
 			if (oldUploadFile.Status == firestore2.FileDBEntry_Status_AlreadyPresent) ||
 				(oldUploadFile.Status == firestore2.FileDBEntry_Status_Uploaded) {
-					newUploadFile.BlobID = null.IntFrom(storeFileMap[oldUploadFile.FileName].Blobs[oldUploadFile.Hash].StoreFileBlobId)
+					newUploadFileBlobId = null.IntFrom(storeFileMap[oldUploadFile.FileName].Blobs[oldUploadFile.Hash].StoreFileBlobId)
 			}
+
+			// Support upload-files created without any status
+			newUploadFileStatus := models.StoreUploadStatusCompleted
+			if oldUploadFile.Status != "" {
+				newUploadFileStatus = oldUploadFile.Status
+			}
+
+			newUploadFile.UploadID = null.IntFrom(newUpload.UploadID)
+			newUploadFile.BlobID = newUploadFileBlobId
 			newUploadFile.UploadFileIndex = oldUploadFileIndex
-			newUploadFile.Status = oldUploadFile.Status
+			newUploadFile.Status = newUploadFileStatus
 			newUploadFile.FileName = oldUploadFile.FileName
 			newUploadFile.FileBlobIdentifier = oldUploadFile.Hash
 
