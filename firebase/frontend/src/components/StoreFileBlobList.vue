@@ -167,7 +167,11 @@ function translateBlobType(blobType: string | undefined): string {
 }
 
 function abbreviateHash(hash: string): string {
-  return `${hash.slice(0, 4)}...${hash.slice(-4)}`
+  if (hash.length > 8) {
+    return `${hash.slice(0, 4)}...${hash.slice(-4)}`
+  } else {
+    return hash
+  }
 }
 
 function timestampToDisplayString(timestamp: string): string {
