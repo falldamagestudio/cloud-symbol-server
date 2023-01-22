@@ -198,7 +198,7 @@ generate-go-server-api:
 		--git-repo-id=cloud-symbol-server/backend-api \
 		-i /local/backend-api/admin-api.yaml \
 		-g go-server \
-		--additional-properties=enumClassPrefix=true,generateAliasAsModel=false \
+		--additional-properties=enumClassPrefix=true,hideGenerationTimestamp=true,generateAliasAsModel=false \
 		-o /local/backend-api/generated/go-server
 
 generate-go-client-api:
