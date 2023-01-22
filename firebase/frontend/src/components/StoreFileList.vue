@@ -19,7 +19,6 @@
           100,
         ],
       }"
-      pagination.sync="pagination"
       @pagination="updatePagination"
     >
       <template
