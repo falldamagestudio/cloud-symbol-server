@@ -79,11 +79,11 @@ function logout(): void {
 }
 
 function isLoggedIn(): boolean {
-   return authUserStore.user != null
+  return authUserStore.user != null
 }
 
 function isLoginStateUnknown(): boolean {
-    return authUserStore.loginState == LoginState.Unknown
+  return authUserStore.loginState == LoginState.Unknown
 }
 
 </script>
