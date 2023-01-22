@@ -14,3 +14,6 @@
 go.mod
 go.sum
 
+# Do not generate tests
+test
+test/*
