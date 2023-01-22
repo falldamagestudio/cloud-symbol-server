@@ -919,15 +919,6 @@ components:
           example: 7F416863ABF34C3E894BAD1739BAA5571
         status:
           $ref: '#/components/schemas/storeUploadFileStatus'
-          type: string
-          example: completed
-          enum:
-            - unknown
-            - already_present
-            - pending
-            - completed
-            - aborted
-            - expired
 
   securitySchemes:
     emailAndPat:

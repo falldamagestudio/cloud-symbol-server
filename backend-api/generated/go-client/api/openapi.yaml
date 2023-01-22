@@ -813,10 +813,10 @@ components:
           files:
           - fileName: Application.pdb
             blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
-            status: status
+            status: completed
           - fileName: Application.pdb
             blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
-            status: status
+            status: completed
           buildId: Build 432
           timestamp: 2019-10-12T07:20:50.52Z
           status: completed
@@ -825,10 +825,10 @@ components:
           files:
           - fileName: Application.pdb
             blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
-            status: status
+            status: completed
           - fileName: Application.pdb
             blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
-            status: status
+            status: completed
           buildId: Build 432
           timestamp: 2019-10-12T07:20:50.52Z
           status: completed
@@ -991,10 +991,10 @@ components:
         files:
         - fileName: Application.pdb
           blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
-          status: status
+          status: completed
         - fileName: Application.pdb
           blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
-          status: status
+          status: completed
         buildId: Build 432
         timestamp: 2019-10-12T07:20:50.52Z
         status: completed
@@ -1029,7 +1029,7 @@ components:
       example:
         fileName: Application.pdb
         blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
-        status: status
+        status: completed
       properties:
         fileName:
           example: Application.pdb
