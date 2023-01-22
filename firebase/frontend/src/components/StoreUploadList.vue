@@ -24,31 +24,31 @@
       <template
         v-slot:item.uploadId="{ item }"
       >
-        <router-link :to="{ name: 'storeUpload', params: { store: store, upload: storeUploads.indexOf(item).toString() } }">{{ item.uploadId }}</router-link>
+        <router-link :to="{ name: 'storeUpload', params: { store: store, upload: item.uploadId } }">{{ item.uploadId }}</router-link>
       </template>
 
       <template
         v-slot:item.description="{ item }"
       >
-        <router-link :to="{ name: 'storeUpload', params: { store: store, upload: storeUploads.indexOf(item).toString() } }">{{ item.description }}</router-link>
+        <router-link :to="{ name: 'storeUpload', params: { store: store, upload: item.uploadId } }">{{ item.description }}</router-link>
       </template>
 
       <template
         v-slot:item.buildId="{ item }"
       >
-        <router-link :to="{ name: 'storeUpload', params: { store: store, upload: storeUploads.indexOf(item).toString() } }">{{ item.buildId }}</router-link>
+        <router-link :to="{ name: 'storeUpload', params: { store: store, upload: item.uploadId } }">{{ item.buildId }}</router-link>
       </template>
 
       <template
         v-slot:item.timestamp="{ item }"
       >
-        <router-link :to="{ name: 'storeUpload', params: { store: store, upload: storeUploads.indexOf(item).toString() } }">{{ timestampToDisplayString(item.timestamp) }}</router-link>
+        <router-link :to="{ name: 'storeUpload', params: { store: store, upload: item.uploadId } }">{{ timestampToDisplayString(item.timestamp) }}</router-link>
       </template>
 
       <template
         v-slot:item.status="{ item }"
       >
-        <router-link :to="{ name: 'storeUpload', params: { store: store, upload: storeUploads.indexOf(item).toString() } }">{{ item.status }}</router-link>
+        <router-link :to="{ name: 'storeUpload', params: { store: store, upload: item.uploadId } }">{{ item.status }}</router-link>
       </template>
 
 
