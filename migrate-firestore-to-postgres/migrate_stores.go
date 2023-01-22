@@ -205,7 +205,10 @@ func replicateStoreFromFirestoreToPostgres(ctx context.Context, firestoreClient 
 					var newFile models.StoreFile
 					newFile.StoreID = null.IntFrom(newStore.StoreID)
 					newFile.FileName = oldFile.FileName
-					newFile.Insert(ctx, tx, boil.Infer())
+					if err = newFile.Insert(ctx, tx, boil.Infer()); err != nil {
+						log.Printf("Unable to insert store-file %v / %v: %v", storeName, oldFile.FileName, err)
+						return err
+					}
 
 					// Track entry in in-memory datastructure
 
@@ -240,7 +243,10 @@ func replicateStoreFromFirestoreToPostgres(ctx context.Context, firestoreClient 
 					newBlob.UploadTimestamp = timestamp
 					newBlob.Type = blobType
 					newBlob.Status = blobStatus
-					newBlob.Insert(ctx, tx, boil.Infer())
+					if err = newBlob.Insert(ctx, tx, boil.Infer()); err != nil {
+						log.Printf("Unable to insert store-file-blob %v / %v / %v: %v", storeName, oldFile.FileName, oldFile.Hash, err)
+						return err
+					}
 
 					// Track entry in in-memory datastructure
 
@@ -262,7 +268,10 @@ func replicateStoreFromFirestoreToPostgres(ctx context.Context, firestoreClient 
 		newUpload.Timestamp = timestamp
 		newUpload.Status = oldUpload.Status
 
-		newUpload.Insert(ctx, tx, boil.Infer())
+		if err = newUpload.Insert(ctx, tx, boil.Infer()); err != nil {
+			log.Printf("Unable to insert store-upload %v / %v: %v", storeName, uploadDocIndex, err)
+			return err
+		}
 
 		// Create upload-files
 
@@ -279,10 +288,11 @@ func replicateStoreFromFirestoreToPostgres(ctx context.Context, firestoreClient 
 			newUploadFile.FileName = oldUploadFile.FileName
 			newUploadFile.FileBlobIdentifier = oldUploadFile.Hash
 
-			newUploadFile.Insert(ctx, tx, boil.Infer())
+			if err = newUploadFile.Insert(ctx, tx, boil.Infer()); err != nil {
+				log.Printf("Unable to insert store-upload-file %v / %v / %v (%v / %v): %v", storeName, uploadDocIndex, oldUploadFileIndex, oldUploadFile.FileName, oldUploadFile.Hash, err)
+				return err
+			}
 		}
-
-		break
 	}
 
 	return nil
