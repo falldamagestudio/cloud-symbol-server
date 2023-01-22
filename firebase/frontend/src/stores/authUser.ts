@@ -37,8 +37,4 @@ export const useAuthUserStore = defineStore('authUser', {
       }
     },
   },
-
-  persist: {
-    paths: ['loginState'],
-  },
 })
