@@ -3,6 +3,7 @@ package token_api
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -15,9 +16,28 @@ import (
 	postgres "github.com/falldamagestudio/cloud-symbol-server/backend-api/postgres"
 )
 
-func GetTokens(ctx context.Context) (openapi.ImplResponse, error) {
+var getTokensSortOptions = map[string]string{
+	"":                   models.PersonalAccessTokenColumns.CreationTimestamp,
+	"token":              models.PersonalAccessTokenColumns.Token,
+	"-token":             models.PersonalAccessTokenColumns.Token + " desc",
+	"description":        models.PersonalAccessTokenColumns.Description,
+	"-description":       models.PersonalAccessTokenColumns.Description + " desc",
+	"creationTimestamp":  models.PersonalAccessTokenColumns.CreationTimestamp,
+	"-creationTimestamp": models.PersonalAccessTokenColumns.CreationTimestamp + " desc",
+}
 
-	log.Printf("Fetching PATs")
+func GetTokens(ctx context.Context, sort string) (openapi.ImplResponse, error) {
+
+	log.Printf("Fetching PATs, sort %v", sort)
+
+	// Handle sorting
+	orderByOption := ""
+	if sortOption, ok := getTokensSortOptions[sort]; ok {
+		orderByOption = sortOption
+	} else {
+		log.Printf("Unsupported sort option: %v", sort)
+		return openapi.Response(http.StatusBadRequest, openapi.MessageResponse{Message: fmt.Sprintf("Unsupported sort option: %v", sort)}), nil
+	}
 
 	db := postgres.GetDB()
 	if db == nil {
@@ -30,6 +50,7 @@ func GetTokens(ctx context.Context) (openapi.ImplResponse, error) {
 	// fetch PAT
 	pats, err := models.PersonalAccessTokens(
 		qm.Where(models.PersonalAccessTokenTableColumns.Owner+" = ?", owner),
+		qm.OrderBy(orderByOption),
 	).All(ctx, db)
 
 	if err != nil {

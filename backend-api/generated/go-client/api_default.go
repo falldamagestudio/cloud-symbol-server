@@ -835,8 +835,15 @@ type ApiGetStoreFileBlobsRequest struct {
 	ApiService *DefaultApiService
 	storeId string
 	fileId string
+	sort *string
 	offset *int32
 	limit *int32
+}
+
+// Sort the content of the response according to a given key, potentially in descending order
+func (r ApiGetStoreFileBlobsRequest) Sort(sort string) ApiGetStoreFileBlobsRequest {
+	r.sort = &sort
+	return r
 }
 
 // How many entries to skip (used for pagination of results)
@@ -895,6 +902,9 @@ func (a *DefaultApiService) GetStoreFileBlobsExecute(r ApiGetStoreFileBlobsReque
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if r.sort != nil {
+		localVarQueryParams.Add("sort", parameterToString(*r.sort, ""))
+	}
 	if r.offset != nil {
 		localVarQueryParams.Add("offset", parameterToString(*r.offset, ""))
 	}
@@ -980,8 +990,15 @@ type ApiGetStoreFilesRequest struct {
 	ctx context.Context
 	ApiService *DefaultApiService
 	storeId string
+	sort *string
 	offset *int32
 	limit *int32
+}
+
+// Sort the content of the response according to a given key, potentially in descending order
+func (r ApiGetStoreFilesRequest) Sort(sort string) ApiGetStoreFilesRequest {
+	r.sort = &sort
+	return r
 }
 
 // How many entries to skip (used for pagination of results)
@@ -1037,6 +1054,9 @@ func (a *DefaultApiService) GetStoreFilesExecute(r ApiGetStoreFilesRequest) (*Ge
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if r.sort != nil {
+		localVarQueryParams.Add("sort", parameterToString(*r.sort, ""))
+	}
 	if r.offset != nil {
 		localVarQueryParams.Add("offset", parameterToString(*r.offset, ""))
 	}
@@ -1123,6 +1143,13 @@ type ApiGetStoreUploadRequest struct {
 	ApiService *DefaultApiService
 	uploadId int32
 	storeId string
+	sort *string
+}
+
+// Sort the content of the response according to a given key, potentially in descending order
+func (r ApiGetStoreUploadRequest) Sort(sort string) ApiGetStoreUploadRequest {
+	r.sort = &sort
+	return r
 }
 
 func (r ApiGetStoreUploadRequest) Execute() (*GetStoreUploadResponse, *http.Response, error) {
@@ -1169,6 +1196,9 @@ func (a *DefaultApiService) GetStoreUploadExecute(r ApiGetStoreUploadRequest) (*
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if r.sort != nil {
+		localVarQueryParams.Add("sort", parameterToString(*r.sort, ""))
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -1248,8 +1278,15 @@ type ApiGetStoreUploadsRequest struct {
 	ctx context.Context
 	ApiService *DefaultApiService
 	storeId string
+	sort *string
 	offset *int32
 	limit *int32
+}
+
+// Sort the content of the response according to a given key, potentially in descending order
+func (r ApiGetStoreUploadsRequest) Sort(sort string) ApiGetStoreUploadsRequest {
+	r.sort = &sort
+	return r
 }
 
 // How many entries to skip (used for pagination of results)
@@ -1305,6 +1342,9 @@ func (a *DefaultApiService) GetStoreUploadsExecute(r ApiGetStoreUploadsRequest) 
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if r.sort != nil {
+		localVarQueryParams.Add("sort", parameterToString(*r.sort, ""))
+	}
 	if r.offset != nil {
 		localVarQueryParams.Add("offset", parameterToString(*r.offset, ""))
 	}
@@ -1389,6 +1429,13 @@ func (a *DefaultApiService) GetStoreUploadsExecute(r ApiGetStoreUploadsRequest) 
 type ApiGetStoresRequest struct {
 	ctx context.Context
 	ApiService *DefaultApiService
+	sort *string
+}
+
+// Sort the content of the response according to a given key, potentially in descending order
+func (r ApiGetStoresRequest) Sort(sort string) ApiGetStoresRequest {
+	r.sort = &sort
+	return r
 }
 
 func (r ApiGetStoresRequest) Execute() ([]string, *http.Response, error) {
@@ -1429,6 +1476,9 @@ func (a *DefaultApiService) GetStoresExecute(r ApiGetStoresRequest) ([]string, *
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if r.sort != nil {
+		localVarQueryParams.Add("sort", parameterToString(*r.sort, ""))
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -1618,6 +1668,13 @@ func (a *DefaultApiService) GetTokenExecute(r ApiGetTokenRequest) (*GetTokenResp
 type ApiGetTokensRequest struct {
 	ctx context.Context
 	ApiService *DefaultApiService
+	sort *string
+}
+
+// Sort the content of the response according to a given key, potentially in descending order
+func (r ApiGetTokensRequest) Sort(sort string) ApiGetTokensRequest {
+	r.sort = &sort
+	return r
 }
 
 func (r ApiGetTokensRequest) Execute() ([]GetTokenResponse, *http.Response, error) {
@@ -1658,6 +1715,9 @@ func (a *DefaultApiService) GetTokensExecute(r ApiGetTokensRequest) ([]GetTokenR
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if r.sort != nil {
+		localVarQueryParams.Add("sort", parameterToString(*r.sort, ""))
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 

@@ -497,7 +497,7 @@ Name | Type | Description  | Notes
 
 ## GetStoreFileBlobs
 
-> GetStoreFileBlobsResponse GetStoreFileBlobs(ctx, storeId, fileId).Offset(offset).Limit(limit).Execute()
+> GetStoreFileBlobsResponse GetStoreFileBlobs(ctx, storeId, fileId).Sort(sort).Offset(offset).Limit(limit).Execute()
 
 Fetch a list of blobs for a specific file in store
 
@@ -516,12 +516,13 @@ import (
 func main() {
     storeId := "storeId_example" // string | ID of the store containing the file
     fileId := "fileId_example" // string | ID of the file
+    sort := "name" // string | Sort the content of the response according to a given key, potentially in descending order (optional)
     offset := int32(56) // int32 | How many entries to skip (used for pagination of results) (optional) (default to 0)
     limit := int32(56) // int32 | Max number of results to return (used for pagination of results) (optional) (default to 25)
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.DefaultApi.GetStoreFileBlobs(context.Background(), storeId, fileId).Offset(offset).Limit(limit).Execute()
+    resp, r, err := apiClient.DefaultApi.GetStoreFileBlobs(context.Background(), storeId, fileId).Sort(sort).Offset(offset).Limit(limit).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStoreFileBlobs``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -549,6 +550,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
 
+ **sort** | **string** | Sort the content of the response according to a given key, potentially in descending order | 
  **offset** | **int32** | How many entries to skip (used for pagination of results) | [default to 0]
  **limit** | **int32** | Max number of results to return (used for pagination of results) | [default to 25]
 
@@ -572,7 +574,7 @@ Name | Type | Description  | Notes
 
 ## GetStoreFiles
 
-> GetStoreFilesResponse GetStoreFiles(ctx, storeId).Offset(offset).Limit(limit).Execute()
+> GetStoreFilesResponse GetStoreFiles(ctx, storeId).Sort(sort).Offset(offset).Limit(limit).Execute()
 
 Fetch a list of files in store
 
@@ -590,12 +592,13 @@ import (
 
 func main() {
     storeId := "storeId_example" // string | ID of the store containing the files
+    sort := "name" // string | Sort the content of the response according to a given key, potentially in descending order (optional)
     offset := int32(56) // int32 | How many entries to skip (used for pagination of results) (optional) (default to 0)
     limit := int32(56) // int32 | Max number of results to return (used for pagination of results) (optional) (default to 25)
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.DefaultApi.GetStoreFiles(context.Background(), storeId).Offset(offset).Limit(limit).Execute()
+    resp, r, err := apiClient.DefaultApi.GetStoreFiles(context.Background(), storeId).Sort(sort).Offset(offset).Limit(limit).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStoreFiles``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -621,6 +624,7 @@ Other parameters are passed through a pointer to a apiGetStoreFilesRequest struc
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **sort** | **string** | Sort the content of the response according to a given key, potentially in descending order | 
  **offset** | **int32** | How many entries to skip (used for pagination of results) | [default to 0]
  **limit** | **int32** | Max number of results to return (used for pagination of results) | [default to 25]
 
@@ -644,7 +648,7 @@ Name | Type | Description  | Notes
 
 ## GetStoreUpload
 
-> GetStoreUploadResponse GetStoreUpload(ctx, uploadId, storeId).Execute()
+> GetStoreUploadResponse GetStoreUpload(ctx, uploadId, storeId).Sort(sort).Execute()
 
 Fetch an upload
 
@@ -663,10 +667,11 @@ import (
 func main() {
     uploadId := int32(56) // int32 | ID of the upload to fetch
     storeId := "storeId_example" // string | ID of the store containing the upload
+    sort := "name" // string | Sort the content of the response according to a given key, potentially in descending order (optional)
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.DefaultApi.GetStoreUpload(context.Background(), uploadId, storeId).Execute()
+    resp, r, err := apiClient.DefaultApi.GetStoreUpload(context.Background(), uploadId, storeId).Sort(sort).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStoreUpload``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -694,6 +699,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
 
+ **sort** | **string** | Sort the content of the response according to a given key, potentially in descending order | 
 
 ### Return type
 
@@ -715,7 +721,7 @@ Name | Type | Description  | Notes
 
 ## GetStoreUploads
 
-> GetStoreUploadsResponse GetStoreUploads(ctx, storeId).Offset(offset).Limit(limit).Execute()
+> GetStoreUploadsResponse GetStoreUploads(ctx, storeId).Sort(sort).Offset(offset).Limit(limit).Execute()
 
 Fetch a list of uploads in store
 
@@ -733,12 +739,13 @@ import (
 
 func main() {
     storeId := "storeId_example" // string | ID of the store containing the uploads
+    sort := "name" // string | Sort the content of the response according to a given key, potentially in descending order (optional)
     offset := int32(56) // int32 | How many entries to skip (used for pagination of results) (optional) (default to 0)
     limit := int32(56) // int32 | Max number of results to return (used for pagination of results) (optional) (default to 25)
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.DefaultApi.GetStoreUploads(context.Background(), storeId).Offset(offset).Limit(limit).Execute()
+    resp, r, err := apiClient.DefaultApi.GetStoreUploads(context.Background(), storeId).Sort(sort).Offset(offset).Limit(limit).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStoreUploads``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -764,6 +771,7 @@ Other parameters are passed through a pointer to a apiGetStoreUploadsRequest str
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **sort** | **string** | Sort the content of the response according to a given key, potentially in descending order | 
  **offset** | **int32** | How many entries to skip (used for pagination of results) | [default to 0]
  **limit** | **int32** | Max number of results to return (used for pagination of results) | [default to 25]
 
@@ -787,7 +795,7 @@ Name | Type | Description  | Notes
 
 ## GetStores
 
-> []string GetStores(ctx).Execute()
+> []string GetStores(ctx).Sort(sort).Execute()
 
 Fetch a list of all stores
 
@@ -804,10 +812,11 @@ import (
 )
 
 func main() {
+    sort := "name" // string | Sort the content of the response according to a given key, potentially in descending order (optional)
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.DefaultApi.GetStores(context.Background()).Execute()
+    resp, r, err := apiClient.DefaultApi.GetStores(context.Background()).Sort(sort).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetStores``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -819,12 +828,16 @@ func main() {
 
 ### Path Parameters
 
-This endpoint does not need any parameter.
+
 
 ### Other Parameters
 
 Other parameters are passed through a pointer to a apiGetStoresRequest struct via the builder pattern
 
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **sort** | **string** | Sort the content of the response according to a given key, potentially in descending order | 
 
 ### Return type
 
@@ -914,7 +927,7 @@ Name | Type | Description  | Notes
 
 ## GetTokens
 
-> []GetTokenResponse GetTokens(ctx).Execute()
+> []GetTokenResponse GetTokens(ctx).Sort(sort).Execute()
 
 Fetch a list of all tokens for current user
 
@@ -931,10 +944,11 @@ import (
 )
 
 func main() {
+    sort := "name" // string | Sort the content of the response according to a given key, potentially in descending order (optional)
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
-    resp, r, err := apiClient.DefaultApi.GetTokens(context.Background()).Execute()
+    resp, r, err := apiClient.DefaultApi.GetTokens(context.Background()).Sort(sort).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DefaultApi.GetTokens``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -946,12 +960,16 @@ func main() {
 
 ### Path Parameters
 
-This endpoint does not need any parameter.
+
 
 ### Other Parameters
 
 Other parameters are passed through a pointer to a apiGetTokensRequest struct via the builder pattern
 
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **sort** | **string** | Sort the content of the response according to a given key, potentially in descending order | 
 
 ### Return type
 

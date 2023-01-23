@@ -19,16 +19,16 @@ func (s *ApiService) DeleteStore(ctx context.Context, storeId string) (openapi.I
 	return store_api.DeleteStore(ctx, storeId)
 }
 
-func (s *ApiService) GetStoreFiles(ctx context.Context, storeId string, offset int32, limit int32) (openapi.ImplResponse, error) {
-	return store_api.GetStoreFiles(ctx, storeId, offset, limit)
+func (s *ApiService) GetStoreFiles(ctx context.Context, storeId string, sort string, offset int32, limit int32) (openapi.ImplResponse, error) {
+	return store_api.GetStoreFiles(ctx, storeId, sort, offset, limit)
 }
 
-func (s *ApiService) GetStores(ctx context.Context) (openapi.ImplResponse, error) {
-	return store_api.GetStores(ctx)
+func (s *ApiService) GetStores(ctx context.Context, sort string) (openapi.ImplResponse, error) {
+	return store_api.GetStores(ctx, sort)
 }
 
-func (s *ApiService) GetStoreFileBlobs(ctx context.Context, storeId string, fileId string, offset int32, limit int32) (openapi.ImplResponse, error) {
-	return store_api.GetStoreFileBlobs(ctx, storeId, fileId, offset, limit)
+func (s *ApiService) GetStoreFileBlobs(ctx context.Context, storeId string, fileId string, sort string, offset int32, limit int32) (openapi.ImplResponse, error) {
+	return store_api.GetStoreFileBlobs(ctx, storeId, fileId, sort, offset, limit)
 }
 
 func (s *ApiService) GetStoreFileBlobDownloadUrl(ctx context.Context, storeId string, fileId string, blobId string) (openapi.ImplResponse, error) {
@@ -45,12 +45,12 @@ func (s *ApiService) ExpireStoreUpload(ctx context.Context, uploadId int32, stor
 	return upload_api.ExpireStoreUpload(ctx, uploadId, storeId)
 }
 
-func (s *ApiService) GetStoreUploads(ctx context.Context, storeId string, offset int32, limit int32) (openapi.ImplResponse, error) {
-	return upload_api.GetStoreUploads(ctx, storeId, offset, limit)
+func (s *ApiService) GetStoreUploads(ctx context.Context, storeId string, sort string, offset int32, limit int32) (openapi.ImplResponse, error) {
+	return upload_api.GetStoreUploads(ctx, storeId, sort, offset, limit)
 }
 
-func (s *ApiService) GetStoreUpload(ctx context.Context, uploadId int32, storeId string) (openapi.ImplResponse, error) {
-	return upload_api.GetStoreUpload(ctx, uploadId, storeId)
+func (s *ApiService) GetStoreUpload(ctx context.Context, uploadId int32, storeId string, sort string) (openapi.ImplResponse, error) {
+	return upload_api.GetStoreUpload(ctx, uploadId, storeId, sort)
 }
 
 func (s *ApiService) MarkStoreUploadAborted(ctx context.Context, uploadId int32, storeId string) (openapi.ImplResponse, error) {
@@ -79,8 +79,8 @@ func (s *ApiService) GetToken(ctx context.Context, token string) (openapi.ImplRe
 	return token_api.GetToken(ctx, token)
 }
 
-func (s *ApiService) GetTokens(ctx context.Context) (openapi.ImplResponse, error) {
-	return token_api.GetTokens(ctx)
+func (s *ApiService) GetTokens(ctx context.Context, sort string) (openapi.ImplResponse, error) {
+	return token_api.GetTokens(ctx, sort)
 }
 
 func (s *ApiService) UpdateToken(ctx context.Context, token string, updateTokenRequest openapi.UpdateTokenRequest) (openapi.ImplResponse, error) {

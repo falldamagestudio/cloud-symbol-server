@@ -16,9 +16,34 @@ import (
 	postgres "github.com/falldamagestudio/cloud-symbol-server/backend-api/postgres"
 )
 
-func GetStoreFileBlobs(ctx context.Context, storeId string, fileId string, offset int32, limit int32) (openapi.ImplResponse, error) {
+var getStoreFileBlobsSortOptions = map[string]string{
+	"":                 models.StoreFileBlobColumns.UploadTimestamp,
+	"blobIdentifier":   models.StoreFileBlobColumns.BlobIdentifier,
+	"-blobIdentifier":  models.StoreFileBlobColumns.BlobIdentifier + " desc",
+	"uploadTimestamp":  models.StoreFileBlobColumns.UploadTimestamp,
+	"-uploadTimestamp": models.StoreFileBlobColumns.UploadTimestamp + " desc",
+	"type":             models.StoreFileBlobColumns.Type,
+	"-type":            models.StoreFileBlobColumns.Type + " desc",
+	"size":             models.StoreFileBlobColumns.Size,
+	"-size":            models.StoreFileBlobColumns.Size + " desc",
+	"contentHash":      models.StoreFileBlobColumns.ContentHash,
+	"-contentHash":     models.StoreFileBlobColumns.ContentHash + " desc",
+	"status":           models.StoreFileBlobColumns.Status,
+	"-status":          models.StoreFileBlobColumns.Status + " desc",
+}
 
-	log.Printf("Getting store file blobs; store %v, file %v, offset %v, limit %v", storeId, fileId, offset, limit)
+func GetStoreFileBlobs(ctx context.Context, storeId string, fileId string, sort string, offset int32, limit int32) (openapi.ImplResponse, error) {
+
+	log.Printf("Getting store file blobs; store %v, file %v, sort %v, offset %v, limit %v", storeId, fileId, sort, offset, limit)
+
+	// Handle sorting
+	orderByOption := ""
+	if sortOption, ok := getStoreFileBlobsSortOptions[sort]; ok {
+		orderByOption = sortOption
+	} else {
+		log.Printf("Unsupported sort option: %v", sort)
+		return openapi.Response(http.StatusBadRequest, openapi.MessageResponse{Message: fmt.Sprintf("Unsupported sort option: %v", sort)}), nil
+	}
 
 	tx, err := postgres.BeginDBTransaction(ctx)
 	if err != nil {
@@ -70,7 +95,7 @@ func GetStoreFileBlobs(ctx context.Context, storeId string, fileId string, offse
 	// Fetch all blobs within file
 	blobs, err := models.StoreFileBlobs(
 		qm.Where(models.StoreFileBlobTableColumns.FileID+" = ?", file.FileID),
-		qm.OrderBy(models.StoreFileBlobColumns.BlobID),
+		qm.OrderBy(orderByOption),
 		qm.Offset(int(offset)),
 		qm.Limit(int(limit)),
 	).All(ctx, tx)

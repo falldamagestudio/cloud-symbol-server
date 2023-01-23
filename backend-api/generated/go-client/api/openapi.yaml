@@ -15,6 +15,23 @@ paths:
   /tokens:
     get:
       operationId: getTokens
+      parameters:
+      - description: "Sort the content of the response according to a given key, potentially\
+          \ in descending order"
+        examples:
+          singleKeyAscending:
+            summary: "Single sort key, ascending"
+            value: name
+          singleKeyDescending:
+            summary: "Single sort key, descending"
+            value: -name
+        explode: false
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -140,6 +157,23 @@ paths:
   /stores:
     get:
       operationId: getStores
+      parameters:
+      - description: "Sort the content of the response according to a given key, potentially\
+          \ in descending order"
+        examples:
+          singleKeyAscending:
+            summary: "Single sort key, ascending"
+            value: name
+          singleKeyDescending:
+            summary: "Single sort key, descending"
+            value: -name
+        explode: false
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -221,6 +255,22 @@ paths:
         schema:
           type: string
         style: simple
+      - description: "Sort the content of the response according to a given key, potentially\
+          \ in descending order"
+        examples:
+          singleKeyAscending:
+            summary: "Single sort key, ascending"
+            value: name
+          singleKeyDescending:
+            summary: "Single sort key, descending"
+            value: -name
+        explode: false
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: form
       - description: How many entries to skip (used for pagination of results)
         explode: true
         in: query
@@ -282,6 +332,22 @@ paths:
         schema:
           type: string
         style: simple
+      - description: "Sort the content of the response according to a given key, potentially\
+          \ in descending order"
+        examples:
+          singleKeyAscending:
+            summary: "Single sort key, ascending"
+            value: name
+          singleKeyDescending:
+            summary: "Single sort key, descending"
+            value: -name
+        explode: false
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: form
       - description: How many entries to skip (used for pagination of results)
         explode: true
         in: query
@@ -384,6 +450,22 @@ paths:
         schema:
           type: string
         style: simple
+      - description: "Sort the content of the response according to a given key, potentially\
+          \ in descending order"
+        examples:
+          singleKeyAscending:
+            summary: "Single sort key, ascending"
+            value: name
+          singleKeyDescending:
+            summary: "Single sort key, descending"
+            value: -name
+        explode: false
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: form
       - description: How many entries to skip (used for pagination of results)
         explode: true
         in: query
@@ -476,6 +558,22 @@ paths:
         schema:
           type: string
         style: simple
+      - description: "Sort the content of the response according to a given key, potentially\
+          \ in descending order"
+        examples:
+          singleKeyAscending:
+            summary: "Single sort key, ascending"
+            value: name
+          singleKeyDescending:
+            summary: "Single sort key, descending"
+            value: -name
+        explode: false
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -650,6 +748,24 @@ paths:
           description: No such store/upload/item
       summary: Mark a file within an upload as uploaded
 components:
+  parameters:
+    sort:
+      description: "Sort the content of the response according to a given key, potentially\
+        \ in descending order"
+      examples:
+        singleKeyAscending:
+          summary: "Single sort key, ascending"
+          value: name
+        singleKeyDescending:
+          summary: "Single sort key, descending"
+          value: -name
+      explode: false
+      in: query
+      name: sort
+      required: false
+      schema:
+        type: string
+      style: form
   responses:
     "401":
       content:

@@ -16,9 +16,32 @@ import (
 	postgres "github.com/falldamagestudio/cloud-symbol-server/backend-api/postgres"
 )
 
-func GetStoreUploads(ctx context.Context, storeId string, offset int32, limit int32) (openapi.ImplResponse, error) {
+var getStoreUploadsSortOptions = map[string]string{
+	"":             models.StoreUploadColumns.StoreUploadIndex,
+	"uploadId":     models.StoreUploadColumns.StoreUploadIndex,
+	"-uploadId":    models.StoreUploadColumns.StoreUploadIndex + " desc",
+	"description":  models.StoreUploadColumns.Description,
+	"-description": models.StoreUploadColumns.Description + " desc",
+	"buildId":      models.StoreUploadColumns.Build,
+	"-buildId":     models.StoreUploadColumns.Build + " desc",
+	"timestamp":    models.StoreUploadColumns.Timestamp,
+	"-timestamp":   models.StoreUploadColumns.Timestamp + " desc",
+	"status":       models.StoreUploadColumns.Status,
+	"-status":      models.StoreUploadColumns.Status + " desc",
+}
 
-	log.Printf("Getting store uploads for store %v, offset %v, limit %v", storeId, offset, limit)
+func GetStoreUploads(ctx context.Context, storeId string, sort string, offset int32, limit int32) (openapi.ImplResponse, error) {
+
+	log.Printf("Getting store uploads for store %v, sort %v, offset %v, limit %v", storeId, sort, offset, limit)
+
+	// Handle sorting
+	orderByOption := ""
+	if sortOption, ok := getStoreUploadsSortOptions[sort]; ok {
+		orderByOption = sortOption
+	} else {
+		log.Printf("Unsupported sort option: %v", sort)
+		return openapi.Response(http.StatusBadRequest, openapi.MessageResponse{Message: fmt.Sprintf("Unsupported sort option: %v", sort)}), nil
+	}
 
 	tx, err := postgres.BeginDBTransaction(ctx)
 	if err != nil {
@@ -54,7 +77,7 @@ func GetStoreUploads(ctx context.Context, storeId string, offset int32, limit in
 	// Fetch all uploads within store
 	uploads, err := models.StoreUploads(
 		qm.Where(models.StoreUploadTableColumns.StoreID+" = ?", store.StoreID),
-		qm.OrderBy(models.StoreUploadColumns.UploadID),
+		qm.OrderBy(orderByOption),
 		qm.Offset(int(offset)),
 		qm.Limit(int(limit)),
 	).All(ctx, tx)

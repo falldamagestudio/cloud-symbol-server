@@ -13,6 +13,8 @@ paths:
     get:
       summary: Fetch a list of all tokens for current user
       operationId: getTokens
+      parameters:
+        - $ref: '#/components/parameters/sort'
 
       responses:
         200:
@@ -127,6 +129,8 @@ paths:
     get:
       summary: Fetch a list of all stores
       operationId: getStores
+      parameters:
+        - $ref: '#/components/parameters/sort'
 
       responses:
         200:
@@ -201,6 +205,7 @@ paths:
             type: string
           required: true
           description: ID of the store containing the files
+        - $ref: '#/components/parameters/sort'
         - in: query
           name: offset
           schema:
@@ -254,6 +259,7 @@ paths:
             type: string
           required: true
           description: ID of the file
+        - $ref: '#/components/parameters/sort'
         - in: query
           name: offset
           schema:
@@ -343,6 +349,7 @@ paths:
             type: string
           required: true
           description: ID of the store containing the uploads
+        - $ref: '#/components/parameters/sort'
         - in: query
           name: offset
           schema:
@@ -424,6 +431,7 @@ paths:
             type: string
           required: true
           description: ID of the store containing the upload
+        - $ref: '#/components/parameters/sort'
       
       responses:
         200:
@@ -578,6 +586,24 @@ paths:
                 $ref: '#/components/schemas/messageResponse'
 
 components:
+
+  parameters:
+    sort:
+      in: query
+      name: sort
+      description: Sort the content of the response according to a given key, potentially in descending order
+      required: false
+      schema:
+        type: string
+      style: form
+      explode: false
+      examples:
+        singleKeyAscending:
+          summary: Single sort key, ascending
+          value: name   # ?sort=name
+        singleKeyDescending:
+          summary: Single sort key, descending
+          value: -name   # ?sort=-name
 
   responses:
     401:

@@ -15,9 +15,24 @@ import (
 	postgres "github.com/falldamagestudio/cloud-symbol-server/backend-api/postgres"
 )
 
-func GetStoreFiles(ctx context.Context, storeId string, offset int32, limit int32) (openapi.ImplResponse, error) {
+var getStoreFilesSortOptions = map[string]string{
+	"":          models.StoreFileColumns.FileName,
+	"fileName":  models.StoreFileColumns.FileName,
+	"-fileName": models.StoreFileColumns.FileName + " desc",
+}
 
-	log.Printf("Getting store files; store %v, offset %v, limit %v", storeId, offset, limit)
+func GetStoreFiles(ctx context.Context, storeId string, sort string, offset int32, limit int32) (openapi.ImplResponse, error) {
+
+	log.Printf("Getting store files; store %v, sort %v, offset %v, limit %v", storeId, sort, offset, limit)
+
+	// Handle sorting
+	orderByOption := ""
+	if sortOption, ok := getStoreFilesSortOptions[sort]; ok {
+		orderByOption = sortOption
+	} else {
+		log.Printf("Unsupported sort option: %v", sort)
+		return openapi.Response(http.StatusBadRequest, openapi.MessageResponse{Message: fmt.Sprintf("Unsupported sort option: %v", sort)}), nil
+	}
 
 	tx, err := postgres.BeginDBTransaction(ctx)
 	if err != nil {
@@ -53,7 +68,7 @@ func GetStoreFiles(ctx context.Context, storeId string, offset int32, limit int3
 	// Fetch all files within store
 	files, err := models.StoreFiles(
 		qm.Where(models.StoreFileTableColumns.StoreID+" = ?", store.StoreID),
-		qm.OrderBy(models.StoreFileColumns.FileID),
+		qm.OrderBy(orderByOption),
 		qm.Offset(int(offset)),
 		qm.Limit(int(limit)),
 	).All(ctx, tx)

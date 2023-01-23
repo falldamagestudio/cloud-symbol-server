@@ -759,12 +759,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Fetch a list of blobs for a specific file in store
          * @param {string} storeId ID of the store containing the file
          * @param {string} fileId ID of the file
+         * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
          * @param {number} [offset] How many entries to skip (used for pagination of results)
          * @param {number} [limit] Max number of results to return (used for pagination of results)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStoreFileBlobs: async (storeId: string, fileId: string, offset?: number, limit?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getStoreFileBlobs: async (storeId: string, fileId: string, sort?: string, offset?: number, limit?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'storeId' is not null or undefined
             assertParamExists('getStoreFileBlobs', 'storeId', storeId)
             // verify required parameter 'fileId' is not null or undefined
@@ -786,6 +787,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication emailAndPat required
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
+            }
 
             if (offset !== undefined) {
                 localVarQueryParameter['offset'] = offset;
@@ -810,12 +815,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * 
          * @summary Fetch a list of files in store
          * @param {string} storeId ID of the store containing the files
+         * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
          * @param {number} [offset] How many entries to skip (used for pagination of results)
          * @param {number} [limit] Max number of results to return (used for pagination of results)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStoreFiles: async (storeId: string, offset?: number, limit?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getStoreFiles: async (storeId: string, sort?: string, offset?: number, limit?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'storeId' is not null or undefined
             assertParamExists('getStoreFiles', 'storeId', storeId)
             const localVarPath = `/stores/{storeId}/files`
@@ -834,6 +840,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication emailAndPat required
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
+            }
 
             if (offset !== undefined) {
                 localVarQueryParameter['offset'] = offset;
@@ -859,10 +869,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Fetch an upload
          * @param {number} uploadId ID of the upload to fetch
          * @param {string} storeId ID of the store containing the upload
+         * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStoreUpload: async (uploadId: number, storeId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getStoreUpload: async (uploadId: number, storeId: string, sort?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'uploadId' is not null or undefined
             assertParamExists('getStoreUpload', 'uploadId', uploadId)
             // verify required parameter 'storeId' is not null or undefined
@@ -885,6 +896,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
+            }
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -900,12 +915,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * 
          * @summary Fetch a list of uploads in store
          * @param {string} storeId ID of the store containing the uploads
+         * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
          * @param {number} [offset] How many entries to skip (used for pagination of results)
          * @param {number} [limit] Max number of results to return (used for pagination of results)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStoreUploads: async (storeId: string, offset?: number, limit?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getStoreUploads: async (storeId: string, sort?: string, offset?: number, limit?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'storeId' is not null or undefined
             assertParamExists('getStoreUploads', 'storeId', storeId)
             const localVarPath = `/stores/{storeId}/uploads`
@@ -924,6 +940,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication emailAndPat required
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
+            }
 
             if (offset !== undefined) {
                 localVarQueryParameter['offset'] = offset;
@@ -947,10 +967,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @summary Fetch a list of all stores
+         * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStores: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getStores: async (sort?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/stores`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -966,6 +987,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication emailAndPat required
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
+            }
 
 
     
@@ -1019,10 +1044,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @summary Fetch a list of all tokens for current user
+         * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTokens: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getTokens: async (sort?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/tokens`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1038,6 +1064,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication emailAndPat required
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
+            }
 
 
     
@@ -1319,26 +1349,28 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @summary Fetch a list of blobs for a specific file in store
          * @param {string} storeId ID of the store containing the file
          * @param {string} fileId ID of the file
+         * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
          * @param {number} [offset] How many entries to skip (used for pagination of results)
          * @param {number} [limit] Max number of results to return (used for pagination of results)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getStoreFileBlobs(storeId: string, fileId: string, offset?: number, limit?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStoreFileBlobsResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getStoreFileBlobs(storeId, fileId, offset, limit, options);
+        async getStoreFileBlobs(storeId: string, fileId: string, sort?: string, offset?: number, limit?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStoreFileBlobsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStoreFileBlobs(storeId, fileId, sort, offset, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
          * @summary Fetch a list of files in store
          * @param {string} storeId ID of the store containing the files
+         * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
          * @param {number} [offset] How many entries to skip (used for pagination of results)
          * @param {number} [limit] Max number of results to return (used for pagination of results)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getStoreFiles(storeId: string, offset?: number, limit?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStoreFilesResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getStoreFiles(storeId, offset, limit, options);
+        async getStoreFiles(storeId: string, sort?: string, offset?: number, limit?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStoreFilesResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStoreFiles(storeId, sort, offset, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1346,34 +1378,37 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @summary Fetch an upload
          * @param {number} uploadId ID of the upload to fetch
          * @param {string} storeId ID of the store containing the upload
+         * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getStoreUpload(uploadId: number, storeId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStoreUploadResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getStoreUpload(uploadId, storeId, options);
+        async getStoreUpload(uploadId: number, storeId: string, sort?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStoreUploadResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStoreUpload(uploadId, storeId, sort, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
          * @summary Fetch a list of uploads in store
          * @param {string} storeId ID of the store containing the uploads
+         * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
          * @param {number} [offset] How many entries to skip (used for pagination of results)
          * @param {number} [limit] Max number of results to return (used for pagination of results)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getStoreUploads(storeId: string, offset?: number, limit?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStoreUploadsResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getStoreUploads(storeId, offset, limit, options);
+        async getStoreUploads(storeId: string, sort?: string, offset?: number, limit?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStoreUploadsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStoreUploads(storeId, sort, offset, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
          * @summary Fetch a list of all stores
+         * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getStores(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getStores(options);
+        async getStores(sort?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStores(sort, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1390,11 +1425,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Fetch a list of all tokens for current user
+         * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTokens(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetTokenResponse>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getTokens(options);
+        async getTokens(sort?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetTokenResponse>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTokens(sort, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1534,57 +1570,62 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @summary Fetch a list of blobs for a specific file in store
          * @param {string} storeId ID of the store containing the file
          * @param {string} fileId ID of the file
+         * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
          * @param {number} [offset] How many entries to skip (used for pagination of results)
          * @param {number} [limit] Max number of results to return (used for pagination of results)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStoreFileBlobs(storeId: string, fileId: string, offset?: number, limit?: number, options?: any): AxiosPromise<GetStoreFileBlobsResponse> {
-            return localVarFp.getStoreFileBlobs(storeId, fileId, offset, limit, options).then((request) => request(axios, basePath));
+        getStoreFileBlobs(storeId: string, fileId: string, sort?: string, offset?: number, limit?: number, options?: any): AxiosPromise<GetStoreFileBlobsResponse> {
+            return localVarFp.getStoreFileBlobs(storeId, fileId, sort, offset, limit, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Fetch a list of files in store
          * @param {string} storeId ID of the store containing the files
+         * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
          * @param {number} [offset] How many entries to skip (used for pagination of results)
          * @param {number} [limit] Max number of results to return (used for pagination of results)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStoreFiles(storeId: string, offset?: number, limit?: number, options?: any): AxiosPromise<GetStoreFilesResponse> {
-            return localVarFp.getStoreFiles(storeId, offset, limit, options).then((request) => request(axios, basePath));
+        getStoreFiles(storeId: string, sort?: string, offset?: number, limit?: number, options?: any): AxiosPromise<GetStoreFilesResponse> {
+            return localVarFp.getStoreFiles(storeId, sort, offset, limit, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Fetch an upload
          * @param {number} uploadId ID of the upload to fetch
          * @param {string} storeId ID of the store containing the upload
+         * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStoreUpload(uploadId: number, storeId: string, options?: any): AxiosPromise<GetStoreUploadResponse> {
-            return localVarFp.getStoreUpload(uploadId, storeId, options).then((request) => request(axios, basePath));
+        getStoreUpload(uploadId: number, storeId: string, sort?: string, options?: any): AxiosPromise<GetStoreUploadResponse> {
+            return localVarFp.getStoreUpload(uploadId, storeId, sort, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Fetch a list of uploads in store
          * @param {string} storeId ID of the store containing the uploads
+         * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
          * @param {number} [offset] How many entries to skip (used for pagination of results)
          * @param {number} [limit] Max number of results to return (used for pagination of results)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStoreUploads(storeId: string, offset?: number, limit?: number, options?: any): AxiosPromise<GetStoreUploadsResponse> {
-            return localVarFp.getStoreUploads(storeId, offset, limit, options).then((request) => request(axios, basePath));
+        getStoreUploads(storeId: string, sort?: string, offset?: number, limit?: number, options?: any): AxiosPromise<GetStoreUploadsResponse> {
+            return localVarFp.getStoreUploads(storeId, sort, offset, limit, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Fetch a list of all stores
+         * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStores(options?: any): AxiosPromise<Array<string>> {
-            return localVarFp.getStores(options).then((request) => request(axios, basePath));
+        getStores(sort?: string, options?: any): AxiosPromise<Array<string>> {
+            return localVarFp.getStores(sort, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1599,11 +1640,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @summary Fetch a list of all tokens for current user
+         * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTokens(options?: any): AxiosPromise<Array<GetTokenResponse>> {
-            return localVarFp.getTokens(options).then((request) => request(axios, basePath));
+        getTokens(sort?: string, options?: any): AxiosPromise<Array<GetTokenResponse>> {
+            return localVarFp.getTokens(sort, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1752,28 +1794,30 @@ export class DefaultApi extends BaseAPI {
      * @summary Fetch a list of blobs for a specific file in store
      * @param {string} storeId ID of the store containing the file
      * @param {string} fileId ID of the file
+     * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
      * @param {number} [offset] How many entries to skip (used for pagination of results)
      * @param {number} [limit] Max number of results to return (used for pagination of results)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getStoreFileBlobs(storeId: string, fileId: string, offset?: number, limit?: number, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).getStoreFileBlobs(storeId, fileId, offset, limit, options).then((request) => request(this.axios, this.basePath));
+    public getStoreFileBlobs(storeId: string, fileId: string, sort?: string, offset?: number, limit?: number, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getStoreFileBlobs(storeId, fileId, sort, offset, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Fetch a list of files in store
      * @param {string} storeId ID of the store containing the files
+     * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
      * @param {number} [offset] How many entries to skip (used for pagination of results)
      * @param {number} [limit] Max number of results to return (used for pagination of results)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getStoreFiles(storeId: string, offset?: number, limit?: number, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).getStoreFiles(storeId, offset, limit, options).then((request) => request(this.axios, this.basePath));
+    public getStoreFiles(storeId: string, sort?: string, offset?: number, limit?: number, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getStoreFiles(storeId, sort, offset, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1781,37 +1825,40 @@ export class DefaultApi extends BaseAPI {
      * @summary Fetch an upload
      * @param {number} uploadId ID of the upload to fetch
      * @param {string} storeId ID of the store containing the upload
+     * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getStoreUpload(uploadId: number, storeId: string, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).getStoreUpload(uploadId, storeId, options).then((request) => request(this.axios, this.basePath));
+    public getStoreUpload(uploadId: number, storeId: string, sort?: string, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getStoreUpload(uploadId, storeId, sort, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Fetch a list of uploads in store
      * @param {string} storeId ID of the store containing the uploads
+     * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
      * @param {number} [offset] How many entries to skip (used for pagination of results)
      * @param {number} [limit] Max number of results to return (used for pagination of results)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getStoreUploads(storeId: string, offset?: number, limit?: number, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).getStoreUploads(storeId, offset, limit, options).then((request) => request(this.axios, this.basePath));
+    public getStoreUploads(storeId: string, sort?: string, offset?: number, limit?: number, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getStoreUploads(storeId, sort, offset, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Fetch a list of all stores
+     * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getStores(options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).getStores(options).then((request) => request(this.axios, this.basePath));
+    public getStores(sort?: string, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getStores(sort, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1829,12 +1876,13 @@ export class DefaultApi extends BaseAPI {
     /**
      * 
      * @summary Fetch a list of all tokens for current user
+     * @param {string} [sort] Sort the content of the response according to a given key, potentially in descending order
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getTokens(options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).getTokens(options).then((request) => request(this.axios, this.basePath));
+    public getTokens(sort?: string, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getTokens(sort, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

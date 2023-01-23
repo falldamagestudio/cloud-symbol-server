@@ -8,8 +8,6 @@
       :items="storeFileBlobs"
       :server-items-length="total"
       :options="options"
-      :page="options.page"
-      :items-per-page="options.itemsPerPage"
       :footer-props="{
         showCurrentPage: true,
         showFirstLastPage: true,
@@ -19,7 +17,7 @@
           100,
         ],
       }"
-      @pagination="updatePagination"
+      @update:options="updateOptions"
     >
       <template
         v-slot:item.blobIdentifier="{ item }"
@@ -148,9 +146,26 @@ interface StoreFileBlobEntry {
   status: string
 }
 
-let options = {
+interface DataTableOptions {
+  page: number,
+  itemsPerPage: number,
+  sortBy: string[],
+  sortDesc: boolean[],
+  groupBy: string[],
+  groupDesc: boolean[],
+  multiSort: boolean,
+  mustSort: boolean
+}
+
+let options: DataTableOptions = {
   page: 1,
   itemsPerPage: 25,
+  sortBy: [],
+  sortDesc: [],
+  groupBy: [],
+  groupDesc: [],
+  multiSort: false,
+  mustSort: false,
 }
 
 const storeFileBlobs = ref([] as StoreFileBlobEntry[])
@@ -182,10 +197,20 @@ function copyTextToClipboard(text: string) {
   navigator.clipboard.writeText(text)
 }
 
+function getSortIndex(): string | undefined {
+  if (options.sortBy.length == 0) {
+    return undefined
+  } else {
+    const sortDirection = (options.sortDesc[0] ? "-" : "")
+    const sortKey = options.sortBy[0]
+    return `${sortDirection}${sortKey}`
+  }
+}
+
 async function fetch() {
 
   try {
-    const storeFileBlobsResponse = await api.getStoreFileBlobs(props.store, props.file, (options.page - 1) * options.itemsPerPage, options.itemsPerPage)
+    const storeFileBlobsResponse = await api.getStoreFileBlobs(props.store, props.file, getSortIndex(), (options.page - 1) * options.itemsPerPage, options.itemsPerPage)
     storeFileBlobs.value.length = 0
     if (storeFileBlobsResponse.data.blobs) {
       for (const blob of storeFileBlobsResponse.data.blobs) {
@@ -206,15 +231,11 @@ async function fetch() {
   }
 }
 
-function updatePagination(newOptions: {
-  page: number,
-  itemsPerPage: number,
-  pageStart: number,
-  pageStop: number,
-  pageCount: number,
-  itemsLength: number
-}) {
-  if ((options.page != newOptions.page) || (options.itemsPerPage != newOptions.itemsPerPage)) {
+function updateOptions(newOptions: DataTableOptions) {
+  if ((options.page != newOptions.page)
+    || (options.itemsPerPage != newOptions.itemsPerPage)
+    || (options.sortBy != newOptions.sortBy)
+    || (options.sortDesc != newOptions.sortDesc) ) {
     options = newOptions
     fetch()
   }

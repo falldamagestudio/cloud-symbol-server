@@ -299,6 +299,7 @@ func (c *DefaultApiController) GetStoreFileBlobs(w http.ResponseWriter, r *http.
 	
 	fileIdParam := params["fileId"]
 	
+	sortParam := query.Get("sort")
 	offsetParam, err := parseInt32Parameter(query.Get("offset"), false)
 	if err != nil {
 		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
@@ -309,7 +310,7 @@ func (c *DefaultApiController) GetStoreFileBlobs(w http.ResponseWriter, r *http.
 		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
 		return
 	}
-	result, err := c.service.GetStoreFileBlobs(r.Context(), storeIdParam, fileIdParam, offsetParam, limitParam)
+	result, err := c.service.GetStoreFileBlobs(r.Context(), storeIdParam, fileIdParam, sortParam, offsetParam, limitParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)
@@ -326,6 +327,7 @@ func (c *DefaultApiController) GetStoreFiles(w http.ResponseWriter, r *http.Requ
 	query := r.URL.Query()
 	storeIdParam := params["storeId"]
 	
+	sortParam := query.Get("sort")
 	offsetParam, err := parseInt32Parameter(query.Get("offset"), false)
 	if err != nil {
 		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
@@ -336,7 +338,7 @@ func (c *DefaultApiController) GetStoreFiles(w http.ResponseWriter, r *http.Requ
 		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
 		return
 	}
-	result, err := c.service.GetStoreFiles(r.Context(), storeIdParam, offsetParam, limitParam)
+	result, err := c.service.GetStoreFiles(r.Context(), storeIdParam, sortParam, offsetParam, limitParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)
@@ -350,6 +352,7 @@ func (c *DefaultApiController) GetStoreFiles(w http.ResponseWriter, r *http.Requ
 // GetStoreUpload - Fetch an upload
 func (c *DefaultApiController) GetStoreUpload(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
+	query := r.URL.Query()
 	uploadIdParam, err := parseInt32Parameter(params["uploadId"], true)
 	if err != nil {
 		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
@@ -358,7 +361,8 @@ func (c *DefaultApiController) GetStoreUpload(w http.ResponseWriter, r *http.Req
 
 	storeIdParam := params["storeId"]
 	
-	result, err := c.service.GetStoreUpload(r.Context(), uploadIdParam, storeIdParam)
+	sortParam := query.Get("sort")
+	result, err := c.service.GetStoreUpload(r.Context(), uploadIdParam, storeIdParam, sortParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)
@@ -375,6 +379,7 @@ func (c *DefaultApiController) GetStoreUploads(w http.ResponseWriter, r *http.Re
 	query := r.URL.Query()
 	storeIdParam := params["storeId"]
 	
+	sortParam := query.Get("sort")
 	offsetParam, err := parseInt32Parameter(query.Get("offset"), false)
 	if err != nil {
 		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
@@ -385,7 +390,7 @@ func (c *DefaultApiController) GetStoreUploads(w http.ResponseWriter, r *http.Re
 		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
 		return
 	}
-	result, err := c.service.GetStoreUploads(r.Context(), storeIdParam, offsetParam, limitParam)
+	result, err := c.service.GetStoreUploads(r.Context(), storeIdParam, sortParam, offsetParam, limitParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)
@@ -398,7 +403,9 @@ func (c *DefaultApiController) GetStoreUploads(w http.ResponseWriter, r *http.Re
 
 // GetStores - Fetch a list of all stores
 func (c *DefaultApiController) GetStores(w http.ResponseWriter, r *http.Request) {
-	result, err := c.service.GetStores(r.Context())
+	query := r.URL.Query()
+	sortParam := query.Get("sort")
+	result, err := c.service.GetStores(r.Context(), sortParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)
@@ -427,7 +434,9 @@ func (c *DefaultApiController) GetToken(w http.ResponseWriter, r *http.Request) 
 
 // GetTokens - Fetch a list of all tokens for current user
 func (c *DefaultApiController) GetTokens(w http.ResponseWriter, r *http.Request) {
-	result, err := c.service.GetTokens(r.Context())
+	query := r.URL.Query()
+	sortParam := query.Get("sort")
+	result, err := c.service.GetTokens(r.Context(), sortParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)

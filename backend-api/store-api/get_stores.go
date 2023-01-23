@@ -14,9 +14,24 @@ import (
 	postgres "github.com/falldamagestudio/cloud-symbol-server/backend-api/postgres"
 )
 
-func GetStores(ctx context.Context) (openapi.ImplResponse, error) {
+var getStoresSortOptions = map[string]string{
+	"":      models.StoreColumns.Name,
+	"name":  models.StoreColumns.Name,
+	"-name": models.StoreColumns.Name + " desc",
+}
 
-	log.Printf("Getting store names")
+func GetStores(ctx context.Context, sort string) (openapi.ImplResponse, error) {
+
+	log.Printf("Getting store names, sort %v", sort)
+
+	// Handle sorting
+	orderByOption := ""
+	if sortOption, ok := getStoresSortOptions[sort]; ok {
+		orderByOption = sortOption
+	} else {
+		log.Printf("Unsupported sort option: %v", sort)
+		return openapi.Response(http.StatusBadRequest, openapi.MessageResponse{Message: fmt.Sprintf("Unsupported sort option: %v", sort)}), nil
+	}
 
 	db := postgres.GetDB()
 	if db == nil {
@@ -25,7 +40,8 @@ func GetStores(ctx context.Context) (openapi.ImplResponse, error) {
 
 	// Fetch names of all stores
 	stores, err := models.Stores(
-		qm.Select(models.StoreColumns.Name), qm.OrderBy(models.StoreColumns.StoreID),
+		qm.Select(models.StoreColumns.Name),
+		qm.OrderBy(orderByOption),
 	).All(ctx, db)
 	if err != nil {
 		log.Printf("Error while accessing stores: %v", err)

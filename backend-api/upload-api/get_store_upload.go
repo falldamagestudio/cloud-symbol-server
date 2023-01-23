@@ -16,9 +16,30 @@ import (
 	postgres "github.com/falldamagestudio/cloud-symbol-server/backend-api/postgres"
 )
 
-func GetStoreUpload(ctx context.Context, uploadId int32, storeId string) (openapi.ImplResponse, error) {
+var getStoreUploadSortOptions = map[string]string{
+	"":                    models.StoreUploadFileColumns.UploadFileIndex,
+	"uploadFileId":        models.StoreUploadFileColumns.UploadFileIndex,
+	"-uploadFileId":       models.StoreUploadFileColumns.UploadFileIndex + " desc",
+	"status":              models.StoreUploadFileColumns.Status,
+	"-status":             models.StoreUploadFileColumns.Status + " desc",
+	"fileName":            models.StoreUploadFileColumns.FileName,
+	"-fileName":           models.StoreUploadFileColumns.FileName + " desc",
+	"FileBlobIdentifier":  models.StoreUploadFileColumns.FileBlobIdentifier,
+	"-FileBlobIdentifier": models.StoreUploadFileColumns.FileBlobIdentifier + " desc",
+}
 
-	log.Printf("Getting store upload")
+func GetStoreUpload(ctx context.Context, uploadId int32, storeId string, sort string) (openapi.ImplResponse, error) {
+
+	log.Printf("Getting store upload, sort %v", sort)
+
+	// Handle sorting
+	orderByOption := ""
+	if sortOption, ok := getStoreUploadSortOptions[sort]; ok {
+		orderByOption = sortOption
+	} else {
+		log.Printf("Unsupported sort option: %v", sort)
+		return openapi.Response(http.StatusBadRequest, openapi.MessageResponse{Message: fmt.Sprintf("Unsupported sort option: %v", sort)}), nil
+	}
 
 	tx, err := postgres.BeginDBTransaction(ctx)
 	if err != nil {
@@ -58,7 +79,7 @@ func GetStoreUpload(ctx context.Context, uploadId int32, storeId string) (openap
 	// Locate upload-files in DB
 	uploadFiles, err := models.StoreUploadFiles(
 		qm.Where(models.StoreUploadFileColumns.UploadID+" = ?", upload.UploadID),
-		qm.OrderBy(models.StoreUploadFileColumns.UploadFileIndex),
+		qm.OrderBy(orderByOption),
 	).All(ctx, tx)
 	if err != nil {
 		log.Printf("Error while accessing files of upload %v / %v: %v", storeId, uploadId, err)
