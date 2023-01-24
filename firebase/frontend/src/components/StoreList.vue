@@ -57,10 +57,6 @@ async function fetch() {
   }
 }
 
-function refresh() {
-  fetch()
-}
-
 fetch()
 
 </script>

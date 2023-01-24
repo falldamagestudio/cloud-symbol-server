@@ -96,7 +96,7 @@
 
 <script setup lang="ts">
 
-import { computed, ref, watch } from 'vue'
+import { ref } from 'vue'
 import dayjs from 'dayjs'
 
 import { api } from '../adminApi'

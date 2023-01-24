@@ -39,13 +39,9 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router/composables'
 
-import { useAuthUserStore } from '../stores/authUser'
 import { api } from '../adminApi'
 
-const authUserStore = useAuthUserStore()
-
 const description = ref('')
-const email = authUserStore.user!.email!
 const isFormValid = ref(false)
 
 const router = useRouter()
@@ -58,7 +54,7 @@ async function generate() {
 
   try {
     const createTokenResponse = await api.createToken()
-    const updateTokenResponse = await api.updateToken(createTokenResponse.data.token!, {
+    await api.updateToken(createTokenResponse.data.token!, {
       description: description.value
     })
   } catch (error) {
