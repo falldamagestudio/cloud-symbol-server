@@ -77,10 +77,6 @@ import PATListEntry from './PATListEntry.vue'
 import { api } from '../adminApi'
 import { GetTokenResponse } from '../generated/api'
 
-const props = defineProps<{
-  email: string,
-}>()
-
 const pats = ref([] as GetTokenResponse[])
 
 async function fetch() {
