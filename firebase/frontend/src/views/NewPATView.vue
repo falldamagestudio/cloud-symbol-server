@@ -54,7 +54,7 @@ async function generate() {
 
   try {
     const createTokenResponse = await api.createToken()
-    await api.updateToken(createTokenResponse.data.token!, {
+    await api.updateToken(createTokenResponse.data.token, {
       description: description.value
     })
   } catch (error) {

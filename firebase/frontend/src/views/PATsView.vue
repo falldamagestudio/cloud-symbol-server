@@ -12,6 +12,6 @@ import PATList from '../components/PATList.vue';
 
 const authUserStore = useAuthUserStore()
 
-const email = authUserStore.user!.email!
+const email = authUserStore.user?.email || "Unknown"
 
 </script>
