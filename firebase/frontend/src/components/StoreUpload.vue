@@ -75,12 +75,12 @@ const headers = [
   }
 ]
 
-const storeUpload = ref(null as GetStoreUploadResponse)
+const storeUpload = ref(null as (null | GetStoreUploadResponse))
 
 async function fetch() {
 
   try {
-    const storeUploadResponse = await api.getStoreUpload(props.upload, props.store)
+    const storeUploadResponse = await api.getStoreUpload(props.upload as unknown as number, props.store)
     storeUpload.value = storeUploadResponse.data
   } catch (error) {
     console.log(error)
