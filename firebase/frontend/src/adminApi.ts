@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { InternalAxiosRequestConfig } from 'axios'
 
 import { Configuration, ConfigurationParameters } from './generated/configuration'
 import { DefaultApiFactory } from './generated/api'
@@ -11,14 +11,14 @@ const axiosInstance = axios.create({
 });
 
 // Use interceptor to inject the token to requests
-axiosInstance.interceptors.request.use((request: any) => {
+axiosInstance.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
   const authUserStore = useAuthUserStore()
 
-  return authUserStore.user!.getIdToken(false)
-    .then((token) => {
-      request.headers['Authorization'] = 'Bearer ' + token;
-      return request;
-    })
+  if (authUserStore.user) {
+    const token = await authUserStore.user.getIdToken(false)
+    config.headers['Authorization'] = 'Bearer ' + token
+  }
+  return config
 });
 
 const apiConfigurationParameters = {
