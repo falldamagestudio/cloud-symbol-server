@@ -101,7 +101,7 @@ function copyTextToClipboard(text: string) {
 async function revoke() {
 
   try {
-    const response = await api.deleteToken(props.pat.token)
+    await api.deleteToken(props.pat.token)
   } catch (error) {
     console.log(error)
   }
