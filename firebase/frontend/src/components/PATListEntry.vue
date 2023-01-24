@@ -76,7 +76,6 @@
 <script setup lang="ts">
 
 import { ref } from 'vue'
-import { doc, deleteDoc, Timestamp } from 'firebase/firestore'
 import dayjs from 'dayjs'
 
 import PATUsageGuide from './PATUsageGuide.vue'
