@@ -272,7 +272,7 @@ func replicateStoreFromFirestoreToPostgres(ctx context.Context, firestoreClient 
 		newUpload.StoreUploadIndex = uploadDocIndex
 		newUpload.Description = oldUpload.Description
 		newUpload.Build = oldUpload.BuildId
-		newUpload.Timestamp = timestamp
+		newUpload.UploadTimestamp = timestamp
 		newUpload.Status = newUploadStatus
 
 		if err = newUpload.Insert(ctx, tx, boil.Infer()); err != nil {
