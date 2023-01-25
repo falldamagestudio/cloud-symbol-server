@@ -206,23 +206,8 @@ paths:
           required: true
           description: ID of the store containing the files
         - $ref: '#/components/parameters/sort'
-        - in: query
-          name: offset
-          schema:
-            type: integer
-            minimum: 0
-            default: 0
-          required: false
-          description: How many entries to skip (used for pagination of results)
-        - in: query
-          name: limit
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 100
-            default: 25
-          required: false
-          description: Max number of results to return (used for pagination of results)
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/limit'
 
       responses:
         200:
@@ -260,23 +245,8 @@ paths:
           required: true
           description: ID of the file
         - $ref: '#/components/parameters/sort'
-        - in: query
-          name: offset
-          schema:
-            type: integer
-            minimum: 0
-            default: 0
-          required: false
-          description: How many entries to skip (used for pagination of results)
-        - in: query
-          name: limit
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 100
-            default: 25
-          required: false
-          description: Max number of results to return (used for pagination of results)
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/limit'
 
       responses:
         200:
@@ -350,23 +320,8 @@ paths:
           required: true
           description: ID of the store containing the uploads
         - $ref: '#/components/parameters/sort'
-        - in: query
-          name: offset
-          schema:
-            type: integer
-            minimum: 0
-            default: 0
-          required: false
-          description: How many entries to skip (used for pagination of results)
-        - in: query
-          name: limit
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 100
-            default: 25
-          required: false
-          description: Max number of results to return (used for pagination of results)
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/limit'
 
       responses:
         200:
@@ -604,6 +559,27 @@ components:
         singleKeyDescending:
           summary: Single sort key, descending
           value: -name   # ?sort=-name
+
+    offset:
+      in: query
+      name: offset
+      description: How many entries to skip (used for pagination of results)
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+
+    limit:
+      in: query
+      name: limit
+      description: Max number of results to return (used for pagination of results)
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 25
 
   responses:
     401:

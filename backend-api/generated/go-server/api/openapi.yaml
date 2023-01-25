@@ -766,6 +766,29 @@ components:
       schema:
         type: string
       style: form
+    offset:
+      description: How many entries to skip (used for pagination of results)
+      explode: true
+      in: query
+      name: offset
+      required: false
+      schema:
+        default: 0
+        minimum: 0
+        type: integer
+      style: form
+    limit:
+      description: Max number of results to return (used for pagination of results)
+      explode: true
+      in: query
+      name: limit
+      required: false
+      schema:
+        default: 25
+        maximum: 100
+        minimum: 1
+        type: integer
+      style: form
   responses:
     "401":
       content:
