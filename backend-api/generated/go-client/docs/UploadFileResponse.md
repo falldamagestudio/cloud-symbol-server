@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **FileName** | **string** |  | 
 **BlobIdentifier** | **string** |  | 
 **Url** | Pointer to **string** | Short-lived signed URL where the client should upload the file to, or blank if the file already exists in the storage backend | [optional] 
+**Hash** | Pointer to **string** |  | [optional] 
 
 ## Methods
 
@@ -91,6 +92,31 @@ SetUrl sets Url field to given value.
 `func (o *UploadFileResponse) HasUrl() bool`
 
 HasUrl returns a boolean if a field has been set.
+
+### GetHash
+
+`func (o *UploadFileResponse) GetHash() string`
+
+GetHash returns the Hash field if non-nil, zero value otherwise.
+
+### GetHashOk
+
+`func (o *UploadFileResponse) GetHashOk() (*string, bool)`
+
+GetHashOk returns a tuple with the Hash field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetHash
+
+`func (o *UploadFileResponse) SetHash(v string)`
+
+SetHash sets Hash field to given value.
+
+### HasHash
+
+`func (o *UploadFileResponse) HasHash() bool`
+
+HasHash returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

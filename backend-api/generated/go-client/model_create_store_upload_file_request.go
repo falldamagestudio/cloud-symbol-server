@@ -17,20 +17,20 @@ import (
 // CreateStoreUploadFileRequest struct for CreateStoreUploadFileRequest
 type CreateStoreUploadFileRequest struct {
 	FileName string `json:"fileName"`
-	BlobIdentifier string `json:"blobIdentifier"`
+	BlobIdentifier *string `json:"blobIdentifier,omitempty"`
 	Type *StoreFileBlobType `json:"type,omitempty"`
 	Size *int64 `json:"size,omitempty"`
 	ContentHash *string `json:"contentHash,omitempty"`
+	Hash *string `json:"hash,omitempty"`
 }
 
 // NewCreateStoreUploadFileRequest instantiates a new CreateStoreUploadFileRequest object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCreateStoreUploadFileRequest(fileName string, blobIdentifier string) *CreateStoreUploadFileRequest {
+func NewCreateStoreUploadFileRequest(fileName string) *CreateStoreUploadFileRequest {
 	this := CreateStoreUploadFileRequest{}
 	this.FileName = fileName
-	this.BlobIdentifier = blobIdentifier
 	return &this
 }
 
@@ -66,28 +66,36 @@ func (o *CreateStoreUploadFileRequest) SetFileName(v string) {
 	o.FileName = v
 }
 
-// GetBlobIdentifier returns the BlobIdentifier field value
+// GetBlobIdentifier returns the BlobIdentifier field value if set, zero value otherwise.
 func (o *CreateStoreUploadFileRequest) GetBlobIdentifier() string {
-	if o == nil {
+	if o == nil || isNil(o.BlobIdentifier) {
 		var ret string
 		return ret
 	}
-
-	return o.BlobIdentifier
+	return *o.BlobIdentifier
 }
 
-// GetBlobIdentifierOk returns a tuple with the BlobIdentifier field value
+// GetBlobIdentifierOk returns a tuple with the BlobIdentifier field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *CreateStoreUploadFileRequest) GetBlobIdentifierOk() (*string, bool) {
-	if o == nil {
+	if o == nil || isNil(o.BlobIdentifier) {
     return nil, false
 	}
-	return &o.BlobIdentifier, true
+	return o.BlobIdentifier, true
 }
 
-// SetBlobIdentifier sets field value
+// HasBlobIdentifier returns a boolean if a field has been set.
+func (o *CreateStoreUploadFileRequest) HasBlobIdentifier() bool {
+	if o != nil && !isNil(o.BlobIdentifier) {
+		return true
+	}
+
+	return false
+}
+
+// SetBlobIdentifier gets a reference to the given string and assigns it to the BlobIdentifier field.
 func (o *CreateStoreUploadFileRequest) SetBlobIdentifier(v string) {
-	o.BlobIdentifier = v
+	o.BlobIdentifier = &v
 }
 
 // GetType returns the Type field value if set, zero value otherwise.
@@ -186,12 +194,44 @@ func (o *CreateStoreUploadFileRequest) SetContentHash(v string) {
 	o.ContentHash = &v
 }
 
+// GetHash returns the Hash field value if set, zero value otherwise.
+func (o *CreateStoreUploadFileRequest) GetHash() string {
+	if o == nil || isNil(o.Hash) {
+		var ret string
+		return ret
+	}
+	return *o.Hash
+}
+
+// GetHashOk returns a tuple with the Hash field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CreateStoreUploadFileRequest) GetHashOk() (*string, bool) {
+	if o == nil || isNil(o.Hash) {
+    return nil, false
+	}
+	return o.Hash, true
+}
+
+// HasHash returns a boolean if a field has been set.
+func (o *CreateStoreUploadFileRequest) HasHash() bool {
+	if o != nil && !isNil(o.Hash) {
+		return true
+	}
+
+	return false
+}
+
+// SetHash gets a reference to the given string and assigns it to the Hash field.
+func (o *CreateStoreUploadFileRequest) SetHash(v string) {
+	o.Hash = &v
+}
+
 func (o CreateStoreUploadFileRequest) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
 		toSerialize["fileName"] = o.FileName
 	}
-	if true {
+	if !isNil(o.BlobIdentifier) {
 		toSerialize["blobIdentifier"] = o.BlobIdentifier
 	}
 	if !isNil(o.Type) {
@@ -202,6 +242,9 @@ func (o CreateStoreUploadFileRequest) MarshalJSON() ([]byte, error) {
 	}
 	if !isNil(o.ContentHash) {
 		toSerialize["contentHash"] = o.ContentHash
+	}
+	if !isNil(o.Hash) {
+		toSerialize["hash"] = o.Hash
 	}
 	return json.Marshal(toSerialize)
 }

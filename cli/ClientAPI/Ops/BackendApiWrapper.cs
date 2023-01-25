@@ -130,7 +130,7 @@ namespace ClientAPI
         public async Task<BackendAPI.Model.GetStoreUploadsResponse> GetStoreUploadsAsync(string store, int offset, int limit) {
 
             try {
-                BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreUploadsResponse> response = await backendApi.GetStoreUploadsWithHttpInfoAsync(store, offset, limit);
+                BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreUploadsResponse> response = await backendApi.GetStoreUploadsWithHttpInfoAsync(store, null, offset, limit);
                 if (response.ErrorText != null)
                     throw new ApiException(response.ErrorText);
                 return response.Data;
@@ -208,7 +208,7 @@ namespace ClientAPI
         public async Task<BackendAPI.Model.GetStoreFilesResponse> GetStoreFilesAsync(string store, int offset, int limit) {
 
             try {
-                BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreFilesResponse> response = await backendApi.GetStoreFilesWithHttpInfoAsync(store, offset, limit);
+                BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreFilesResponse> response = await backendApi.GetStoreFilesWithHttpInfoAsync(store, null, offset, limit);
                 if (response.ErrorText != null)
                     throw new ApiException(response.ErrorText);
                 return response.Data;
@@ -228,7 +228,7 @@ namespace ClientAPI
         public async Task<BackendAPI.Model.GetStoreFileBlobsResponse> GetStoreFileBlobsAsync(string store, string file, int offset, int limit) {
 
             try {
-                BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreFileBlobsResponse> response = await backendApi.GetStoreFileBlobsWithHttpInfoAsync(store, file, offset, limit);
+                BackendAPI.Client.ApiResponse<BackendAPI.Model.GetStoreFileBlobsResponse> response = await backendApi.GetStoreFileBlobsWithHttpInfoAsync(store, file, null, offset, limit);
                 if (response.ErrorText != null)
                     throw new ApiException(response.ErrorText);
                 return response.Data;

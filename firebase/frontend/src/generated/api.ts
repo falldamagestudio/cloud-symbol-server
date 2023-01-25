@@ -38,7 +38,7 @@ export interface CreateStoreUploadFileRequest {
      * @type {string}
      * @memberof CreateStoreUploadFileRequest
      */
-    'blobIdentifier': string;
+    'blobIdentifier'?: string;
     /**
      * 
      * @type {StoreFileBlobType}
@@ -57,6 +57,12 @@ export interface CreateStoreUploadFileRequest {
      * @memberof CreateStoreUploadFileRequest
      */
     'contentHash'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateStoreUploadFileRequest
+     */
+    'hash'?: string;
 }
 /**
  * 
@@ -466,6 +472,12 @@ export interface UploadFileResponse {
      * @memberof UploadFileResponse
      */
     'url'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UploadFileResponse
+     */
+    'hash'?: string;
 }
 
 /**

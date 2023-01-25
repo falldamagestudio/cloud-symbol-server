@@ -675,7 +675,7 @@ catch (ApiException e)
 
 <a name="getstorefileblobs"></a>
 # **GetStoreFileBlobs**
-> GetStoreFileBlobsResponse GetStoreFileBlobs (string storeId, string fileId, int? offset = null, int? limit = null)
+> GetStoreFileBlobsResponse GetStoreFileBlobs (string storeId, string fileId, string sort = null, int? offset = null, int? limit = null)
 
 Fetch a list of blobs for a specific file in store
 
@@ -702,13 +702,14 @@ namespace Example
             var apiInstance = new DefaultApi(config);
             var storeId = "storeId_example";  // string | ID of the store containing the file
             var fileId = "fileId_example";  // string | ID of the file
+            var sort = name;  // string | Sort the content of the response according to a given key, potentially in descending order (optional) 
             var offset = 0;  // int? | How many entries to skip (used for pagination of results) (optional)  (default to 0)
             var limit = 25;  // int? | Max number of results to return (used for pagination of results) (optional)  (default to 25)
 
             try
             {
                 // Fetch a list of blobs for a specific file in store
-                GetStoreFileBlobsResponse result = apiInstance.GetStoreFileBlobs(storeId, fileId, offset, limit);
+                GetStoreFileBlobsResponse result = apiInstance.GetStoreFileBlobs(storeId, fileId, sort, offset, limit);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -729,7 +730,7 @@ This returns an ApiResponse object which contains the response data, status code
 try
 {
     // Fetch a list of blobs for a specific file in store
-    ApiResponse<GetStoreFileBlobsResponse> response = apiInstance.GetStoreFileBlobsWithHttpInfo(storeId, fileId, offset, limit);
+    ApiResponse<GetStoreFileBlobsResponse> response = apiInstance.GetStoreFileBlobsWithHttpInfo(storeId, fileId, sort, offset, limit);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -748,6 +749,7 @@ catch (ApiException e)
 |------|------|-------------|-------|
 | **storeId** | **string** | ID of the store containing the file |  |
 | **fileId** | **string** | ID of the file |  |
+| **sort** | **string** | Sort the content of the response according to a given key, potentially in descending order | [optional]  |
 | **offset** | **int?** | How many entries to skip (used for pagination of results) | [optional] [default to 0] |
 | **limit** | **int?** | Max number of results to return (used for pagination of results) | [optional] [default to 25] |
 
@@ -776,7 +778,7 @@ catch (ApiException e)
 
 <a name="getstorefiles"></a>
 # **GetStoreFiles**
-> GetStoreFilesResponse GetStoreFiles (string storeId, int? offset = null, int? limit = null)
+> GetStoreFilesResponse GetStoreFiles (string storeId, string sort = null, int? offset = null, int? limit = null)
 
 Fetch a list of files in store
 
@@ -802,13 +804,14 @@ namespace Example
 
             var apiInstance = new DefaultApi(config);
             var storeId = "storeId_example";  // string | ID of the store containing the files
+            var sort = name;  // string | Sort the content of the response according to a given key, potentially in descending order (optional) 
             var offset = 0;  // int? | How many entries to skip (used for pagination of results) (optional)  (default to 0)
             var limit = 25;  // int? | Max number of results to return (used for pagination of results) (optional)  (default to 25)
 
             try
             {
                 // Fetch a list of files in store
-                GetStoreFilesResponse result = apiInstance.GetStoreFiles(storeId, offset, limit);
+                GetStoreFilesResponse result = apiInstance.GetStoreFiles(storeId, sort, offset, limit);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -829,7 +832,7 @@ This returns an ApiResponse object which contains the response data, status code
 try
 {
     // Fetch a list of files in store
-    ApiResponse<GetStoreFilesResponse> response = apiInstance.GetStoreFilesWithHttpInfo(storeId, offset, limit);
+    ApiResponse<GetStoreFilesResponse> response = apiInstance.GetStoreFilesWithHttpInfo(storeId, sort, offset, limit);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -847,6 +850,7 @@ catch (ApiException e)
 | Name | Type | Description | Notes |
 |------|------|-------------|-------|
 | **storeId** | **string** | ID of the store containing the files |  |
+| **sort** | **string** | Sort the content of the response according to a given key, potentially in descending order | [optional]  |
 | **offset** | **int?** | How many entries to skip (used for pagination of results) | [optional] [default to 0] |
 | **limit** | **int?** | Max number of results to return (used for pagination of results) | [optional] [default to 25] |
 
@@ -875,7 +879,7 @@ catch (ApiException e)
 
 <a name="getstoreupload"></a>
 # **GetStoreUpload**
-> GetStoreUploadResponse GetStoreUpload (int uploadId, string storeId)
+> GetStoreUploadResponse GetStoreUpload (int uploadId, string storeId, string sort = null)
 
 Fetch an upload
 
@@ -902,11 +906,12 @@ namespace Example
             var apiInstance = new DefaultApi(config);
             var uploadId = 56;  // int | ID of the upload to fetch
             var storeId = "storeId_example";  // string | ID of the store containing the upload
+            var sort = name;  // string | Sort the content of the response according to a given key, potentially in descending order (optional) 
 
             try
             {
                 // Fetch an upload
-                GetStoreUploadResponse result = apiInstance.GetStoreUpload(uploadId, storeId);
+                GetStoreUploadResponse result = apiInstance.GetStoreUpload(uploadId, storeId, sort);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -927,7 +932,7 @@ This returns an ApiResponse object which contains the response data, status code
 try
 {
     // Fetch an upload
-    ApiResponse<GetStoreUploadResponse> response = apiInstance.GetStoreUploadWithHttpInfo(uploadId, storeId);
+    ApiResponse<GetStoreUploadResponse> response = apiInstance.GetStoreUploadWithHttpInfo(uploadId, storeId, sort);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -946,6 +951,7 @@ catch (ApiException e)
 |------|------|-------------|-------|
 | **uploadId** | **int** | ID of the upload to fetch |  |
 | **storeId** | **string** | ID of the store containing the upload |  |
+| **sort** | **string** | Sort the content of the response according to a given key, potentially in descending order | [optional]  |
 
 ### Return type
 
@@ -972,7 +978,7 @@ catch (ApiException e)
 
 <a name="getstoreuploads"></a>
 # **GetStoreUploads**
-> GetStoreUploadsResponse GetStoreUploads (string storeId, int? offset = null, int? limit = null)
+> GetStoreUploadsResponse GetStoreUploads (string storeId, string sort = null, int? offset = null, int? limit = null)
 
 Fetch a list of uploads in store
 
@@ -998,13 +1004,14 @@ namespace Example
 
             var apiInstance = new DefaultApi(config);
             var storeId = "storeId_example";  // string | ID of the store containing the uploads
+            var sort = name;  // string | Sort the content of the response according to a given key, potentially in descending order (optional) 
             var offset = 0;  // int? | How many entries to skip (used for pagination of results) (optional)  (default to 0)
             var limit = 25;  // int? | Max number of results to return (used for pagination of results) (optional)  (default to 25)
 
             try
             {
                 // Fetch a list of uploads in store
-                GetStoreUploadsResponse result = apiInstance.GetStoreUploads(storeId, offset, limit);
+                GetStoreUploadsResponse result = apiInstance.GetStoreUploads(storeId, sort, offset, limit);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -1025,7 +1032,7 @@ This returns an ApiResponse object which contains the response data, status code
 try
 {
     // Fetch a list of uploads in store
-    ApiResponse<GetStoreUploadsResponse> response = apiInstance.GetStoreUploadsWithHttpInfo(storeId, offset, limit);
+    ApiResponse<GetStoreUploadsResponse> response = apiInstance.GetStoreUploadsWithHttpInfo(storeId, sort, offset, limit);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -1043,6 +1050,7 @@ catch (ApiException e)
 | Name | Type | Description | Notes |
 |------|------|-------------|-------|
 | **storeId** | **string** | ID of the store containing the uploads |  |
+| **sort** | **string** | Sort the content of the response according to a given key, potentially in descending order | [optional]  |
 | **offset** | **int?** | How many entries to skip (used for pagination of results) | [optional] [default to 0] |
 | **limit** | **int?** | Max number of results to return (used for pagination of results) | [optional] [default to 25] |
 
@@ -1071,7 +1079,7 @@ catch (ApiException e)
 
 <a name="getstores"></a>
 # **GetStores**
-> List&lt;string&gt; GetStores ()
+> List&lt;string&gt; GetStores (string sort = null)
 
 Fetch a list of all stores
 
@@ -1096,11 +1104,12 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
+            var sort = name;  // string | Sort the content of the response according to a given key, potentially in descending order (optional) 
 
             try
             {
                 // Fetch a list of all stores
-                List<string> result = apiInstance.GetStores();
+                List<string> result = apiInstance.GetStores(sort);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -1121,7 +1130,7 @@ This returns an ApiResponse object which contains the response data, status code
 try
 {
     // Fetch a list of all stores
-    ApiResponse<List<string>> response = apiInstance.GetStoresWithHttpInfo();
+    ApiResponse<List<string>> response = apiInstance.GetStoresWithHttpInfo(sort);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -1135,7 +1144,11 @@ catch (ApiException e)
 ```
 
 ### Parameters
-This endpoint does not need any parameter.
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **sort** | **string** | Sort the content of the response according to a given key, potentially in descending order | [optional]  |
+
 ### Return type
 
 **List<string>**
@@ -1255,7 +1268,7 @@ catch (ApiException e)
 
 <a name="gettokens"></a>
 # **GetTokens**
-> List&lt;GetTokenResponse&gt; GetTokens ()
+> List&lt;GetTokenResponse&gt; GetTokens (string sort = null)
 
 Fetch a list of all tokens for current user
 
@@ -1280,11 +1293,12 @@ namespace Example
             config.Password = "YOUR_PASSWORD";
 
             var apiInstance = new DefaultApi(config);
+            var sort = name;  // string | Sort the content of the response according to a given key, potentially in descending order (optional) 
 
             try
             {
                 // Fetch a list of all tokens for current user
-                List<GetTokenResponse> result = apiInstance.GetTokens();
+                List<GetTokenResponse> result = apiInstance.GetTokens(sort);
                 Debug.WriteLine(result);
             }
             catch (ApiException  e)
@@ -1305,7 +1319,7 @@ This returns an ApiResponse object which contains the response data, status code
 try
 {
     // Fetch a list of all tokens for current user
-    ApiResponse<List<GetTokenResponse>> response = apiInstance.GetTokensWithHttpInfo();
+    ApiResponse<List<GetTokenResponse>> response = apiInstance.GetTokensWithHttpInfo(sort);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
     Debug.Write("Response Body: " + response.Data);
@@ -1319,7 +1333,11 @@ catch (ApiException e)
 ```
 
 ### Parameters
-This endpoint does not need any parameter.
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **sort** | **string** | Sort the content of the response according to a given key, potentially in descending order | [optional]  |
+
 ### Return type
 
 [**List&lt;GetTokenResponse&gt;**](GetTokenResponse.md)

@@ -17,6 +17,8 @@ type UploadFileResponse struct {
 
 	// Short-lived signed URL where the client should upload the file to, or blank if the file already exists in the storage backend
 	Url string `json:"url,omitempty"`
+
+	Hash string `json:"hash,omitempty"`
 }
 
 // AssertUploadFileResponseRequired checks if the required fields are not zero-ed

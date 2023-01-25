@@ -915,8 +915,10 @@ components:
         contentHash:
           example: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
           type: string
+        hash:
+          example: 7F416863ABF34C3E894BAD1739BAA5571
+          type: string
       required:
-      - blobIdentifier
       - fileName
       type: object
     getStoreUploadsResponse:
@@ -1059,9 +1061,11 @@ components:
         - fileName: Application.pdb
           blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
           url: https://storage.googleapis.com/storage/v1/b/example-bucket/o/stores/default/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
+          hash: 7F416863ABF34C3E894BAD1739BAA5571
         - fileName: Application.pdb
           blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
           url: https://storage.googleapis.com/storage/v1/b/example-bucket/o/stores/default/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
+          hash: 7F416863ABF34C3E894BAD1739BAA5571
         id: s4elWg054qyrpHCsHqLq
       properties:
         uploadId:
@@ -1084,6 +1088,7 @@ components:
         fileName: Application.pdb
         blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
         url: https://storage.googleapis.com/storage/v1/b/example-bucket/o/stores/default/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
+        hash: 7F416863ABF34C3E894BAD1739BAA5571
       properties:
         fileName:
           example: Application.pdb
@@ -1095,6 +1100,9 @@ components:
           description: "Short-lived signed URL where the client should upload the\
             \ file to, or blank if the file already exists in the storage backend"
           example: https://storage.googleapis.com/storage/v1/b/example-bucket/o/stores/default/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
+          type: string
+        hash:
+          example: 7F416863ABF34C3E894BAD1739BAA5571
           type: string
       required:
       - blobIdentifier

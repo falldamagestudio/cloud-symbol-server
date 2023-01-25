@@ -20,6 +20,7 @@ type UploadFileResponse struct {
 	BlobIdentifier string `json:"blobIdentifier"`
 	// Short-lived signed URL where the client should upload the file to, or blank if the file already exists in the storage backend
 	Url *string `json:"url,omitempty"`
+	Hash *string `json:"hash,omitempty"`
 }
 
 // NewUploadFileResponse instantiates a new UploadFileResponse object
@@ -121,6 +122,38 @@ func (o *UploadFileResponse) SetUrl(v string) {
 	o.Url = &v
 }
 
+// GetHash returns the Hash field value if set, zero value otherwise.
+func (o *UploadFileResponse) GetHash() string {
+	if o == nil || isNil(o.Hash) {
+		var ret string
+		return ret
+	}
+	return *o.Hash
+}
+
+// GetHashOk returns a tuple with the Hash field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UploadFileResponse) GetHashOk() (*string, bool) {
+	if o == nil || isNil(o.Hash) {
+    return nil, false
+	}
+	return o.Hash, true
+}
+
+// HasHash returns a boolean if a field has been set.
+func (o *UploadFileResponse) HasHash() bool {
+	if o != nil && !isNil(o.Hash) {
+		return true
+	}
+
+	return false
+}
+
+// SetHash gets a reference to the given string and assigns it to the Hash field.
+func (o *UploadFileResponse) SetHash(v string) {
+	o.Hash = &v
+}
+
 func (o UploadFileResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
@@ -131,6 +164,9 @@ func (o UploadFileResponse) MarshalJSON() ([]byte, error) {
 	}
 	if !isNil(o.Url) {
 		toSerialize["url"] = o.Url
+	}
+	if !isNil(o.Hash) {
+		toSerialize["hash"] = o.Hash
 	}
 	return json.Marshal(toSerialize)
 }

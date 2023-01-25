@@ -5,16 +5,17 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **FileName** | **string** |  | 
-**BlobIdentifier** | **string** |  | 
+**BlobIdentifier** | Pointer to **string** |  | [optional] 
 **Type** | Pointer to [**StoreFileBlobType**](StoreFileBlobType.md) |  | [optional] 
 **Size** | Pointer to **int64** |  | [optional] 
 **ContentHash** | Pointer to **string** |  | [optional] 
+**Hash** | Pointer to **string** |  | [optional] 
 
 ## Methods
 
 ### NewCreateStoreUploadFileRequest
 
-`func NewCreateStoreUploadFileRequest(fileName string, blobIdentifier string, ) *CreateStoreUploadFileRequest`
+`func NewCreateStoreUploadFileRequest(fileName string, ) *CreateStoreUploadFileRequest`
 
 NewCreateStoreUploadFileRequest instantiates a new CreateStoreUploadFileRequest object
 This constructor will assign default values to properties that have it defined,
@@ -68,6 +69,11 @@ and a boolean to check if the value has been set.
 
 SetBlobIdentifier sets BlobIdentifier field to given value.
 
+### HasBlobIdentifier
+
+`func (o *CreateStoreUploadFileRequest) HasBlobIdentifier() bool`
+
+HasBlobIdentifier returns a boolean if a field has been set.
 
 ### GetType
 
@@ -143,6 +149,31 @@ SetContentHash sets ContentHash field to given value.
 `func (o *CreateStoreUploadFileRequest) HasContentHash() bool`
 
 HasContentHash returns a boolean if a field has been set.
+
+### GetHash
+
+`func (o *CreateStoreUploadFileRequest) GetHash() string`
+
+GetHash returns the Hash field if non-nil, zero value otherwise.
+
+### GetHashOk
+
+`func (o *CreateStoreUploadFileRequest) GetHashOk() (*string, bool)`
+
+GetHashOk returns a tuple with the Hash field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetHash
+
+`func (o *CreateStoreUploadFileRequest) SetHash(v string)`
+
+SetHash sets Hash field to given value.
+
+### HasHash
+
+`func (o *CreateStoreUploadFileRequest) HasHash() bool`
+
+HasHash returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

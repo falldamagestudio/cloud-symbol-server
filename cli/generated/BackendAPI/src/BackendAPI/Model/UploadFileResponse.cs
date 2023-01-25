@@ -42,7 +42,8 @@ namespace BackendAPI.Model
         /// <param name="fileName">fileName (required).</param>
         /// <param name="blobIdentifier">blobIdentifier (required).</param>
         /// <param name="url">Short-lived signed URL where the client should upload the file to, or blank if the file already exists in the storage backend.</param>
-        public UploadFileResponse(string fileName = default(string), string blobIdentifier = default(string), string url = default(string))
+        /// <param name="hash">hash.</param>
+        public UploadFileResponse(string fileName = default(string), string blobIdentifier = default(string), string url = default(string), string hash = default(string))
         {
             // to ensure "fileName" is required (not null)
             if (fileName == null)
@@ -57,6 +58,7 @@ namespace BackendAPI.Model
             }
             this.BlobIdentifier = blobIdentifier;
             this.Url = url;
+            this.Hash = hash;
         }
 
         /// <summary>
@@ -79,6 +81,12 @@ namespace BackendAPI.Model
         public string Url { get; set; }
 
         /// <summary>
+        /// Gets or Sets Hash
+        /// </summary>
+        [DataMember(Name = "hash", EmitDefaultValue = false)]
+        public string Hash { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -89,6 +97,7 @@ namespace BackendAPI.Model
             sb.Append("  FileName: ").Append(FileName).Append("\n");
             sb.Append("  BlobIdentifier: ").Append(BlobIdentifier).Append("\n");
             sb.Append("  Url: ").Append(Url).Append("\n");
+            sb.Append("  Hash: ").Append(Hash).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -138,6 +147,11 @@ namespace BackendAPI.Model
                     this.Url == input.Url ||
                     (this.Url != null &&
                     this.Url.Equals(input.Url))
+                ) && 
+                (
+                    this.Hash == input.Hash ||
+                    (this.Hash != null &&
+                    this.Hash.Equals(input.Hash))
                 );
         }
 
@@ -161,6 +175,10 @@ namespace BackendAPI.Model
                 if (this.Url != null)
                 {
                     hashCode = (hashCode * 59) + this.Url.GetHashCode();
+                }
+                if (this.Hash != null)
+                {
+                    hashCode = (hashCode * 59) + this.Hash.GetHashCode();
                 }
                 return hashCode;
             }

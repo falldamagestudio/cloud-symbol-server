@@ -46,11 +46,12 @@ namespace BackendAPI.Model
         /// Initializes a new instance of the <see cref="CreateStoreUploadFileRequest" /> class.
         /// </summary>
         /// <param name="fileName">fileName (required).</param>
-        /// <param name="blobIdentifier">blobIdentifier (required).</param>
+        /// <param name="blobIdentifier">blobIdentifier.</param>
         /// <param name="type">type.</param>
         /// <param name="size">size.</param>
         /// <param name="contentHash">contentHash.</param>
-        public CreateStoreUploadFileRequest(string fileName = default(string), string blobIdentifier = default(string), StoreFileBlobType? type = default(StoreFileBlobType?), long size = default(long), string contentHash = default(string))
+        /// <param name="hash">hash.</param>
+        public CreateStoreUploadFileRequest(string fileName = default(string), string blobIdentifier = default(string), StoreFileBlobType? type = default(StoreFileBlobType?), long size = default(long), string contentHash = default(string), string hash = default(string))
         {
             // to ensure "fileName" is required (not null)
             if (fileName == null)
@@ -58,15 +59,11 @@ namespace BackendAPI.Model
                 throw new ArgumentNullException("fileName is a required property for CreateStoreUploadFileRequest and cannot be null");
             }
             this.FileName = fileName;
-            // to ensure "blobIdentifier" is required (not null)
-            if (blobIdentifier == null)
-            {
-                throw new ArgumentNullException("blobIdentifier is a required property for CreateStoreUploadFileRequest and cannot be null");
-            }
             this.BlobIdentifier = blobIdentifier;
             this.Type = type;
             this.Size = size;
             this.ContentHash = contentHash;
+            this.Hash = hash;
         }
 
         /// <summary>
@@ -78,7 +75,7 @@ namespace BackendAPI.Model
         /// <summary>
         /// Gets or Sets BlobIdentifier
         /// </summary>
-        [DataMember(Name = "blobIdentifier", IsRequired = true, EmitDefaultValue = true)]
+        [DataMember(Name = "blobIdentifier", EmitDefaultValue = false)]
         public string BlobIdentifier { get; set; }
 
         /// <summary>
@@ -94,6 +91,12 @@ namespace BackendAPI.Model
         public string ContentHash { get; set; }
 
         /// <summary>
+        /// Gets or Sets Hash
+        /// </summary>
+        [DataMember(Name = "hash", EmitDefaultValue = false)]
+        public string Hash { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -106,6 +109,7 @@ namespace BackendAPI.Model
             sb.Append("  Type: ").Append(Type).Append("\n");
             sb.Append("  Size: ").Append(Size).Append("\n");
             sb.Append("  ContentHash: ").Append(ContentHash).Append("\n");
+            sb.Append("  Hash: ").Append(Hash).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -163,6 +167,11 @@ namespace BackendAPI.Model
                     this.ContentHash == input.ContentHash ||
                     (this.ContentHash != null &&
                     this.ContentHash.Equals(input.ContentHash))
+                ) && 
+                (
+                    this.Hash == input.Hash ||
+                    (this.Hash != null &&
+                    this.Hash.Equals(input.Hash))
                 );
         }
 
@@ -188,6 +197,10 @@ namespace BackendAPI.Model
                 if (this.ContentHash != null)
                 {
                     hashCode = (hashCode * 59) + this.ContentHash.GetHashCode();
+                }
+                if (this.Hash != null)
+                {
+                    hashCode = (hashCode * 59) + this.Hash.GetHashCode();
                 }
                 return hashCode;
             }

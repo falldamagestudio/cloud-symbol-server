@@ -178,11 +178,12 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the file</param>
         /// <param name="fileId">ID of the file</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>GetStoreFileBlobsResponse</returns>
-        GetStoreFileBlobsResponse GetStoreFileBlobs(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0);
+        GetStoreFileBlobsResponse GetStoreFileBlobs(string storeId, string fileId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0);
 
         /// <summary>
         /// Fetch a list of blobs for a specific file in store
@@ -193,21 +194,23 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the file</param>
         /// <param name="fileId">ID of the file</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of GetStoreFileBlobsResponse</returns>
-        ApiResponse<GetStoreFileBlobsResponse> GetStoreFileBlobsWithHttpInfo(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0);
+        ApiResponse<GetStoreFileBlobsResponse> GetStoreFileBlobsWithHttpInfo(string storeId, string fileId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0);
         /// <summary>
         /// Fetch a list of files in store
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the files</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>GetStoreFilesResponse</returns>
-        GetStoreFilesResponse GetStoreFiles(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0);
+        GetStoreFilesResponse GetStoreFiles(string storeId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0);
 
         /// <summary>
         /// Fetch a list of files in store
@@ -217,20 +220,22 @@ namespace BackendAPI.Api
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the files</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of GetStoreFilesResponse</returns>
-        ApiResponse<GetStoreFilesResponse> GetStoreFilesWithHttpInfo(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0);
+        ApiResponse<GetStoreFilesResponse> GetStoreFilesWithHttpInfo(string storeId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0);
         /// <summary>
         /// Fetch an upload
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="uploadId">ID of the upload to fetch</param>
         /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>GetStoreUploadResponse</returns>
-        GetStoreUploadResponse GetStoreUpload(int uploadId, string storeId, int operationIndex = 0);
+        GetStoreUploadResponse GetStoreUpload(int uploadId, string storeId, string sort = default(string), int operationIndex = 0);
 
         /// <summary>
         /// Fetch an upload
@@ -241,19 +246,21 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="uploadId">ID of the upload to fetch</param>
         /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of GetStoreUploadResponse</returns>
-        ApiResponse<GetStoreUploadResponse> GetStoreUploadWithHttpInfo(int uploadId, string storeId, int operationIndex = 0);
+        ApiResponse<GetStoreUploadResponse> GetStoreUploadWithHttpInfo(int uploadId, string storeId, string sort = default(string), int operationIndex = 0);
         /// <summary>
         /// Fetch a list of uploads in store
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the uploads</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>GetStoreUploadsResponse</returns>
-        GetStoreUploadsResponse GetStoreUploads(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0);
+        GetStoreUploadsResponse GetStoreUploads(string storeId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0);
 
         /// <summary>
         /// Fetch a list of uploads in store
@@ -263,18 +270,20 @@ namespace BackendAPI.Api
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the uploads</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of GetStoreUploadsResponse</returns>
-        ApiResponse<GetStoreUploadsResponse> GetStoreUploadsWithHttpInfo(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0);
+        ApiResponse<GetStoreUploadsResponse> GetStoreUploadsWithHttpInfo(string storeId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0);
         /// <summary>
         /// Fetch a list of all stores
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;string&gt;</returns>
-        List<string> GetStores(int operationIndex = 0);
+        List<string> GetStores(string sort = default(string), int operationIndex = 0);
 
         /// <summary>
         /// Fetch a list of all stores
@@ -283,9 +292,10 @@ namespace BackendAPI.Api
         /// 
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;string&gt;</returns>
-        ApiResponse<List<string>> GetStoresWithHttpInfo(int operationIndex = 0);
+        ApiResponse<List<string>> GetStoresWithHttpInfo(string sort = default(string), int operationIndex = 0);
         /// <summary>
         /// Fetch a token for current user
         /// </summary>
@@ -310,9 +320,10 @@ namespace BackendAPI.Api
         /// Fetch a list of all tokens for current user
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;GetTokenResponse&gt;</returns>
-        List<GetTokenResponse> GetTokens(int operationIndex = 0);
+        List<GetTokenResponse> GetTokens(string sort = default(string), int operationIndex = 0);
 
         /// <summary>
         /// Fetch a list of all tokens for current user
@@ -321,9 +332,10 @@ namespace BackendAPI.Api
         /// 
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;GetTokenResponse&gt;</returns>
-        ApiResponse<List<GetTokenResponse>> GetTokensWithHttpInfo(int operationIndex = 0);
+        ApiResponse<List<GetTokenResponse>> GetTokensWithHttpInfo(string sort = default(string), int operationIndex = 0);
         /// <summary>
         /// Mark an upload as aborted
         /// </summary>
@@ -613,12 +625,13 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the file</param>
         /// <param name="fileId">ID of the file</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of GetStoreFileBlobsResponse</returns>
-        System.Threading.Tasks.Task<GetStoreFileBlobsResponse> GetStoreFileBlobsAsync(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<GetStoreFileBlobsResponse> GetStoreFileBlobsAsync(string storeId, string fileId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// Fetch a list of blobs for a specific file in store
@@ -629,12 +642,13 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the file</param>
         /// <param name="fileId">ID of the file</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (GetStoreFileBlobsResponse)</returns>
-        System.Threading.Tasks.Task<ApiResponse<GetStoreFileBlobsResponse>> GetStoreFileBlobsWithHttpInfoAsync(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<ApiResponse<GetStoreFileBlobsResponse>> GetStoreFileBlobsWithHttpInfoAsync(string storeId, string fileId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Fetch a list of files in store
         /// </summary>
@@ -643,12 +657,13 @@ namespace BackendAPI.Api
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the files</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of GetStoreFilesResponse</returns>
-        System.Threading.Tasks.Task<GetStoreFilesResponse> GetStoreFilesAsync(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<GetStoreFilesResponse> GetStoreFilesAsync(string storeId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// Fetch a list of files in store
@@ -658,12 +673,13 @@ namespace BackendAPI.Api
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the files</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (GetStoreFilesResponse)</returns>
-        System.Threading.Tasks.Task<ApiResponse<GetStoreFilesResponse>> GetStoreFilesWithHttpInfoAsync(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<ApiResponse<GetStoreFilesResponse>> GetStoreFilesWithHttpInfoAsync(string storeId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Fetch an upload
         /// </summary>
@@ -673,10 +689,11 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="uploadId">ID of the upload to fetch</param>
         /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of GetStoreUploadResponse</returns>
-        System.Threading.Tasks.Task<GetStoreUploadResponse> GetStoreUploadAsync(int uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<GetStoreUploadResponse> GetStoreUploadAsync(int uploadId, string storeId, string sort = default(string), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// Fetch an upload
@@ -687,10 +704,11 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="uploadId">ID of the upload to fetch</param>
         /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (GetStoreUploadResponse)</returns>
-        System.Threading.Tasks.Task<ApiResponse<GetStoreUploadResponse>> GetStoreUploadWithHttpInfoAsync(int uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<ApiResponse<GetStoreUploadResponse>> GetStoreUploadWithHttpInfoAsync(int uploadId, string storeId, string sort = default(string), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Fetch a list of uploads in store
         /// </summary>
@@ -699,12 +717,13 @@ namespace BackendAPI.Api
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the uploads</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of GetStoreUploadsResponse</returns>
-        System.Threading.Tasks.Task<GetStoreUploadsResponse> GetStoreUploadsAsync(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<GetStoreUploadsResponse> GetStoreUploadsAsync(string storeId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// Fetch a list of uploads in store
@@ -714,12 +733,13 @@ namespace BackendAPI.Api
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the uploads</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (GetStoreUploadsResponse)</returns>
-        System.Threading.Tasks.Task<ApiResponse<GetStoreUploadsResponse>> GetStoreUploadsWithHttpInfoAsync(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<ApiResponse<GetStoreUploadsResponse>> GetStoreUploadsWithHttpInfoAsync(string storeId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Fetch a list of all stores
         /// </summary>
@@ -727,10 +747,11 @@ namespace BackendAPI.Api
         /// 
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;string&gt;</returns>
-        System.Threading.Tasks.Task<List<string>> GetStoresAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<List<string>> GetStoresAsync(string sort = default(string), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// Fetch a list of all stores
@@ -739,10 +760,11 @@ namespace BackendAPI.Api
         /// 
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;string&gt;)</returns>
-        System.Threading.Tasks.Task<ApiResponse<List<string>>> GetStoresWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<ApiResponse<List<string>>> GetStoresWithHttpInfoAsync(string sort = default(string), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Fetch a token for current user
         /// </summary>
@@ -775,10 +797,11 @@ namespace BackendAPI.Api
         /// 
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;GetTokenResponse&gt;</returns>
-        System.Threading.Tasks.Task<List<GetTokenResponse>> GetTokensAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<List<GetTokenResponse>> GetTokensAsync(string sort = default(string), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <summary>
         /// Fetch a list of all tokens for current user
@@ -787,10 +810,11 @@ namespace BackendAPI.Api
         /// 
         /// </remarks>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;GetTokenResponse&gt;)</returns>
-        System.Threading.Tasks.Task<ApiResponse<List<GetTokenResponse>>> GetTokensWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<ApiResponse<List<GetTokenResponse>>> GetTokensWithHttpInfoAsync(string sort = default(string), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
         /// <summary>
         /// Mark an upload as aborted
         /// </summary>
@@ -2155,13 +2179,14 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the file</param>
         /// <param name="fileId">ID of the file</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>GetStoreFileBlobsResponse</returns>
-        public GetStoreFileBlobsResponse GetStoreFileBlobs(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0)
+        public GetStoreFileBlobsResponse GetStoreFileBlobs(string storeId, string fileId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0)
         {
-            BackendAPI.Client.ApiResponse<GetStoreFileBlobsResponse> localVarResponse = GetStoreFileBlobsWithHttpInfo(storeId, fileId, offset, limit);
+            BackendAPI.Client.ApiResponse<GetStoreFileBlobsResponse> localVarResponse = GetStoreFileBlobsWithHttpInfo(storeId, fileId, sort, offset, limit);
             return localVarResponse.Data;
         }
 
@@ -2171,11 +2196,12 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the file</param>
         /// <param name="fileId">ID of the file</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of GetStoreFileBlobsResponse</returns>
-        public BackendAPI.Client.ApiResponse<GetStoreFileBlobsResponse> GetStoreFileBlobsWithHttpInfo(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0)
+        public BackendAPI.Client.ApiResponse<GetStoreFileBlobsResponse> GetStoreFileBlobsWithHttpInfo(string storeId, string fileId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0)
         {
             // verify the required parameter 'storeId' is set
             if (storeId == null)
@@ -2213,6 +2239,10 @@ namespace BackendAPI.Api
 
             localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
             localVarRequestOptions.PathParameters.Add("fileId", BackendAPI.Client.ClientUtils.ParameterToString(fileId)); // path parameter
+            if (sort != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "sort", sort));
+            }
             if (offset != null)
             {
                 localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "offset", offset));
@@ -2252,14 +2282,15 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the file</param>
         /// <param name="fileId">ID of the file</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of GetStoreFileBlobsResponse</returns>
-        public async System.Threading.Tasks.Task<GetStoreFileBlobsResponse> GetStoreFileBlobsAsync(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<GetStoreFileBlobsResponse> GetStoreFileBlobsAsync(string storeId, string fileId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            BackendAPI.Client.ApiResponse<GetStoreFileBlobsResponse> localVarResponse = await GetStoreFileBlobsWithHttpInfoAsync(storeId, fileId, offset, limit, operationIndex, cancellationToken).ConfigureAwait(false);
+            BackendAPI.Client.ApiResponse<GetStoreFileBlobsResponse> localVarResponse = await GetStoreFileBlobsWithHttpInfoAsync(storeId, fileId, sort, offset, limit, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
@@ -2269,12 +2300,13 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the file</param>
         /// <param name="fileId">ID of the file</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (GetStoreFileBlobsResponse)</returns>
-        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetStoreFileBlobsResponse>> GetStoreFileBlobsWithHttpInfoAsync(string storeId, string fileId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetStoreFileBlobsResponse>> GetStoreFileBlobsWithHttpInfoAsync(string storeId, string fileId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'storeId' is set
             if (storeId == null)
@@ -2313,6 +2345,10 @@ namespace BackendAPI.Api
 
             localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
             localVarRequestOptions.PathParameters.Add("fileId", BackendAPI.Client.ClientUtils.ParameterToString(fileId)); // path parameter
+            if (sort != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "sort", sort));
+            }
             if (offset != null)
             {
                 localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "offset", offset));
@@ -2352,13 +2388,14 @@ namespace BackendAPI.Api
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the files</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>GetStoreFilesResponse</returns>
-        public GetStoreFilesResponse GetStoreFiles(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0)
+        public GetStoreFilesResponse GetStoreFiles(string storeId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0)
         {
-            BackendAPI.Client.ApiResponse<GetStoreFilesResponse> localVarResponse = GetStoreFilesWithHttpInfo(storeId, offset, limit);
+            BackendAPI.Client.ApiResponse<GetStoreFilesResponse> localVarResponse = GetStoreFilesWithHttpInfo(storeId, sort, offset, limit);
             return localVarResponse.Data;
         }
 
@@ -2367,11 +2404,12 @@ namespace BackendAPI.Api
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the files</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of GetStoreFilesResponse</returns>
-        public BackendAPI.Client.ApiResponse<GetStoreFilesResponse> GetStoreFilesWithHttpInfo(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0)
+        public BackendAPI.Client.ApiResponse<GetStoreFilesResponse> GetStoreFilesWithHttpInfo(string storeId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0)
         {
             // verify the required parameter 'storeId' is set
             if (storeId == null)
@@ -2402,6 +2440,10 @@ namespace BackendAPI.Api
             }
 
             localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
+            if (sort != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "sort", sort));
+            }
             if (offset != null)
             {
                 localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "offset", offset));
@@ -2440,14 +2482,15 @@ namespace BackendAPI.Api
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the files</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of GetStoreFilesResponse</returns>
-        public async System.Threading.Tasks.Task<GetStoreFilesResponse> GetStoreFilesAsync(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<GetStoreFilesResponse> GetStoreFilesAsync(string storeId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            BackendAPI.Client.ApiResponse<GetStoreFilesResponse> localVarResponse = await GetStoreFilesWithHttpInfoAsync(storeId, offset, limit, operationIndex, cancellationToken).ConfigureAwait(false);
+            BackendAPI.Client.ApiResponse<GetStoreFilesResponse> localVarResponse = await GetStoreFilesWithHttpInfoAsync(storeId, sort, offset, limit, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
@@ -2456,12 +2499,13 @@ namespace BackendAPI.Api
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the files</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (GetStoreFilesResponse)</returns>
-        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetStoreFilesResponse>> GetStoreFilesWithHttpInfoAsync(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetStoreFilesResponse>> GetStoreFilesWithHttpInfoAsync(string storeId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'storeId' is set
             if (storeId == null)
@@ -2493,6 +2537,10 @@ namespace BackendAPI.Api
             }
 
             localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
+            if (sort != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "sort", sort));
+            }
             if (offset != null)
             {
                 localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "offset", offset));
@@ -2533,11 +2581,12 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="uploadId">ID of the upload to fetch</param>
         /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>GetStoreUploadResponse</returns>
-        public GetStoreUploadResponse GetStoreUpload(int uploadId, string storeId, int operationIndex = 0)
+        public GetStoreUploadResponse GetStoreUpload(int uploadId, string storeId, string sort = default(string), int operationIndex = 0)
         {
-            BackendAPI.Client.ApiResponse<GetStoreUploadResponse> localVarResponse = GetStoreUploadWithHttpInfo(uploadId, storeId);
+            BackendAPI.Client.ApiResponse<GetStoreUploadResponse> localVarResponse = GetStoreUploadWithHttpInfo(uploadId, storeId, sort);
             return localVarResponse.Data;
         }
 
@@ -2547,9 +2596,10 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="uploadId">ID of the upload to fetch</param>
         /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of GetStoreUploadResponse</returns>
-        public BackendAPI.Client.ApiResponse<GetStoreUploadResponse> GetStoreUploadWithHttpInfo(int uploadId, string storeId, int operationIndex = 0)
+        public BackendAPI.Client.ApiResponse<GetStoreUploadResponse> GetStoreUploadWithHttpInfo(int uploadId, string storeId, string sort = default(string), int operationIndex = 0)
         {
             // verify the required parameter 'storeId' is set
             if (storeId == null)
@@ -2581,6 +2631,10 @@ namespace BackendAPI.Api
 
             localVarRequestOptions.PathParameters.Add("uploadId", BackendAPI.Client.ClientUtils.ParameterToString(uploadId)); // path parameter
             localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
+            if (sort != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "sort", sort));
+            }
 
             localVarRequestOptions.Operation = "DefaultApi.GetStoreUpload";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -2612,12 +2666,13 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="uploadId">ID of the upload to fetch</param>
         /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of GetStoreUploadResponse</returns>
-        public async System.Threading.Tasks.Task<GetStoreUploadResponse> GetStoreUploadAsync(int uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<GetStoreUploadResponse> GetStoreUploadAsync(int uploadId, string storeId, string sort = default(string), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            BackendAPI.Client.ApiResponse<GetStoreUploadResponse> localVarResponse = await GetStoreUploadWithHttpInfoAsync(uploadId, storeId, operationIndex, cancellationToken).ConfigureAwait(false);
+            BackendAPI.Client.ApiResponse<GetStoreUploadResponse> localVarResponse = await GetStoreUploadWithHttpInfoAsync(uploadId, storeId, sort, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
@@ -2627,10 +2682,11 @@ namespace BackendAPI.Api
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="uploadId">ID of the upload to fetch</param>
         /// <param name="storeId">ID of the store containing the upload</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (GetStoreUploadResponse)</returns>
-        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetStoreUploadResponse>> GetStoreUploadWithHttpInfoAsync(int uploadId, string storeId, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetStoreUploadResponse>> GetStoreUploadWithHttpInfoAsync(int uploadId, string storeId, string sort = default(string), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'storeId' is set
             if (storeId == null)
@@ -2663,6 +2719,10 @@ namespace BackendAPI.Api
 
             localVarRequestOptions.PathParameters.Add("uploadId", BackendAPI.Client.ClientUtils.ParameterToString(uploadId)); // path parameter
             localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
+            if (sort != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "sort", sort));
+            }
 
             localVarRequestOptions.Operation = "DefaultApi.GetStoreUpload";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -2694,13 +2754,14 @@ namespace BackendAPI.Api
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the uploads</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>GetStoreUploadsResponse</returns>
-        public GetStoreUploadsResponse GetStoreUploads(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0)
+        public GetStoreUploadsResponse GetStoreUploads(string storeId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0)
         {
-            BackendAPI.Client.ApiResponse<GetStoreUploadsResponse> localVarResponse = GetStoreUploadsWithHttpInfo(storeId, offset, limit);
+            BackendAPI.Client.ApiResponse<GetStoreUploadsResponse> localVarResponse = GetStoreUploadsWithHttpInfo(storeId, sort, offset, limit);
             return localVarResponse.Data;
         }
 
@@ -2709,11 +2770,12 @@ namespace BackendAPI.Api
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the uploads</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of GetStoreUploadsResponse</returns>
-        public BackendAPI.Client.ApiResponse<GetStoreUploadsResponse> GetStoreUploadsWithHttpInfo(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0)
+        public BackendAPI.Client.ApiResponse<GetStoreUploadsResponse> GetStoreUploadsWithHttpInfo(string storeId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0)
         {
             // verify the required parameter 'storeId' is set
             if (storeId == null)
@@ -2744,6 +2806,10 @@ namespace BackendAPI.Api
             }
 
             localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
+            if (sort != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "sort", sort));
+            }
             if (offset != null)
             {
                 localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "offset", offset));
@@ -2782,14 +2848,15 @@ namespace BackendAPI.Api
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the uploads</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of GetStoreUploadsResponse</returns>
-        public async System.Threading.Tasks.Task<GetStoreUploadsResponse> GetStoreUploadsAsync(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<GetStoreUploadsResponse> GetStoreUploadsAsync(string storeId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            BackendAPI.Client.ApiResponse<GetStoreUploadsResponse> localVarResponse = await GetStoreUploadsWithHttpInfoAsync(storeId, offset, limit, operationIndex, cancellationToken).ConfigureAwait(false);
+            BackendAPI.Client.ApiResponse<GetStoreUploadsResponse> localVarResponse = await GetStoreUploadsWithHttpInfoAsync(storeId, sort, offset, limit, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
@@ -2798,12 +2865,13 @@ namespace BackendAPI.Api
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="storeId">ID of the store containing the uploads</param>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="offset">How many entries to skip (used for pagination of results) (optional, default to 0)</param>
         /// <param name="limit">Max number of results to return (used for pagination of results) (optional, default to 25)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (GetStoreUploadsResponse)</returns>
-        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetStoreUploadsResponse>> GetStoreUploadsWithHttpInfoAsync(string storeId, int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<GetStoreUploadsResponse>> GetStoreUploadsWithHttpInfoAsync(string storeId, string sort = default(string), int? offset = default(int?), int? limit = default(int?), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             // verify the required parameter 'storeId' is set
             if (storeId == null)
@@ -2835,6 +2903,10 @@ namespace BackendAPI.Api
             }
 
             localVarRequestOptions.PathParameters.Add("storeId", BackendAPI.Client.ClientUtils.ParameterToString(storeId)); // path parameter
+            if (sort != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "sort", sort));
+            }
             if (offset != null)
             {
                 localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "offset", offset));
@@ -2873,11 +2945,12 @@ namespace BackendAPI.Api
         /// Fetch a list of all stores 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;string&gt;</returns>
-        public List<string> GetStores(int operationIndex = 0)
+        public List<string> GetStores(string sort = default(string), int operationIndex = 0)
         {
-            BackendAPI.Client.ApiResponse<List<string>> localVarResponse = GetStoresWithHttpInfo();
+            BackendAPI.Client.ApiResponse<List<string>> localVarResponse = GetStoresWithHttpInfo(sort);
             return localVarResponse.Data;
         }
 
@@ -2885,9 +2958,10 @@ namespace BackendAPI.Api
         /// Fetch a list of all stores 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;string&gt;</returns>
-        public BackendAPI.Client.ApiResponse<List<string>> GetStoresWithHttpInfo(int operationIndex = 0)
+        public BackendAPI.Client.ApiResponse<List<string>> GetStoresWithHttpInfo(string sort = default(string), int operationIndex = 0)
         {
             BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
 
@@ -2911,6 +2985,10 @@ namespace BackendAPI.Api
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
+            if (sort != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "sort", sort));
+            }
 
             localVarRequestOptions.Operation = "DefaultApi.GetStores";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -2940,12 +3018,13 @@ namespace BackendAPI.Api
         /// Fetch a list of all stores 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;string&gt;</returns>
-        public async System.Threading.Tasks.Task<List<string>> GetStoresAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<List<string>> GetStoresAsync(string sort = default(string), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            BackendAPI.Client.ApiResponse<List<string>> localVarResponse = await GetStoresWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            BackendAPI.Client.ApiResponse<List<string>> localVarResponse = await GetStoresWithHttpInfoAsync(sort, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
@@ -2953,10 +3032,11 @@ namespace BackendAPI.Api
         /// Fetch a list of all stores 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;string&gt;)</returns>
-        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<List<string>>> GetStoresWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<List<string>>> GetStoresWithHttpInfoAsync(string sort = default(string), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
             BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
@@ -2981,6 +3061,10 @@ namespace BackendAPI.Api
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
+            if (sort != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "sort", sort));
+            }
 
             localVarRequestOptions.Operation = "DefaultApi.GetStores";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -3167,11 +3251,12 @@ namespace BackendAPI.Api
         /// Fetch a list of all tokens for current user 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;GetTokenResponse&gt;</returns>
-        public List<GetTokenResponse> GetTokens(int operationIndex = 0)
+        public List<GetTokenResponse> GetTokens(string sort = default(string), int operationIndex = 0)
         {
-            BackendAPI.Client.ApiResponse<List<GetTokenResponse>> localVarResponse = GetTokensWithHttpInfo();
+            BackendAPI.Client.ApiResponse<List<GetTokenResponse>> localVarResponse = GetTokensWithHttpInfo(sort);
             return localVarResponse.Data;
         }
 
@@ -3179,9 +3264,10 @@ namespace BackendAPI.Api
         /// Fetch a list of all tokens for current user 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;GetTokenResponse&gt;</returns>
-        public BackendAPI.Client.ApiResponse<List<GetTokenResponse>> GetTokensWithHttpInfo(int operationIndex = 0)
+        public BackendAPI.Client.ApiResponse<List<GetTokenResponse>> GetTokensWithHttpInfo(string sort = default(string), int operationIndex = 0)
         {
             BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
 
@@ -3205,6 +3291,10 @@ namespace BackendAPI.Api
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
+            if (sort != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "sort", sort));
+            }
 
             localVarRequestOptions.Operation = "DefaultApi.GetTokens";
             localVarRequestOptions.OperationIndex = operationIndex;
@@ -3234,12 +3324,13 @@ namespace BackendAPI.Api
         /// Fetch a list of all tokens for current user 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;GetTokenResponse&gt;</returns>
-        public async System.Threading.Tasks.Task<List<GetTokenResponse>> GetTokensAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<List<GetTokenResponse>> GetTokensAsync(string sort = default(string), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            BackendAPI.Client.ApiResponse<List<GetTokenResponse>> localVarResponse = await GetTokensWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            BackendAPI.Client.ApiResponse<List<GetTokenResponse>> localVarResponse = await GetTokensWithHttpInfoAsync(sort, operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
@@ -3247,10 +3338,11 @@ namespace BackendAPI.Api
         /// Fetch a list of all tokens for current user 
         /// </summary>
         /// <exception cref="BackendAPI.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="sort">Sort the content of the response according to a given key, potentially in descending order (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;GetTokenResponse&gt;)</returns>
-        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<List<GetTokenResponse>>> GetTokensWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<BackendAPI.Client.ApiResponse<List<GetTokenResponse>>> GetTokensWithHttpInfoAsync(string sort = default(string), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
 
             BackendAPI.Client.RequestOptions localVarRequestOptions = new BackendAPI.Client.RequestOptions();
@@ -3275,6 +3367,10 @@ namespace BackendAPI.Api
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
+            if (sort != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(BackendAPI.Client.ClientUtils.ParameterToMultiMap("", "sort", sort));
+            }
 
             localVarRequestOptions.Operation = "DefaultApi.GetTokens";
             localVarRequestOptions.OperationIndex = operationIndex;

@@ -13,20 +13,21 @@ type CreateStoreUploadFileRequest struct {
 
 	FileName string `json:"fileName"`
 
-	BlobIdentifier string `json:"blobIdentifier"`
+	BlobIdentifier string `json:"blobIdentifier,omitempty"`
 
 	Type StoreFileBlobType `json:"type,omitempty"`
 
 	Size int64 `json:"size,omitempty"`
 
 	ContentHash string `json:"contentHash,omitempty"`
+
+	Hash string `json:"hash,omitempty"`
 }
 
 // AssertCreateStoreUploadFileRequestRequired checks if the required fields are not zero-ed
 func AssertCreateStoreUploadFileRequestRequired(obj CreateStoreUploadFileRequest) error {
 	elements := map[string]interface{}{
 		"fileName": obj.FileName,
-		"blobIdentifier": obj.BlobIdentifier,
 	}
 	for name, el := range elements {
 		if isZero := IsZeroValue(el); isZero {

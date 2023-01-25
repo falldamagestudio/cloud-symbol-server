@@ -757,10 +757,10 @@ components:
       type: object
       required:
         - fileName
-        - blobIdentifier
         # This API call will continue to be used by legacy clients for some time. Those
         #  may pass only some of these parameters. Therefore we leave some parameters here as
         #  optional for the time being.
+        # - blobIdentifier
         # - type
         # - size
         # - contentHash
@@ -780,6 +780,10 @@ components:
         contentHash:
           type: string
           example: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
+        # hash is present for legacy (0.x) API users
+        hash:
+          type: string
+          example: 7F416863ABF34C3E894BAD1739BAA5571
 
     getStoreUploadsResponse:
       type: object
@@ -900,6 +904,10 @@ components:
           type: string
           example: https://storage.googleapis.com/storage/v1/b/example-bucket/o/stores/default/Application.pdb/7F416863ABF34C3E894BAD1739BAA5571/Application.pdb?GoogleAcountID=123456&Sign=123012301230124012401240124012031021024012401240124012401240241
           description: Short-lived signed URL where the client should upload the file to, or blank if the file already exists in the storage backend
+        # hash is present for legacy (0.x) API users
+        hash:
+          type: string
+          example: 7F416863ABF34C3E894BAD1739BAA5571
 
     getStoreUploadResponse:
       type: object

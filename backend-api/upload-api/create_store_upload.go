@@ -22,7 +22,13 @@ import (
 )
 
 func uploadFileRequestToPath(storeId string, createStoreUploadFileRequest openapi.CreateStoreUploadFileRequest) string {
-	return fmt.Sprintf("stores/%s/%s/%s/%s", storeId, createStoreUploadFileRequest.FileName, createStoreUploadFileRequest.BlobIdentifier, createStoreUploadFileRequest.FileName)
+	// Legacy API users provide the blob identifier in 'Hash' rather than 'BlobIdentifier' member
+	blobIdentifier := createStoreUploadFileRequest.Hash
+	if blobIdentifier == "" {
+		blobIdentifier = createStoreUploadFileRequest.BlobIdentifier
+	}
+
+	return fmt.Sprintf("stores/%s/%s/%s/%s", storeId, createStoreUploadFileRequest.FileName, blobIdentifier, createStoreUploadFileRequest.FileName)
 }
 
 type FileEntry struct {
@@ -98,10 +104,18 @@ func CreateStoreUpload(context context.Context, storeId string, createStoreUploa
 		}
 
 		if includeAlreadyPresentFiles || (objectURL != "") {
+			// Legacy API users provide the blob identifier in 'Hash' rather than 'BlobIdentifier' member
+			blobIdentifier := createStoreUploadFileRequest.Hash
+			if blobIdentifier == "" {
+				blobIdentifier = createStoreUploadFileRequest.BlobIdentifier
+			}
+
 			createStoreUploadResponse.Files = append(createStoreUploadResponse.Files, openapi.UploadFileResponse{
 				FileName:       createStoreUploadFileRequest.FileName,
-				BlobIdentifier: createStoreUploadFileRequest.BlobIdentifier,
+				BlobIdentifier: blobIdentifier,
 				Url:            objectURL,
+				// Legacy API users expect 'Hash' instead of 'BlobIdentifier' as name for this member
+				Hash: 			blobIdentifier,
 			})
 
 			logStatus := models.StoreUploadFileStatusAlreadyPresent
@@ -122,7 +136,7 @@ func CreateStoreUpload(context context.Context, storeId string, createStoreUploa
 
 			logFiles = append(logFiles, FileEntry{
 				FileName:       createStoreUploadFileRequest.FileName,
-				BlobIdentifier: createStoreUploadFileRequest.BlobIdentifier,
+				BlobIdentifier: blobIdentifier,
 				Type:           logType,
 				Size:           createStoreUploadFileRequest.Size,
 				ContentHash:    createStoreUploadFileRequest.ContentHash,
