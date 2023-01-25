@@ -5,7 +5,5 @@
         "example",
         "example.pdb"
     ],
-    "SkipStdoutLines": 0,
-    "SkipStderrLines": 0,
     "ExitCode": 1
 }

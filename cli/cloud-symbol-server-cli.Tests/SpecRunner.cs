@@ -13,16 +13,13 @@ public static class SpecRunner
     private class Spec
     {
         [JsonProperty(Required = Required.Always)]
-        public List<string> CommandArguments;
+        public List<string> CommandArguments = new List<string>();
         
         [JsonProperty(Required = Required.Always)]
-        public int ExitCode;
+        public int ExitCode = 0;
         
-        public int SkipStdoutLines;
-        public int SkipStderrLines;
-        
-        public string Stdout;
-        public string Stderr;
+        public string Stdout = "";
+        public string Stderr = "";
     }
 
     private static Spec ReadSpec(string directory)
@@ -57,21 +54,6 @@ public static class SpecRunner
         return cliCommandResult;
     }
 
-    private static string SkipLines(string source, int linesToSkip)
-    {
-        int position = 0;
-
-        for (int lineBreaksEncountered = 0; lineBreaksEncountered < linesToSkip; lineBreaksEncountered++)
-        {
-            int nextLineBreakPosition = source.IndexOf('\n', position);
-            if (nextLineBreakPosition == -1)
-                break;
-            position = nextLineBreakPosition;
-        }
-
-        return source.Substring(position);
-    }
-
     private static string ReplaceRoot(string source)
     {
         const string relativeRootLocation = "../../../..";
@@ -83,11 +65,11 @@ public static class SpecRunner
 
     private static void ValidateResult(Spec spec, Helpers.CLICommandResult cliCommandResult, ITestOutputHelper output)
     {
-        string expectedStdoutContent = SkipLines(spec.Stdout, spec.SkipStdoutLines);
-        string actualStdoutContent = ReplaceRoot(SkipLines(cliCommandResult.Stdout, spec.SkipStdoutLines));
+        string expectedStdoutContent = spec.Stdout;
+        string actualStdoutContent = ReplaceRoot(cliCommandResult.Stdout);
 
-        string expectedStderrContent = SkipLines(spec.Stderr, spec.SkipStderrLines);
-        string actualStderrContent = ReplaceRoot(SkipLines(cliCommandResult.Stderr, spec.SkipStderrLines));
+        string expectedStderrContent = spec.Stderr;
+        string actualStderrContent = ReplaceRoot(cliCommandResult.Stderr);
 
         int expectedExitCode = spec.ExitCode;
         int actualExitCode = cliCommandResult.ExitCode;

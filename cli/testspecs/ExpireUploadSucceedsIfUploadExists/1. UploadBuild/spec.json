@@ -8,7 +8,5 @@
         "../../../../testdata/*.pdb",
         "../../../../testdata/*.exe"
     ],
-    "SkipStdoutLines": 0,
-    "SkipStderrLines": 0,
     "ExitCode": 0
 }
