@@ -103,11 +103,11 @@ func TestCreateStoreUploadWithoutProgressSucceeds(t *testing.T) {
 	files := []openapi_client.CreateStoreUploadFileRequest{
 		{
 			FileName:       fileName1,
-			BlobIdentifier: blobIdentifier1,
+			BlobIdentifier: &blobIdentifier1,
 		},
 		{
 			FileName:       fileName2,
-			BlobIdentifier: blobIdentifier2,
+			BlobIdentifier: &blobIdentifier2,
 		},
 	}
 
@@ -187,14 +187,14 @@ func TestCreateStoreUploadWithProgressSucceeds(t *testing.T) {
 	files := []openapi_client.CreateStoreUploadFileRequest{
 		{
 			FileName:       fileName1,
-			BlobIdentifier: blobIdentifier1,
+			BlobIdentifier: &blobIdentifier1,
 			Type:           &type1,
 			Size:           &size1,
 			ContentHash:    &contentHash1,
 		},
 		{
 			FileName:       fileName2,
-			BlobIdentifier: blobIdentifier2,
+			BlobIdentifier: &blobIdentifier2,
 			Type:           &type2,
 			Size:           &size2,
 			ContentHash:    &contentHash2,
@@ -367,14 +367,14 @@ func TestCreateStoreUploadWithProgressAndAbortSucceeds(t *testing.T) {
 	files := []openapi_client.CreateStoreUploadFileRequest{
 		{
 			FileName:       fileName1,
-			BlobIdentifier: blobIdentifier1,
+			BlobIdentifier: &blobIdentifier1,
 			Type:           &type1,
 			Size:           &size1,
 			ContentHash:    &contentHash1,
 		},
 		{
 			FileName:       fileName2,
-			BlobIdentifier: blobIdentifier2,
+			BlobIdentifier: &blobIdentifier2,
 			Type:           &type2,
 			Size:           &size2,
 			ContentHash:    &contentHash2,

@@ -7,7 +7,8 @@ Name | Type | Description | Notes
 **UploadId** | **int32** |  | 
 **Description** | **string** |  | 
 **BuildId** | **string** |  | 
-**Timestamp** | **string** |  | 
+**UploadTimestamp** | **string** |  | 
+**ExpiryTimestamp** | **string** |  | 
 **Files** | [**[]GetStoreUploadFileResponse**](GetStoreUploadFileResponse.md) |  | 
 **Status** | [**StoreUploadStatus**](StoreUploadStatus.md) |  | 
 
@@ -15,7 +16,7 @@ Name | Type | Description | Notes
 
 ### NewGetStoreUploadResponse
 
-`func NewGetStoreUploadResponse(uploadId int32, description string, buildId string, timestamp string, files []GetStoreUploadFileResponse, status StoreUploadStatus, ) *GetStoreUploadResponse`
+`func NewGetStoreUploadResponse(uploadId int32, description string, buildId string, uploadTimestamp string, expiryTimestamp string, files []GetStoreUploadFileResponse, status StoreUploadStatus, ) *GetStoreUploadResponse`
 
 NewGetStoreUploadResponse instantiates a new GetStoreUploadResponse object
 This constructor will assign default values to properties that have it defined,
@@ -90,24 +91,44 @@ and a boolean to check if the value has been set.
 SetBuildId sets BuildId field to given value.
 
 
-### GetTimestamp
+### GetUploadTimestamp
 
-`func (o *GetStoreUploadResponse) GetTimestamp() string`
+`func (o *GetStoreUploadResponse) GetUploadTimestamp() string`
 
-GetTimestamp returns the Timestamp field if non-nil, zero value otherwise.
+GetUploadTimestamp returns the UploadTimestamp field if non-nil, zero value otherwise.
 
-### GetTimestampOk
+### GetUploadTimestampOk
 
-`func (o *GetStoreUploadResponse) GetTimestampOk() (*string, bool)`
+`func (o *GetStoreUploadResponse) GetUploadTimestampOk() (*string, bool)`
 
-GetTimestampOk returns a tuple with the Timestamp field if it's non-nil, zero value otherwise
+GetUploadTimestampOk returns a tuple with the UploadTimestamp field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetTimestamp
+### SetUploadTimestamp
 
-`func (o *GetStoreUploadResponse) SetTimestamp(v string)`
+`func (o *GetStoreUploadResponse) SetUploadTimestamp(v string)`
 
-SetTimestamp sets Timestamp field to given value.
+SetUploadTimestamp sets UploadTimestamp field to given value.
+
+
+### GetExpiryTimestamp
+
+`func (o *GetStoreUploadResponse) GetExpiryTimestamp() string`
+
+GetExpiryTimestamp returns the ExpiryTimestamp field if non-nil, zero value otherwise.
+
+### GetExpiryTimestampOk
+
+`func (o *GetStoreUploadResponse) GetExpiryTimestampOk() (*string, bool)`
+
+GetExpiryTimestampOk returns a tuple with the ExpiryTimestamp field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetExpiryTimestamp
+
+`func (o *GetStoreUploadResponse) SetExpiryTimestamp(v string)`
+
+SetExpiryTimestamp sets ExpiryTimestamp field to given value.
 
 
 ### GetFiles

@@ -163,21 +163,21 @@ func TestGetStoreFileBlobsWithPaginationSucceeds(t *testing.T) {
 	files := []openapi_client.CreateStoreUploadFileRequest{
 		{
 			FileName:       fileName1,
-			BlobIdentifier: blobIdentifier1,
+			BlobIdentifier: &blobIdentifier1,
 			Type:           &type1,
 			Size:           &size1,
 			ContentHash:    &contentHash1,
 		},
 		{
 			FileName:       fileName2,
-			BlobIdentifier: blobIdentifier2,
+			BlobIdentifier: &blobIdentifier2,
 			Type:           &type2,
 			Size:           &size2,
 			ContentHash:    &contentHash2,
 		},
 		{
 			FileName:       fileName3,
-			BlobIdentifier: blobIdentifier3,
+			BlobIdentifier: &blobIdentifier3,
 			Type:           &type3,
 			Size:           &size3,
 			ContentHash:    &contentHash3,

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"cloud.google.com/go/storage"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
@@ -61,10 +62,13 @@ func HandleUploadExpiryOrAbort(ctx context.Context, storeId string, uploadId int
 		return openapi.Response(http.StatusInternalServerError, openapi.MessageResponse{Message: fmt.Sprintf("Error while accessing upload %v / %v: %v", storeId, uploadId, err)}), err
 	}
 
-	// Mark upload as expired/aborted
+	// Mark upload as expired/aborted and set the expiry timestamp
 	numRowsAffected, err := models.StoreUploads(
 		qm.Where(models.StoreUploadColumns.UploadID+" = ?", upload.UploadID),
-	).UpdateAll(ctx, tx, models.M{models.StoreUploadColumns.Status: desiredStatus})
+	).UpdateAll(ctx, tx, models.M{
+		models.StoreUploadColumns.Status: desiredStatus,
+		models.StoreUploadColumns.ExpiryTimestamp: time.Now(),
+	})
 	if (err == nil) && (numRowsAffected == 0) {
 		log.Printf("Upload %v / %v not found", storeId, uploadId)
 		tx.Rollback()

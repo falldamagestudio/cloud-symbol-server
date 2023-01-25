@@ -12,7 +12,10 @@
         Build ID: {{ storeUpload?.buildId }}
       </tr>
       <tr>
-        Timestamp: {{ storeUpload?.timestamp }}
+        Uploaded at: {{ timestampToDisplayString(storeUpload?.uploadTimestamp) }}
+      </tr>
+      <tr>
+        Expired at: {{ storeUpload?.expiryTimestamp && timestampToDisplayString(storeUpload?.expiryTimestamp) || "" }}
       </tr>
       <tr>
         Status: {{ storeUpload?.status }}
@@ -51,6 +54,7 @@
 <script setup lang="ts">
 
 import { ref } from 'vue'
+import dayjs from 'dayjs'
 
 import { api } from '../adminApi'
 import { GetStoreUploadResponse } from '../generated/api'
@@ -76,6 +80,10 @@ const headers = [
 ]
 
 const storeUpload = ref(null as (null | GetStoreUploadResponse))
+
+function timestampToDisplayString(timestamp: string): string {
+  return dayjs(timestamp).format('YYYY-MM-DD HH:mm')
+}
 
 async function fetch() {
 

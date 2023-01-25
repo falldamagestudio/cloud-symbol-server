@@ -75,7 +75,12 @@ CREATE TABLE cloud_symbol_server.store_uploads (
 
   -- Upload timestamp, in RFC3339 format
   -- Example: 1985-04-12T23:20:50.52Z
-  timestamp timestamp NOT NULL,
+  upload_timestamp timestamp NOT NULL,
+
+  -- Expiry timestamp, in RFC3339 format
+  -- This is initially null, and set at the time the upload is expired/aborted
+  -- Example: 1985-04-12T23:20:50.52Z
+  expiry_timestamp timestamp,
 
   -- The upload status will change over time, based on user actions
   status cloud_symbol_server.store_upload_status NOT NULL,

@@ -287,7 +287,13 @@ export interface GetStoreUploadResponse {
      * @type {string}
      * @memberof GetStoreUploadResponse
      */
-    'timestamp': string;
+    'uploadTimestamp': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetStoreUploadResponse
+     */
+    'expiryTimestamp': string;
     /**
      * 
      * @type {Array<GetStoreUploadFileResponse>}

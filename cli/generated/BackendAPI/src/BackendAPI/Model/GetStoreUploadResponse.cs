@@ -48,10 +48,11 @@ namespace BackendAPI.Model
         /// <param name="uploadId">uploadId (required).</param>
         /// <param name="description">description (required).</param>
         /// <param name="buildId">buildId (required).</param>
-        /// <param name="timestamp">timestamp (required).</param>
+        /// <param name="uploadTimestamp">uploadTimestamp (required).</param>
+        /// <param name="expiryTimestamp">expiryTimestamp (required).</param>
         /// <param name="files">files (required).</param>
         /// <param name="status">status (required).</param>
-        public GetStoreUploadResponse(int uploadId = default(int), string description = default(string), string buildId = default(string), string timestamp = default(string), List<GetStoreUploadFileResponse> files = default(List<GetStoreUploadFileResponse>), StoreUploadStatus status = default(StoreUploadStatus))
+        public GetStoreUploadResponse(int uploadId = default(int), string description = default(string), string buildId = default(string), string uploadTimestamp = default(string), string expiryTimestamp = default(string), List<GetStoreUploadFileResponse> files = default(List<GetStoreUploadFileResponse>), StoreUploadStatus status = default(StoreUploadStatus))
         {
             this.UploadId = uploadId;
             // to ensure "description" is required (not null)
@@ -66,12 +67,18 @@ namespace BackendAPI.Model
                 throw new ArgumentNullException("buildId is a required property for GetStoreUploadResponse and cannot be null");
             }
             this.BuildId = buildId;
-            // to ensure "timestamp" is required (not null)
-            if (timestamp == null)
+            // to ensure "uploadTimestamp" is required (not null)
+            if (uploadTimestamp == null)
             {
-                throw new ArgumentNullException("timestamp is a required property for GetStoreUploadResponse and cannot be null");
+                throw new ArgumentNullException("uploadTimestamp is a required property for GetStoreUploadResponse and cannot be null");
             }
-            this.Timestamp = timestamp;
+            this.UploadTimestamp = uploadTimestamp;
+            // to ensure "expiryTimestamp" is required (not null)
+            if (expiryTimestamp == null)
+            {
+                throw new ArgumentNullException("expiryTimestamp is a required property for GetStoreUploadResponse and cannot be null");
+            }
+            this.ExpiryTimestamp = expiryTimestamp;
             // to ensure "files" is required (not null)
             if (files == null)
             {
@@ -100,10 +107,16 @@ namespace BackendAPI.Model
         public string BuildId { get; set; }
 
         /// <summary>
-        /// Gets or Sets Timestamp
+        /// Gets or Sets UploadTimestamp
         /// </summary>
-        [DataMember(Name = "timestamp", IsRequired = true, EmitDefaultValue = true)]
-        public string Timestamp { get; set; }
+        [DataMember(Name = "uploadTimestamp", IsRequired = true, EmitDefaultValue = true)]
+        public string UploadTimestamp { get; set; }
+
+        /// <summary>
+        /// Gets or Sets ExpiryTimestamp
+        /// </summary>
+        [DataMember(Name = "expiryTimestamp", IsRequired = true, EmitDefaultValue = true)]
+        public string ExpiryTimestamp { get; set; }
 
         /// <summary>
         /// Gets or Sets Files
@@ -122,7 +135,8 @@ namespace BackendAPI.Model
             sb.Append("  UploadId: ").Append(UploadId).Append("\n");
             sb.Append("  Description: ").Append(Description).Append("\n");
             sb.Append("  BuildId: ").Append(BuildId).Append("\n");
-            sb.Append("  Timestamp: ").Append(Timestamp).Append("\n");
+            sb.Append("  UploadTimestamp: ").Append(UploadTimestamp).Append("\n");
+            sb.Append("  ExpiryTimestamp: ").Append(ExpiryTimestamp).Append("\n");
             sb.Append("  Files: ").Append(Files).Append("\n");
             sb.Append("  Status: ").Append(Status).Append("\n");
             sb.Append("}\n");
@@ -175,9 +189,14 @@ namespace BackendAPI.Model
                     this.BuildId.Equals(input.BuildId))
                 ) && 
                 (
-                    this.Timestamp == input.Timestamp ||
-                    (this.Timestamp != null &&
-                    this.Timestamp.Equals(input.Timestamp))
+                    this.UploadTimestamp == input.UploadTimestamp ||
+                    (this.UploadTimestamp != null &&
+                    this.UploadTimestamp.Equals(input.UploadTimestamp))
+                ) && 
+                (
+                    this.ExpiryTimestamp == input.ExpiryTimestamp ||
+                    (this.ExpiryTimestamp != null &&
+                    this.ExpiryTimestamp.Equals(input.ExpiryTimestamp))
                 ) && 
                 (
                     this.Files == input.Files ||
@@ -209,9 +228,13 @@ namespace BackendAPI.Model
                 {
                     hashCode = (hashCode * 59) + this.BuildId.GetHashCode();
                 }
-                if (this.Timestamp != null)
+                if (this.UploadTimestamp != null)
                 {
-                    hashCode = (hashCode * 59) + this.Timestamp.GetHashCode();
+                    hashCode = (hashCode * 59) + this.UploadTimestamp.GetHashCode();
+                }
+                if (this.ExpiryTimestamp != null)
+                {
+                    hashCode = (hashCode * 59) + this.ExpiryTimestamp.GetHashCode();
                 }
                 if (this.Files != null)
                 {

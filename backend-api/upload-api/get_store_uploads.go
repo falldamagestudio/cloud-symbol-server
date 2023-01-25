@@ -24,8 +24,10 @@ var getStoreUploadsSortOptions = map[string]string{
 	"-description": models.StoreUploadColumns.Description + " desc",
 	"buildId":      models.StoreUploadColumns.Build,
 	"-buildId":     models.StoreUploadColumns.Build + " desc",
-	"timestamp":    models.StoreUploadColumns.Timestamp,
-	"-timestamp":   models.StoreUploadColumns.Timestamp + " desc",
+	"uploadTimestamp":    models.StoreUploadColumns.UploadTimestamp,
+	"-uploadTimestamp":   models.StoreUploadColumns.UploadTimestamp + " desc",
+	"expiryTimestamp":    models.StoreUploadColumns.ExpiryTimestamp,
+	"-expiryTimestamp":   models.StoreUploadColumns.ExpiryTimestamp + " desc",
 	"status":       models.StoreUploadColumns.Status,
 	"-status":      models.StoreUploadColumns.Status + " desc",
 }
@@ -159,11 +161,17 @@ func GetStoreUploads(ctx context.Context, storeId string, sort string, offset in
 	for uploadIndex, upload := range uploads {
 		var files = uploadIdToFiles[upload.UploadID]
 
+		expiryTimestamp := ""
+		if upload.ExpiryTimestamp.Valid {
+			expiryTimestamp = upload.ExpiryTimestamp.Time.Format(time.RFC3339)
+		}
+
 		storeUploads[uploadIndex] = openapi.GetStoreUploadResponse{
 			UploadId:    int32(upload.StoreUploadIndex),
 			Description: upload.Description,
 			BuildId:     upload.Build,
-			Timestamp:   upload.Timestamp.Format(time.RFC3339),
+			UploadTimestamp:   upload.UploadTimestamp.Format(time.RFC3339),
+			ExpiryTimestamp:   expiryTimestamp,
 			Files:       files,
 			Status:      openapi.StoreUploadStatus(upload.Status),
 		}

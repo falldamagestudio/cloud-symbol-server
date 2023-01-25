@@ -7,7 +7,8 @@ Name | Type | Description | Notes
 **UploadId** | **int** |  | 
 **Description** | **string** |  | 
 **BuildId** | **string** |  | 
-**Timestamp** | **string** |  | 
+**UploadTimestamp** | **string** |  | 
+**ExpiryTimestamp** | **string** |  | 
 **Files** | [**List&lt;GetStoreUploadFileResponse&gt;**](GetStoreUploadFileResponse.md) |  | 
 **Status** | **StoreUploadStatus** |  | 
 

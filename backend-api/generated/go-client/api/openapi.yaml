@@ -926,7 +926,9 @@ components:
         pagination:
           total: 0
         uploads:
-        - uploadId: 129
+        - expiryTimestamp: 2019-10-12T07:20:50.52Z
+          uploadId: 129
+          uploadTimestamp: 2019-10-12T07:20:50.52Z
           description: Example application
           files:
           - fileName: Application.pdb
@@ -936,9 +938,10 @@ components:
             blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
             status: completed
           buildId: Build 432
-          timestamp: 2019-10-12T07:20:50.52Z
           status: completed
-        - uploadId: 129
+        - expiryTimestamp: 2019-10-12T07:20:50.52Z
+          uploadId: 129
+          uploadTimestamp: 2019-10-12T07:20:50.52Z
           description: Example application
           files:
           - fileName: Application.pdb
@@ -948,7 +951,6 @@ components:
             blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
             status: completed
           buildId: Build 432
-          timestamp: 2019-10-12T07:20:50.52Z
           status: completed
       properties:
         uploads:
@@ -1110,7 +1112,9 @@ components:
       type: object
     getStoreUploadResponse:
       example:
+        expiryTimestamp: 2019-10-12T07:20:50.52Z
         uploadId: 129
+        uploadTimestamp: 2019-10-12T07:20:50.52Z
         description: Example application
         files:
         - fileName: Application.pdb
@@ -1120,7 +1124,6 @@ components:
           blobIdentifier: 7F416863ABF34C3E894BAD1739BAA5571
           status: completed
         buildId: Build 432
-        timestamp: 2019-10-12T07:20:50.52Z
         status: completed
       properties:
         uploadId:
@@ -1132,7 +1135,10 @@ components:
         buildId:
           example: Build 432
           type: string
-        timestamp:
+        uploadTimestamp:
+          example: 2019-10-12T07:20:50.52Z
+          type: string
+        expiryTimestamp:
           example: 2019-10-12T07:20:50.52Z
           type: string
         files:
@@ -1144,10 +1150,11 @@ components:
       required:
       - buildId
       - description
+      - expiryTimestamp
       - files
       - status
-      - timestamp
       - uploadId
+      - uploadTimestamp
       type: object
     getStoreUploadFileResponse:
       example:

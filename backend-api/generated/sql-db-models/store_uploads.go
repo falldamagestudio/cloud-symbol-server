@@ -29,7 +29,8 @@ type StoreUpload struct {
 	StoreUploadIndex int       `boil:"store_upload_index" json:"store_upload_index" toml:"store_upload_index" yaml:"store_upload_index"`
 	Description      string    `boil:"description" json:"description" toml:"description" yaml:"description"`
 	Build            string    `boil:"build" json:"build" toml:"build" yaml:"build"`
-	Timestamp        time.Time `boil:"timestamp" json:"timestamp" toml:"timestamp" yaml:"timestamp"`
+	UploadTimestamp  time.Time `boil:"upload_timestamp" json:"upload_timestamp" toml:"upload_timestamp" yaml:"upload_timestamp"`
+	ExpiryTimestamp  null.Time `boil:"expiry_timestamp" json:"expiry_timestamp,omitempty" toml:"expiry_timestamp" yaml:"expiry_timestamp,omitempty"`
 	Status           string    `boil:"status" json:"status" toml:"status" yaml:"status"`
 
 	R *storeUploadR `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -42,7 +43,8 @@ var StoreUploadColumns = struct {
 	StoreUploadIndex string
 	Description      string
 	Build            string
-	Timestamp        string
+	UploadTimestamp  string
+	ExpiryTimestamp  string
 	Status           string
 }{
 	UploadID:         "upload_id",
@@ -50,7 +52,8 @@ var StoreUploadColumns = struct {
 	StoreUploadIndex: "store_upload_index",
 	Description:      "description",
 	Build:            "build",
-	Timestamp:        "timestamp",
+	UploadTimestamp:  "upload_timestamp",
+	ExpiryTimestamp:  "expiry_timestamp",
 	Status:           "status",
 }
 
@@ -60,7 +63,8 @@ var StoreUploadTableColumns = struct {
 	StoreUploadIndex string
 	Description      string
 	Build            string
-	Timestamp        string
+	UploadTimestamp  string
+	ExpiryTimestamp  string
 	Status           string
 }{
 	UploadID:         "store_uploads.upload_id",
@@ -68,11 +72,36 @@ var StoreUploadTableColumns = struct {
 	StoreUploadIndex: "store_uploads.store_upload_index",
 	Description:      "store_uploads.description",
 	Build:            "store_uploads.build",
-	Timestamp:        "store_uploads.timestamp",
+	UploadTimestamp:  "store_uploads.upload_timestamp",
+	ExpiryTimestamp:  "store_uploads.expiry_timestamp",
 	Status:           "store_uploads.status",
 }
 
 // Generated where
+
+type whereHelpernull_Time struct{ field string }
+
+func (w whereHelpernull_Time) EQ(x null.Time) qm.QueryMod {
+	return qmhelper.WhereNullEQ(w.field, false, x)
+}
+func (w whereHelpernull_Time) NEQ(x null.Time) qm.QueryMod {
+	return qmhelper.WhereNullEQ(w.field, true, x)
+}
+func (w whereHelpernull_Time) LT(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LT, x)
+}
+func (w whereHelpernull_Time) LTE(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LTE, x)
+}
+func (w whereHelpernull_Time) GT(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GT, x)
+}
+func (w whereHelpernull_Time) GTE(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GTE, x)
+}
+
+func (w whereHelpernull_Time) IsNull() qm.QueryMod    { return qmhelper.WhereIsNull(w.field) }
+func (w whereHelpernull_Time) IsNotNull() qm.QueryMod { return qmhelper.WhereIsNotNull(w.field) }
 
 var StoreUploadWhere = struct {
 	UploadID         whereHelperint
@@ -80,7 +109,8 @@ var StoreUploadWhere = struct {
 	StoreUploadIndex whereHelperint
 	Description      whereHelperstring
 	Build            whereHelperstring
-	Timestamp        whereHelpertime_Time
+	UploadTimestamp  whereHelpertime_Time
+	ExpiryTimestamp  whereHelpernull_Time
 	Status           whereHelperstring
 }{
 	UploadID:         whereHelperint{field: "\"cloud_symbol_server\".\"store_uploads\".\"upload_id\""},
@@ -88,7 +118,8 @@ var StoreUploadWhere = struct {
 	StoreUploadIndex: whereHelperint{field: "\"cloud_symbol_server\".\"store_uploads\".\"store_upload_index\""},
 	Description:      whereHelperstring{field: "\"cloud_symbol_server\".\"store_uploads\".\"description\""},
 	Build:            whereHelperstring{field: "\"cloud_symbol_server\".\"store_uploads\".\"build\""},
-	Timestamp:        whereHelpertime_Time{field: "\"cloud_symbol_server\".\"store_uploads\".\"timestamp\""},
+	UploadTimestamp:  whereHelpertime_Time{field: "\"cloud_symbol_server\".\"store_uploads\".\"upload_timestamp\""},
+	ExpiryTimestamp:  whereHelpernull_Time{field: "\"cloud_symbol_server\".\"store_uploads\".\"expiry_timestamp\""},
 	Status:           whereHelperstring{field: "\"cloud_symbol_server\".\"store_uploads\".\"status\""},
 }
 
@@ -130,9 +161,9 @@ func (r *storeUploadR) GetUploadStoreUploadFiles() StoreUploadFileSlice {
 type storeUploadL struct{}
 
 var (
-	storeUploadAllColumns            = []string{"upload_id", "store_id", "store_upload_index", "description", "build", "timestamp", "status"}
-	storeUploadColumnsWithoutDefault = []string{"store_upload_index", "description", "build", "timestamp", "status"}
-	storeUploadColumnsWithDefault    = []string{"upload_id", "store_id"}
+	storeUploadAllColumns            = []string{"upload_id", "store_id", "store_upload_index", "description", "build", "upload_timestamp", "expiry_timestamp", "status"}
+	storeUploadColumnsWithoutDefault = []string{"store_upload_index", "description", "build", "upload_timestamp", "status"}
+	storeUploadColumnsWithDefault    = []string{"upload_id", "store_id", "expiry_timestamp"}
 	storeUploadPrimaryKeyColumns     = []string{"upload_id"}
 	storeUploadGeneratedColumns      = []string{"upload_id"}
 )

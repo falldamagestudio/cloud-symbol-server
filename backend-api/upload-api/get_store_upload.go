@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
-
+	
 	openapi "github.com/falldamagestudio/cloud-symbol-server/backend-api/generated/go-server/go"
 	models "github.com/falldamagestudio/cloud-symbol-server/backend-api/generated/sql-db-models"
 	postgres "github.com/falldamagestudio/cloud-symbol-server/backend-api/postgres"
@@ -93,11 +93,17 @@ func GetStoreUpload(ctx context.Context, uploadId int32, storeId string, sort st
 		return openapi.Response(http.StatusInternalServerError, nil), err
 	}
 
+	expiryTimestamp := ""
+	if upload.ExpiryTimestamp.Valid {
+		expiryTimestamp = upload.ExpiryTimestamp.Time.Format(time.RFC3339)
+	}
+
 	getStoreUploadResponse := openapi.GetStoreUploadResponse{}
 	getStoreUploadResponse.UploadId = int32(upload.StoreUploadIndex)
 	getStoreUploadResponse.Description = upload.Description
 	getStoreUploadResponse.BuildId = upload.Build
-	getStoreUploadResponse.Timestamp = upload.Timestamp.Format(time.RFC3339)
+	getStoreUploadResponse.UploadTimestamp = upload.UploadTimestamp.Format(time.RFC3339)
+	getStoreUploadResponse.ExpiryTimestamp = expiryTimestamp
 	// Uploads created before the progress API existed do not have any Status field in the DB
 	// These uploads will be assumed to be completed
 	if upload.Status != "" {

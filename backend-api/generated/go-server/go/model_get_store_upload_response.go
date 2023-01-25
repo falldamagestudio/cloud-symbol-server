@@ -17,7 +17,9 @@ type GetStoreUploadResponse struct {
 
 	BuildId string `json:"buildId"`
 
-	Timestamp string `json:"timestamp"`
+	UploadTimestamp string `json:"uploadTimestamp"`
+
+	ExpiryTimestamp string `json:"expiryTimestamp"`
 
 	Files []GetStoreUploadFileResponse `json:"files"`
 
@@ -30,7 +32,8 @@ func AssertGetStoreUploadResponseRequired(obj GetStoreUploadResponse) error {
 		"uploadId": obj.UploadId,
 		"description": obj.Description,
 		"buildId": obj.BuildId,
-		"timestamp": obj.Timestamp,
+		"uploadTimestamp": obj.UploadTimestamp,
+		"expiryTimestamp": obj.ExpiryTimestamp,
 		"files": obj.Files,
 		"status": obj.Status,
 	}

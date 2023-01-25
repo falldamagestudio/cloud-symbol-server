@@ -216,7 +216,7 @@ func logUpload(ctx context.Context, storeId string, storeUploadEntry StoreUpload
 		StoreUploadIndex: storeUploadIndex,
 		Description:      storeUploadEntry.Description,
 		Build:            storeUploadEntry.BuildId,
-		Timestamp:        timestamp,
+		UploadTimestamp:  timestamp,
 		Status:           storeUploadEntry.Status,
 	}
 	err = upload.Insert(ctx, tx, boil.Infer())

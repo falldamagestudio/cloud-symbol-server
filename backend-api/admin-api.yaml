@@ -915,7 +915,8 @@ components:
         - uploadId
         - description
         - buildId
-        - timestamp
+        - uploadTimestamp
+        - expiryTimestamp
         - files
         - status
       properties:
@@ -928,7 +929,10 @@ components:
         buildId:
           type: string
           example: Build 432
-        timestamp:
+        uploadTimestamp:
+          type: string
+          example: '2019-10-12T07:20:50.52Z'
+        expiryTimestamp:
           type: string
           example: '2019-10-12T07:20:50.52Z'
         files:

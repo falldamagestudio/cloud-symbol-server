@@ -82,11 +82,11 @@ func TestGetStoreFilesWithPaginationSucceeds(t *testing.T) {
 	files := []openapi_client.CreateStoreUploadFileRequest{
 		{
 			FileName:       fileName1,
-			BlobIdentifier: blobIdentifier1,
+			BlobIdentifier: &blobIdentifier1,
 		},
 		{
 			FileName:       fileName2,
-			BlobIdentifier: blobIdentifier2,
+			BlobIdentifier: &blobIdentifier2,
 		},
 	}
 

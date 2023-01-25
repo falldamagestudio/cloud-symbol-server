@@ -19,7 +19,8 @@ type GetStoreUploadResponse struct {
 	UploadId int32 `json:"uploadId"`
 	Description string `json:"description"`
 	BuildId string `json:"buildId"`
-	Timestamp string `json:"timestamp"`
+	UploadTimestamp string `json:"uploadTimestamp"`
+	ExpiryTimestamp string `json:"expiryTimestamp"`
 	Files []GetStoreUploadFileResponse `json:"files"`
 	Status StoreUploadStatus `json:"status"`
 }
@@ -28,12 +29,13 @@ type GetStoreUploadResponse struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetStoreUploadResponse(uploadId int32, description string, buildId string, timestamp string, files []GetStoreUploadFileResponse, status StoreUploadStatus) *GetStoreUploadResponse {
+func NewGetStoreUploadResponse(uploadId int32, description string, buildId string, uploadTimestamp string, expiryTimestamp string, files []GetStoreUploadFileResponse, status StoreUploadStatus) *GetStoreUploadResponse {
 	this := GetStoreUploadResponse{}
 	this.UploadId = uploadId
 	this.Description = description
 	this.BuildId = buildId
-	this.Timestamp = timestamp
+	this.UploadTimestamp = uploadTimestamp
+	this.ExpiryTimestamp = expiryTimestamp
 	this.Files = files
 	this.Status = status
 	return &this
@@ -119,28 +121,52 @@ func (o *GetStoreUploadResponse) SetBuildId(v string) {
 	o.BuildId = v
 }
 
-// GetTimestamp returns the Timestamp field value
-func (o *GetStoreUploadResponse) GetTimestamp() string {
+// GetUploadTimestamp returns the UploadTimestamp field value
+func (o *GetStoreUploadResponse) GetUploadTimestamp() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.Timestamp
+	return o.UploadTimestamp
 }
 
-// GetTimestampOk returns a tuple with the Timestamp field value
+// GetUploadTimestampOk returns a tuple with the UploadTimestamp field value
 // and a boolean to check if the value has been set.
-func (o *GetStoreUploadResponse) GetTimestampOk() (*string, bool) {
+func (o *GetStoreUploadResponse) GetUploadTimestampOk() (*string, bool) {
 	if o == nil {
     return nil, false
 	}
-	return &o.Timestamp, true
+	return &o.UploadTimestamp, true
 }
 
-// SetTimestamp sets field value
-func (o *GetStoreUploadResponse) SetTimestamp(v string) {
-	o.Timestamp = v
+// SetUploadTimestamp sets field value
+func (o *GetStoreUploadResponse) SetUploadTimestamp(v string) {
+	o.UploadTimestamp = v
+}
+
+// GetExpiryTimestamp returns the ExpiryTimestamp field value
+func (o *GetStoreUploadResponse) GetExpiryTimestamp() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.ExpiryTimestamp
+}
+
+// GetExpiryTimestampOk returns a tuple with the ExpiryTimestamp field value
+// and a boolean to check if the value has been set.
+func (o *GetStoreUploadResponse) GetExpiryTimestampOk() (*string, bool) {
+	if o == nil {
+    return nil, false
+	}
+	return &o.ExpiryTimestamp, true
+}
+
+// SetExpiryTimestamp sets field value
+func (o *GetStoreUploadResponse) SetExpiryTimestamp(v string) {
+	o.ExpiryTimestamp = v
 }
 
 // GetFiles returns the Files field value
@@ -203,7 +229,10 @@ func (o GetStoreUploadResponse) MarshalJSON() ([]byte, error) {
 		toSerialize["buildId"] = o.BuildId
 	}
 	if true {
-		toSerialize["timestamp"] = o.Timestamp
+		toSerialize["uploadTimestamp"] = o.UploadTimestamp
+	}
+	if true {
+		toSerialize["expiryTimestamp"] = o.ExpiryTimestamp
 	}
 	if true {
 		toSerialize["files"] = o.Files

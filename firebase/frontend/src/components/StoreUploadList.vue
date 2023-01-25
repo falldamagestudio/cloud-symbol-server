@@ -38,9 +38,15 @@
       </template>
 
       <template
-        v-slot:item.timestamp="{ item }"
+        v-slot:item.uploadTimestamp="{ item }"
       >
-        <router-link :to="{ name: 'storeUpload', params: { store: store, upload: item.uploadId } }">{{ timestampToDisplayString(item.timestamp) }}</router-link>
+        <router-link :to="{ name: 'storeUpload', params: { store: store, upload: item.uploadId } }">{{ timestampToDisplayString(item.uploadTimestamp) }}</router-link>
+      </template>
+
+      <template
+        v-slot:item.expiryTimestamp="{ item }"
+      >
+        <router-link :to="{ name: 'storeUpload', params: { store: store, upload: item.uploadId } }">{{ item.expiryTimestamp && timestampToDisplayString(item.expiryTimestamp) || "" }}</router-link>
       </template>
 
       <template
@@ -81,8 +87,12 @@ const headers = [
     value: "buildId",
   },
   {
-    text: "Timestamp",
-    value: "timestamp",
+    text: "Uploaded at",
+    value: "uploadTimestamp",
+  },
+  {
+    text: "Expired at",
+    value: "expiryTimestamp",
   },
   {
     text: "Status",

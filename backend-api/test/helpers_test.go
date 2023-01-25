@@ -168,11 +168,11 @@ func populateTestStore(adminAPIClient *openapi_client.APIClient, authContext con
 	files := []openapi_client.CreateStoreUploadFileRequest{
 		{
 			FileName:       fileName1,
-			BlobIdentifier: blobIdentifier1,
+			BlobIdentifier: &blobIdentifier1,
 		},
 		{
 			FileName:       fileName2,
-			BlobIdentifier: blobIdentifier2,
+			BlobIdentifier: &blobIdentifier2,
 		},
 	}
 
@@ -285,7 +285,7 @@ func upload(apiClient *openapi_client.APIClient, authContext context.Context, st
 		targetFile := &((*createStoreUploadRequest).Files)[fileIndex]
 
 		targetFile.FileName = sourceFile.FileName
-		targetFile.BlobIdentifier = sourceFile.BlobIdentifier
+		targetFile.BlobIdentifier = &sourceFile.BlobIdentifier
 	}
 
 	createStoreUploadResponse, _, err := apiClient.DefaultApi.CreateStoreUpload(authContext, storeId).CreateStoreUploadRequest(*createStoreUploadRequest).Execute()
