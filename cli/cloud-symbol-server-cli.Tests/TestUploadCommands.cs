@@ -54,8 +54,6 @@ public partial class TestCommands
             Assert.Equal(desiredContent, content);
         }
 
-        string uploadId = "0";
-
         // Ensure that the upload is not expired
 
         await SpecRunner.RunSpecCommand("../../../../testspecs/ExpireUploadSucceedsIfUploadExists/2. EnsureUploadIsNotExpired", output);
