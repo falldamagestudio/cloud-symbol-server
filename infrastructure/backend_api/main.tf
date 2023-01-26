@@ -33,7 +33,7 @@ resource "google_cloudfunctions_function" "function" {
 
   name                  = "BackendAPI"
   description           = "Backend API"
-  runtime               = "go116"
+  runtime               = "go119"
   region                = var.function_region
   service_account_email = google_service_account.function_service_account.email
 

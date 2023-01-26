@@ -23,7 +23,7 @@ resource "google_cloudfunctions_function" "function_2" {
 
   name                  = "AdminAPI"
   description           = "Legacy Admin API => Backend API redirect"
-  runtime               = "go116"
+  runtime               = "go119"
   region                = var.function_region
   service_account_email = google_service_account.function_service_account.email
 
@@ -54,7 +54,7 @@ resource "google_cloudfunctions_function" "function_3" {
 
   name                  = "DownloadAPI"
   description           = "Legacy Download API => Backend API redirect"
-  runtime               = "go116"
+  runtime               = "go119"
   region                = var.function_region
   service_account_email = google_service_account.function_service_account.email
 
