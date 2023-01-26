@@ -36,12 +36,14 @@ Here is how to upgrade from v0.x to v1.x:
 
 1. Make sure that your existing service is at v0.4.0. If not, upgrade to v0.4.0 first.
 2. Disable any jobs that upload to Cloud Symbol Server.
-3. Deploy v1.x (`make deploy` pointing to your production environment).
-4. Run the data migration step (`make run-migrate-firestore-to-postgres`, again, pointing to your production environment).
-5. Verify that you still can log in to the web portal.
-6. Verify that the v0.x CLI tool can upload symbols.
-7. Verify that the v1.x CLI tool can upload symbols.
-8. Re-enable jobs that upload to Cloud Symbol Server.
-9. Update the CLI tools that you use to v1.x.
+3. Tear down `admin-api` and `backend-api` portions in your production deployment.
+4. Update your production repo to use v1.x of the Cloud Symbol Server repository.
+5. Update your production environment config to match `environments/test` in layout & settings & parameters.
+6. Deploy v1.x (`deploy-core`, `deploy-database`, create new key for `iam-admin@`, store into `database/google_application_credentials.json`, `deploy-db-migrations`, `deploy-backend-api`, create new key for `backend-api@`, store into `backend_api/google_application_credentials.json`, `deploy-firebase-and-frontend`, `run-migrate-firestore-to-postgres`).
+7. Verify that you still can log in to the web portal.
+8. Verify that the v0.x CLI tool can upload symbols.
+9. Verify that the v1.x CLI tool can upload symbols.
+10. Re-enable jobs that upload to Cloud Symbol Server.
+11. Update the CLI tools that you use to v1.x.
 
 The migration step will copy all metadata from Cloud Firestore and into Postgres. After the upgrade, new metadata will be written to Postgres; the contents of Cloud Firestore will remain, but no longer be updated. The Cloud Firestore database and its contents will be deleted in the future, when v2.x comes around.
