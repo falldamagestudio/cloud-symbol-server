@@ -160,10 +160,10 @@ test-local: test-local-backend-api test-local-cli
 
 run-migrate-firestore-to-postgres:
 	cd migrate-firestore-to-postgres/cmd \
-	&&	GCP_PROJECT_ID=test-cloud-symbol-server \
+	&&	GCP_PROJECT_ID="$(shell jq -r ".gcpProjectId" < $(ENV)/config.json)" \
 		CLOUD_SQL_INSTANCE="$(shell jq -r ".cloudSQLInstance" < $(ENV)/config.json)" \
 		CLOUD_SQL_USER="$(shell jq -r ".cloudSQLAdminUser" < $(ENV)/config.json)" \
-		GOOGLE_APPLICATION_CREDENTIALS="../../environments/local/backend_api/google_application_credentials.json" \
+		GOOGLE_APPLICATION_CREDENTIALS="../../$(ENV)/backend_api/google_application_credentials.json" \
 		go run main.go
 
 #########################################################

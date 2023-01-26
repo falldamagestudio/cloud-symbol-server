@@ -1,4 +1,5 @@
 {
+    "gcpProjectId" : "test-cloud-symbol-server",
     "backendAPIEndpoint" : "https://europe-west1-test-cloud-symbol-server.cloudfunctions.net/BackendAPI",
     "cloudSQLInstance" : "test-cloud-symbol-server:europe-west1:db",
     "cloudSQLAdminUser" : "backend-api@test-cloud-symbol-server.iam",
