@@ -56,12 +56,14 @@ namespace ClientAPI
                         if (progress != null)
                             progress.Report(new UploadProgress { State = UploadProgress.StateEnum.UploadingMissingFile, FileName = fileWithMetadata.FileWithPath });
 
-                        byte[] content = File.ReadAllBytes(fileWithMetadata.FileWithPath);
+                        using (Stream fileStream = File.Open(fileWithMetadata.FileWithPath, FileMode.Open)) {
+                            var fileStreamContent = new StreamContent(fileStream);
 
-                        HttpResponseMessage response = await HttpClient.PutAsync(uploadFileResponse.Url, new ByteArrayContent(content));
+                            HttpResponseMessage response = await HttpClient.PutAsync(uploadFileResponse.Url, fileStreamContent);
 
-                        if (!response.IsSuccessStatusCode) {
-                            throw new UploadException($"Upload failed with status code {response.StatusCode}; content = {response.Content}");
+                            if (!response.IsSuccessStatusCode) {
+                                throw new UploadException($"Upload failed with status code {response.StatusCode}; content = {response.Content}");
+                            }
                         }
 
                         int uploadId = createStoreUploadResponse.UploadId;
