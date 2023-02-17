@@ -160,6 +160,10 @@ func GetStoreUploads(ctx context.Context, storeId string, sort string, offset in
 
 	for uploadIndex, upload := range uploads {
 		var files = uploadIdToFiles[upload.UploadID]
+		if files == nil {
+			// There are no files as part of this upload; include an empty slice, so it serializes to [] instead of nil
+			files = []openapi.GetStoreUploadFileResponse{}
+		}
 
 		expiryTimestamp := ""
 		if upload.ExpiryTimestamp.Valid {
